@@ -1,4 +1,4 @@
-# Gestor-de-Produccion-e-Inventario-para-Emprendimientos
+# Gestor-de-Produccion-e-Inventario-para-Emprendimientos.
 
 Sistema de gestión de producción e inventario orientado a microemprendimientos.
 
