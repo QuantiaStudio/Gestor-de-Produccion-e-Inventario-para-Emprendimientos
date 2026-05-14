@@ -274,6 +274,12 @@
      fill: currentColor;
  }
 
+/* Flecha roja para insights negativos */
+.alerts-container .alert-insight.negative .icon {
+    color: var(--color-error);
+    fill: currentColor;
+}
+
  /*-----------------------------------------------------------------------------------------*/
 
  /* Estilos de la sección de gráficos */
