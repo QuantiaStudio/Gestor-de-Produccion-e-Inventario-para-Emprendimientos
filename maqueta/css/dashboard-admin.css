@@ -1,0 +1,86 @@
+ /* hoja-especifica.css */
+ @import url('styles.css');
+
+ body {
+     background-color: var(--background-color);
+     color: var(--gray-900);
+     font-family: var(--font-heading);
+ }
+
+ /* ---------- ESTILOS ESPECÍFICOS PARA EL DASHBOARD ADMIN ---------- */
+
+ /* Estilos del contenedor principal */
+ .content {
+     margin-left: 200px;
+     padding-left: 20px;
+ }
+
+ /*----------------------------- Estilos del Sidebar ----------------------------------------*/
+
+ /* Estilos del contenedor del Sidebar */
+ .sidebar {
+     background-color: var(--secondary-color);
+     height: 100%;
+     width: 200px;
+     position: fixed;
+     z-index: 1;
+     top: 0;
+     left: 0;
+     overflow-x: hidden;
+     padding-top: 5rem;
+ }
+
+ /* Estilos del encabezado del Sidebar */
+ .sidebar-header {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0 16px 20px;
+     color: var(--color-success);
+ }
+
+ .sidebar-logo {
+     width: 28px;
+     height: 28px;
+     display: block;
+     object-fit: contain;
+}
+ /* Estilos de los enlaces del Sidebar */
+ .sidebar a {
+     color: white;
+     padding:16px;
+     font-family: var(--font-body);
+     text-decoration: none;
+     display: block;
+     text-align: center;
+ }
+
+ .sidebar-link {
+     display: flex;
+     align-items: center;
+     justify-content: flex-start;
+     gap: 0.75rem;
+     text-align: left;
+ }
+
+ .sidebar-link .icon {
+     width: 18px;
+     height: 18px;
+     flex-shrink: 0;
+     color: white;
+     fill: currentColor;
+     vertical-align: middle;
+ }
+
+ .sidebar-link .text {
+     line-height: 1;
+     margin-left: 1.5rem;
+ }
+
+ /* cambio del color en el hover*/
+ .sidebar a:hover {
+     background-color: var(--primary-color);
+     color: white;
+ }
+
+ /*-----------------------------------------------------------------------------------------*/
