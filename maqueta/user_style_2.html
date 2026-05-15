@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/Gestor-de-Produccion-e-Inventario-para-Emprendimientos/maqueta/css/user_style_2.css" />
+    <link rel="stylesheet" href="css/user_style_2.css"/>
     <title>Usuario dashboard</title>
 </head>
 
@@ -24,7 +24,68 @@
         </header>
 
         <div class="content">
-            <h1>Sección Principal</h1>
+
+            <div class="page-header">
+                <h1>Materias Primas</h1>
+                <p>Consulta el estado actual de los materiales disponibles en el taller.</p>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar material..." class="input" />
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+
+            <div class="stock-table-wrapper">
+                <table class="stock-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Material</th>
+                            <th>Categoria</th>
+                            <th>Cantidad</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">#M001</td>
+                            <td>Madera de Roble</td>
+                            <td>Madera</td>
+                            <td class="numeric">320 kg</td>
+                            <td><span class="badge badge--success">Disponible</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">#M002</td>
+                            <td>Pintura Blanca</td>
+                            <td>Acabados</td>
+                            <td class="numeric">15 L</td>
+                            <td><span class="badge badge--warning">Bajo stock</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">#M003</td>
+                            <td>Tornillos 3mm</td>
+                            <td>Herrajes</td>
+                            <td class="numeric">1.800 u</td>
+                            <td><span class="badge badge--success">Disponible</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">#M004</td>
+                            <td>Barniz Transparente</td>
+                            <td>Acabados</td>
+                            <td class="numeric">3 L</td>
+                            <td><span class="badge badge--error">Sin stock</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">#M005</td>
+                            <td>Contrachapado 18mm</td>
+                            <td>Madera</td>
+                            <td class="numeric">45 planchas</td>
+                            <td><span class="badge badge--success">Disponible</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
         <aside>
             <div class="sidebar">
