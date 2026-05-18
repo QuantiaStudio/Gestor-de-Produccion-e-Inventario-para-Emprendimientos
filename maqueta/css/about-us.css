@@ -1,0 +1,123 @@
+@import url('styles.css');
+
+/* ---------- CONTENEDOR DE LA PÁGINA ---------- */
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+/* ---------- SECCIÓN PRINCIPAL ---------- */
+
+.hero-section {
+    margin-bottom: 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(124, 58, 237, 0.02) 100%);
+    border: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.hero-section h1 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.hero-section p {
+    margin: 1rem 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--gray-600);
+}
+
+.hero-section p:last-child {
+    margin-bottom: 0;
+}
+
+/* ---------- SECCIÓN DE EQUIPO ---------- */
+
+.team-section {
+    margin-top: 3rem;
+}
+
+.team-section h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2.5rem;
+    font-size: 28px;
+}
+
+/* ---------- GRID de MIEMBROS ---------- */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+}
+
+/* ---------- CARDS DE MIEMBROS ---------- */
+
+.member-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: var(--transition-fast);
+    border: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.member-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.2);
+    border-color: rgba(124, 58, 237, 0.3);
+}
+
+.member-card h3 {
+    margin: 1rem 0 0.5rem;
+    font-size: 18px;
+    color: var(--gray-900);
+}
+
+.member-card p {
+    margin: 0.5rem 0 0;
+    color: var(--gray-600);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ---------- AVATAR ---------- */
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #5B21B6 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* ---------- FOOTER ---------- */
+
+.footer {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 4rem;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
