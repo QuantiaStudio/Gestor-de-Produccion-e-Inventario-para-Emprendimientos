@@ -2,7 +2,7 @@
     /* Colores principales */
     --primary-color: #7C3AED;
     --secondary-color: #111827;
-    --backgroud-color: #F5F3FF;
+    --background-color: #F5F3FF;
     --color-surface: #FFFFFF;
 
     /* Estados */
@@ -14,7 +14,7 @@
     /* Grises base */
     --gray-200: #E5E7EB;
     --gray-300: #D1D5DB;
-    --gray-400: #9CA3AF;
+    --gray-400: #9096a0;
     --gray-600: #4B5563;
     --gray-900: #111827;
 
@@ -186,7 +186,7 @@ code,
 .card {
     background-color: var(--color-surface);
     border-radius: var(--radius-md);
-    padding: 20px;
+    padding: 1.5rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     transition: var(--transition-fast);
 }

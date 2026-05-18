@@ -1,0 +1,90 @@
+/* ---------- MAIN (prototype layout) ---------- */
+
+.main_content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.main_content .block {
+    margin: 0 0 24px;
+}
+
+.main_content h1 {
+    margin: 0 0 12px;
+}
+
+.main_content h2 {
+    margin: 0 0 8px;
+}
+
+.main_content p {
+    margin: 0 0 8px;
+}
+
+.main_content hr {
+    border: 0;
+    border-top: 1px dashed var(--gray-300);
+    margin: 24px 0;
+}
+
+.features_list {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.features_list li {
+    margin-bottom: 6px;
+}
+
+/* ---------- FOOTER ---------- */
+
+.main_footer {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.main_footer_inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.main_footer_brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.main_footer_logo {
+    height: 32px;
+    width: auto;
+}
+
+.main_footer_name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.main_footer p {
+    margin: 0;
+    color: var(--gray-300);
+    font-size: 13px;
+}
+
+.main_footer a {
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.main_footer a:hover {
+    color: var(--primary-color);
+}
