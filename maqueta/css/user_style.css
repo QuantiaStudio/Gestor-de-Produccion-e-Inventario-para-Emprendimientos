@@ -5,6 +5,7 @@
      background-color: var(--background-color);
      color: var(--gray-900);
      font-family: var(--font-heading);
+     margin: 0;
  }
 
  /* ---------- ESTILOS ESPECÍFICOS PARA EL DASHBOARD ADMIN ---------- */
@@ -76,7 +77,7 @@
 
  /* Estilos del contenedor principal */
  main {
-     padding-bottom: 4rem;
+     min-height: 100vh;
  }
 
  .content {
@@ -174,18 +175,6 @@
  }
 
  /*-----------------------------------------------------------------------------------------*/
- /* Estilos del footer */
- footer {
-     background-color: var(--primary-color);
-     color: white;
-     padding: 1rem;
-     text-align: center;
-     position: fixed;
-     left: 200px;
-     bottom: 0;
-     width: calc(100% - 200px);
-     box-sizing: border-box;
- }
 
  .content {
     padding-top: 80px;
@@ -327,6 +316,7 @@
     color: white;
     padding: 32px 24px;
     text-align: center;
+    margin-left: 200px;
 }
 
 .main_footer_inner {
