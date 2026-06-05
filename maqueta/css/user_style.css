@@ -5,7 +5,6 @@
      background-color: var(--background-color);
      color: var(--gray-900);
      font-family: var(--font-heading);
-     margin: 0;
  }
 
  /* ---------- ESTILOS ESPECÍFICOS PARA EL DASHBOARD ADMIN ---------- */
@@ -14,10 +13,7 @@
      background-color: var(--primary-color);
      color: white;
      padding: 1rem;
-     position: fixed;
      top: 0;
-     left: 200px;
-     width: calc(100% - 200px);
      box-sizing: border-box;
      margin: 0;
      display: flex;
@@ -81,7 +77,6 @@
  }
 
  .content {
-     margin-left: 200px;
      padding-left: 20px;
  }
 
@@ -90,14 +85,6 @@
  /* Estilos del contenedor del Sidebar */
  .sidebar {
      background-color: var(--secondary-color);
-     height: 100%;
-     width: 200px;
-     position: fixed;
-     z-index: 1;
-     top: 0;
-     left: 0;
-     overflow-x: hidden;
-     padding-top: 1rem;
  }
 
  /* Estilos del encabezado del Sidebar */
@@ -177,7 +164,7 @@
  /*-----------------------------------------------------------------------------------------*/
 
  .content {
-    padding-top: 80px;
+
     padding-right: 24px;
 }
 
@@ -316,7 +303,6 @@
     color: white;
     padding: 32px 24px;
     text-align: center;
-    margin-left: 200px;
 }
 
 .main_footer_inner {
@@ -363,6 +349,7 @@
 }
 
 
+
 /* nav footer */  /* nav footer */   /* nav footer */
 
 .nav_fondo {
@@ -374,8 +361,7 @@
     justify-content: center;
     align-items: center;
 
-    width: 100%;
-    border-top: solid white 10px;
+  border-top: solid white 10px;
     border-bottom: solid white 10px;
 }
 
