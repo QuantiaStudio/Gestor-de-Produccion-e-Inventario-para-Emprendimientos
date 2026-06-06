@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/materia_prima_admin.css" />
+    <title>Materia Prima</title>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="header-content">
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú" aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo" aria-expanded="true">
+                    <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true" />
+                </button>
+                <span class="text">Materia Prima</span>
+            </div>
+            <div class="user-info">
+                <img src="../css/assets/avatar.jpg" alt="Logo de la aplicación" class="user-avatar" />
+                <span class="text-name">Admin</span>
+                <span class="text-rol"> Administrador</span>
+            </div>
+        </header>
+
+
+        <div class="content">
+            <section class="inventory-layout row g-4">
+
+                <div class="col-lg-8">
+                    <div class="inventory-content">
+
+                        <section class="page-header">
+                            <div class="page-header__content">
+                                <h1>Materia Prima</h1>
+                                <p>Consulta y gestión del inventario de materias primas.</p>
+                            </div>
+
+                            <div class="page-header__actions">
+                                <button type="button" class="btn btn-outline-primary">
+                                    Exportar
+                                </button>
+                            </div>
+                        </section>
+
+                        <section class="inventory-filters card">
+                            <div class="filters-row">
+
+                                <div class="search-box">
+                                    <input type="text" placeholder="Buscar materia prima...">
+                                </div>
+
+                                <div class="filter-select">
+                                    <select>
+                                        <option>Todas las categorías</option>
+                                    </select>
+                                </div>
+
+                                <div class="filter-select">
+                                    <select>
+                                        <option>Todos los estados</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" class="btn btn-outline-secondary">
+                                    Limpiar filtros
+                                </button>
+
+                            </div>
+                        </section>
+
+                        <section class="inventory-stats">
+
+                            <article class="stat-card">
+                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__content">
+                                    <span>Total materias primas</span>
+                                    <strong>32</strong>
+                                </div>
+                            </article>
+
+                            <article class="stat-card">
+                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__content">
+                                    <span>Stock total</span>
+                                    <strong>12.450</strong>
+                                </div>
+                            </article>
+
+                            <article class="stat-card warning">
+                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__content">
+                                    <span>Bajo mínimo</span>
+                                    <strong>5</strong>
+                                </div>
+                            </article>
+
+                            <article class="stat-card danger">
+                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__content">
+                                    <span>Sin stock</span>
+                                    <strong>2</strong>
+                                </div>
+                            </article>
+
+                        </section>
+
+                        <section class="inventory-table card">
+
+                            <table class="table table-hover align-middle mb-0">
+
+                                <thead>
+                                    <tr>
+                                        <th>Materia Prima</th>
+                                        <th>Categoría</th>
+                                        <th>Unidad</th>
+                                        <th>Stock Total</th>
+                                        <th>Disponible</th>
+                                        <th>Nivel Mínimo</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr class="selected">
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">
+                                                    Tablero MDF 18mm
+                                                </span>
+                                                <small>MP-001</small>
+                                            </div>
+                                        </td>
+                                        <td>Madera</td>
+                                        <td>und</td>
+                                        <td>120</td>
+                                        <td>100</td>
+                                        <td>50</td>
+                                        <td>
+                                            <span class="badge bg-success badge-success">
+                                                Óptimo
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Ver</button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Melamina Blanca</span>
+                                                <small>MP-002</small>
+                                            </div>
+                                        </td>
+                                        <td>Láminas</td>
+                                        <td>m²</td>
+                                        <td>250</td>
+                                        <td>220</td>
+                                        <td>100</td>
+                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Canto PVC Blanco</span>
+                                                <small>MP-003</small>
+                                            </div>
+                                        </td>
+                                        <td>Accesorios</td>
+                                        <td>metros</td>
+                                        <td>480</td>
+                                        <td>450</td>
+                                        <td>200</td>
+                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Tornillo 3.5x16mm</span>
+                                                <small>MP-004</small>
+                                            </div>
+                                        </td>
+                                        <td>Ferretería</td>
+                                        <td>unid</td>
+                                        <td>850</td>
+                                        <td>800</td>
+                                        <td>300</td>
+                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Pegamento de Contacto</span>
+                                                <small>MP-005</small>
+                                            </div>
+                                        </td>
+                                        <td>Adhesivos</td>
+                                        <td>litros</td>
+                                        <td>15</td>
+                                        <td>10</td>
+                                        <td>20</td>
+                                        <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Barniz Transparente</span>
+                                                <small>MP-006</small>
+                                            </div>
+                                        </td>
+                                        <td>Acabados</td>
+                                        <td>litros</td>
+                                        <td>5</td>
+                                        <td>4</td>
+                                        <td>10</td>
+                                        <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Lija Grano 120</span>
+                                                <small>MP-007</small>
+                                            </div>
+                                        </td>
+                                        <td>Abrasivos</td>
+                                        <td>unid</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>50</td>
+                                        <td><span class="badge bg-danger badge-success">Sin stock</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-info">
+                                                <span class="material-name">Clavo 1"</span>
+                                                <small>MP-008</small>
+                                            </div>
+                                        </td>
+                                        <td>Ferretería</td>
+                                        <td>kg</td>
+                                        <td>2.5</td>
+                                        <td>1.0</td>
+                                        <td>5</td>
+                                        <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                            <div class="table-footer">
+
+                                <div class="results-info">
+                                    Mostrando 1 a 8 de 32 resultados
+                                </div>
+
+                                <nav class="pagination">
+                                    <button type="button">Anterior</button>
+                                    <button type="button" class="active">1</button>
+                                    <button type="button">2</button>
+                                    <button type="button">3</button>
+                                    <button type="button">4</button>
+                                    <button type="button">Siguiente</button>
+                                </nav>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <aside class="inventory-detail card">
+
+                        <header class="detail-header">
+
+                            <div class="detail-icon"></div>
+
+                            <div class="detail-title">
+                                <h2>Tablero MDF 18mm</h2>
+                                <span>MP-001</span>
+                            </div>
+
+                            <span class="badge bg-success badge-success">
+                                Óptimo
+                            </span>
+
+                        </header>
+
+                        <section class="detail-tabs">
+
+                            <button type="button" class="active">
+                                Información
+                            </button>
+
+                            <button type="button">
+                                Movimientos
+                            </button>
+
+                        </section>
+
+                        <section class="detail-info">
+
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>
+                                    Tablero MDF de 18mm utilizado para muebles.
+                                </p>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Madera</p>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>und</p>
+                            </div>
+
+                        </section>
+
+                        <section class="detail-stock">
+
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>120 und</strong>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>20 und</strong>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>100 und</strong>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>50 und</strong>
+                            </div>
+
+                        </section>
+
+                        <section class="detail-update">
+
+                            <span>Última actualización</span>
+                            <p>18/05/2024 - 10:30 hs</p>
+
+                        </section>
+
+                        <footer class="detail-actions">
+
+                            <button type="button" class="btn btn-outline-primary">
+                                Ver historial completo
+                            </button>
+
+                        </footer>
+
+                    </aside>
+                </div>
+
+            </section>
+        </div>
+
+
+        <aside>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed" aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse show" aria-hidden="true"></span>
+                <div class="sidebar-brand p-4">
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse show" />
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse" />
+                </div>
+
+                <div class="nav flex-column">
+                    <a href="#" class="sidebar-link active text-decoration-none p-3">
+                        <img src="../css/assets/house-door.svg" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse show">Panel</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse show">Materia Prima</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse show">Productos Terminados</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bar-chart-line.svg" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse show">Reportes</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse show">Configuración</span>
+                    </a>
+                </div>
+
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil" />
+                        <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse show">
+                            <h6 class="text-white mb-0">Admin</h6>
+                            <small class="text-muted">Administrador</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+    </main>
+    <footer>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="about-us.html">Quienes somos</a>
+            <a href="user_view.html">Dashboard user</a>
+        </nav>
+    </footer>
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
