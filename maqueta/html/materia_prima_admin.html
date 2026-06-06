@@ -27,9 +27,9 @@
 
 
         <div class="content">
-            <section class="inventory-layout row g-4">
+            <section class="inventory-layout row g-4" id="inventario">
 
-                <div class="col-lg-8">
+                <div class="col-lg-8 inventory-table-col">
                     <div class="inventory-content">
 
                         <section class="page-header">
@@ -126,12 +126,10 @@
 
                                 <tbody>
 
-                                    <tr class="selected">
+                                    <tr>
                                         <td>
                                             <div class="material-info">
-                                                <span class="material-name">
-                                                    Tablero MDF 18mm
-                                                </span>
+                                                <span class="material-name">Tablero MDF 18mm</span>
                                                 <small>MP-001</small>
                                             </div>
                                         </td>
@@ -140,14 +138,8 @@
                                         <td>120</td>
                                         <td>100</td>
                                         <td>50</td>
-                                        <td>
-                                            <span class="badge bg-success badge-success">
-                                                Óptimo
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Ver</button>
-                                        </td>
+                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
+                                        <td><a href="#detail-MP001" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -163,7 +155,7 @@
                                         <td>220</td>
                                         <td>100</td>
                                         <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP002" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -179,7 +171,7 @@
                                         <td>450</td>
                                         <td>200</td>
                                         <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP003" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -195,7 +187,7 @@
                                         <td>800</td>
                                         <td>300</td>
                                         <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP004" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -211,7 +203,7 @@
                                         <td>10</td>
                                         <td>20</td>
                                         <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP005" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -227,7 +219,7 @@
                                         <td>4</td>
                                         <td>10</td>
                                         <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP006" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -243,7 +235,7 @@
                                         <td>0</td>
                                         <td>50</td>
                                         <td><span class="badge bg-danger badge-success">Sin stock</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP007" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                     <tr>
@@ -259,7 +251,7 @@
                                         <td>1.0</td>
                                         <td>5</td>
                                         <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-outline-primary">Ver</button></td>
+                                        <td><a href="#detail-MP008" class="btn btn-sm btn-outline-primary">Ver</a></td>
                                     </tr>
 
                                 </tbody>
@@ -288,94 +280,539 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <aside class="inventory-detail card">
+                <!-- ===== PANELES DE DETALLE (uno por producto) ===== -->
+
+                <!-- MP-001 Tablero MDF 18mm -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP001">
 
                         <header class="detail-header">
-
                             <div class="detail-icon"></div>
-
                             <div class="detail-title">
                                 <h2>Tablero MDF 18mm</h2>
                                 <span>MP-001</span>
                             </div>
-
-                            <span class="badge bg-success badge-success">
-                                Óptimo
-                            </span>
-
+                            <div class="detail-header-right">
+                                <span class="badge bg-success badge-success">Óptimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
                         </header>
 
                         <section class="detail-tabs">
-
-                            <button type="button" class="active">
-                                Información
-                            </button>
-
-                            <button type="button">
-                                Movimientos
-                            </button>
-
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
                         </section>
 
                         <section class="detail-info">
-
                             <div class="detail-item">
                                 <span>Descripción</span>
-                                <p>
-                                    Tablero MDF de 18mm utilizado para muebles.
-                                </p>
+                                <p>Tablero MDF de 18mm utilizado para muebles.</p>
                             </div>
-
                             <div class="detail-item">
                                 <span>Categoría</span>
                                 <p>Madera</p>
                             </div>
-
                             <div class="detail-item">
                                 <span>Unidad de medida</span>
                                 <p>und</p>
                             </div>
-
                         </section>
 
                         <section class="detail-stock">
-
                             <div class="detail-row">
                                 <span>Stock Total</span>
                                 <strong>120 und</strong>
                             </div>
-
                             <div class="detail-row">
                                 <span>Stock Reservado</span>
                                 <strong>20 und</strong>
                             </div>
-
                             <div class="detail-row">
                                 <span>Stock Disponible</span>
                                 <strong>100 und</strong>
                             </div>
-
                             <div class="detail-row">
                                 <span>Nivel Mínimo</span>
                                 <strong>50 und</strong>
                             </div>
-
                         </section>
 
                         <section class="detail-update">
-
                             <span>Última actualización</span>
                             <p>18/05/2024 - 10:30 hs</p>
-
                         </section>
 
                         <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
 
-                            <button type="button" class="btn btn-outline-primary">
-                                Ver historial completo
-                            </button>
+                    </aside>
+                </div>
 
+                <!-- MP-002 Melamina Blanca -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP002">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Melamina Blanca</h2>
+                                <span>MP-002</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-success badge-success">Óptimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Melamina blanca para superficies de muebles.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Láminas</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>m²</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>250 m²</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>30 m²</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>220 m²</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>100 m²</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>20/05/2024 - 09:15 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-003 Canto PVC Blanco -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP003">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Canto PVC Blanco</h2>
+                                <span>MP-003</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-success badge-success">Óptimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Canto de PVC blanco para cantear tableros.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Accesorios</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>metros</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>480 metros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>30 metros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>450 metros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>200 metros</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>22/05/2024 - 14:00 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-004 Tornillo 3.5x16mm -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP004">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Tornillo 3.5x16mm</h2>
+                                <span>MP-004</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-success badge-success">Óptimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Tornillo autorroscante para ensamble de muebles.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Ferretería</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>unid</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>850 unid</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>50 unid</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>800 unid</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>300 unid</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>15/05/2024 - 11:45 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-005 Pegamento de Contacto -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP005">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Pegamento de Contacto</h2>
+                                <span>MP-005</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-warning text-dark badge-success">Bajo mínimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Pegamento de contacto para laminados y enchapados.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Adhesivos</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>litros</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>15 litros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>5 litros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>10 litros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>20 litros</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>25/05/2024 - 08:00 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-006 Barniz Transparente -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP006">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Barniz Transparente</h2>
+                                <span>MP-006</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-warning text-dark badge-success">Bajo mínimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Barniz transparente para terminación de superficies de madera.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Acabados</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>litros</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>5 litros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>1 litros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>4 litros</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>10 litros</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>23/05/2024 - 16:20 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-007 Lija Grano 120 -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP007">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Lija Grano 120</h2>
+                                <span>MP-007</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-danger badge-success">Sin stock</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Lija de grano 120 para lijado fino de superficies.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Abrasivos</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>unid</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>0 unid</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>0 unid</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>0 unid</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>50 unid</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>10/05/2024 - 07:30 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-008 Clavo 1" -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-MP008">
+
+                        <header class="detail-header">
+                            <div class="detail-icon"></div>
+                            <div class="detail-title">
+                                <h2>Clavo 1"</h2>
+                                <span>MP-008</span>
+                            </div>
+                            <div class="detail-header-right">
+                                <span class="badge bg-warning text-dark badge-success">Bajo mínimo</span>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </div>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span>Descripción</span>
+                                <p>Clavo de 1 pulgada para ensamble de marcos y estructuras.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Categoría</span>
+                                <p>Ferretería</p>
+                            </div>
+                            <div class="detail-item">
+                                <span>Unidad de medida</span>
+                                <p>kg</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span>Stock Total</span>
+                                <strong>2.5 kg</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Reservado</span>
+                                <strong>1.5 kg</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Stock Disponible</span>
+                                <strong>1.0 kg</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Nivel Mínimo</span>
+                                <strong>5 kg</strong>
+                            </div>
+                        </section>
+
+                        <section class="detail-update">
+                            <span>Última actualización</span>
+                            <p>28/05/2024 - 13:10 hs</p>
+                        </section>
+
+                        <footer class="detail-actions">
+                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
                         </footer>
 
                     </aside>
