@@ -35,7 +35,7 @@
      transition: left var(--sidebar-transition), width var(--sidebar-transition);
  }
 
- body.sidebar-collapsed header {
+ body:has(#sidebarExpandedState:not(.show)) header {
      left: var(--sidebar-width-collapsed);
      width: calc(100% - var(--sidebar-width-collapsed));
  }
@@ -65,6 +65,13 @@
      background: rgba(255, 255, 255, 0.22);
      color: white;
      outline: none;
+ }
+
+ .menu-icon {
+     width: 20px;
+     height: 20px;
+     display: block;
+     filter: brightness(0) invert(1);
  }
 
  /* Estilos de user-info */
@@ -115,7 +122,7 @@
      transition: margin-left var(--sidebar-transition), width var(--sidebar-transition), max-width var(--sidebar-transition);
  }
 
- body.sidebar-collapsed .content {
+ body:has(#sidebarExpandedState:not(.show)) .content {
      margin-left: var(--sidebar-width-collapsed);
      width: calc(100% - var(--sidebar-width-collapsed));
      max-width: calc(100vw - var(--sidebar-width-collapsed));
@@ -135,8 +142,12 @@
      transition: width var(--sidebar-transition);
  }
 
- .sidebar.collapsed {
+ .sidebar:has(#sidebarExpandedState:not(.show)) {
      width: var(--sidebar-width-collapsed);
+ }
+
+ .sidebar-state {
+     display: none !important;
  }
 
  .sidebar-brand {
@@ -164,6 +175,10 @@
      max-height: 44px;
  }
 
+ .sidebar-logo-collapsed.show {
+     display: block;
+ }
+
  /* Estilos de los enlaces del Sidebar */
  .sidebar-link {
      color: #a0a3bd;
@@ -171,6 +186,7 @@
      display: flex;
      align-items: center;
      justify-content: flex-start;
+     gap: 1rem;
      border-radius: 8px;
      margin: 4px 16px;
      white-space: nowrap;
@@ -178,13 +194,20 @@
      transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, margin var(--sidebar-transition);
  }
 
- .sidebar-link i {
+ .sidebar-icon {
      width: 20px;
-     min-width: 20px;
+     height: 20px;
      display: inline-flex;
      align-items: center;
      justify-content: center;
-     text-align: center;
+     object-fit: contain;
+     flex-shrink: 0;
+     filter: brightness(0) invert(1);
+ }
+
+ .hide-on-collapse.show,
+ .profile-info.show {
+     display: block;
  }
 
  /* cambio del color en el hover*/
@@ -216,49 +239,39 @@
      transition: opacity 0.2s ease, visibility 0.2s ease;
  }
 
- .sidebar.collapsed .hide-on-collapse,
- .sidebar.collapsed .profile-info {
-     display: none;
-     opacity: 0;
-     visibility: hidden;
- }
-
- .sidebar.collapsed .sidebar-brand {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .sidebar-brand {
      justify-content: center;
      padding-left: 0 !important;
      padding-right: 0 !important;
  }
 
- .sidebar.collapsed .sidebar-logo-full {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .sidebar-logo-full {
      display: none;
  }
 
- .sidebar.collapsed .sidebar-logo-collapsed {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .sidebar-logo-collapsed {
      display: block;
  }
 
- .sidebar.collapsed .profile-section {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .profile-section {
      padding-left: 13px !important;
      padding-right: 13px !important;
  }
 
- .sidebar.collapsed .profile-section .d-flex {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .profile-section .d-flex {
      justify-content: center;
  }
 
- .sidebar.collapsed .sidebar-link {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .sidebar-link {
      justify-content: center;
      padding: 1rem !important;
      margin: 4px 8px;
+     gap: 0;
  }
 
- .sidebar.collapsed .sidebar-link:hover,
- .sidebar.collapsed .sidebar-link:focus {
+ .sidebar:has(#sidebarExpandedState:not(.show)) .sidebar-link:hover,
+ .sidebar:has(#sidebarExpandedState:not(.show)) .sidebar-link:focus {
      transform: none;
- }
-
- .sidebar.collapsed .sidebar-link i {
-     margin: 0 !important;
  }
 
  /*-----------------------------------------------------------------------------------------*/
@@ -608,7 +621,7 @@
      transition: margin-left var(--sidebar-transition), width var(--sidebar-transition);
  }
 
- body.sidebar-collapsed footer {
+ body:has(#sidebarExpandedState:not(.show)) footer {
      margin-left: var(--sidebar-width-collapsed);
      width: calc(100% - var(--sidebar-width-collapsed));
  }
