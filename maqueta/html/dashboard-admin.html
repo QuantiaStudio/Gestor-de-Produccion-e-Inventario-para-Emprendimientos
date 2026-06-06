@@ -4,17 +4,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/dashboard-admin.css" />
-    <title>Dashboard de Carpintería</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
     <main>
         <header>
             <div class="header-content">
-                <svg class="icon" aria-hidden="true">
-                    <use href="../css/assets/list.svg"></use>
-                </svg>
+                <button class="menu-toggle" type="button" onclick="toggleSidebar()" aria-label="Contraer menú" aria-controls="sidebar" aria-expanded="true">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
                 <span class="text">Dashboard de Carpintería</span>
             </div>
             <div class="user-info">
@@ -296,37 +298,45 @@
 
 
         <aside>
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo" />
-                    <span class="rol">ADMIN</span>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed" aria-label="Menú principal">
+                <div class="sidebar-brand p-4">
+                    <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-full" />
+                    <img src="../css/assets/logo-only.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-collapsed" />
                 </div>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/house-door.svg"></use>
-                    </svg>
-                    <span class="text">Panel</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/people.svg"></use>
-                    </svg>
-                    <span class="text">Clientes</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/bag.svg"></use>
-                    </svg>
-                    <span class="text">Muebles</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/bar-chart-line.svg"></use>
-                    </svg>
-                    <span class="text">Reportes</span>
-                </a>
 
-            </div>
+                <div class="nav flex-column">
+                    <a href="#" class="sidebar-link active text-decoration-none p-3">
+                        <i class="fas fa-house me-3" aria-hidden="true"></i>
+                        <span class="hide-on-collapse">Panel</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <i class="fas fa-boxes-stacked me-3" aria-hidden="true"></i>
+                        <span class="hide-on-collapse">Materia Prima</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <i class="fas fa-box-open me-3" aria-hidden="true"></i>
+                        <span class="hide-on-collapse">Productos Terminados</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <i class="fas fa-chart-bar me-3" aria-hidden="true"></i>
+                        <span class="hide-on-collapse">Reportes</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <i class="fas fa-gear me-3" aria-hidden="true"></i>
+                        <span class="hide-on-collapse">Configuración</span>
+                    </a>
+                </div>
+
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil" />
+                        <div class="ms-3 profile-info">
+                            <h6 class="text-white mb-0">Admin</h6>
+                            <small class="text-muted">Administrador</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </aside>
     </main>
     <footer>
@@ -336,6 +346,18 @@
             <a href="user_view.html">Dashboard user</a>
         </nav>
     </footer>
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('#sidebar');
+            const toggleButton = document.querySelector('.menu-toggle');
+            const isCollapsed = sidebar.classList.toggle('collapsed');
+
+            document.body.classList.toggle('sidebar-collapsed', isCollapsed);
+            toggleButton.setAttribute('aria-expanded', String(!isCollapsed));
+            toggleButton.setAttribute('aria-label', isCollapsed ? 'Expandir menú' : 'Contraer menú');
+        }
+    </script>
 </body>
 
 </html>
