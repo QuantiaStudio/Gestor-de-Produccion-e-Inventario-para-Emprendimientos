@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/productos-terminados-admin.css" />
+    <title>Productos Terminados</title>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="header-content">
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse"
+                    data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú"
+                    aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo"
+                    aria-expanded="true">
+                    <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true">
+                </button>
+                <span class="text">Productos Terminados</span>
+            </div>
+            <div class="user-info">
+                <img src="../css/assets/avatar.jpg" alt="Logo de la aplicación" class="user-avatar">
+                <span class="text-name">Admin</span>
+                <span class="text-rol"> Administrador</span>
+            </div>
+        </header>
+
+
+        <div class="content">
+            <section class="inventory-layout row g-4" id="inventario">
+
+                <div class="col-lg-8 inventory-table-col">
+                    <div class="inventory-content">
+
+                        <section class="page-header">
+                            <div class="page-header__content">
+                                <h1>Productos Terminados</h1>
+                                <p>Consulta y gestión del catálogo e inventario de Productos Terminados.</p>
+                            </div>
+                            <div class="page-header__actions d-flex gap-2">
+                                <button type="button" class="btn btn-primary d-flex align-items-center gap-2"
+                                    data-bs-toggle="modal" data-bs-target="#modalCrear">
+                                    Nuevo Producto
+                                </button>
+                                <button type="button" class="btn btn-outline-primary d-flex align-items-center gap-2"
+                                    data-bs-toggle="modal" data-bs-target="#modalActualizar">
+                                    Actualizar Stock
+                                </button>
+                            </div>
+                        </section>
+
+                        <section class="inventory-filters card">
+                            <div class="filters-row">
+
+                                <div class="search-box">
+                                    <span class="search-icon">
+                                        <img src="../css/assets/search.svg" class="icon-gray" alt="">
+                                    </span>
+                                    <input type="text" placeholder="Buscar Producto...">
+                                </div>
+
+                                <div class="filter-select">
+                                    <span class="filter-label">Categoría</span>
+                                    <select>
+                                        <option>Todas</option>
+                                    </select>
+                                </div>
+
+                                <div class="filter-select">
+                                    <span class="filter-label">Estado</span>
+                                    <select>
+                                        <option>Todos</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                                    <img src="../css/assets/filter.svg" class="icon-gray" alt="">
+                                    Limpiar filtros
+                                </button>
+
+                            </div>
+                        </section>
+
+                        <section class="inventory-stats">
+
+                            <article class="stat-card">
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/bag.svg" class="icon-primary" alt="">
+                                </div>
+                                <div class="stat-card__content">
+                                    <span>Productos</span>
+                                    <span class="stat-value">48</span>
+                                </div>
+                            </article>
+
+                            <article class="stat-card">
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/box.svg" class="icon-primary" alt="">
+                                </div>
+                                <div class="stat-card__content">
+                                    <span>En Stock</span>
+                                    <span class="stat-value">320 <span class="stat-unit">unidades</span></span>
+                                </div>
+                            </article>
+
+                            <article class="stat-card">
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/bricks.svg" class="icon-primary" alt="">
+                                </div>
+                                <div class="stat-card__content">
+                                    <span>En Producción</span>
+                                    <span class="stat-value">14</span>
+                                </div>
+                            </article>
+
+                            <article class="stat-card danger">
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/exclamation-triangle.svg" class="icon-danger" alt="">
+                                </div>
+                                <div class="stat-card__content">
+                                    <span>Sin stock</span>
+                                    <span class="stat-value">2</span>
+                                </div>
+                            </article>
+
+                        </section>
+
+                        <section class="inventory-table card">
+
+                            <table class="table table-hover align-middle mb-0">
+
+                                <thead>
+                                    <tr>
+                                        <th>Producto ↕</th>
+                                        <th>Categoría</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr class="selected">
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/mesa_nordica.jpg" alt="Mesa Nórdica">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Mesa Nórdica</span>
+                                                    <small>PT-001</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Mesas</td>
+                                        <td>20</td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">En Stock</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-PT001" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/biblioteca_moderna.webp"
+                                                        alt="Biblioteca Moderna">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Biblioteca Moderna</span>
+                                                    <small>PT-002</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Bibliotecas</td>
+                                        <td>15</td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">En Stock</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-PT002" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/escritorio_gamer.jpg"
+                                                        alt="Escritorio Gamer">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Escritorio Gamer</span>
+                                                    <small>PT-003</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Escritorios</td>
+                                        <td>4</td>
+                                        <td><span class="badge bg-warning-10 text-warning  badge-success">En
+                                                Producción</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-PT003" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/mesa_ratona.webp" alt="Mesa Ratona">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Mesa Ratona</span>
+                                                    <small>PT-004</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Mesas</td>
+                                        <td>0</td>
+                                        <td><span class="badge bg-error-10 text-error badge-success">Sin Stock</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-PT004" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/comoda_6_cajones.webp"
+                                                        alt="Cómoda 6 Cajones">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Cómoda 6 Cajones</span>
+                                                    <small>PT-005</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Cómodass</td>
+                                        <td>6</td>
+                                        <td><span class="badge bg-warning-10 text-warning badge-success">
+                                                En Producción
+                                            </span></td>
+                                        <td>
+                                            <a href="#detail-PT005" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/rack_tv.jpg" alt="Rack TV 1.80">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Rack TV 1.80</span>
+                                                    <small>PT-006</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Racks</td>
+                                        <td>12</td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">
+                                                En Stock
+                                            </span></td>
+                                        <td>
+                                            <a href="#detail-PT006" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="material-cell">
+                                                <div class="table-thumb">
+                                                    <img src="../css/assets/banqueta_alta.jpg" alt="Banqueta Alta">
+                                                </div>
+                                                <div class="material-info">
+                                                    <span class="material-name">Banqueta Alta</span>
+                                                    <small>PT-007</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Banquetas</td>
+                                        <td>0</td>
+                                        <td><span class="badge bg-error-10 text-error badge-success">Sin Stock</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-PT007" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                            <div class="table-footer">
+
+                                <div class="results-info">
+                                    Mostrando 1 a 8 de 48 resultados
+                                </div>
+
+                                <nav class="pagination">
+                                    <button type="button" aria-label="Anterior">
+                                        <img src="../css/assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                    </button>
+                                    <button type="button" class="active">1</button>
+                                    <button type="button">2</button>
+                                    <button type="button">3</button>
+                                    <button type="button">4</button>
+                                    <button type="button" aria-label="Siguiente">
+                                        <img src="../css/assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                    </button>
+                                </nav>
+
+                                <div class="page-size-selector">
+                                    <select aria-label="Resultados por página">
+                                        <option>10 por página</option>
+                                        <option>20 por página</option>
+                                        <option>50 por página</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+                </div>
+
+                <!-- ===== PANELES DE DETALLE (uno por producto) ===== -->
+
+                <!-- PT-001 Mesa Nórdica -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT001">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/mesa_nordica.jpg" alt="Mesa Nórdica">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Mesa Nórdica</h2>
+                                    <span>PT-001</span>
+                                    <span class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">
+                                        En Stock
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="">Descripción
+                                </span>
+                                <p>Mesa de comedor de estilo nórdico fabricada en MDF laminado con patas de madera
+                                    maciza. Diseñada para ofrecer resistencia y una estética minimalista ideal para
+                                    hogares modernos.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="">Categoría
+                                </span>
+                                <p>Mesas</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="">Stock
+                                </span>
+                                <span class="detail-value">20 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="">
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Tablero MDF 18 mm: 1 unidad</li>
+                                <li>Patas de pino cepillado: 4 unidades</li>
+                                <li>Tornillos para madera 3.5x16 mm: 16 unidades</li>
+                                <li>Adhesivo para madera: 50 ml</li>
+                                <li>Barniz transparente satinado: 200 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+                <!-- PT-002 Biblioteca Moderna -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT002">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/biblioteca_moderna.webp" alt="Biblioteca Moderna">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Biblioteca Moderna</h2>
+                                    <span>PT-002</span>
+                                    <span class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">
+                                        En Stock
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="">Descripción
+                                </span>
+                                <p>Biblioteca vertical de múltiples estantes destinada al almacenamiento y exhibición de
+                                    libros, objetos decorativos y elementos de oficina. Combina funcionalidad y diseño
+                                    contemporáneo.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="">Categoría
+                                </span>
+                                <p>Bibliotecas</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                </span>
+                                <span class="detail-value">15 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Tablero MDF 18 mm: 5 unidad</li>
+                                <li>Fondo MDF 3 mm: 1 unidad</li>
+                                <li>Tornillos para madera 3.5x16 mm: 24 unidades</li>
+                                <li>Adhesivo para madera: 80 ml</li>
+                                <li>Barniz transparente satinado: 300 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- TP-003 TEscritorio Gamer -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT003">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/escritorio_gamer.jpg" alt="Escritorio Gamer">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Escritorio Gamer</h2>
+                                    <span>PT-003</span>
+                                    <span class="badge bg-warning-10 text-warning badge-success mt-1 d-inline-block">
+                                        En Producción
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="">Descripción
+                                </span>
+                                <p>Escritorio amplio diseñado para estaciones de juego y trabajo. Cuenta con superficie
+                                    reforzada y espacio suficiente para múltiples monitores y periféricos.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="">Categoría
+                                </span>
+                                <p>Escritorios</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="">Stock
+                                </span>
+                                <span class="detail-value">15 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="">
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Tablero MDF 18 mm: 2 unidad</li>
+                                <li>Tablero MDF 25 mm: 1 unidad</li>
+                                <li>Listones de pino estructural: 4 unidades</li>
+                                <li>Tornillos para madera 3.5x16 mm: 30 unidades</li>
+                                <li>Adhesivo para madera: 100 ml</li>
+                                <li>Barniz transparente satinado: 250 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-004 Mesa Ratona -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT004">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/mesa_ratona.webp" alt="Mesa Ratona">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Mesa Ratona</h2>
+                                    <span>PT-004</span>
+                                    <span class="badge bg-error-10 text-error badge-success mt-1 d-inline-block">
+                                        Sin Stock
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="">Descripción
+                                </span>
+                                <p>Mesa ratona compacta para sala de estar, fabricada con tablero MDF revestido y
+                                    estructura de madera maciza. Ideal para complementar ambientes modernos y
+                                    funcionales.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="">Categoría
+                                </span>
+                                <p>Mesas</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="">Stock
+                                </span>
+                                <span class="detail-value">0 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="">
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Tablero MDF 18 mm: 1 unidad</li>
+                                <li>Patas de pino cepillado: 4 unidades</li>
+                                <li>Tornillos para madera 3.5x16 mm: 12 unidades</li>
+                                <li>Adhesivo para madera: 40 ml</li>
+                                <li>Barniz transparente satinado: 150 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-005 Cómoda 6 Cajones -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT005">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/comoda_6_cajones.webp" alt="Cómoda 6 Cajones">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Cómoda 6 Cajones</h2>
+                                    <span>PT-005</span>
+                                    <span class="badge bg-warning-10 text-warning badge-success mt-1 d-inline-block">
+                                        En Producción
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="">Descripción
+                                </span>
+                                <p>Cómoda de almacenamiento con seis cajones de gran capacidad. Diseñada para
+                                    dormitorios y espacios organizados, combinando resistencia y practicidad</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="">Categoría
+                                </span>
+                                <p>Cómodas</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de stock">Stock
+                                </span>
+                                <span class="detail-value">6 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de materiales">
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Tablero MDF 18 mm: 6 unidad</li>
+                                <li>Fondo MDF 3 mm: 7 unidad</li>
+                                <li>Corredera Metálica: 12 unidad</li>
+                                <li>Tornillos para madera 3.5x16 mm: 40 unidad</li>
+                                <li>Tirador de Madera: 6 unidad</li>
+                                <li>Adhesivo para madera: 120 ml</li>
+                                <li>Barniz transparente: 400 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="Ícono de fecha de alta">Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="Ícono de última modificación">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-006 Rack TV 1.80 -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT006">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/rack_tv.jpg" alt="Rack TV 1.80">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Rack TV 1.80</h2>
+                                    <span>PT-006</span>
+                                    <span class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">
+                                        En Stock
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="">Descripción
+                                </span>
+                                <p>Rack para televisión de hasta 1,80 metros de ancho, con compartimentos de
+                                    almacenamiento y diseño moderno para salas de estar y espacios multimedia.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="">Categoría
+                                </span>
+                                <p>Racks</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de stock">Stock
+                                </span>
+                                <span class="detail-value"> 12 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de materiales">
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Tablero MDF 18 mm: 4 unidad</li>
+                                <li>Fondo MDF 3 mm: 4 unidad</li>
+                                <li>Patas de pino cepillado: 1 unidades</li>
+                                <li>Tornillos para madera 3.5x16 mm: 28 unidad</li>
+                                <li>Adhesivo para madera: 90 ml</li>
+                                <li>Barniz transparente satinado: 250 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="Ícono de fecha de alta">Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="Ícono de última modificación">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+
+                <!-- MP-007 Banqueta Alta -->
+                <div class="col-lg-4 detail-col">
+                    <aside class="inventory-detail card" id="detail-PT007">
+
+                        <header class="detail-header">
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/banqueta_alta.jpg" alt="Banqueta Alta">
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Banqueta Alta</h2>
+                                    <span>PT-007</span>
+                                    <span class="badge bg-error-10 text-error badge-success mt-1 d-inline-block">
+                                        Sin Stock
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                        </header>
+
+                        <section class="detail-tabs">
+                            <button type="button" class="active">Información</button>
+                            <button type="button">Movimientos</button>
+                        </section>
+
+                        <section class="detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de descripción">Descripción
+                                </span>
+                                <p>Banqueta alta fabricada en madera maciza, ideal para barras y desayunadores. Su
+                                    diseño simple y robusto garantiza estabilidad y durabilidad.</p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de categoría">Categoría
+                                </span>
+                                <p>Banquetas</p>
+                            </div>
+                        </section>
+
+                        <section class="detail-stock">
+                            <div class="detail-row">
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de stock">Stock
+                                </span>
+                                <span class="detail-value">0 und</span>
+                            </div>
+                        </section>
+
+                        <section class="detail-material">
+
+                            <div class="detail-row">
+
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray"
+                                        alt="Ícono de materiales">
+                                    Materiales Requeridos
+                                </span>
+
+                            </div>
+
+                            <ul class="materials-list">
+                                <li>Listones de pino macizo: 5 unidades</li>
+                                <li>Tornillos para madera 3.5x16 mm: 12 unidades</li>
+                                <li>Adhesivo para madera: 30 ml</li>
+                                <li>Barniz transparente satinado: 120 ml</li>
+                            </ul>
+
+                        </section>
+
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="Ícono de fecha de alta">Fecha de Alta
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 10:30 a.m.</p>
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="Ícono de última modificación">Última Modificación
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2026 10:30 a.m.</p>
+                        </section>
+
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100"
+                                data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                Editar Producto
+                            </button>
+                        </footer>
+
+                    </aside>
+                </div>
+            </section>
+        </div>
+
+
+        <aside>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed"
+                aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse"
+                    aria-hidden="true"></span>
+                <div class="sidebar-brand p-4 d-flex">
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse">
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse">
+                    <button class="btn-close btn-close-white d-md-none sidebar-toggle-target collapse" type="button"
+                        data-bs-toggle="collapse" data-bs-target=".sidebar-toggle-target"
+                        aria-label="Cerrar menú"></button>
+                </div>
+
+                <div class="nav flex-column">
+                    <a href="./dashboard-admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/house-door.svg" class="sidebar-icon" alt="Ícono de panel"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Panel</span>
+                    </a>
+                    <a href="./materia_prima_admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="Ícono de materia prima"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Materia Prima</span>
+                    </a>
+                    <a href="../html/productos-terminados-admin.html"
+                        class="sidebar-link active text-decoration-none p-3">
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="" aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Productos Terminados</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Ícono de producción"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Producción</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/people.svg" class="sidebar-icon" alt="Ícono de reportes"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Usuarios</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Ícono de configuración"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Configuración</span>
+                    </a>
+                </div>
+
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil">
+                        <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse">
+                            <span class="text-white mb-0 d-block fw-bold">Admin</span>
+                            <small class="text-muted">Administrador</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+    </main>
+    <footer class="main_footer">
+        <div class="main_footer_inner">
+            <div class="main_footer_brand">
+                <img src="../css/assets/logo.png" alt="Logo QuantiaStudio" class="main_footer_logo">
+                <span class="main_footer_name">Gestor de Producción e Inventario</span>
+            </div>
+            <p>&copy; 2026 QuantiaStudio. Todos los derechos reservados.</p>
+            <p>Proyecto académico &mdash; Full Stack I (2026)</p>
+            <p>
+                <a href="home.html" target="_blank" rel="noopener">
+                    Ir a la Página de Inicio
+                </a>
+            </p>
+        </div>
+
+    </footer>
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal Registrar Producto Nuevo -->
+    <div class="modal fade" id="modalCrear" role="dialog" tabindex="-1" aria-labelledby="modalCrearLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content card">
+
+                <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalCrearLabel">
+                        Registrar Nuevo Producto
+                    </h2>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="formRegistrar">
+
+                        <!-- Código -->
+                        <div class="mb-3">
+                            <label for="regCodigo" class="form-label mb-1">
+                                Código
+                            </label>
+
+                            <input type="text" class="input" id="regCodigo" placeholder="Ej: PT-002" required>
+                        </div>
+
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label for="regNombre" class="form-label mb-1">
+                                Nombre
+                            </label>
+
+                            <input type="text" class="input" id="regNombre" placeholder="Nombre del producto" required>
+                        </div>
+
+                        <!-- Categoría -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-6">
+
+                                <label for="regCategoria" class="form-label mb-1">
+                                    Categoría
+                                </label>
+
+                                <select class="input form-select" id="regCategoria" required>
+
+                                    <option value="">Seleccionar...</option>
+                                    <option>Mesas</option>
+                                    <option>Escritorios</option>
+                                    <option>Decks</option>
+                                    <option>Cómodas</option>
+                                    <option>Bibliotecas</option>
+                                    <option>Banquetas</option>
+                                    <option>Sillas</option>
+
+                                </select>
+
+                                <div class="mt-1">
+                                    <a href="#collapseNuevaCategoria" class="text-decoration-none"
+                                        data-bs-toggle="collapse" role="button">
+
+                                        + Nueva categoría
+
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Nueva Categoría -->
+                        <div class="collapse" id="collapseNuevaCategoria">
+
+                            <div class="mb-3">
+
+                                <label for="regNuevaCategoria" class="form-label mb-1">
+                                    Nombre de la nueva categoría
+                                </label>
+
+                                <input type="text" class="input" id="regNuevaCategoria" placeholder="Categoría">
+
+                            </div>
+
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-6">
+
+                                <label for="regStock" class="form-label mb-1">
+                                    Stock Inicial
+                                </label>
+
+                                <input type="number" class="input" id="regStock" min="0" placeholder="0" required>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-4">
+
+                            <label for="regDescripcion" class="form-label mb-1">
+                                Descripción
+                            </label>
+
+                            <textarea class="input" id="regDescripcion" rows="3"
+                                placeholder="Breve descripción del producto..."></textarea>
+
+                        </div>
+
+                        <!-- Materiales Requeridos -->
+                        <div class="mb-4">
+
+                            <label class="form-label mb-2">
+                                Materiales Requeridos
+                            </label>
+
+                            <div class="row g-2 align-items-end mb-3">
+
+                                <div class="col-md-6">
+
+                                    <label for="materialSelect" class="form-label mb-1">
+                                        Material
+                                    </label>
+
+                                    <select class="input form-select" id="materialSelect">
+
+                                        <option value="">Seleccionar material...</option>
+                                        <option>Tablero MDF 18 mm</option>
+                                        <option>Patas de pino cepillado</option>
+                                        <option>Tornillos para madera 3.5x16 mm</option>
+                                        <option>Adhesivo para madera</option>
+                                        <option>Barniz transparente</option>
+
+                                    </select>
+
+                                    <small class="text-muted">
+                                        Stock disponible: 120 unidades
+                                    </small>
+
+                                </div>
+
+                                <div class="col-md-3">
+
+                                    <label for="materialCantidad" class="form-label mb-1">
+                                        Cantidad
+                                    </label>
+
+                                    <input type="number" min="1" class="input" id="materialCantidad" placeholder="0">
+
+                                </div>
+
+                                <div class="col-md-3">
+
+                                    <button type="button" class="btn btn-primary w-100">
+
+                                        Agregar
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <div class="materials-container">
+
+                                <table class="table align-middle mb-0">
+
+                                    <thead>
+
+                                        <tr>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                            <th></th>
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="materialesTableBody">
+
+                                        <tr>
+                                            <td>Tablero MDF 18 mm</td>
+                                            <td>1</td>
+                                            <td>unidad</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-outline-danger">
+                                                    Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+
+                            <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">
+
+                                Cancelar
+
+                            </button>
+
+                            <button type="submit" class="btn btn-primary">
+
+                                Guardar
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <div class="modal fade" id="modalEditar" role="dialog" tabindex="-1" aria-labelledby="modalEditarLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content card">
+
+                <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalEditarLabel">
+                        Editar Producto
+                    </h2>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="formEditar">
+
+                        <!-- Producto Seleccionado -->
+                        <div class="mb-3">
+                            <label for="editProducto" class="form-label mb-1">
+                                Producto
+                            </label>
+
+                            <input type="text" class="input bg-light" id="editProducto"
+                                placeholder="PT001 - Mesa Nórdica" readonly>
+                        </div>
+
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label for="editNombre" class="form-label mb-1">
+                                Nombre
+                            </label>
+
+                            <input type="text" class="input" id="editNombre" placeholder="Mesa Nórdica" required>
+
+                            <!-- Categoría -->
+                            <div class="row g-3 mb-3">
+
+                                <div class="col-md-6">
+
+                                    <label for="editCategoria" class="form-label mb-1">
+                                        Categoría
+                                    </label>
+
+                                    <select class="input form-select" id="editCategoria" required>
+
+                                        <option value="">Mesas</option>
+                                        <option>Escritorios</option>
+                                        <option>Decks</option>
+                                        <option>Cómodas</option>
+                                        <option>Bibliotecas</option>
+                                        <option>Banquetas</option>
+                                        <option>Sillas</option>
+
+                                    </select>
+
+                                    <div class="mt-1">
+                                        <a href="#collapseNuevaCategoriaEdit" class="text-decoration-none"
+                                            data-bs-toggle="collapse" role="button">
+
+                                            + Nueva categoría
+
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Nueva Categoría -->
+                            <div class="collapse" id="collapseNuevaCategoriaEdit">
+
+                                <div class="mb-3">
+
+                                    <label for="editNuevaCategoria" class="form-label mb-1">
+                                        Nombre de la nueva categoría
+                                    </label>
+
+                                    <input type="text" class="input" id="editNuevaCategoria" placeholder="Categoría" />
+
+                                </div>
+
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="mb-4">
+
+                                <label for="editDescripcion" class="form-label mb-1">
+                                    Descripción
+                                </label>
+
+                                <textarea class="input" id="editDescripcion"
+                                    rows="3">Mesa de comedor de estilo nórdico fabricada en MDF laminado con patas de madera maciza. Diseñada para ofrecer resistencia y una estética minimalista ideal para hogares modernos.</textarea>
+
+                            </div>
+
+                            <!-- Materiales Requeridos -->
+                            <div class="mb-4">
+
+                                <label class="form-label mb-2">
+                                    Materiales Requeridos
+                                </label>
+
+                                <div class="row g-2 align-items-end mb-3">
+
+                                    <div class="col-md-6">
+
+                                        <label for="materialSelectEdit" class="form-label mb-1">
+                                            Material
+                                        </label>
+
+                                        <select class="input form-select" id="materialSelectEdit">
+
+                                            <option value="">Seleccionar material...</option>
+                                            <option>Tablero MDF 18 mm</option>
+                                            <option>Patas de pino cepillado</option>
+                                            <option>Tornillos para madera 3.5x16 mm</option>
+                                            <option>Adhesivo para madera</option>
+                                            <option>Barniz transparente</option>
+
+                                        </select>
+
+                                        <small class="text-muted">
+                                            Stock disponible: 120 unidades
+                                        </small>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        <label for="materialCantidadEdit" class="form-label mb-1">
+                                            Cantidad
+                                        </label>
+
+                                        <input type="number" min="1" class="input" id="materialCantidadEdit"
+                                            placeholder="0" />
+
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        <button type="button" class="btn btn-primary w-100">
+
+                                            Agregar
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="materials-container">
+
+                                    <table class="table align-middle mb-0">
+
+                                        <thead>
+
+                                            <tr>
+                                                <th>Material</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad</th>
+                                                <th></th>
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody id="materialesTableBodyEdit">
+
+                                            <tr>
+                                                <td>Tablero MDF 18 mm</td>
+                                                <td>1</td>
+                                                <td>unidad</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Patas de pino cepillado</td>
+                                                <td>4</td>
+                                                <td>unidades</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tornillos para madera 3.5x16 mm</td>
+                                                <td>16</td>
+                                                <td>unidades</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Adhesivo para madera</td>
+                                                <td>50</td>
+                                                <td>ml</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Barniz transparente</td>
+                                                <td>200</td>
+                                                <td>ml</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                                <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">
+
+                                    Cancelar
+
+                                </button>
+
+                                <button type="submit" class="btn btn-primary">
+
+                                    Guardar
+
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actualizar Stock -->
+    <div class="modal fade" role="dialog" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card">
+                <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalActualizarLabel">Actualizar Stock</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formActualizar">
+                        <div class="mb-3">
+                            <label for="actMateria" class="form-label mb-1">Seleccionar
+                                Producto</label>
+                            <select class="input form-select" id="actMateria" required>
+                                <option value="">Seleccione Producto...</option>
+                                <option value="PT-001">Mesa Nórdica (PT-001)</option>
+                                <option value="PT-002">Biblioteca Moderna (PT-002)</option>
+                                <option value="PT-003">Escritorio Gamer (PT-003)</option>
+                                <option value="PT-004">Mesa Ratona (PT-004)</option>
+                                <option value="PT-005">Cómoda 6 cajones (PT-005)</option>
+                                <option value="PT-006">Rack TV 1.80 (PT-006)</option>
+                                <option value="PT-007">Banqueta Alta (PT-007)</option>
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="actStock" class="form-label mb-1">Stock
+                                    Total</label>
+                                <input type="number" class="input" id="actStock" min="0" placeholder="Ej: 150"
+                                    required />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="actReservado" class="form-label mb-1">Stock
+                                    Reservado</label>
+                                <input type="number" class="input" id="actReservado" min="0" placeholder="Ej: 10"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="actMinimo" class="form-label mb-1">Nivel
+                                    Mínimo</label>
+                                <input type="number" class="input" id="actMinimo" min="0" placeholder="Ej: 50" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="actEstado" class="form-label mb-1">Estado</label>
+                                <select class="input form-select" id="actEstado">
+                                    <option value="optimo">Óptimo</option>
+                                    <option value="bajo-minimo">Bajo Mínimo</option>
+                                    <option value="sin-stock">Sin Stock</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

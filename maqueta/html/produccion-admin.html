@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/produccion-admin.css" />
+    <title>Producción</title>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="header-content">
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse"
+                    data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú"
+                    aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo"
+                    aria-expanded="true">
+                    <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true">
+                </button>
+                <span class="text">Productos Terminados</span>
+            </div>
+            <div class="user-info">
+                <img src="../css/assets/avatar.jpg" alt="Logo de la aplicación" class="user-avatar">
+                <span class="text-name">Admin</span>
+                <span class="text-rol"> Administrador</span>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- Cabecera de página -->
+            <section class="page-header mb-4">
+                <div class="page-header__content">
+                    <h1>Producción</h1>
+                    <p>Supervisión de órdenes de producción y seguimiento del taller.</p>
+                </div>
+                <div class="page-header__actions">
+                    <div class="date-picker-btn btn d-flex align-items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-calendar3 icon-gray" viewBox="0 0 16 16">
+                            <path
+                                d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
+                            <path
+                                d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                        </svg>
+                        <span>10/06/2026 - 17/06/2026</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                            class="bi bi-chevron-down icon-gray" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </div>
+                    <button class="btn btn-exportar d-flex align-items-center gap-2" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-download icon-gray" viewBox="0 0 16 16">
+                            <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                            <path
+                                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                        </svg>
+                        <span>Exportar</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Estadísticas -->
+            <section class="inventory-stats mb-4">
+                <article class="stat-card">
+                    <div class="stat-card__icon icon-circle-violet">
+                        <img src="../css/assets/list-ul.svg" class="icon-violet" alt="" />
+                    </div>
+                    <div class="stat-card__content">
+                        <span class="stat-label">Órdenes Totales</span>
+                        <span class="stat-value">42</span>
+                        <span class="stat-desc">Todas las órdenes registradas</span>
+                    </div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon icon-circle-orange">
+                        <img src="../css/assets/info-circle.svg" class="icon-orange" alt="" />
+                    </div>
+                    <div class="stat-card__content">
+                        <span class="stat-label">Pendientes</span>
+                        <span class="stat-value">8</span>
+                        <span class="stat-desc">Esperando inicio</span>
+                    </div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon icon-circle-indigo">
+                        <img src="../css/assets/icons8-gear-50.png" class="icon-indigo" alt="" />
+                    </div>
+                    <div class="stat-card__content">
+                        <span class="stat-label">En Producción</span>
+                        <span class="stat-value">21</span>
+                        <span class="stat-desc">Órdenes en proceso</span>
+                    </div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon icon-circle-green">
+                        <img src="../css/assets/clipboard-check.svg" class="icon-green" alt="" />
+                    </div>
+                    <div class="stat-card__content">
+                        <span class="stat-label">Finalizadas</span>
+                        <span class="stat-value">13</span>
+                        <span class="stat-desc">Órdenes completadas</span>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Filtros -->
+            <section class="inventory-filters mb-4">
+                <div class="filters-row">
+                    <div class="search-box">
+                        <span class="search-icon">
+                            <img src="../css/assets/search.svg" class="icon-gray" alt="" />
+                        </span>
+                        <input type="text" placeholder="Buscar orden, producto o responsable..." class="input" />
+                    </div>
+                    <div class="filter-select">
+                        <span class="filter-label">Estado</span>
+                        <select class="input form-select">
+                            <option>Todos</option>
+                        </select>
+                    </div>
+                    <div class="filter-select">
+                        <span class="filter-label">Responsable</span>
+                        <select class="input form-select">
+                            <option>Todos</option>
+                        </select>
+                    </div>
+                    <div class="filter-select">
+                        <span class="filter-label">Producto</span>
+                        <select class="input form-select">
+                            <option>Todos</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-limpiar">
+                        <img src="../css/assets/filter.svg" class="icon-gray" alt="" />
+                        Limpiar filtros
+                    </button>
+                </div>
+            </section>
+
+            <!-- Tabla + Widgets -->
+            <div class="row g-4">
+
+                <!-- Tabla de órdenes -->
+                <div class="col-lg-8">
+                    <section class="inventory-table">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Orden</th>
+                                        <th>Producto</th>
+                                        <th>Responsable</th>
+                                        <th>Estado</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Estimada</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1028</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/mesa_nordica.jpg" alt="Mesa Nórdica"
+                                                    class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Mesa Nórdica</span>
+                                                    <small class="product-code">PT-001</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>María López</td>
+                                        <td><span class="badge badge-pendiente">Pendiente</span></td>
+                                        <td>10/06/2026</td>
+                                        <td>15/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1028" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1027</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/biblioteca_moderna.webp"
+                                                    alt="Biblioteca Moderna" class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Biblioteca Moderna</span>
+                                                    <small class="product-code">PT-002</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Juan Pérez</td>
+                                        <td><span class="badge badge-produccion">En Producción</span></td>
+                                        <td>11/06/2026</td>
+                                        <td>16/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1027" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1026</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/escritorio_gamer.jpg" alt="Escritorio Gamer"
+                                                    class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Escritorio Gamer</span>
+                                                    <small class="product-code">PT-003</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Ana Martínez</td>
+                                        <td><span class="badge badge-produccion">En Producción</span></td>
+                                        <td>09/06/2026</td>
+                                        <td>14/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1026" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1025</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/banqueta_alta.jpg" alt="Silla Tapizada"
+                                                    class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Silla Tapizada</span>
+                                                    <small class="product-code">PT-004</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Carlos García</td>
+                                        <td><span class="badge badge-produccion">En Producción</span></td>
+                                        <td>09/06/2026</td>
+                                        <td>13/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1025" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/mesa_ratona.webp" alt="Mesa Ratona"
+                                                    class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Mesa Ratona</span>
+                                                    <small class="product-code">PT-005</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>María López</td>
+                                        <td><span class="badge badge-finalizada">Finalizada</span></td>
+                                        <td>05/06/2026</td>
+                                        <td>08/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1024" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1023</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/comoda_6_cajones.webp" alt="Cómoda Minimalista"
+                                                    class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Cómoda Minimalista</span>
+                                                    <small class="product-code">PT-006</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Juan Pérez</td>
+                                        <td><span class="badge badge-finalizada">Finalizada</span></td>
+                                        <td>03/06/2026</td>
+                                        <td>06/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1023" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">OP-1022</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="../css/assets/banqueta_alta.jpg" alt="Banqueta Alta"
+                                                    class="table-product-img" />
+                                                <div>
+                                                    <span class="product-name d-block">Banqueta Alta</span>
+                                                    <small class="product-code">PT-007</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Ana Martínez</td>
+                                        <td><span class="badge badge-cancelada">Cancelada</span></td>
+                                        <td>04/06/2026</td>
+                                        <td>07/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP-1022" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+
+                            <div class="results-info">
+                                Mostrando 1 a 8 de 48 resultados
+                            </div>
+
+                            <nav class="pagination">
+                                <button type="button" aria-label="Anterior">
+                                    <img src="../css/assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                </button>
+                                <button type="button" class="active">1</button>
+                                <button type="button">2</button>
+                                <button type="button">3</button>
+                                <button type="button">4</button>
+                                <button type="button" aria-label="Siguiente">
+                                    <img src="../css/assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                </button>
+                            </nav>
+
+                            <div class="page-size-selector">
+                                <select aria-label="Resultados por página">
+                                    <option>10 por página</option>
+                                    <option>20 por página</option>
+                                    <option>50 por página</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Widgets laterales -->
+                <div class="col-lg-4 d-flex flex-column gap-4">
+
+                    <!-- Carga de Trabajo -->
+                    <article class="widget-card">
+                        <h2 class="widget-title">Carga de Trabajo</h2>
+                        <div class="employee-list">
+                            <div class="employee-item">
+                                <div class="avatar-bubble avatar-violet">ML</div>
+                                <div class="employee-details">
+                                    <span class="employee-name">María López</span>
+                                    <div class="employee-progress-track">
+                                        <div class="employee-progress-fill"
+                                            style="width: 90%; background-color: #7C3AED;"></div>
+                                    </div>
+                                </div>
+                                <span class="employee-orders">5 órdenes</span>
+                            </div>
+                            <div class="employee-item">
+                                <div class="avatar-bubble avatar-indigo">JP</div>
+                                <div class="employee-details">
+                                    <span class="employee-name">Juan Pérez</span>
+                                    <div class="employee-progress-track">
+                                        <div class="employee-progress-fill"
+                                            style="width: 75%; background-color: #4F46E5;"></div>
+                                    </div>
+                                </div>
+                                <span class="employee-orders">4 órdenes</span>
+                            </div>
+                            <div class="employee-item">
+                                <div class="avatar-bubble avatar-green">AM</div>
+                                <div class="employee-details">
+                                    <span class="employee-name">Ana Martínez</span>
+                                    <div class="employee-progress-track">
+                                        <div class="employee-progress-fill"
+                                            style="width: 55%; background-color: #10B981;"></div>
+                                    </div>
+                                </div>
+                                <span class="employee-orders">3 órdenes</span>
+                            </div>
+                            <div class="employee-item">
+                                <div class="avatar-bubble avatar-blue">CG</div>
+                                <div class="employee-details">
+                                    <span class="employee-name">Carlos García</span>
+                                    <div class="employee-progress-track">
+                                        <div class="employee-progress-fill"
+                                            style="width: 35%; background-color: #3B82F6;"></div>
+                                    </div>
+                                </div>
+                                <span class="employee-orders">2 órdenes</span>
+                            </div>
+                            <div class="employee-item">
+                                <div class="avatar-bubble avatar-orange">DH</div>
+                                <div class="employee-details">
+                                    <span class="employee-name">Diego Hernández</span>
+                                    <div class="employee-progress-track">
+                                        <div class="employee-progress-fill"
+                                            style="width: 0%; background-color: #F59E0B;"></div>
+                                    </div>
+                                </div>
+                                <span class="employee-orders">0 órdenes</span>
+                            </div>
+                        </div>
+                        <a href="#" class="widget-link">Ver todos los empleados &rarr;</a>
+                    </article>
+
+                    <!-- Próximas Finalizaciones -->
+                    <article class="widget-card">
+                        <h2 class="widget-title">Próximas Finalizaciones</h2>
+                        <div class="completion-list">
+                            <div class="completion-item">
+                                <img src="../css/assets/mesa_nordica.jpg" alt="Mesa Nórdica"
+                                    class="widget-product-img" />
+                                <div class="completion-details">
+                                    <span class="completion-product-name">Mesa Nórdica</span>
+                                    <small class="completion-product-meta">OP-1028 &middot; María López</small>
+                                </div>
+                                <div class="completion-time">
+                                    <span class="time-label">Finaliza en</span>
+                                    <strong class="time-value time-value--urgente">1 día</strong>
+                                </div>
+                            </div>
+                            <div class="completion-item">
+                                <img src="../css/assets/biblioteca_moderna.webp" alt="Biblioteca Moderna"
+                                    class="widget-product-img" />
+                                <div class="completion-details">
+                                    <span class="completion-product-name">Biblioteca Moderna</span>
+                                    <small class="completion-product-meta">OP-1027 &middot; Juan Pérez</small>
+                                </div>
+                                <div class="completion-time">
+                                    <span class="time-label">Finaliza en</span>
+                                    <strong class="time-value time-value--cercano">2 días</strong>
+                                </div>
+                            </div>
+                            <div class="completion-item">
+                                <img src="../css/assets/escritorio_gamer.jpg" alt="Escritorio Gamer"
+                                    class="widget-product-img" />
+                                <div class="completion-details">
+                                    <span class="completion-product-name">Escritorio Gamer</span>
+                                    <small class="completion-product-meta">OP-1026 &middot; Ana Martínez</small>
+                                </div>
+                                <div class="completion-time">
+                                    <span class="time-label">Finaliza en</span>
+                                    <strong class="time-value time-value--cercano">3 días</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="widget-link">Ver todas las próximas &rarr;</a>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+
+        <aside>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed"
+                aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse"
+                    aria-hidden="true"></span>
+                <div class="sidebar-brand p-4 d-flex">
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse">
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse">
+                    <button class="btn-close btn-close-white d-md-none sidebar-toggle-target collapse" type="button"
+                        data-bs-toggle="collapse" data-bs-target=".sidebar-toggle-target"
+                        aria-label="Cerrar menú"></button>
+                </div>
+
+                <div class="nav flex-column">
+                    <a href="./dashboard-admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/house-door.svg" class="sidebar-icon" alt="Ícono de panel"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Panel</span>
+                    </a>
+                    <a href="./materia_prima_admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="Ícono de materia prima"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Materia Prima</span>
+                    </a>
+                    <a href="../html/productos-terminados-admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="" aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Productos Terminados</span>
+                    </a>
+                    <a href="#" class="sidebar-link active text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Ícono de producción"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Producción</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bar-chart-line.svg" class="sidebar-icon" alt="Ícono de reportes"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Reportes</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Ícono de configuración"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Configuración</span>
+                    </a>
+                </div>
+
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil">
+                        <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse">
+                            <span class="text-white mb-0 d-block fw-bold">Admin</span>
+                            <small class="text-muted">Administrador</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+    </main>
+
+    <footer class="main_footer">
+        <div class="main_footer_inner">
+            <div class="main_footer_brand">
+                <img src="../css/assets/logo.png" alt="Logo QuantiaStudio" class="main_footer_logo">
+                <span class="main_footer_name">Gestor de Producción e Inventario</span>
+            </div>
+            <p>&copy; 2026 QuantiaStudio. Todos los derechos reservados.</p>
+            <p>Proyecto académico &mdash; Full Stack I (2026)</p>
+            <p>
+                <a href="home.html" target="_blank" rel="noopener">Ir a la Página de Inicio</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal Registrar Producto Nuevo -->
+    <div class="modal fade" id="modalCrear" role="dialog" tabindex="-1" aria-labelledby="modalCrearLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content card">
+                <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalCrearLabel">Registrar Nuevo Producto
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRegistrar">
+                        <div class="mb-3">
+                            <label for="regCodigo" class="form-label mb-1">Código</label>
+                            <input type="text" class="input" id="regCodigo" placeholder="Ej: PT-002" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regNombre" class="form-label mb-1">Nombre</label>
+                            <input type="text" class="input" id="regNombre" placeholder="Nombre del producto" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="regCategoria" class="form-label mb-1">Categoría</label>
+                                <select class="input form-select" id="regCategoria" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option>Mesas</option>
+                                    <option>Escritorios</option>
+                                    <option>Decks</option>
+                                    <option>Cómodas</option>
+                                    <option>Bibliotecas</option>
+                                    <option>Banquetas</option>
+                                    <option>Sillas</option>
+                                </select>
+                                <div class="mt-1">
+                                    <a href="#collapseNuevaCategoria" class="text-decoration-none"
+                                        data-bs-toggle="collapse" role="button">+ Nueva categoría</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseNuevaCategoria">
+                            <div class="mb-3">
+                                <label for="regNuevaCategoria" class="form-label mb-1">Nombre de la nueva
+                                    categoría</label>
+                                <input type="text" class="input" id="regNuevaCategoria" placeholder="Categoría">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="regStock" class="form-label mb-1">Stock Inicial</label>
+                                <input type="number" class="input" id="regStock" min="0" placeholder="0" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="regDescripcion" class="form-label mb-1">Descripción</label>
+                            <textarea class="input" id="regDescripcion" rows="3"
+                                placeholder="Breve descripción del producto..."></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label mb-2">Materiales Requeridos</label>
+                            <div class="row g-2 align-items-end mb-3">
+                                <div class="col-md-6">
+                                    <label for="materialSelect" class="form-label mb-1">Material</label>
+                                    <select class="input form-select" id="materialSelect">
+                                        <option value="">Seleccionar material...</option>
+                                        <option>Tablero MDF 18 mm</option>
+                                        <option>Patas de pino cepillado</option>
+                                        <option>Tornillos para madera 3.5x16 mm</option>
+                                        <option>Adhesivo para madera</option>
+                                        <option>Barniz transparente</option>
+                                    </select>
+                                    <small class="text-muted">Stock disponible: 120 unidades</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="materialCantidad" class="form-label mb-1">Cantidad</label>
+                                    <input type="number" min="1" class="input" id="materialCantidad" placeholder="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-primary w-100">Agregar</button>
+                                </div>
+                            </div>
+                            <div class="materials-container">
+                                <table class="table align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="materialesTableBody">
+                                        <tr>
+                                            <td>Tablero MDF 18 mm</td>
+                                            <td>1</td>
+                                            <td>unidad</td>
+                                            <td>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <div class="modal fade" id="modalEditar" role="dialog" tabindex="-1" aria-labelledby="modalEditarLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content card">
+                <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalEditarLabel">Editar Producto</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditar">
+                        <div class="mb-3">
+                            <label for="editProducto" class="form-label mb-1">Producto</label>
+                            <input type="text" class="input bg-light" id="editProducto"
+                                placeholder="PT001 - Mesa Nórdica" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editNombre" class="form-label mb-1">Nombre</label>
+                            <input type="text" class="input" id="editNombre" placeholder="Mesa Nórdica" required>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="editCategoria" class="form-label mb-1">Categoría</label>
+                                    <select class="input form-select" id="editCategoria" required>
+                                        <option value="">Mesas</option>
+                                        <option>Escritorios</option>
+                                        <option>Decks</option>
+                                        <option>Cómodas</option>
+                                        <option>Bibliotecas</option>
+                                        <option>Banquetas</option>
+                                        <option>Sillas</option>
+                                    </select>
+                                    <div class="mt-1">
+                                        <a href="#collapseNuevaCategoriaEdit" class="text-decoration-none"
+                                            data-bs-toggle="collapse" role="button">+ Nueva categoría</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="collapse" id="collapseNuevaCategoriaEdit">
+                                <div class="mb-3">
+                                    <label for="editNuevaCategoria" class="form-label mb-1">Nombre de la nueva
+                                        categoría</label>
+                                    <input type="text" class="input" id="editNuevaCategoria" placeholder="Categoría" />
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label for="editDescripcion" class="form-label mb-1">Descripción</label>
+                                <textarea class="input" id="editDescripcion"
+                                    rows="3">Mesa de comedor de estilo nórdico fabricada en MDF laminado con patas de madera maciza. Diseñada para ofrecer resistencia y una estética minimalista ideal para hogares modernos.</textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label mb-2">Materiales Requeridos</label>
+                                <div class="row g-2 align-items-end mb-3">
+                                    <div class="col-md-6">
+                                        <label for="materialSelectEdit" class="form-label mb-1">Material</label>
+                                        <select class="input form-select" id="materialSelectEdit">
+                                            <option value="">Seleccionar material...</option>
+                                            <option>Tablero MDF 18 mm</option>
+                                            <option>Patas de pino cepillado</option>
+                                            <option>Tornillos para madera 3.5x16 mm</option>
+                                            <option>Adhesivo para madera</option>
+                                            <option>Barniz transparente</option>
+                                        </select>
+                                        <small class="text-muted">Stock disponible: 120 unidades</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="materialCantidadEdit" class="form-label mb-1">Cantidad</label>
+                                        <input type="number" min="1" class="input" id="materialCantidadEdit"
+                                            placeholder="0" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-primary w-100">Agregar</button>
+                                    </div>
+                                </div>
+                                <div class="materials-container">
+                                    <table class="table align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Material</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="materialesTableBodyEdit">
+                                            <tr>
+                                                <td>Tablero MDF 18 mm</td>
+                                                <td>1</td>
+                                                <td>unidad</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Patas de pino cepillado</td>
+                                                <td>4</td>
+                                                <td>unidades</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tornillos para madera 3.5x16 mm</td>
+                                                <td>16</td>
+                                                <td>unidades</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Adhesivo para madera</td>
+                                                <td>50</td>
+                                                <td>ml</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Barniz transparente</td>
+                                                <td>200</td>
+                                                <td>ml</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actualizar Stock -->
+    <div class="modal fade" role="dialog" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card">
+                <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalActualizarLabel">Actualizar Stock</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formActualizar">
+                        <div class="mb-3">
+                            <label for="actMateria" class="form-label mb-1">Seleccionar Producto</label>
+                            <select class="input form-select" id="actMateria" required>
+                                <option value="">Seleccione Producto...</option>
+                                <option value="PT-001">Mesa Nórdica (PT-001)</option>
+                                <option value="PT-002">Biblioteca Moderna (PT-002)</option>
+                                <option value="PT-003">Escritorio Gamer (PT-003)</option>
+                                <option value="PT-004">Mesa Ratona (PT-004)</option>
+                                <option value="PT-005">Cómoda 6 cajones (PT-005)</option>
+                                <option value="PT-006">Rack TV 1.80 (PT-006)</option>
+                                <option value="PT-007">Banqueta Alta (PT-007)</option>
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="actStock" class="form-label mb-1">Stock Total</label>
+                                <input type="number" class="input" id="actStock" min="0" placeholder="Ej: 150"
+                                    required />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="actReservado" class="form-label mb-1">Stock Reservado</label>
+                                <input type="number" class="input" id="actReservado" min="0" placeholder="Ej: 10"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="actMinimo" class="form-label mb-1">Nivel Mínimo</label>
+                                <input type="number" class="input" id="actMinimo" min="0" placeholder="Ej: 50" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="actEstado" class="form-label mb-1">Estado</label>
+                                <select class="input form-select" id="actEstado">
+                                    <option value="optimo">Óptimo</option>
+                                    <option value="bajo-minimo">Bajo Mínimo</option>
+                                    <option value="sin-stock">Sin Stock</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
