@@ -679,8 +679,6 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	color: var(--primary-color);
 }
 
-/* ---------- NUEVOS ESTILOS PARA COMPATIBILIDAD CON MOCKUP ---------- */
-
 /* Ajustes de filtros */
 .filters-row {
 	display: grid;
@@ -1316,7 +1314,7 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 	}
 
 	.filters-row {
-		grid-template-columns: 1fr !important;
+		grid-template-columns: 1fr important;
 		gap: 1rem;
 	}
 
