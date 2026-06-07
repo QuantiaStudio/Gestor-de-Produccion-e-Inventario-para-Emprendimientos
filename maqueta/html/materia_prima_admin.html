@@ -13,7 +13,10 @@
     <main>
         <header>
             <div class="header-content">
-                <button class="menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú" aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo" aria-expanded="true">
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse"
+                    data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú"
+                    aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo"
+                    aria-expanded="true">
                     <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true" />
                 </button>
                 <span class="text">Materia Prima</span>
@@ -37,34 +40,34 @@
                                 <h1>Materia Prima</h1>
                                 <p>Consulta y gestión del inventario de materias primas.</p>
                             </div>
-
-                            <div class="page-header__actions">
-                                <button type="button" class="btn btn-outline-primary">
-                                    Exportar
-                                </button>
-                            </div>
                         </section>
 
                         <section class="inventory-filters card">
                             <div class="filters-row">
 
                                 <div class="search-box">
+                                    <span class="search-icon">
+                                        <img src="../css/assets/search.svg" class="icon-gray" alt="" />
+                                    </span>
                                     <input type="text" placeholder="Buscar materia prima...">
                                 </div>
 
                                 <div class="filter-select">
+                                    <span class="filter-label">Categoría</span>
                                     <select>
-                                        <option>Todas las categorías</option>
+                                        <option>Todas</option>
                                     </select>
                                 </div>
 
                                 <div class="filter-select">
+                                    <span class="filter-label">Estado</span>
                                     <select>
-                                        <option>Todos los estados</option>
+                                        <option>Todos</option>
                                     </select>
                                 </div>
 
-                                <button type="button" class="btn btn-outline-secondary">
+                                <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                                    <img src="../css/assets/filter.svg" class="icon-gray" alt="" />
                                     Limpiar filtros
                                 </button>
 
@@ -74,34 +77,42 @@
                         <section class="inventory-stats">
 
                             <article class="stat-card">
-                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/box.svg" class="icon-primary" alt="" />
+                                </div>
                                 <div class="stat-card__content">
                                     <span>Total materias primas</span>
-                                    <strong>32</strong>
+                                    <span class="stat-value">32</span>
                                 </div>
                             </article>
 
                             <article class="stat-card">
-                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/bag.svg" class="icon-primary" alt="" />
+                                </div>
                                 <div class="stat-card__content">
                                     <span>Stock total</span>
-                                    <strong>12.450</strong>
+                                    <span class="stat-value">12,450.75 <span class="stat-unit">unidades</span></span>
                                 </div>
                             </article>
 
                             <article class="stat-card warning">
-                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/exclamation-triangle.svg" class="icon-danger" alt="" />
+                                </div>
                                 <div class="stat-card__content">
-                                    <span>Bajo mínimo</span>
-                                    <strong>5</strong>
+                                    <span>Por debajo del mínimo</span>
+                                    <span class="stat-value">5</span>
                                 </div>
                             </article>
 
                             <article class="stat-card danger">
-                                <div class="stat-card__icon"></div>
+                                <div class="stat-card__icon">
+                                    <img src="../css/assets/box.svg" class="icon-danger" alt="" />
+                                </div>
                                 <div class="stat-card__content">
                                     <span>Sin stock</span>
-                                    <strong>2</strong>
+                                    <span class="stat-value">2</span>
                                 </div>
                             </article>
 
@@ -113,11 +124,11 @@
 
                                 <thead>
                                     <tr>
-                                        <th>Materia Prima</th>
+                                        <th>Materia Prima ↕</th>
                                         <th>Categoría</th>
                                         <th>Unidad</th>
                                         <th>Stock Total</th>
-                                        <th>Disponible</th>
+                                        <th>Stock Disponible</th>
                                         <th>Nivel Mínimo</th>
                                         <th>Estado</th>
                                         <th></th>
@@ -126,11 +137,13 @@
 
                                 <tbody>
 
-                                    <tr>
+                                    <tr class="selected">
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Tablero MDF 18mm</span>
-                                                <small>MP-001</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Tablero MDF 18mm</span>
+                                                    <small>MP-001</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Madera</td>
@@ -138,15 +151,23 @@
                                         <td>120</td>
                                         <td>100</td>
                                         <td>50</td>
-                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><a href="#detail-MP001" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">Óptimo</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-MP001" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Melamina Blanca</span>
-                                                <small>MP-002</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Melamina Blanca</span>
+                                                    <small>MP-002</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Láminas</td>
@@ -154,15 +175,23 @@
                                         <td>250</td>
                                         <td>220</td>
                                         <td>100</td>
-                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><a href="#detail-MP002" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">Óptimo</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-MP002" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Canto PVC Blanco</span>
-                                                <small>MP-003</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Canto PVC Blanco</span>
+                                                    <small>MP-003</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Accesorios</td>
@@ -170,15 +199,23 @@
                                         <td>480</td>
                                         <td>450</td>
                                         <td>200</td>
-                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><a href="#detail-MP003" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">Óptimo</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-MP003" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Tornillo 3.5x16mm</span>
-                                                <small>MP-004</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Tornillo 3.5x16mm</span>
+                                                    <small>MP-004</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Ferretería</td>
@@ -186,15 +223,23 @@
                                         <td>850</td>
                                         <td>800</td>
                                         <td>300</td>
-                                        <td><span class="badge bg-success badge-success">Óptimo</span></td>
-                                        <td><a href="#detail-MP004" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-success-10 text-success badge-success">Óptimo</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-MP004" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Pegamento de Contacto</span>
-                                                <small>MP-005</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Pegamento de Contacto</span>
+                                                    <small>MP-005</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Adhesivos</td>
@@ -202,15 +247,23 @@
                                         <td>15</td>
                                         <td>10</td>
                                         <td>20</td>
-                                        <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
-                                        <td><a href="#detail-MP005" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-warning-10 text-warning badge-success">Bajo
+                                                Mínimo</span></td>
+                                        <td>
+                                            <a href="#detail-MP005" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Barniz Transparente</span>
-                                                <small>MP-006</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Barniz Transparente</span>
+                                                    <small>MP-006</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Acabados</td>
@@ -218,15 +271,23 @@
                                         <td>5</td>
                                         <td>4</td>
                                         <td>10</td>
-                                        <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
-                                        <td><a href="#detail-MP006" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-warning-10 text-warning badge-success">Bajo
+                                                Mínimo</span></td>
+                                        <td>
+                                            <a href="#detail-MP006" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Lija Grano 120</span>
-                                                <small>MP-007</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Lija Grano 120</span>
+                                                    <small>MP-007</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Abrasivos</td>
@@ -234,15 +295,23 @@
                                         <td>0</td>
                                         <td>0</td>
                                         <td>50</td>
-                                        <td><span class="badge bg-danger badge-success">Sin stock</span></td>
-                                        <td><a href="#detail-MP007" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-error-10 text-error badge-success">Sin Stock</span>
+                                        </td>
+                                        <td>
+                                            <a href="#detail-MP007" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>
-                                            <div class="material-info">
-                                                <span class="material-name">Clavo 1"</span>
-                                                <small>MP-008</small>
+                                            <div class="material-cell">
+                                                <div class="material-info">
+                                                    <span class="material-name">Clavo 1"</span>
+                                                    <small>MP-008</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>Ferretería</td>
@@ -250,8 +319,14 @@
                                         <td>2.5</td>
                                         <td>1.0</td>
                                         <td>5</td>
-                                        <td><span class="badge bg-warning text-dark badge-success">Bajo mínimo</span></td>
-                                        <td><a href="#detail-MP008" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                        <td><span class="badge bg-warning-10 text-warning badge-success">Bajo
+                                                Mínimo</span></td>
+                                        <td>
+                                            <a href="#detail-MP008" class="btn-ver-detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
                                     </tr>
 
                                 </tbody>
@@ -265,13 +340,25 @@
                                 </div>
 
                                 <nav class="pagination">
-                                    <button type="button">Anterior</button>
+                                    <button type="button" aria-label="Anterior">
+                                        <img src="../css/assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                    </button>
                                     <button type="button" class="active">1</button>
                                     <button type="button">2</button>
                                     <button type="button">3</button>
                                     <button type="button">4</button>
-                                    <button type="button">Siguiente</button>
+                                    <button type="button" aria-label="Siguiente">
+                                        <img src="../css/assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                    </button>
                                 </nav>
+
+                                <div class="page-size-selector">
+                                    <select aria-label="Resultados por página">
+                                        <option>10 por página</option>
+                                        <option>20 por página</option>
+                                        <option>50 por página</option>
+                                    </select>
+                                </div>
 
                             </div>
 
@@ -287,15 +374,18 @@
                     <aside class="inventory-detail card" id="detail-MP001">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Tablero MDF 18mm</h2>
-                                <span>MP-001</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/box.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Tablero MDF 18mm</h2>
+                                    <span>MP-001</span>
+                                    <span
+                                        class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">Óptimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-success badge-success">Óptimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -305,45 +395,74 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
-                                <p>Tablero MDF de 18mm utilizado para muebles.</p>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
+                                <p>Tablero de fibra de densidad media de 18mm de espesor, ideal para muebles y
+                                    carpintería.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Madera</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>und</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>120 und</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">120 und</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>20 und</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">20 und</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>100 und</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">100 und</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>50 und</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">50 und</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>18/05/2024 - 10:30 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">18/05/2024 10:30 a.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -354,15 +473,18 @@
                     <aside class="inventory-detail card" id="detail-MP002">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Melamina Blanca</h2>
-                                <span>MP-002</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/list-ul.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Melamina Blanca</h2>
+                                    <span>MP-002</span>
+                                    <span
+                                        class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">Óptimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-success badge-success">Óptimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -372,45 +494,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Melamina blanca para superficies de muebles.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Láminas</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>m²</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>250 m²</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">250 m²</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>30 m²</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">30 m²</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>220 m²</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">220 m²</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>100 m²</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">100 m²</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>20/05/2024 - 09:15 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">20/05/2024 09:15 a.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -421,15 +571,18 @@
                     <aside class="inventory-detail card" id="detail-MP003">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Canto PVC Blanco</h2>
-                                <span>MP-003</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/info-circle.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Canto PVC Blanco</h2>
+                                    <span>MP-003</span>
+                                    <span
+                                        class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">Óptimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-success badge-success">Óptimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -439,45 +592,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Canto de PVC blanco para cantear tableros.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Accesorios</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>metros</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>480 metros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">480 metros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>30 metros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">30 metros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>450 metros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">450 metros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>200 metros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">200 metros</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>22/05/2024 - 14:00 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">22/05/2024 02:00 p.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -488,15 +669,18 @@
                     <aside class="inventory-detail card" id="detail-MP004">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Tornillo 3.5x16mm</h2>
-                                <span>MP-004</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/unlock.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Tornillo 3.5x16mm</h2>
+                                    <span>MP-004</span>
+                                    <span
+                                        class="badge bg-success-10 text-success badge-success mt-1 d-inline-block">Óptimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-success badge-success">Óptimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -506,45 +690,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Tornillo autorroscante para ensamble de muebles.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Ferretería</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>unid</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>850 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">850 unid</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>50 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">50 unid</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>800 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">800 unid</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>300 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">300 unid</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>15/05/2024 - 11:45 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">15/05/2024 11:45 a.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -555,15 +767,19 @@
                     <aside class="inventory-detail card" id="detail-MP005">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Pegamento de Contacto</h2>
-                                <span>MP-005</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/info-circle.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Pegamento de Contacto</h2>
+                                    <span>MP-005</span>
+                                    <span
+                                        class="badge bg-warning-10 text-warning badge-success mt-1 d-inline-block">Bajo
+                                        Mínimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-warning text-dark badge-success">Bajo mínimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -573,45 +789,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Pegamento de contacto para laminados y enchapados.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Adhesivos</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>litros</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>15 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">15 litros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>5 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">5 litros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>10 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">10 litros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>20 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">20 litros</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>25/05/2024 - 08:00 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">25/05/2024 08:00 a.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -622,15 +866,19 @@
                     <aside class="inventory-detail card" id="detail-MP006">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Barniz Transparente</h2>
-                                <span>MP-006</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/info-circle.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Barniz Transparente</h2>
+                                    <span>MP-006</span>
+                                    <span
+                                        class="badge bg-warning-10 text-warning badge-success mt-1 d-inline-block">Bajo
+                                        Mínimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-warning text-dark badge-success">Bajo mínimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -640,45 +888,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Barniz transparente para terminación de superficies de madera.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Acabados</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>litros</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>5 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">5 litros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>1 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">1 litros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>4 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">4 litros</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>10 litros</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">10 litros</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>23/05/2024 - 16:20 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">23/05/2024 04:20 p.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -689,15 +965,18 @@
                     <aside class="inventory-detail card" id="detail-MP007">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Lija Grano 120</h2>
-                                <span>MP-007</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/clipboard-check.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Lija Grano 120</h2>
+                                    <span>MP-007</span>
+                                    <span class="badge bg-error-10 text-error badge-success mt-1 d-inline-block">Sin
+                                        Stock</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-danger badge-success">Sin stock</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -707,45 +986,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Lija de grano 120 para lijado fino de superficies.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Abrasivos</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>unid</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>0 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">0 unid</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>0 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">0 unid</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>0 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">0 unid</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>50 unid</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">50 unid</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>10/05/2024 - 07:30 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">10/05/2024 07:30 a.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -756,15 +1063,19 @@
                     <aside class="inventory-detail card" id="detail-MP008">
 
                         <header class="detail-header">
-                            <div class="detail-icon"></div>
-                            <div class="detail-title">
-                                <h2>Clavo 1"</h2>
-                                <span>MP-008</span>
+                            <div class="detail-header-left">
+                                <div class="detail-icon">
+                                    <img src="../css/assets/unlock.svg" class="icon-primary" alt="" />
+                                </div>
+                                <div class="detail-title">
+                                    <h2>Clavo 1"</h2>
+                                    <span>MP-008</span>
+                                    <span
+                                        class="badge bg-warning-10 text-warning badge-success mt-1 d-inline-block">Bajo
+                                        Mínimo</span>
+                                </div>
                             </div>
-                            <div class="detail-header-right">
-                                <span class="badge bg-warning text-dark badge-success">Bajo mínimo</span>
-                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
-                            </div>
+                            <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
                         </header>
 
                         <section class="detail-tabs">
@@ -774,45 +1085,73 @@
 
                         <section class="detail-info">
                             <div class="detail-item">
-                                <span>Descripción</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Descripción
+                                </span>
                                 <p>Clavo de 1 pulgada para ensamble de marcos y estructuras.</p>
                             </div>
                             <div class="detail-item">
-                                <span>Categoría</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/people.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Categoría
+                                </span>
                                 <p>Ferretería</p>
                             </div>
                             <div class="detail-item">
-                                <span>Unidad de medida</span>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/list-ul.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Unidad de medida
+                                </span>
                                 <p>kg</p>
                             </div>
                         </section>
 
                         <section class="detail-stock">
                             <div class="detail-row">
-                                <span>Stock Total</span>
-                                <strong>2.5 kg</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/box.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Total
+                                </span>
+                                <span class="detail-value">2.5 kg</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Reservado</span>
-                                <strong>1.5 kg</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/lock.svg" class="detail-label-icon icon-gray" alt="" />Stock
+                                    Reservado
+                                </span>
+                                <span class="detail-value">1.5 kg</span>
                             </div>
                             <div class="detail-row">
-                                <span>Stock Disponible</span>
-                                <strong>1.0 kg</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/unlock.svg" class="detail-label-icon icon-primary"
+                                        alt="" />Stock Disponible
+                                </span>
+                                <span class="detail-value text-primary-color">1.0 kg</span>
                             </div>
                             <div class="detail-row">
-                                <span>Nivel Mínimo</span>
-                                <strong>5 kg</strong>
+                                <span class="detail-label-with-icon">
+                                    <img src="../css/assets/info-circle.svg" class="detail-label-icon icon-gray"
+                                        alt="" />Nivel Mínimo
+                                </span>
+                                <span class="detail-value">5 kg</span>
                             </div>
                         </section>
 
-                        <section class="detail-update">
-                            <span>Última actualización</span>
-                            <p>28/05/2024 - 13:10 hs</p>
+                        <section class="detail-update d-flex justify-content-between align-items-center mt-3 pt-3"
+                            style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span class="detail-label-with-icon">
+                                <img src="../css/assets/clipboard-check.svg" class="detail-label-icon icon-gray"
+                                    alt="" />Última actualización
+                            </span>
+                            <p class="mb-0 text-muted fs-7 font-normal">28/05/2024 01:10 p.m.</p>
                         </section>
 
-                        <footer class="detail-actions">
-                            <button type="button" class="btn btn-outline-primary">Ver historial completo</button>
+                        <footer class="detail-actions mt-3">
+                            <button type="button"
+                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100">
+                                Ver historial completo
+                            </button>
                         </footer>
 
                     </aside>
@@ -823,11 +1162,15 @@
 
 
         <aside>
-            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed" aria-label="Menú principal">
-                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse show" aria-hidden="true"></span>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed"
+                aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse show"
+                    aria-hidden="true"></span>
                 <div class="sidebar-brand p-4">
-                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse show" />
-                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse" />
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse show" />
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse" />
                 </div>
 
                 <div class="nav flex-column">
@@ -855,7 +1198,8 @@
 
                 <div class="profile-section mt-auto p-4">
                     <div class="d-flex align-items-center">
-                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil" />
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar"
+                            alt="Foto de perfil" />
                         <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse show">
                             <h6 class="text-white mb-0">Admin</h6>
                             <small class="text-muted">Administrador</small>

@@ -32,7 +32,7 @@ body {
 /* ---------- ESTILOS ESPECÍFICOS PARA MATERIA PRIMA ADMIN ---------- */
 
 /* Estilos del header */
-header {
+main > header {
 	background-color: var(--primary-color);
 	color: white;
 	padding: 1rem;
@@ -49,7 +49,7 @@ header {
 	transition: left var(--sidebar-transition), width var(--sidebar-transition);
 }
 
-body:has(#sidebarExpandedState:not(.show)) header {
+body:has(#sidebarExpandedState:not(.show)) main > header {
 	left: var(--sidebar-width-collapsed);
 	width: calc(100% - var(--sidebar-width-collapsed));
 }
@@ -452,7 +452,7 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	color: var(--gray-500);
 }
 
-.stat-card__content strong {
+.stat-card__content .stat-value {
 	font-size: 1.35rem;
 	font-weight: 700;
 	line-height: 1;
@@ -743,7 +743,7 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	gap: 1rem;
 }
 
-.detail-row strong {
+.detail-row .detail-value {
 	color: var(--gray-900);
 	font-size: 0.92rem;
 	font-weight: 700;
@@ -771,7 +771,7 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 		--sidebar-width-collapsed: 72px;
 	}
 
-	header {
+	main > header {
 		gap: 1rem;
 		padding: 0.75rem;
 	}
@@ -910,3 +910,262 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 .main_footer a:hover {
 	color: var(--primary-color);
 }
+
+/* ---------- NUEVOS ESTILOS PARA COMPATIBILIDAD CON MOCKUP ---------- */
+
+/* Ajustes de filtros */
+.filters-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1.9fr) repeat(2, minmax(0, 1fr)) auto;
+	gap: 0.85rem;
+	align-items: end; /* Para alinear con las etiquetas de Categoría/Estado */
+}
+
+.filter-select {
+	position: relative;
+}
+
+.filter-label {
+	position: absolute;
+	top: -7px;
+	left: 12px;
+	background: #ffffff;
+	padding: 0 4px;
+	font-size: 10px;
+	font-weight: 800;
+	color: var(--gray-600);
+	text-transform: uppercase;
+	pointer-events: none;
+	z-index: 5;
+}
+
+/* Ajustes de búsqueda */
+.search-box {
+	position: relative;
+}
+
+.search-box .search-icon {
+	position: absolute;
+	left: 14px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--gray-400);
+	display: flex;
+	align-items: center;
+	pointer-events: none;
+}
+
+.search-box input {
+	padding-left: 2.5rem !important;
+}
+
+/* Iconos de Cards de Estado */
+.stat-card__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--primary-color);
+}
+
+.stat-card.warning .stat-card__icon {
+	color: var(--color-error);
+	background: rgba(220, 38, 38, 0.1);
+}
+
+.stat-card.warning .stat-card__content span {
+	color: var(--color-error) !important;
+}
+
+.stat-card.danger .stat-card__icon {
+	color: var(--color-error);
+	background: rgba(220, 38, 38, 0.1);
+}
+
+.stat-card.danger .stat-card__content span {
+	color: var(--color-error) !important;
+}
+
+.stat-unit {
+	font-size: 0.75rem;
+	font-weight: 400;
+	color: var(--gray-500);
+	margin-left: 0.25rem;
+}
+
+/* Elementos y celdas de la tabla */
+.material-cell {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.material-item-icon {
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	background: rgba(124, 58, 237, 0.1);
+	color: var(--primary-color);
+}
+
+.material-item-icon svg {
+	width: 1.15rem;
+	height: 1.15rem;
+	fill: currentColor;
+}
+
+.inventory-table tbody tr.selected td:nth-child(5) {
+	color: var(--primary-color);
+	font-weight: 700;
+}
+
+/* Chevron de ver detalle */
+.btn-ver-detalle {
+	color: var(--primary-color);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.2s ease, color 0.2s ease;
+	text-decoration: none;
+}
+
+.btn-ver-detalle:hover {
+	transform: translateX(3px);
+	color: var(--primary-color);
+}
+
+.btn-ver-detalle svg {
+	width: 1rem;
+	height: 1rem;
+}
+
+/* Selector de tamaño de página */
+.page-size-selector select {
+	border: 1px solid rgba(148, 163, 184, 0.22);
+	background: white;
+	color: var(--gray-600);
+	border-radius: 0.65rem;
+	padding: 0.4rem 1.75rem 0.4rem 0.75rem;
+	font-size: 0.85rem;
+	outline: none;
+	cursor: pointer;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234B5563' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: right 0.75rem center;
+	background-size: 10px;
+}
+
+/* Estructura del panel de detalle */
+.detail-header {
+	position: relative;
+	width: 100%;
+}
+
+.detail-header-left {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.detail-header-left .detail-title h2 {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.detail-header-left .detail-title span {
+	font-size: 0.85rem;
+}
+
+.detail-header .btn-cerrar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 1.5rem;
+}
+
+.detail-icon {
+	width: 3.25rem;
+	height: 3.25rem;
+	border-radius: 50%;
+	background: radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.25), rgba(124, 58, 237, 0.12));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--primary-color);
+	flex-shrink: 0;
+}
+
+.detail-icon svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.detail-label-with-icon {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var(--gray-500);
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+.detail-label-icon {
+	color: var(--gray-400);
+	flex-shrink: 0;
+}
+
+.detail-row .detail-value.text-primary-color {
+	color: var(--primary-color) !important;
+}
+
+.detail-tabs {
+	margin-bottom: 0.5rem;
+}
+
+.detail-info {
+	gap: 1.2rem;
+}
+
+/* Clases de filtro para colorear iconos de assets (SVG) en img */
+.icon-primary {
+	filter: invert(31%) sepia(85%) saturate(1469%) hue-rotate(242deg) brightness(96%) contrast(98%);
+}
+.icon-danger {
+	filter: invert(16%) sepia(89%) saturate(6011%) hue-rotate(354deg) brightness(93%) contrast(90%);
+}
+.icon-gray {
+	filter: invert(65%) sepia(6%) saturate(583%) hue-rotate(180deg) brightness(88%) contrast(83%);
+}
+
+.stat-card__icon img {
+	width: 24px;
+	height: 24px;
+}
+.detail-icon img {
+	width: 24px;
+	height: 24px;
+}
+.detail-label-icon {
+	width: 14px;
+	height: 14px;
+	object-fit: contain;
+	display: inline-block;
+}
+
+.search-icon img {
+	width: 16px;
+	height: 16px;
+	object-fit: contain;
+}
+.btn img {
+	width: 16px;
+	height: 16px;
+	object-fit: contain;
+}
+
+
