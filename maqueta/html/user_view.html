@@ -84,6 +84,9 @@
                 <button class="btn btn-primary">Buscar</button>
             </div>
 
+            <div class="alert alert-warning d-none" id="sin-resultados" role="alert">
+                No se encontraron materiales que coincidan con la búsqueda.
+            </div>
             <div class="stock-table-wrapper">
                 <table class="stock-table">
                     <thead>
@@ -96,40 +99,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#modalDetalle" style="cursor: pointer;">
                             <td class="mono">#M001</td>
                             <td>Madera de Roble</td>
                             <td>Madera</td>
                             <td class="numeric">320 kg</td>
-                            <td><span class="badge badge--success">Disponible</span></td>
+                            <span class="estado-badge badge--success">Disponible</span>
                         </tr>
-                        <tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#modalDetalle" style="cursor: pointer;">
                             <td class="mono">#M002</td>
                             <td>Pintura Blanca</td>
                             <td>Acabados</td>
                             <td class="numeric">15 L</td>
-                            <td><span class="badge badge--warning">Bajo stock</span></td>
+                            <span class="estado-badge badge--warning">Bajo stock</span>
                         </tr>
-                        <tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#modalDetalle" style="cursor: pointer;">
                             <td class="mono">#M003</td>
                             <td>Tornillos 3mm</td>
                             <td>Herrajes</td>
                             <td class="numeric">1.800 u</td>
-                            <td><span class="badge badge--success">Disponible</span></td>
+                            <span class="estado-badge badge--success">Disponible</span>
                         </tr>
-                        <tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#modalDetalle" style="cursor: pointer;">
                             <td class="mono">#M004</td>
                             <td>Barniz Transparente</td>
                             <td>Acabados</td>
                             <td class="numeric">3 L</td>
-                            <td><span class="badge badge--error">Sin stock</span></td>
+                            <span class="estado-badge badge--error">Sin stock</span>
                         </tr>
-                        <tr>
+                        <tr data-bs-toggle="modal" data-bs-target="#modalDetalle" style="cursor: pointer;">
                             <td class="mono">#M005</td>
                             <td>Contrachapado 18mm</td>
                             <td>Madera</td>
                             <td class="numeric">45 planchas</td>
-                            <td><span class="badge badge--success">Disponible</span></td>
+                            <span class="estado-badge badge--success">Disponible</span>
                         </tr>
                     </tbody>
                 </table>
@@ -168,6 +171,57 @@
 
         
     </main>
+<div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalleLabel">Detalle de Materia Prima</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <td>#M001</td>
+                        </tr>
+                        <tr>
+                            <th>Material</th>
+                            <td>Madera de Roble</td>
+                        </tr>
+                        <tr>
+                            <th>Categoría</th>
+                            <td>Madera</td>
+                        </tr>
+                        <tr>
+                            <th>Stock total</th>
+                            <td>320 kg</td>
+                        </tr>
+                        <tr>
+                            <th>Estado</th>
+                            <td><span class="estado-badge badge--success">Disponible</span></td>
+                        </tr>
+                        <tr>
+                            <th>Descripción</th>
+                            <td>Madera dura de alta calidad para muebles estructurales.</td>
+                        </tr>
+                        <tr>
+                            <th>Proveedor</th>
+                            <td>Maderas del Sur S.A.</td>
+                        </tr>
+                        <tr>
+                            <th>Última actualización</th>
+                            <td>02/06/2026</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Bootstrap JS -->
 <script src="../dist/js/bootstrap.bundle.min.js"></script>
 </body>
