@@ -1,9 +1,16 @@
 :root {
     /* Colores principales */
+    --color-brand: #7C3AED;
     --primary-color: #7C3AED;
     --secondary-color: #111827;
     --background-color: #F5F3FF;
     --color-surface: #FFFFFF;
+
+    --color-bg-light: #F5F3FF;
+    --color-white: #FFFFFF;
+    --color-text-dark: #111827;
+    --color-text-light: #6b7280;
+    --color-border: #E5E7EB;
 
     /* Estados */
     --color-success: #10B981;
