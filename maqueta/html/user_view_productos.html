@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/user_style.css">
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
+    <title>Usuario dashboard</title>
+</head>
+
+<body class="container-fluid p-0">
+    <main class="row g-0 min-vh-100">
+        <aside class="col-12 col-lg-2 sidebar">
+            <div class="sidebar-header text-center">
+                <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo" />
+                <span class="rol">Usuario</span>
+            </div>
+            <div class="sidebar-menu d-flex flex-row flex-wrap justify-content-center justify-content-lg-start flex-lg-column gap-2 gap-lg-0 mt-3 mt-lg-4">
+                <a href="" class="sidebar-link">
+                    <img src="../css/assets/icons8-gear-50.png" class="icon" alt="icon">
+                    <span class="text">Produccion</span>
+                </a>
+                <a href="user_view.html" class="sidebar-link">
+                    <img src="../css/assets/materias_primas.png" class="icon" alt="icon">
+                    <span class="text">Materias primas</span>
+                </a>
+                <a href="user_view_productos.html" class="sidebar-link">
+                    <svg class="icon" aria-hidden="true"><use href="../css/assets/bag.svg"></use></svg>
+                    <span class="text">Productos</span>
+                </a>
+                <a href="" class="sidebar-link">
+                    <svg class="icon" aria-hidden="true"><use href="../css/assets/bar-chart-line.svg"></use></svg>
+                    <span class="text">Metricas</span>
+                </a>
+            </div>
+        </aside>
+
+        <div class="col-12 col-lg-10">
+            <header>
+                <div class="header-content">
+                    <svg class="icon" aria-hidden="true"><use href="../css/assets/list.svg"></use></svg>
+                    <span class="text">Dashboard</span>
+                </div>
+                <div class="user-info">
+                    <img src="../css/assets/avatar.jpg" alt="Avatar">
+                    <span class="text-name">User</span>
+                    <span class="text-rol">Usuario</span>
+                </div>
+            </header>
+
+            <nav>
+                <ul class="texto_nav_fondo">
+                    <li><a href="home.html">Home</a></li>
+                </ul>
+            </nav>
+
+            <div class="content p-4">
+                <div class="page-header mb-4">
+                    <h1>Productos</h1>
+                    <p>Consulta el catálogo de productos disponibles.</p>
+                </div>
+
+                <div class="search-bar mb-4">
+                    <input type="text" placeholder="Buscar producto..." class="form-control d-inline-block w-auto">
+                    <button class="btn btn-primary">Buscar</button>
+                </div>
+
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Mesa Nórdica</h5>
+                                <p class="card-text text-muted mb-1">Categoría: Mesas</p>
+                                <p class="card-text">Mesa de diseño minimalista con patas de madera clara.</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <button class="btn btn-outline-primary w-100">Ver Detalles</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Biblioteca Moderna</h5>
+                                <p class="card-text text-muted mb-1">Categoría: Bibliotecas</p>
+                                <p class="card-text">Estantería de 5 niveles con estructura de hierro y madera.</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <button class="btn btn-outline-primary w-100">Ver Detalles</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Escritorio Gamer</h5>
+                                <p class="card-text text-muted mb-1">Categoría: Escritorios</p>
+                                <p class="card-text">Escritorio amplio con superficie texturizada y soporte para cables.</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <button class="btn btn-outline-primary w-100">Ver Detalles</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
