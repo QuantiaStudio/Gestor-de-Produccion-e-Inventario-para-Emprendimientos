@@ -23,37 +23,30 @@ Este sistema busca dar respuesta directa a esas necesidades mediante una interfa
 
 A continuación se describen las funcionalidades previstas para el producto final. La maqueta actual representa visualmente la mayoría de estas pantallas y sirve como base para el desarrollo posterior.
 
-### Acceso y gestión de usuarios
+- **Acceso y gestión de usuarios**:
+  1. Pantalla de bienvenida (landing page)
+  2. Inicio de sesión
+  3. Registro de nuevos usuarios
+  4. Diferenciación por roles (Administrador y Usuario operativo)
 
-- **Pantalla de bienvenida (landing page)** que presenta el sistema, sus beneficios y los puntos de contacto del emprendimiento.
-- **Inicio de sesión** con correo electrónico y contraseña para usuarios ya registrados.
-- **Registro de nuevos usuarios**, permitiendo que cada emprendimiento o miembro del equipo cuente con su propia cuenta.
-- **Diferenciación por roles**: el sistema contempla al menos dos tipos de usuario, un perfil de **Administrador** con acceso completo a la gestión del negocio y un perfil de **Usuario operativo** orientado a la consulta y registro diario de tareas.
+- **Panel de Administrador (Dashboard Admin)**:
+  1. Indicadores clave (KPIs) comparados con el mes anterior.
+  2. Gráficos de producción para análisis visual.
+  3. Tabla de órdenes de trabajo donde se listan los pedidos con cada detalle.
+  4. Menú expandible lateral para navegación.
 
-### Panel de Administrador (Dashboard Admin)
+- **Panel de Usuario operativo**:
 
-El panel del administrador es el centro de control del emprendimiento. Reúne en una sola vista los indicadores más importantes para la toma de decisiones:
+  1. Listado de materias primas con cada detalle
+  2. Buscador de materiales para filtrar rápidamente entre los insumos del taller.
+  3. Indicadores visuales que destacan en color los materiales que requieren reposición urgente.
+  4. Menú lateral expandible con accesos a Producción, Materias Primas, Productos terminados y Métricas.
 
-- **Indicadores clave (KPIs)** con métricas como cantidad de trabajadores activos, productos en producción, diseños o modelos disponibles en catálogo y nivel de materia prima en stock, incluyendo la variación respecto al mes anterior.
-- **Gráficos de producción** que muestran la evolución histórica de la fabricación y la distribución del trabajo en el taller, facilitando el análisis visual.
-- **Tabla de órdenes de trabajo**, donde se listan los pedidos con su estado (Pendiente, En Producción, Finalizado, Cancelado), cliente asociado, producto solicitado y fecha de ingreso.
-- **Tabla de rendimiento del equipo**, que permite ver para cada integrante cuántas tareas tiene asignadas, cuántas finalizó y su porcentaje de eficiencia.
-- **Menú lateral de navegación** con accesos rápidos al panel, clientes, catálogo de productos y reportes.
+- **Páginas institucionales**:
 
-### Panel de Usuario operativo
-
-Pensado para el día a día de quienes trabajan en producción y necesitan consultar información rápida y precisa:
-
-- **Listado de materias primas** con identificador, nombre del material, categoría, cantidad disponible y estado (Disponible, Bajo stock, Sin stock).
-- **Buscador de materiales** para filtrar rápidamente entre los insumos del taller.
-- **Indicadores visuales** que destacan en color los materiales que requieren reposición urgente.
-- **Menú lateral** con accesos a Producción, Materias Primas, Productos terminados y Métricas.
-
-### Páginas institucionales
-
-- **Página de inicio (Home)** que explica de manera resumida el propósito del sistema y enlaza a las secciones principales.
-- **Sección "Quiénes somos"**, con la presentación del equipo de desarrollo, los roles de cada integrante y el contexto académico del proyecto.
-- **Footer institucional** con información del estudio (QuantiaStudio), enlaces a la Wiki del repositorio y datos del proyecto.
+  1. Página de inicio (Home).
+  2. Sección "Quiénes somos" con la presentación del equipo de desarrollo.
+  3. Footer institucional con información del estudio (QuantiaStudio) y del proyecto.
 
 ## Instalación y ejecución del prototipo
 

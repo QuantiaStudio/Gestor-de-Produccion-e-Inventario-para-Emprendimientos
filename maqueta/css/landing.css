@@ -197,7 +197,7 @@ body {
     margin-bottom: 0;
 }
 
-.contact-item h4 {
+.contact-item h2 {
     font-family: var(--font-heading);
     font-size: 14px;
     color: var(--color-text-dark);
