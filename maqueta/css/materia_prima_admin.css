@@ -533,99 +533,7 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
 }
 
-@media (max-width: 768px) {
-	:root {
-		--sidebar-width: 220px;
-		--sidebar-width-collapsed: 72px;
-	}
 
-	main>header {
-		gap: 1rem;
-		padding: 0.75rem;
-	}
-
-	.header-content {
-		min-width: 0;
-	}
-
-	.header-content .text {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.user-info {
-		grid-template-columns: auto;
-	}
-
-	.user-info .text-name,
-	.user-info .text-rol {
-		display: none;
-	}
-
-	.content {
-		padding-left: 12px;
-		padding-right: 12px;
-	}
-
-	.inventory-layout {
-		margin-top: 88px;
-	}
-
-	.inventory-stats {
-		grid-template-columns: 1fr;
-	}
-
-	.filters-row {
-		grid-template-columns: 1fr;
-	}
-
-	.table-footer {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
-	.inventory-detail:target {
-		position: static;
-	}
-
-	.detail-item {
-		grid-template-columns: 1fr;
-		gap: 0.35rem;
-	}
-
-	.detail-header {
-		align-items: flex-start;
-	}
-
-	.detail-header .badge-success {
-		white-space: nowrap;
-	}
-}
-
-/* Ocultar la columna del panel cuando no hay ningún panel activo */
-.inventory-layout>div.detail-col {
-	display: none;
-}
-
-/* Mostrar únicamente la columna cuyo panel es :target */
-.inventory-layout>div.detail-col:has(.inventory-detail:target) {
-	display: flex;
-}
-
-/* Redimensionar la tabla principal dinámicamente si hay un detalle activo */
-@media (min-width: 992px) {
-	.inventory-layout>.inventory-table-col {
-		width: 100%;
-		flex: 0 0 100%;
-		transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), flex 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-	}
-
-	.inventory-layout:has(.inventory-detail:target)>.inventory-table-col {
-		width: 66.666667%;
-		flex: 0 0 66.666667%;
-	}
-}
 
 /* ---------- FOOTER ---------- */
 
@@ -1188,3 +1096,162 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 /*----------------------------- FIN Estilos del Sidebar ----------------------------------------*/
 
 /* ---------- FIN DE ESTILOS COMPARTIDOS POR OTRAS VISTAS ---------- */
+
+
+/* ---------- RESPONSIVE DESIGN (BOOTSTRAP BREAKPOINTS) ---------- */
+
+/* Pantallas Medianas y Pequeñas (Tablets y Celulares: < 992px) */
+@media (max-width: 991.98px) {
+	.inventory-layout {
+		margin-top: 88px;
+	}
+
+	/* Cuadrícula de estadísticas a 2 columnas */
+	.inventory-stats {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	/* Forzar la columna de detalle para que se renderice sin ocupar espacio en la grilla */
+	.inventory-layout>div.detail-col {
+		display: block !important;
+		position: static;
+	}
+
+	/* Cajón deslizable lateral para detalles en móviles/tablets */
+	.inventory-detail {
+		position: fixed;
+		top: 0;
+		right: -420px;
+		width: 400px;
+		max-width: 100%;
+		height: 100vh;
+		z-index: 1060;
+		margin: 0 !important;
+		border-radius: 0;
+		box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+		transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		display: flex !important;
+	}
+
+	.inventory-detail:target {
+		right: 0;
+	}
+
+	.detail-item {
+		grid-template-columns: 1fr;
+		gap: 0.35rem;
+	}
+
+	.detail-header {
+		align-items: flex-start;
+	}
+
+	.detail-header .badge-success {
+		white-space: nowrap;
+	}
+}
+
+/* Pantallas Pequeñas (Celulares: < 768px) - sidebar a pantalla completa y auto-colapso */
+@media (max-width: 768px) {
+	:root {
+		--sidebar-width: 100vw;
+		--sidebar-width-collapsed: 0px;
+	}
+
+	.sidebar {
+		position: fixed !important;
+		top: 0;
+		left: -100vw;
+		width: 100vw !important;
+		height: 100vh !important;
+		z-index: 1050 !important;
+		transition: left var(--sidebar-transition) !important;
+	}
+
+	.sidebar:has(#sidebarExpandedState.show) {
+		left: 0 !important;
+	}
+
+	main>header {
+		left: 0 !important;
+		width: 100% !important;
+		gap: 1rem;
+		padding: 0.75rem;
+	}
+
+	.header-content {
+		min-width: 0;
+	}
+
+	.header-content .text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.user-info {
+		grid-template-columns: auto;
+	}
+
+	.user-info .text-name,
+	.user-info .text-rol {
+		display: none;
+	}
+
+	.content {
+		margin-left: 0 !important;
+		width: 100% !important;
+		max-width: 100vw !important;
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+
+	.inventory-stats {
+		grid-template-columns: 1fr;
+	}
+
+	.filters-row {
+		grid-template-columns: 1fr !important;
+		gap: 1rem;
+	}
+
+	.filters-row .btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.table-footer {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.75rem;
+	}
+}
+
+/* Habilitar scroll horizontal en la tabla de inventario si se desborda */
+.inventory-table {
+	overflow-x: auto;
+}
+
+/* Ocultar detalle por defecto en desktop */
+.inventory-layout>div.detail-col {
+	display: none;
+}
+
+/* Mostrar detalle en desktop cuando esté activo */
+.inventory-layout>div.detail-col:has(.inventory-detail:target) {
+	display: flex;
+}
+
+/* Pantallas Grandes (Desktops: >= 992px) */
+@media (min-width: 992px) {
+	.inventory-layout>.inventory-table-col {
+		width: 100%;
+		flex: 0 0 100%;
+		transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), flex 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.inventory-layout:has(.inventory-detail:target)>.inventory-table-col {
+		width: 66.666667%;
+		flex: 0 0 66.666667%;
+	}
+}
