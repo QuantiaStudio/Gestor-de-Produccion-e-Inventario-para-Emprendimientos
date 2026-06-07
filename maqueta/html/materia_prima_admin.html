@@ -1195,7 +1195,7 @@
                         <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="" aria-hidden="true" />
                         <span class="hide-on-collapse sidebar-toggle-target collapse show">Materia Prima</span>
                     </a>
-                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                    <a href="productos-terminados-admin.html" class="sidebar-link text-decoration-none p-3">
                         <img src="../css/assets/bag.svg" class="sidebar-icon" alt="" aria-hidden="true" />
                         <span class="hide-on-collapse sidebar-toggle-target collapse show">Productos Terminados</span>
                     </a>
@@ -1232,7 +1232,7 @@
     <script src="../dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Modal Registrar Materia Prima -->
-    <div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCrear" role="dialog" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content card"
                 style="border: 1px solid rgba(124, 58, 237, 0.15); box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
@@ -1268,7 +1268,10 @@
                                     <option value="acabados">Acabados</option>
                                 </select>
                                 <div class="mt-1">
-                                    <a href="#collapseNuevaCategoria" class="text-decoration-none" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseNuevaCategoria" style="font-size: 10.5px; font-weight: 700; color: var(--primary-color);">
+                                    <a href="#collapseNuevaCategoria" class="text-decoration-none"
+                                        data-bs-toggle="collapse" role="button" aria-expanded="false"
+                                        aria-controls="collapseNuevaCategoria"
+                                        style="font-size: 10.5px; font-weight: 700; color: var(--primary-color);">
                                         + Nueva categoría
                                     </a>
                                 </div>
@@ -1283,8 +1286,10 @@
                         <div class="collapse" id="collapseNuevaCategoria">
                             <div class="mb-3">
                                 <label for="regNuevaCategoria" class="form-label mb-1"
-                                    style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--gray-600);">Nombre de la nueva categoría</label>
-                                <input type="text" class="input" id="regNuevaCategoria" placeholder="Ej: Herrajes, Plásticos" />
+                                    style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--gray-600);">Nombre
+                                    de la nueva categoría</label>
+                                <input type="text" class="input" id="regNuevaCategoria"
+                                    placeholder="Ej: Herrajes, Plásticos" />
                             </div>
                         </div>
                         <div class="row g-3 mb-3">
@@ -1320,7 +1325,7 @@
     </div>
 
     <!-- Modal Actualizar Materia Prima -->
-    <div class="modal fade" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel"
+    <div class="modal fade" id="modalActualizar" role="dialog" tabindex="-1" aria-labelledby="modalActualizarLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content card"
