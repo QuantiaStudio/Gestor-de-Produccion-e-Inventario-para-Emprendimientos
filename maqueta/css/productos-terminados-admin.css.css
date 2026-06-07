@@ -397,11 +397,19 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 }
 
 .detail-icon {
-	width: 4rem;
-	height: 4rem;
-	border-radius: 50%;
-	background: radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.25), rgba(124, 58, 237, 0.12));
+	width: 7rem;
+	height: 7rem;
+	border-radius: 0.85rem;
 	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.detail-icon img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	display: block;
 }
 
 .detail-title {
@@ -545,7 +553,56 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 }
 
 
+/* ------------- PANELES DE DETALLE: borde superior de sección de fechas ------------------*/
+
+.detail-update {
+	border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
 /* ------------- MODALES ------------------*/
+
+/* Tarjeta del modal */
+.modal-content.card {
+	border: 1px solid rgba(124, 58, 237, 0.15);
+	box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
+}
+
+/* Título del modal */
+.modal-title {
+	font-family: var(--font-heading);
+}
+
+/* Etiquetas de formulario dentro de modales */
+.modal .form-label {
+	font-size: 11px;
+	font-weight: 800;
+	text-transform: uppercase;
+	color: var(--gray-600);
+}
+
+/* Select con flecha personalizada dentro de modales */
+.modal .form-select {
+	appearance: none;
+	background-repeat: no-repeat;
+	background-position: right 0.75rem center;
+	background-size: 10px;
+}
+
+/* Botón primario dentro de modales (Guardar / Actualizar / Agregar) */
+.modal .btn-primary {
+	background-color: var(--primary-color);
+	border: none;
+	color: white;
+}
+
+/* Botón fantasma dentro de modales (Cancelar) */
+.modal .btn-ghost {
+	border: 1px solid var(--gray-300);
+	background-color: transparent;
+}
+
 .materials-container {
 	border: 1px solid var(--gray-200);
 	border-radius: 12px;
@@ -729,6 +786,29 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	fill: currentColor;
 }
 
+/* Miniatura de producto en filas de tabla */
+.table-thumb {
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 0.55rem;
+	overflow: hidden;
+	flex-shrink: 0;
+	background: #f5f0e8;
+}
+
+.table-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.table-thumb--svg {
+	object-fit: contain !important;
+	padding: 0.4rem;
+}
+
 .inventory-table tbody tr.selected td:nth-child(5) {
 	color: var(--primary-color);
 	font-weight: 700;
@@ -800,22 +880,7 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	font-size: 1.5rem;
 }
 
-.detail-icon {
-	width: 3.25rem;
-	height: 3.25rem;
-	border-radius: 50%;
-	background: radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.25), rgba(124, 58, 237, 0.12));
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--primary-color);
-	flex-shrink: 0;
-}
 
-.detail-icon svg {
-	width: 1.5rem;
-	height: 1.5rem;
-}
 
 .detail-label-with-icon {
 	display: flex;
@@ -861,10 +926,7 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	height: 24px;
 }
 
-.detail-icon img {
-	width: 24px;
-	height: 24px;
-}
+
 
 .detail-label-icon {
 	width: 14px;
@@ -1190,26 +1252,34 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 @media (max-width: 768px) {
 	:root {
 		--sidebar-width: 100vw;
-		--sidebar-width-collapsed: 0px;
+		--sidebar-width-collapsed: 72px;
 	}
 
 	.sidebar {
 		position: fixed !important;
 		top: 0;
-		left: -100vw;
-		width: 100vw !important;
+		left: 0;
+		width: var(--sidebar-width-collapsed) !important;
 		height: 100vh !important;
 		z-index: 1050 !important;
-		transition: left var(--sidebar-transition) !important;
+		transition: width var(--sidebar-transition) !important;
 	}
 
 	.sidebar:has(#sidebarExpandedState.show) {
-		left: 0 !important;
+		width: 100vw !important;
+	}
+
+	.sidebar-brand {
+		position: relative;
+	}
+
+	.sidebar-brand .btn-close {
+		position: absolute;
+		right: 16px;
+		top: 16px;
 	}
 
 	main>header {
-		left: 0 !important;
-		width: 100% !important;
 		gap: 1rem;
 		padding: 0.75rem;
 	}
@@ -1234,9 +1304,9 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 	}
 
 	.content {
-		margin-left: 0 !important;
-		width: 100% !important;
-		max-width: 100vw !important;
+		margin-left: var(--sidebar-width-collapsed) !important;
+		width: calc(100% - var(--sidebar-width-collapsed)) !important;
+		max-width: calc(100vw - var(--sidebar-width-collapsed)) !important;
 		padding-left: 12px;
 		padding-right: 12px;
 	}
@@ -1303,5 +1373,65 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 	.inventory-layout:has(.inventory-detail:target)>.inventory-table-col {
 		width: 66.666667%;
 		flex: 0 0 66.666667%;
+	}
+}
+
+/* Pantallas pequeñas (< 992px): panel como drawer inferior */
+@media (max-width: 991.98px) {
+
+	/* Ocultar las columnas de detalle cuando no son el target */
+	.detail-col {
+		display: none;
+	}
+
+	/* Mostrar solo la columna activa */
+	.detail-col:has(.inventory-detail:target) {
+		display: block;
+	}
+
+	.inventory-detail:target {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 1050;
+		border-radius: 1.25rem 1.25rem 0 0;
+		max-height: 90dvh;
+		overflow-y: auto;
+		padding: 1.25rem 1rem 2rem;
+		box-shadow: 0 -8px 40px rgba(15, 23, 42, 0.18);
+		animation: slideInUp 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+	}
+
+	@keyframes slideInUp {
+		from {
+			opacity: 0;
+			transform: translateY(40px);
+		}
+
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Backdrop semitransparente al abrir el panel */
+	body:has(.inventory-detail:target)::before {
+		content: '';
+		position: fixed;
+		inset: 0;
+		background: rgba(15, 23, 42, 0.45);
+		z-index: 1049;
+		animation: fadeIn 0.28s ease forwards;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
 	}
 }

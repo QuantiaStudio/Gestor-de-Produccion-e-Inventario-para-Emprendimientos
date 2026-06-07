@@ -976,6 +976,16 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 	min-height: 120px;
 }
 
+.sidebar-brand {
+	position: relative;
+}
+
+.sidebar-brand .btn-close {
+	position: absolute;
+	right: 16px;
+	top: 16px;
+}
+
 .sidebar-logo {
 	object-fit: contain;
 	height: auto;
@@ -1155,26 +1165,24 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 @media (max-width: 768px) {
 	:root {
 		--sidebar-width: 100vw;
-		--sidebar-width-collapsed: 0px;
+		--sidebar-width-collapsed: 72px;
 	}
 
 	.sidebar {
 		position: fixed !important;
 		top: 0;
-		left: -100vw;
-		width: 100vw !important;
+		left: 0;
+		width: var(--sidebar-width-collapsed) !important;
 		height: 100vh !important;
 		z-index: 1050 !important;
-		transition: left var(--sidebar-transition) !important;
+		transition: width var(--sidebar-transition) !important;
 	}
 
 	.sidebar:has(#sidebarExpandedState.show) {
-		left: 0 !important;
+		width: 100vw !important;
 	}
 
 	main>header {
-		left: 0 !important;
-		width: 100% !important;
 		gap: 1rem;
 		padding: 0.75rem;
 	}
@@ -1199,9 +1207,9 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 	}
 
 	.content {
-		margin-left: 0 !important;
-		width: 100% !important;
-		max-width: 100vw !important;
+		margin-left: var(--sidebar-width-collapsed) !important;
+		width: calc(100% - var(--sidebar-width-collapsed)) !important;
+		max-width: calc(100vw - var(--sidebar-width-collapsed)) !important;
 		padding-left: 12px;
 		padding-right: 12px;
 	}
