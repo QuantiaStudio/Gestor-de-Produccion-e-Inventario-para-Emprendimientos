@@ -517,20 +517,20 @@ body:has(#sidebarExpandedState:not(.show)) .content {
 	padding: 0.85rem 1rem;
 }
 
-.detail-actions .btn-outline-primary {
-	color: var(--primary-color);
-	border-color: var(--primary-color);
-	background-color: transparent;
+.btn-outline-primary {
+	color: var(--primary-color) !important;
+	border-color: var(--primary-color) !important;
+	background-color: transparent !important;
 	transition: all 0.2s ease;
 }
 
-.detail-actions .btn-outline-primary:hover,
-.detail-actions .btn-outline-primary:focus,
-.detail-actions .btn-outline-primary:active {
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
 	color: white !important;
 	background-color: var(--primary-color) !important;
 	border-color: var(--primary-color) !important;
-	box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+	box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
 }
 
 
