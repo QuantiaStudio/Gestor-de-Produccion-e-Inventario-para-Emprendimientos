@@ -1267,12 +1267,24 @@
                                     <option value="adhesivos">Adhesivos</option>
                                     <option value="acabados">Acabados</option>
                                 </select>
+                                <div class="mt-1">
+                                    <a href="#collapseNuevaCategoria" class="text-decoration-none" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseNuevaCategoria" style="font-size: 10.5px; font-weight: 700; color: var(--primary-color);">
+                                        + Nueva categoría
+                                    </a>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label for="regunidad" class="form-label mb-1"
                                     style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--gray-600);">unidad</label>
                                 <input type="text" class="input" id="regunidad" placeholder="Ej: kg, unidad, metros"
                                     required />
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseNuevaCategoria">
+                            <div class="mb-3">
+                                <label for="regNuevaCategoria" class="form-label mb-1"
+                                    style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--gray-600);">Nombre de la nueva categoría</label>
+                                <input type="text" class="input" id="regNuevaCategoria" placeholder="Ej: Herrajes, Plásticos" />
                             </div>
                         </div>
                         <div class="row g-3 mb-3">
@@ -1383,6 +1395,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
