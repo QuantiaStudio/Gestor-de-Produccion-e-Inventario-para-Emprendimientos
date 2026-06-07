@@ -35,7 +35,7 @@ body {
     margin-bottom: 32px;
 }
 
-.login-header h2 {
+.login-header h1 {
     font-family: var(--font-heading);
     color: var(--color-brand);
     font-size: 24px;
