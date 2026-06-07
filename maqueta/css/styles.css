@@ -240,3 +240,29 @@ td.numeric {
 td.actions {
     text-align: center;
 }
+
+/* ---------- BADGES DE ESTADO ---------- */
+
+.estado-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge--success {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.badge--warning {
+    background-color: rgba(245, 158, 11, 0.12);
+    color: #B45309;
+}
+
+.badge--error {
+    background-color: rgba(220, 38, 38, 0.12);
+    color: var(--color-error);
+}
