@@ -1225,6 +1225,21 @@ body:has(#sidebarExpandedState:not(.show)) main>header {
 		align-items: stretch;
 		gap: 0.75rem;
 	}
+
+	.page-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+
+	.page-header__actions {
+		width: 100%;
+	}
+
+	.page-header__actions .btn {
+		flex: 1;
+		justify-content: center;
+	}
 }
 
 /* Habilitar scroll horizontal en la tabla de inventario si se desborda */
