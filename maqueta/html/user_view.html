@@ -1,54 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-    
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/user_style.css">
-
-    <!-- Bootstrap CSS -->
-     <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
-    <title>Usuario dashboard</title>
-
+    <link rel="stylesheet" href="../css/productos-terminados-admin.css">
+    <title>Materias Primas | Usuario</title>
 </head>
 
-<body class="container-fluid p-0">
-    <main class="row g-0 min-vh-100">
-        <aside class="col-12 col-lg-2 sidebar">
-            <div class="d-flex flex-column align-items-center w-100"></div>
-            
-                <div class="sidebar-header text-center">
-                    <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo" />
-                    <span class="rol">Usuario</span>
-                </div>
-                <div class="sidebar-menu d-flex flex-row flex-wrap justify-content-center justify-content-lg-start flex-lg-column gap-2 gap-lg-0 mt-3 mt-lg-4">    
-            
-                <a href="" class="sidebar-link">
-                    <img src="../css/assets/icons8-gear-50.png" class="icon" alt="icon">              
-                    <span class="text">Produccion</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <img src="../css/assets/materias_primas.png" class="icon" alt="icon">
-                    <span class="text">Materias primas</span>
-                </a>
-                <a href="user_view_productos.html" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/bag.svg"></use>    
-                    </svg>
-                    <span class="text">Productos</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/bar-chart-line.svg"></use>
-                    </svg>
-                    <span class="text">Metricas</span>
-                </a>
-                
-                </div>
-            </div>
-        </aside>        
-        <!-- CONTENIDO PRINCIPAL -->
-        <div class="col-12 col-lg-10">
+<body>
+    <main>
         <header>
             <div class="header-content">
                 <svg class="icon" aria-hidden="true">
@@ -57,29 +20,55 @@
                 <span class="text">Dashboard</span>
             </div>
             <div class="user-info">
-                <img src="../css/assets/avatar.jpg" alt="Logo de la aplicación">
+                <img src="../css/assets/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
                 <span class="text-name">User</span>
-                <span class="text-rol"> Usuario</span>
+                <span class="text-rol">Usuario</span>
             </div>
-
         </header>
 
-
-
-        <nav>
-            <ul class="texto_nav_fondo">
-                <li><a href="home.html">Home</a></li>
-            </ul>
-        </nav>                
+        <!-- SIDEBAR -->
+        <aside>
+            <nav class="sidebar d-flex flex-column flex-shrink-0 position-fixed" aria-label="Menú principal">
+                <div class="sidebar-brand p-4 d-flex">
+                    <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-full">
+                </div>
+                <div class="nav flex-column">
+                    <a href="user_view_produccion.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Produccion">
+                        <span>Produccion</span>
+                    </a>
+                    <a href="user_view.html" class="sidebar-link active text-decoration-none p-3">
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="Materias primas">
+                        <span>Materias primas</span>
+                    </a>
+                    <a href="user_view_productos.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="Productos">
+                        <span>Productos</span>
+                    </a>
+                    
+                </div>
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil">
+                        <div class="ms-3">
+                            <span class="text-white mb-0 d-block fw-bold">User</span>
+                            <small class="text-muted">Usuario</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
 
         <div class="content">
 
-            <div class="page-header">
-                <h1>Materias Primas</h1>
-                <p>Consulta el estado actual de los materiales disponibles en el taller.</p>
+            <div class="page-header" style="margin-top: 96px;">
+                <div class="page-header__content">
+                    <h1>Materias Primas</h1>
+                    <p>Consulta el estado actual de los materiales disponibles en el taller.</p>
+                </div>
             </div>
 
-            <div class="search-bar">
+            <div class="search-bar mb-3">
                 <input type="text" placeholder="Buscar material..." class="input">
                 <button class="btn btn-primary">Buscar</button>
             </div>
@@ -87,6 +76,7 @@
             <div class="alert alert-warning d-none" id="sin-resultados" role="alert">
                 No se encontraron materiales que coincidan con la búsqueda.
             </div>
+
             <div class="stock-table-wrapper">
                 <table class="stock-table">
                     <thead>
@@ -139,61 +129,48 @@
             </div>
 
         </div>
-        
     </main>
-<div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalDetalleLabel">Detalle de Materia Prima</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>ID</th>
-                            <td>#M001</td>
-                        </tr>
-                        <tr>
-                            <th>Material</th>
-                            <td>Madera de Roble</td>
-                        </tr>
-                        <tr>
-                            <th>Categoría</th>
-                            <td>Madera</td>
-                        </tr>
-                        <tr>
-                            <th>Stock total</th>
-                            <td>320 kg</td>
-                        </tr>
-                        <tr>
-                            <th>Estado</th>
-                            <td><span class="estado-badge badge--success">Disponible</span></td>
-                        </tr>
-                        <tr>
-                            <th>Descripción</th>
-                            <td>Madera dura de alta calidad para muebles estructurales.</td>
-                        </tr>
-                        <tr>
-                            <th>Proveedor</th>
-                            <td>Maderas del Sur S.A.</td>
-                        </tr>
-                        <tr>
-                            <th>Última actualización</th>
-                            <td>02/06/2026</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetalleLabel">Detalle de Materia Prima</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <tbody>
+                            <tr><th>ID</th><td>#M001</td></tr>
+                            <tr><th>Material</th><td>Madera de Roble</td></tr>
+                            <tr><th>Categoría</th><td>Madera</td></tr>
+                            <tr><th>Stock total</th><td>320 kg</td></tr>
+                            <tr><th>Estado</th><td><span class="estado-badge badge--success">Disponible</span></td></tr>
+                            <tr><th>Descripción</th><td>Madera dura de alta calidad para muebles estructurales.</td></tr>
+                            <tr><th>Proveedor</th><td>Maderas del Sur S.A.</td></tr>
+                            <tr><th>Última actualización</th><td>02/06/2026</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Bootstrap JS -->
-<script src="../dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <footer class="main_footer">
+        <div class="main_footer_inner">
+            <div class="main_footer_brand">
+                <img src="../css/assets/logo.png" alt="Logo QuantiaStudio" class="main_footer_logo">
+                <span class="main_footer_name">Gestor de Producción e Inventario</span>
+            </div>
+            <p>&copy; 2026 QuantiaStudio. Todos los derechos reservados.</p>
+            <p>Proyecto académico &mdash; Full Stack I (2026)</p>
+        </div>
+    </footer>
+
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

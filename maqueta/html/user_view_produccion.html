@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../css/user_style.css">
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
+
+    <title>Producción</title>
+</head>
+
+<body class="container-fluid p-0">
+
+<main class="row g-0 min-vh-100">
+
+
+    <aside class="col-12 col-lg-2 sidebar">
+
+        <div class="sidebar-header text-center">
+            <img src="../css/assets/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="rol">Usuario</span>
+        </div>
+
+        <div class="sidebar-menu d-flex flex-row flex-wrap justify-content-center justify-content-lg-start flex-lg-column mt-3">
+
+            <a href="" class="sidebar-link">
+                <img src="../css/assets/icons8-gear-50.png" class="icon" alt="">
+                <span class="text">Producción</span>
+            </a>
+
+            <a href="user_view.html" class="sidebar-link">
+                <img src="../css/assets/materias_primas.png" class="icon" alt="">
+                <span class="text">Materias Primas</span>
+            </a>
+
+            <a href="user_view_productos.html" class="sidebar-link">
+                <svg class="icon">
+                    <use href="../css/assets/bag.svg"></use>
+                </svg>
+                <span class="text">Productos</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <div class="col-12 col-lg-10">
+
+        <header>
+
+            <div class="header-content">
+                <span class="text">Dashboard</span>
+            </div>
+
+            <div class="user-info">
+                <img src="../css/assets/avatar.jpg" alt="Avatar">
+                <span class="text-name">Usuario</span>
+            </div>
+
+        </header>
+
+        <nav>
+            <ul class="texto_nav_fondo">
+                <li><a href="home.html">Home</a></li>
+            </ul>
+        </nav>
+
+        <div class="content p-4">
+
+            <div class="page-header mb-4">
+                <h1>Producción</h1>
+                <p>Seguimiento de órdenes de producción.</p>
+            </div>
+
+            <div class="search-bar mb-4">
+                <input type="text"
+                       placeholder="Buscar orden..."
+                       class="form-control d-inline-block w-auto">
+
+                <button class="btn btn-primary">
+                    Buscar
+                </button>
+            </div>
+
+            <div class="stock-table-wrapper">
+
+                <table class="stock-table">
+
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr data-bs-toggle="modal"
+                        data-bs-target="#detalleOrden"
+                        style="cursor:pointer">
+
+                        <td>#OP001</td>
+                        <td>Mesa Nórdica</td>
+                        <td>
+                            <span class="badge bg-warning">
+                                En Producción
+                            </span>
+                        </td>
+                        <td>07/06/2026</td>
+
+                    </tr>
+
+                    <tr data-bs-toggle="modal"
+                        data-bs-target="#detalleOrden"
+                        style="cursor:pointer">
+
+                        <td>#OP002</td>
+                        <td>Biblioteca Moderna</td>
+                        <td>
+                            <span class="badge bg-success">
+                                Finalizada
+                            </span>
+                        </td>
+                        <td>05/06/2026</td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<div class="modal fade"
+     id="detalleOrden"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Detalle de Producción
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p><strong>Orden:</strong> OP001</p>
+
+                <p><strong>Producto:</strong> Mesa Nórdica</p>
+
+                <p><strong>Estado:</strong> En Producción</p>
+
+                <p><strong>Materia Prima:</strong> MDF, Tornillos y Barniz</p>
+
+                <p><strong>Resultado esperado:</strong> 10 unidades terminadas</p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal">
+
+                    Cerrar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
