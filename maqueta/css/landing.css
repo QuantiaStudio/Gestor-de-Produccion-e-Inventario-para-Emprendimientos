@@ -197,7 +197,7 @@ body {
     margin-bottom: 0;
 }
 
-.contact-item h4 {
+.contact-item h2 {
     font-family: var(--font-heading);
     font-size: 14px;
     color: var(--color-text-dark);
@@ -207,6 +207,29 @@ body {
 .contact-item p {
     color: var(--color-text-light);
     font-size: 15px;
+}
+
+.features-section {
+    background-color: var(--color-bg-light);
+    padding: 60px 0;
+}
+
+.feature-card {
+    border: 1px solid rgba(124, 58, 237, 0.1);
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+    border-color: rgba(124, 58, 237, 0.3);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    color: var(--color-brand);
+    display: block;
 }
 
 /* Responsive */

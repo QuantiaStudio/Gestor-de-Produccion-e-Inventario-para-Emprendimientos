@@ -1,9 +1,16 @@
 :root {
     /* Colores principales */
+    --color-brand: #7C3AED;
     --primary-color: #7C3AED;
     --secondary-color: #111827;
     --background-color: #F5F3FF;
     --color-surface: #FFFFFF;
+
+    --color-bg-light: #F5F3FF;
+    --color-white: #FFFFFF;
+    --color-text-dark: #111827;
+    --color-text-light: #6b7280;
+    --color-border: #E5E7EB;
 
     /* Estados */
     --color-success: #10B981;
@@ -80,19 +87,19 @@ code,
 /* ---------- UTILIDADES DE ESTADO ---------- */
 
 .text-success {
-    color: var(--color-success);
+    color: var(--color-success) !important;
 }
 
 .text-error {
-    color: var(--color-error);
+    color: var(--color-error) !important;
 }
 
 .text-warning {
-    color: var(--color-warning);
+    color: var(--color-warning) !important;
 }
 
 .text-info {
-    color: var(--color-info);
+    color: var(--color-info) !important;
 }
 
 .bg-success-10 {
@@ -234,4 +241,28 @@ td.actions {
     text-align: center;
 }
 
+/* ---------- BADGES DE ESTADO ---------- */
+
+.estado-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge--success {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.badge--warning {
+    background-color: rgba(245, 158, 11, 0.12);
+    color: #B45309;
+}
+
+.badge--error {
+    background-color: rgba(220, 38, 38, 0.12);
+    color: var(--color-error);
 }

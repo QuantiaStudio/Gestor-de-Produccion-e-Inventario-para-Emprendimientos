@@ -4,18 +4,22 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/dashboard-admin.css" />
-    <title>Dashboard de Carpintería</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
     <main>
         <header>
             <div class="header-content">
-                <svg class="icon" aria-hidden="true">
-                    <use href="../css/assets/list.svg"></use>
-                </svg>
-                <span class="text">Dashboard de Carpintería</span>
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse"
+                    data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú"
+                    aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo"
+                    aria-expanded="true">
+                    <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true" />
+                </button>
+                <span class="text">Dashboard</span>
             </div>
             <div class="user-info">
                 <img src="../css/assets/avatar.jpg" alt="Logo de la aplicación" class="user-avatar" />
@@ -35,7 +39,7 @@
                             </svg>
                         </span>
                         <span class="card-summary-text">
-                            <span class="alert-type">Carpinteros Activos</span>
+                            <span class="alert-type">Usuarios Activos</span>
                             <span class="alert-num">50</span>
                         </span>
                     </div>
@@ -53,7 +57,7 @@
                             </svg>
                         </span>
                         <span class="card-summary-text">
-                            <span class="alert-type">Muebles en Producción</span>
+                            <span class="alert-type">Productos en Producción</span>
                             <span class="alert-num">80</span>
                         </span>
                     </div>
@@ -116,16 +120,18 @@
             </div>
             <div class="graphics-container">
                 <div class="graphic-histogram">
-                    <img src="../css/assets/histo-prod.png" alt="histograma de producción de muebles" class="graphic-img graphic-img-histogram" />
+                    <img src="../css/assets/histo-prod.png" alt="histograma de producción de muebles"
+                        class="graphic-img graphic-img-histogram" />
                 </div>
                 <div class="graphic-cake">
-                    <img src="../css/assets/chart-prod.png" alt="grafico de distribución de trabajos de carpintería" class="graphic-img graphic-img-cake" />
+                    <img src="../css/assets/chart-prod.png" alt="grafico de distribución de trabajos de carpintería"
+                        class="graphic-img graphic-img-cake" />
                 </div>
             </div>
             <div class="table-container">
                 <section class="card table-pedidos">
                     <div class="table-header">
-                        <h2>Órdenes de Carpintería</h2>
+                        <h2>Órdenes de Producción</h2>
                         <button class="btn btn-ghost" type="button">Ver todos</button>
                     </div>
                     <div class="table-responsive">
@@ -148,7 +154,8 @@
                                     <td>Mesa de roble</td>
                                     <td>18 May 2024, 10:45</td>
                                     <td class="actions">
-                                        <button class="table-action" type="button" aria-label="Opciones del pedido 1024">
+                                        <button class="table-action" type="button"
+                                            aria-label="Opciones del pedido 1024">
                                             <span></span>
                                             <span></span>
                                             <span></span>
@@ -162,7 +169,8 @@
                                     <td>Biblioteca a medida</td>
                                     <td>18 May 2024, 09:30</td>
                                     <td class="actions">
-                                        <button class="table-action" type="button" aria-label="Opciones del pedido 1023">
+                                        <button class="table-action" type="button"
+                                            aria-label="Opciones del pedido 1023">
                                             <span></span>
                                             <span></span>
                                             <span></span>
@@ -176,7 +184,8 @@
                                     <td>Silla tapizada</td>
                                     <td>17 May 2024, 16:20</td>
                                     <td class="actions">
-                                        <button class="table-action" type="button" aria-label="Opciones del pedido 1022">
+                                        <button class="table-action" type="button"
+                                            aria-label="Opciones del pedido 1022">
                                             <span></span>
                                             <span></span>
                                             <span></span>
@@ -190,7 +199,8 @@
                                     <td>Placard empotrado</td>
                                     <td>17 May 2024, 14:10</td>
                                     <td class="actions">
-                                        <button class="table-action" type="button" aria-label="Opciones del pedido 1021">
+                                        <button class="table-action" type="button"
+                                            aria-label="Opciones del pedido 1021">
                                             <span></span>
                                             <span></span>
                                             <span></span>
@@ -204,7 +214,8 @@
                                     <td>Escritorio flotante</td>
                                     <td>17 May 2024, 11:05</td>
                                     <td class="actions">
-                                        <button class="table-action" type="button" aria-label="Opciones del pedido 1020">
+                                        <button class="table-action" type="button"
+                                            aria-label="Opciones del pedido 1020">
                                             <span></span>
                                             <span></span>
                                             <span></span>
@@ -217,14 +228,14 @@
                 </section>
                 <section class="card table-users">
                     <div class="table-header">
-                        <h2>Rendimiento de Carpinteros</h2>
+                        <h2>Rendimiento de Empleados</h2>
                         <button class="btn btn-ghost" type="button">Ver todos</button>
                     </div>
                     <div class="table-responsive">
                         <table class="employee-table">
                             <thead>
                                 <tr>
-                                    <th>Carpintero</th>
+                                    <th>Empleado</th>
                                     <th>Asignadas</th>
                                     <th>Terminadas</th>
                                     <th>Eficiencia</th>
@@ -296,37 +307,55 @@
 
 
         <aside>
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo" />
-                    <span class="rol">ADMIN</span>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed"
+                aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse"
+                    aria-hidden="true"></span>
+                <div class="sidebar-brand p-4">
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse" />
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse" />
                 </div>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/house-door.svg"></use>
-                    </svg>
-                    <span class="text">Panel</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/people.svg"></use>
-                    </svg>
-                    <span class="text">Clientes</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/bag.svg"></use>
-                    </svg>
-                    <span class="text">Muebles</span>
-                </a>
-                <a href="" class="sidebar-link">
-                    <svg class="icon" aria-hidden="true">
-                        <use href="../css/assets/bar-chart-line.svg"></use>
-                    </svg>
-                    <span class="text">Reportes</span>
-                </a>
 
-            </div>
+                <div class="nav flex-column">
+                    <a href="./dashboard-admin.html" class="sidebar-link active text-decoration-none p-3">
+                        <img src="../css/assets/house-door.svg" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Panel</span>
+                    </a>
+                    <a href="./materia_prima_admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Materia Prima</span>
+                    </a>
+                    <a href="productos-terminados-admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Productos Terminados</span>
+                    </a>
+                    <a href="produccion-admin.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Producción</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bar-chart-line.svg" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Reportes</span>
+                    </a>
+                    <a href="#" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="" aria-hidden="true" />
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Configuración</span>
+                    </a>
+                </div>
+
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar"
+                            alt="Foto de perfil" />
+                        <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse">
+                            <h6 class="text-white mb-0">Admin</h6>
+                            <small class="text-muted">Administrador</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </aside>
     </main>
     <footer>
@@ -336,6 +365,7 @@
             <a href="user_view.html">Dashboard user</a>
         </nav>
     </footer>
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

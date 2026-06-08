@@ -5,7 +5,6 @@
      background-color: var(--background-color);
      color: var(--gray-900);
      font-family: var(--font-heading);
-     margin: 0;
  }
 
  /* ---------- ESTILOS ESPECÍFICOS PARA EL DASHBOARD ADMIN ---------- */
@@ -14,10 +13,7 @@
      background-color: var(--primary-color);
      color: white;
      padding: 1rem;
-     position: fixed;
      top: 0;
-     left: 200px;
-     width: calc(100% - 200px);
      box-sizing: border-box;
      margin: 0;
      display: flex;
@@ -37,7 +33,6 @@
      height: 18px;
      color: rgb(99, 30, 30);
      fill: currentColor;
-     transform: scale(1.5);
  }
 
  /* Estilos de user-info */
@@ -73,15 +68,13 @@
      margin: 0;
  }
 
- header
-
  /* Estilos del contenedor principal */
  main {
      min-height: 100vh;
+     display: flex;
  }
 
  .content {
-     margin-left: 200px;
      padding-left: 20px;
  }
 
@@ -90,15 +83,7 @@
  /* Estilos del contenedor del Sidebar */
  .sidebar {
      background-color: var(--secondary-color);
-     height: 100%;
-     width: 200px;
-     position: fixed;
-     z-index: 1;
-     top: 0;
-     left: 0;
-     overflow-x: hidden;
-     padding-top: 1rem;
- }
+ } 
 
  /* Estilos del encabezado del Sidebar */
  .sidebar-header {
@@ -120,7 +105,8 @@
  .sidebar-logo {
      display: block;
      object-fit: contain;
-     width: 80%;
+     width: 100%;
+     max-width: 180px;
  }
 
  .sidebar-link .icon {
@@ -133,6 +119,8 @@
      font-family: var(--font-body);
      font-size: 10px;
      color: var(--color-success);
+
+     
 
  }
 
@@ -177,7 +165,7 @@
  /*-----------------------------------------------------------------------------------------*/
 
  .content {
-    padding-top: 80px;
+
     padding-right: 24px;
 }
 
@@ -270,99 +258,6 @@
     text-align: left;
 }
 
-.badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.badge--success {
-    background-color: rgba(16, 185, 129, 0.12);
-    color: #059669;
-}
-
-.badge--warning {
-    background-color: rgba(245, 158, 11, 0.12);
-    color: #B45309;
-}
-
-.badge--error {
-    background-color: rgba(220, 38, 38, 0.12);
-    color: var(--color-error);
-}
-
-.btn {
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    font-family: var(--font-body);
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-
-
-.main_footer {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 32px 24px;
-    text-align: center;
-    margin-left: 200px;
-}
-
-.main_footer_inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.main_footer_brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-}
-
-.main_footer_logo {
-    height: 32px;
-    width: auto;
-}
-
-.main_footer_name {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 16px;
-}
-
-.main_footer p {
-    margin: 0;
-    color: var(--gray-300);
-    font-size: 13px;
-}
-
-.main_footer a {
-    color: white;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.main_footer a:hover {
-    color: var(--primary-color);
-}
-
-
 /* nav footer */  /* nav footer */   /* nav footer */
 
 .nav_fondo {
@@ -374,8 +269,7 @@
     justify-content: center;
     align-items: center;
 
-    width: 100%;
-    border-top: solid white 10px;
+  border-top: solid white 10px;
     border-bottom: solid white 10px;
 }
 
