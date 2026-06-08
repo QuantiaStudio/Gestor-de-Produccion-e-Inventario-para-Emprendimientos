@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../css/user_style.css">
+    <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
+
+    <title>Métricas</title>
+</head>
+
+<body class="container-fluid p-0">
+
+<main class="row g-0 min-vh-100">
+
+    <aside class="col-12 col-lg-2 sidebar">
+
+        <div class="sidebar-header text-center">
+            <img src="../css/assets/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="rol">Usuario</span>
+        </div>
+
+        <div class="sidebar-menu d-flex flex-row flex-wrap justify-content-center justify-content-lg-start flex-lg-column mt-3">
+
+            <a href="user_view_produccion.html" class="sidebar-link">
+                <img src="../css/assets/icons8-gear-50.png" class="icon" alt="">
+                <span class="text">Producción</span>
+            </a>
+
+            <a href="user_view.html" class="sidebar-link">
+                <img src="../css/assets/materias_primas.png" class="icon" alt="">
+                <span class="text">Materias Primas</span>
+            </a>
+
+            <a href="user_view_productos.html" class="sidebar-link">
+                <svg class="icon">
+                    <use href="../css/assets/bag.svg"></use>
+                </svg>
+                <span class="text">Productos</span>
+            </a>
+
+            <a href="user_metricas.html" class="sidebar-link">
+                <svg class="icon">
+                    <use href="../css/assets/bar-chart-line.svg"></use>
+                </svg>
+                <span class="text">Métricas</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <div class="col-12 col-lg-10">
+
+        <header>
+
+            <div class="header-content">
+                <span class="text">Dashboard</span>
+            </div>
+
+            <div class="user-info">
+                <img src="../css/assets/avatar.jpg" alt="Avatar">
+                <span class="text-name">Usuario</span>
+            </div>
+
+        </header>
+
+        <nav>
+            <ul class="texto_nav_fondo">
+                <li><a href="home.html">Home</a></li>
+            </ul>
+        </nav>
+
+        <div class="content p-4">
+
+            <div class="page-header mb-4">
+                <h1>Métricas del Sistema</h1>
+                <p>
+                    Resumen general de producción, productos terminados y materias primas.
+                </p>
+            </div>
+
+
+            <div class="row mb-4">
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm text-center">
+                        <div class="card-body">
+                            <h2>24</h2>
+                            <p>Órdenes Totales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm text-center">
+                        <div class="card-body">
+                            <h2>18</h2>
+                            <p>Producciones Finalizadas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm text-center">
+                        <div class="card-body">
+                            <h2>5</h2>
+                            <p>Productos Activos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm text-center">
+                        <div class="card-body">
+                            <h2>3</h2>
+                            <p>Materias Primas Bajo Stock</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-header">
+                    Producción
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-hover">
+
+                        <thead>
+                            <tr>
+                                <th>Estado</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Pendientes</td>
+                                <td>4</td>
+                            </tr>
+
+                            <tr>
+                                <td>En Producción</td>
+                                <td>2</td>
+                            </tr>
+
+                            <tr>
+                                <td>Finalizadas</td>
+                                <td>18</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-header">
+                    Productos Más Fabricados
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Unidades</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Mesa Nórdica</td>
+                                <td>120</td>
+                            </tr>
+
+                            <tr>
+                                <td>Biblioteca Moderna</td>
+                                <td>95</td>
+                            </tr>
+
+                            <tr>
+                                <td>Escritorio Gamer</td>
+                                <td>80</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- STOCK -->
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+                    Alertas de Stock
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Materia Prima</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Barniz Transparente</td>
+                                <td>3 L</td>
+                                <td>
+                                    <span class="badge bg-danger">
+                                        Crítico
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Pintura Blanca</td>
+                                <td>15 L</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">
+                                        Bajo
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Tornillos 3 mm</td>
+                                <td>1.800 u</td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        Correcto
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="../dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
