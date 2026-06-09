@@ -14,45 +14,59 @@
     <main>
         <header>
             <div class="header-content">
-                <svg class="icon" aria-hidden="true">
-                    <use href="../css/assets/list.svg"></use>
-                </svg>
-                <span class="text">Dashboard</span>
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse"
+                    data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú"
+                    aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo"
+                    aria-expanded="true">
+                    <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true">
+                </button>
+                <span class="text">Materias Primas</span>
             </div>
             <div class="user-info">
                 <img src="../css/assets/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
-                <span class="text-name">User</span>
-                <span class="text-rol">Usuario</span>
+                <span class="text-name">Usuario</span>
+                <span class="text-rol">Empleado</span>
             </div>
         </header>
 
         <!-- SIDEBAR -->
         <aside>
-            <nav class="sidebar d-flex flex-column flex-shrink-0 position-fixed" aria-label="Menú principal">
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed"
+                aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse"
+                    aria-hidden="true"></span>
                 <div class="sidebar-brand p-4 d-flex">
-                    <img src="../css/assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo sidebar-logo-full">
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse">
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse">
+                    <button class="btn-close btn-close-white d-md-none sidebar-toggle-target collapse" type="button"
+                        data-bs-toggle="collapse" data-bs-target=".sidebar-toggle-target"
+                        aria-label="Cerrar menú"></button>
                 </div>
                 <div class="nav flex-column">
                     <a href="user_view_produccion.html" class="sidebar-link text-decoration-none p-3">
-                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Produccion">
-                        <span>Produccion</span>
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Ícono de producción"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Producción</span>
                     </a>
                     <a href="user_view.html" class="sidebar-link active text-decoration-none p-3">
-                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="Materias primas">
-                        <span>Materias primas</span>
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="Ícono de materia prima"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Materias Primas</span>
                     </a>
                     <a href="user_view_productos.html" class="sidebar-link text-decoration-none p-3">
-                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="Productos">
-                        <span>Productos</span>
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="Ícono de productos"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Productos</span>
                     </a>
-                    
                 </div>
                 <div class="profile-section mt-auto p-4">
                     <div class="d-flex align-items-center">
                         <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil">
-                        <div class="ms-3">
-                            <span class="text-white mb-0 d-block fw-bold">User</span>
-                            <small class="text-muted">Usuario</small>
+                        <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse">
+                            <span class="text-white mb-0 d-block fw-bold">Usuario</span>
+                            <small class="text-muted">Empleado</small>
                         </div>
                     </div>
                 </div>
@@ -61,7 +75,7 @@
 
         <div class="content">
 
-            <div class="page-header" style="margin-top: 96px;">
+            <div class="page-header">
                 <div class="page-header__content">
                     <h1>Materias Primas</h1>
                     <p>Consulta el estado actual de los materiales disponibles en el taller.</p>
@@ -168,9 +182,13 @@
             </div>
             <p>&copy; 2026 QuantiaStudio. Todos los derechos reservados.</p>
             <p>Proyecto académico &mdash; Full Stack I (2026)</p>
+            <p>
+                <a href="home.html" target="_blank" rel="noopener">Ir a la Página de Inicio</a>
+            </p>
         </div>
     </footer>
 
     <script src="../dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
