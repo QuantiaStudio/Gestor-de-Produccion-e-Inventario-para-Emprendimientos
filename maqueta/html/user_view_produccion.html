@@ -4,201 +4,853 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="../css/user_style.css">
     <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/user_style.css">
 
     <title>Producción</title>
 </head>
 
-<body class="container-fluid p-0">
+<body>
 
-<main class="row g-0 min-vh-100">
-
-
-    <aside class="col-12 col-lg-2 sidebar">
-
-        <div class="sidebar-header text-center">
-            <img src="../css/assets/logo.png" alt="Logo" class="sidebar-logo">
-            <span class="rol">Usuario</span>
-        </div>
-
-        <div class="sidebar-menu d-flex flex-row flex-wrap justify-content-center justify-content-lg-start flex-lg-column mt-3">
-
-            <a href="" class="sidebar-link">
-                <img src="../css/assets/icons8-gear-50.png" class="icon" alt="">
-                <span class="text">Producción</span>
-            </a>
-
-            <a href="user_view.html" class="sidebar-link">
-                <img src="../css/assets/materias_primas.png" class="icon" alt="">
-                <span class="text">Materias Primas</span>
-            </a>
-
-            <a href="user_view_productos.html" class="sidebar-link">
-                <svg class="icon">
-                    <use href="../css/assets/bag.svg"></use>
-                </svg>
-                <span class="text">Productos</span>
-            </a>
-
-        </div>
-
-    </aside>
-
-
-    <div class="col-12 col-lg-10">
-
+    <main>
         <header>
-
             <div class="header-content">
-                <span class="text">Dashboard</span>
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse"
+                    data-bs-target=".sidebar-toggle-target" aria-label="Contraer menú"
+                    aria-controls="sidebarFullLogo sidebarCollapsedLogo sidebarExpandedState sidebarProfileInfo"
+                    aria-expanded="true">
+                    <img src="../css/assets/list.svg" class="menu-icon" alt="" aria-hidden="true">
+                </button>
+                <span class="text">Producción</span>
             </div>
-
             <div class="user-info">
-                <img src="../css/assets/avatar.jpg" alt="Avatar">
+                <img src="../css/assets/avatar.jpg" alt="Foto de perfil" class="user-avatar">
                 <span class="text-name">Usuario</span>
+                <span class="text-rol"> Empleado</span>
             </div>
-
         </header>
 
-        <nav>
-            <ul class="texto_nav_fondo">
-                <li><a href="home.html">Home</a></li>
-            </ul>
-        </nav>
 
-        <div class="content p-4">
+        <div class="content">
 
-            <div class="page-header mb-4">
-                <h1>Producción</h1>
-                <p>Seguimiento de órdenes de producción.</p>
-            </div>
+                <div class="page-header mb-4 d-flex align-items-start justify-content-between">
+                    <div>
+                        <h1>Producción</h1>
+                        <p>Seguimiento de tus órdenes de producción.</p>
+                    </div>
+                    <button type="button" class="btn-nueva-produccion" data-bs-toggle="modal"
+                        data-bs-target="#modalNuevaProduccion">
+                        + Nueva Producción
+                    </button>
+                </div>
 
-            <div class="search-bar mb-4">
-                <input type="text"
-                       placeholder="Buscar orden..."
-                       class="form-control d-inline-block w-auto">
+                <!-- Estadísticas -->
+                <section class="inventory-stats mb-4">
+                    <article class="stat-card">
+                        <div class="stat-card__icon icon-circle-blue">
+                            <img src="../css/assets/clock.svg" class="icon-blue" alt="" />
+                        </div>
+                        <div class="stat-card__content">
+                            <span class="stat-label">Pendientes</span>
+                            <span class="stat-value">5</span>
+                            <span class="stat-desc">Órdenes Esperando Inicio</span>
+                        </div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-card__icon icon-circle-yellow">
+                            <img src="../css/assets/gear.svg" class="icon-yellow" alt="" />
+                        </div>
+                        <div class="stat-card__content">
+                            <span class="stat-label">En Proceso</span>
+                            <span class="stat-value">5</span>
+                            <span class="stat-desc">Órdenes en Ejecución</span>
+                        </div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-card__icon icon-circle-green">
+                            <img src="../css/assets/check-circle.svg" class="icon-green" alt="" />
+                        </div>
+                        <div class="stat-card__content">
+                            <span class="stat-label">Finalizadas</span>
+                            <span class="stat-value">32</span>
+                            <span class="stat-desc">Órdenes Completadas</span>
+                        </div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-card__icon icon-circle-red">
+                            <img src="../css/assets/x-circle.svg" class="icon-red" alt="" />
+                        </div>
+                        <div class="stat-card__content">
+                            <span class="stat-label">Canceladas</span>
+                            <span class="stat-value">3</span>
+                            <span class="stat-desc">Órdenes canceladas</span>
+                        </div>
+                    </article>
+                </section>
 
-                <button class="btn btn-primary">
-                    Buscar
-                </button>
-            </div>
-
-            <div class="stock-table-wrapper">
-
-                <table class="stock-table">
-
-                    <thead>
-
-                    <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    <tr data-bs-toggle="modal"
-                        data-bs-target="#detalleOrden"
-                        style="cursor:pointer">
-
-                        <td>#OP001</td>
-                        <td>Mesa Nórdica</td>
-                        <td>
-                            <span class="badge bg-warning">
-                                En Producción
+                <!-- Filtros -->
+                <section class="inventory-filters mb-4">
+                    <div class="filters-row">
+                        <div class="search-box">
+                            <span class="search-icon">
+                                <img src="../css/assets/search.svg" class="icon-gray" alt="" />
                             </span>
-                        </td>
-                        <td>07/06/2026</td>
+                            <input type="text" placeholder="Buscar orden..." class="input" />
+                        </div>
+                        <div class="filter-select">
+                            <span class="filter-label">Estado</span>
+                            <select class="input form-select">
+                                <option>Todos</option>
+                            </select>
+                        </div>
+                        <div class="filter-select">
+                            <span class="filter-label">Producto</span>
+                            <select class="input form-select">
+                                <option>Todos</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-limpiar">
+                            <img src="../css/assets/filter.svg" class="icon-gray" alt="" />
+                            Limpiar filtros
+                        </button>
+                    </div>
+                </section>
 
-                    </tr>
+                <div class="inventory-layout row g-4" id="inventario">
+                    <div class="col-lg-12 inventory-table-col">
+                        <div class="stock-table-wrapper">
 
-                    <tr data-bs-toggle="modal"
-                        data-bs-target="#detalleOrden"
-                        style="cursor:pointer">
+                            <table class="stock-table">
 
-                        <td>#OP002</td>
-                        <td>Biblioteca Moderna</td>
-                        <td>
-                            <span class="badge bg-success">
-                                Finalizada
-                            </span>
-                        </td>
-                        <td>05/06/2026</td>
+                                <thead>
 
-                    </tr>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
 
-                    </tbody>
+                                </thead>
 
-                </table>
+                                <tbody>
+
+                                    <tr>
+
+                                        <td>#OP001</td>
+                                        <td>Mesa Nórdica</td>
+                                        <td>10 unidades</td>
+                                        <td>
+                                            <span class="badge badge-produccion">
+                                                En Producción
+                                            </span>
+                                        </td>
+                                        <td>07/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP001" class="btn-ver-detalle" title="Ver detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>#OP002</td>
+                                        <td>Biblioteca Moderna</td>
+                                        <td>5 unidades</td>
+                                        <td>
+                                            <span class="badge badge-finalizada">
+                                                Finalizada
+                                            </span>
+                                        </td>
+                                        <td>05/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP002" class="btn-ver-detalle" title="Ver detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>#OP003</td>
+                                        <td>Silla Nórdica</td>
+                                        <td>15 unidades</td>
+                                        <td>
+                                            <span class="badge badge-pendiente">
+                                                Pendiente
+                                            </span>
+                                        </td>
+                                        <td>08/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP003" class="btn-ver-detalle" title="Ver detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>#OP004</td>
+                                        <td>Escritorio Minimalista</td>
+                                        <td>2 unidades</td>
+                                        <td>
+                                            <span class="badge badge-cancelada">
+                                                Cancelada
+                                            </span>
+                                        </td>
+                                        <td>04/06/2026</td>
+                                        <td>
+                                            <a href="#detail-OP004" class="btn-ver-detalle" title="Ver detalle">
+                                                <img src="../css/assets/chevron-right.svg" class="icon-gray"
+                                                    alt="ver detalle">
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <!-- Columna de Detalle -->
+                    <div class="col-lg-4 detail-col">
+
+                        <!-- Panel de Detalle: Orden #OP001 -->
+                        <aside class="inventory-detail card" id="detail-OP001">
+
+                            <header class="detail-header">
+                                <h2 class="detail-title">Producción #OP001</h2>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </header>
+
+                            <section class="detail-info-grid">
+                                <span class="detail-info-label">Producto</span>
+                                <span class="detail-info-value">Mesa Nórdica</span>
+
+                                <span class="detail-info-label">Cantidad</span>
+                                <span class="detail-info-value">10 unidades</span>
+
+                                <span class="detail-info-label">Estado actual</span>
+                                <span class="detail-info-value">
+                                    <span class="badge badge-produccion">En Proceso</span>
+                                </span>
+
+                                <span class="detail-info-label">Fecha de creación</span>
+                                <span class="detail-info-value">07/06/2026</span>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Materiales reservados</h3>
+                                <table class="detail-materials-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tablero MDF 18mm</td>
+                                            <td>20 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tornillos para madera</td>
+                                            <td>80 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Barniz transparente satinado</td>
+                                            <td>5 L</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cola para madera</td>
+                                            <td>2 L</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <section class="detail-section cambiar-estado-section">
+                                <h3 class="detail-section-title">Cambiar estado</h3>
+                                <label for="estado-OP001" class="detail-estado-label">Nuevo estado</label>
+                                <select id="estado-OP001" class="input form-select mt-1">
+                                    <option value="en-proceso" selected>En Proceso</option>
+                                    <option value="finalizado">Finalizado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                                <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Historial</h3>
+                                <ul class="detail-timeline">
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">07/06/2026 &nbsp; 09:00</span>
+                                            <span class="detail-timeline-text">Producción creada</span>
+                                        </div>
+                                    </li>
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">07/06/2026 &nbsp; 09:00</span>
+                                            <span class="detail-timeline-text">Materiales reservados</span>
+                                        </div>
+                                    </li>
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">07/06/2026 &nbsp; 10:30</span>
+                                            <span class="detail-timeline-text">Estado cambiado a En Proceso</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </section>
+
+                        </aside>
+
+                        <!-- Panel de Detalle: Orden #OP002 -->
+                        <aside class="inventory-detail card" id="detail-OP002">
+
+                            <header class="detail-header">
+                                <h2 class="detail-title">Producción #OP002</h2>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </header>
+
+                            <section class="detail-info-grid">
+                                <span class="detail-info-label">Producto</span>
+                                <span class="detail-info-value">Biblioteca Moderna</span>
+
+                                <span class="detail-info-label">Cantidad</span>
+                                <span class="detail-info-value">5 unidades</span>
+
+                                <span class="detail-info-label">Estado actual</span>
+                                <span class="detail-info-value">
+                                    <span class="badge badge-finalizada">Finalizada</span>
+                                </span>
+
+                                <span class="detail-info-label">Fecha de creación</span>
+                                <span class="detail-info-value">05/06/2026</span>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Materiales reservados</h3>
+                                <table class="detail-materials-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tableros MDF 18mm</td>
+                                            <td>10 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fondo MDF 3mm</td>
+                                            <td>5 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tornillos para madera</td>
+                                            <td>40 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Barniz transparente satinado</td>
+                                            <td>3 L</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <section class="detail-section cambiar-estado-section">
+                                <h3 class="detail-section-title">Cambiar estado</h3>
+                                <label for="estado-OP002" class="detail-estado-label">Nuevo estado</label>
+                                <select id="estado-OP002" class="input form-select mt-1">
+                                    <option value="en-proceso">En Proceso</option>
+                                    <option value="finalizado" selected>Finalizado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                                <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Historial</h3>
+                                <ul class="detail-timeline">
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">05/06/2026 &nbsp; 08:00</span>
+                                            <span class="detail-timeline-text">Producción creada</span>
+                                        </div>
+                                    </li>
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">05/06/2026 &nbsp; 08:00</span>
+                                            <span class="detail-timeline-text">Materiales reservados</span>
+                                        </div>
+                                    </li>
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">05/06/2026 &nbsp; 14:45</span>
+                                            <span class="detail-timeline-text">Estado cambiado a Finalizado</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </section>
+
+                        </aside>
+
+                        <!-- Panel de Detalle: Orden #OP003 -->
+                        <aside class="inventory-detail card" id="detail-OP003">
+
+                            <header class="detail-header">
+                                <h2 class="detail-title">Producción #OP003</h2>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </header>
+
+                            <section class="detail-info-grid">
+                                <span class="detail-info-label">Producto</span>
+                                <span class="detail-info-value">Silla Nórdica</span>
+
+                                <span class="detail-info-label">Cantidad</span>
+                                <span class="detail-info-value">15 unidades</span>
+
+                                <span class="detail-info-label">Estado actual</span>
+                                <span class="detail-info-value">
+                                    <span class="badge badge-pendiente">Pendiente</span>
+                                </span>
+
+                                <span class="detail-info-label">Fecha de creación</span>
+                                <span class="detail-info-value">08/06/2026</span>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Materiales reservados</h3>
+                                <table class="detail-materials-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Madera Maciza Pino 3"</td>
+                                            <td>30 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tornillos para madera 1.5"</td>
+                                            <td>60 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cola para madera resistente</td>
+                                            <td>1 L</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <section class="detail-section cambiar-estado-section">
+                                <h3 class="detail-section-title">Cambiar estado</h3>
+                                <label for="estado-OP003" class="detail-estado-label">Nuevo estado</label>
+                                <select id="estado-OP003" class="input form-select mt-1">
+                                    <option value="pendiente" selected>Pendiente</option>
+                                    <option value="en-proceso">En Proceso</option>
+                                    <option value="finalizado">Finalizado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                                <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Historial</h3>
+                                <ul class="detail-timeline">
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">08/06/2026 &nbsp; 11:20</span>
+                                            <span class="detail-timeline-text">Producción creada (Pendiente de inicio)</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </section>
+
+                        </aside>
+
+                        <!-- Panel de Detalle: Orden #OP004 -->
+                        <aside class="inventory-detail card" id="detail-OP004">
+
+                            <header class="detail-header">
+                                <h2 class="detail-title">Producción #OP004</h2>
+                                <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                            </header>
+
+                            <section class="detail-info-grid">
+                                <span class="detail-info-label">Producto</span>
+                                <span class="detail-info-value">Escritorio Minimalista</span>
+
+                                <span class="detail-info-label">Cantidad</span>
+                                <span class="detail-info-value">2 unidades</span>
+
+                                <span class="detail-info-label">Estado actual</span>
+                                <span class="detail-info-value">
+                                    <span class="badge badge-cancelada">Cancelada</span>
+                                </span>
+
+                                <span class="detail-info-label">Fecha de creación</span>
+                                <span class="detail-info-value">04/06/2026</span>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Materiales liberados</h3>
+                                <table class="detail-materials-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tableros de Madera de Roble</td>
+                                            <td>4 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Patas de Hierro Negras</td>
+                                            <td>4 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tornillos de ensamble</td>
+                                            <td>20 u</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <section class="detail-section cambiar-estado-section">
+                                <h3 class="detail-section-title">Cambiar estado</h3>
+                                <label for="estado-OP004" class="detail-estado-label">Nuevo estado</label>
+                                <select id="estado-OP004" class="input form-select mt-1">
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="en-proceso">En Proceso</option>
+                                    <option value="finalizado">Finalizado</option>
+                                    <option value="cancelado" selected>Cancelado</option>
+                                </select>
+                                <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                            </section>
+
+                            <section class="detail-section">
+                                <h3 class="detail-section-title">Historial</h3>
+                                <ul class="detail-timeline">
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">04/06/2026 &nbsp; 10:00</span>
+                                            <span class="detail-timeline-text">Producción creada</span>
+                                        </div>
+                                    </li>
+                                    <li class="detail-timeline-item">
+                                        <span class="detail-timeline-dot"></span>
+                                        <div class="detail-timeline-body">
+                                            <span class="detail-timeline-date">04/06/2026 &nbsp; 15:30</span>
+                                            <span class="detail-timeline-text">Orden Cancelada (Falta de insumos importados)</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </section>
+
+                        </aside>
+                    </div>
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+    </main>
 
-</main>
+    <!-- ===== MODAL NUEVA PRODUCCIÓN ===== -->
+    <div class="modal fade" id="modalNuevaProduccion" tabindex="-1" aria-labelledby="modalNuevaProduccionLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content nueva-prod-modal">
 
-<div class="modal fade"
-     id="detalleOrden"
-     tabindex="-1"
-     aria-hidden="true">
+                <!-- Header del modal -->
+                <div class="modal-header nueva-prod-modal__header">
+                    <h2 class="modal-title nueva-prod-modal__title" id="modalNuevaProduccionLabel">Nueva Orden de
+                        Producción</h2>
+                    <button type="button" class="nueva-prod-modal__close" data-bs-dismiss="modal"
+                        aria-label="Cerrar">&times;</button>
+                </div>
 
-    <div class="modal-dialog">
+                <!-- Body del modal: formulario con radio inputs ocultos para control CSS -->
+                <form class="modal-body nueva-prod-modal__body p-0" id="formNuevaProduccion">
 
-        <div class="modal-content">
+                    <!-- Radio inputs ocultos para el selector de producto (control CSS puro) -->
+                    <input type="radio" name="prod-select" id="prod-ninguno" class="prod-radio" checked>
+                    <input type="radio" name="prod-select" id="prod-001" class="prod-radio">
+                    <input type="radio" name="prod-select" id="prod-002" class="prod-radio">
+                    <input type="radio" name="prod-select" id="prod-003" class="prod-radio">
+                    <input type="radio" name="prod-select" id="prod-004" class="prod-radio">
+                    <input type="radio" name="prod-select" id="prod-005" class="prod-radio">
+                    <input type="radio" name="prod-select" id="prod-006" class="prod-radio">
+                    <input type="radio" name="prod-select" id="prod-007" class="prod-radio">
 
-            <div class="modal-header">
+                    <div class="nueva-prod-modal__grid">
 
-                <h5 class="modal-title">
-                    Detalle de Producción
-                </h5>
+                        <!-- Columna izquierda: DATOS DE PRODUCCIÓN -->
+                        <div class="nueva-prod-modal__col nueva-prod-modal__col--left">
+                            <h3 class="nueva-prod-modal__col-title">Datos de Producción</h3>
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
+                            <!-- Selector de producto (custom CSS-only dropdown) -->
+                            <div class="np-field">
+                                <label class="np-label">Producto</label>
+                                <div class="np-select-wrapper dropdown">
+                                    <div class="np-select-trigger" tabindex="0" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <span class="np-select-value">
+                                            <span class="np-select-placeholder">Seleccionar producto...</span>
+                                            <span class="np-trigger-label np-trigger-label--001">Mesa Nórdica</span>
+                                            <span class="np-trigger-label np-trigger-label--002">Biblioteca
+                                                Moderna</span>
+                                            <span class="np-trigger-label np-trigger-label--003">Escritorio Gamer</span>
+                                            <span class="np-trigger-label np-trigger-label--004">Mesa Ratona</span>
+                                            <span class="np-trigger-label np-trigger-label--005">Cómoda 6 Cajones</span>
+                                            <span class="np-trigger-label np-trigger-label--006">Rack TV 1.80</span>
+                                            <span class="np-trigger-label np-trigger-label--007">Banqueta Alta</span>
+                                        </span>
+                                        <span class="np-select-arrow">&#9660;</span>
+                                    </div>
+                                    <ul class="dropdown-menu w-100 p-1 np-select-options-bs shadow-sm">
+                                        <li><label for="prod-001" class="dropdown-item np-option rounded">Mesa Nórdica
+                                                <small class="text-muted ms-1">PT-001</small></label></li>
+                                        <li><label for="prod-002" class="dropdown-item np-option rounded">Biblioteca
+                                                Moderna <small class="text-muted ms-1">PT-002</small></label></li>
+                                        <li><label for="prod-003" class="dropdown-item np-option rounded">Escritorio
+                                                Gamer <small class="text-muted ms-1">PT-003</small></label></li>
+                                        <li><label for="prod-004" class="dropdown-item np-option rounded">Mesa Ratona
+                                                <small class="text-muted ms-1">PT-004</small></label></li>
+                                        <li><label for="prod-005" class="dropdown-item np-option rounded">Cómoda 6
+                                                Cajones <small class="text-muted ms-1">PT-005</small></label></li>
+                                        <li><label for="prod-006" class="dropdown-item np-option rounded">Rack TV 1.80
+                                                <small class="text-muted ms-1">PT-006</small></label></li>
+                                        <li><label for="prod-007" class="dropdown-item np-option rounded">Banqueta Alta
+                                                <small class="text-muted ms-1">PT-007</small></label></li>
+                                    </ul>
+                                </div>
+                            </div>
 
+                            <!-- Campo Cantidad -->
+                            <div class="np-field">
+                                <label for="np-cantidad" class="np-label">Cantidad</label>
+                                <input type="number" id="np-cantidad" name="cantidad" value="20" min="1"
+                                    class="np-input">
+                            </div>
+
+                            <!-- Campo Observaciones -->
+                            <div class="np-field">
+                                <label for="np-observaciones" class="np-label">Observaciones</label>
+                                <textarea id="np-observaciones" name="observaciones" class="np-input np-textarea"
+                                    placeholder="Notas adicionales sobre la producción..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Separador vertical -->
+                        <div class="nueva-prod-modal__divider"></div>
+
+                        <!-- Columna derecha: RESUMEN -->
+                        <div class="nueva-prod-modal__col nueva-prod-modal__col--right">
+                            <h3 class="nueva-prod-modal__col-title">Resumen</h3>
+
+                            <!-- Estado por defecto: sin producto seleccionado -->
+                            <div class="np-resumen np-resumen--empty">
+                                <span class="np-resumen-hint">&#8592; Seleccioná un producto para ver los materiales
+                                    requeridos.</span>
+                            </div>
+
+                            <!-- Resumen para Mesa Nórdica (PT-001) -->
+                            <div class="np-resumen np-resumen--001">
+                                <p class="np-resumen-subtitle">Materiales requeridos</p>
+                                <table class="np-materials-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Tablero MDF 18 mm</td>
+                                            <td>1 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Patas de pino cepillado</td>
+                                            <td>4 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tornillos 3.5×16 mm</td>
+                                            <td>16 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Adhesivo para madera</td>
+                                            <td>50 ml</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Barniz satinado</td>
+                                            <td>200 ml</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="np-disponibilidad">
+                                    <p class="np-resumen-subtitle">Disponibilidad</p>
+                                    <span class="np-stock-badge np-stock-bad">Stock insuficiente</span>
+                                    <table class="np-materials-table">
+                                        <tbody>
+                                            <tr>
+                                                <td>Patas de pino cepillado</td>
+                                                <td>2 u</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="np-estado-preview">
+                                    <p class="np-resumen-subtitle">Producción quedará:</p>
+                                    <span class="np-estado-tag">Estado: Pendiente</span>
+                                </div>
+                            </div>
+
+                            <!-- Resumen para Biblioteca Moderna (PT-002) -->
+                            <div class="np-resumen np-resumen--002">
+                                <p class="np-resumen-subtitle">Materiales requeridos</p>
+                                <table class="np-materials-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Tablero MDF 18 mm</td>
+                                            <td>5 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fondo MDF 3 mm</td>
+                                            <td>1 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tornillos 3.5×16 mm</td>
+                                            <td>24 u</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Adhesivo para madera</td>
+                                            <td>80 ml</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Barniz satinado</td>
+                                            <td>300 ml</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="np-disponibilidad">
+                                    <p class="np-resumen-subtitle">Disponibilidad</p>
+                                    <span class="np-stock-badge np-stock-ok">Stock suficiente</span>
+                                </div>
+                                <div class="np-estado-preview">
+                                    <p class="np-resumen-subtitle">Producción quedará:</p>
+                                    <span class="np-estado-tag">Estado: Pendiente</span>
+                                </div>
+                            </div>
+
+                            <!-- Resumen genérico para PT-003 al PT-007 -->
+                            <div class="np-resumen np-resumen--generic">
+                                <span class="np-resumen-hint">&#9432; Producto seleccionado. La fórmula completa estará
+                                    disponible próximamente.</span>
+                                <div class="np-estado-preview" style="margin-top:1rem">
+                                    <p class="np-resumen-subtitle">Producción quedará:</p>
+                                    <span class="np-estado-tag">Estado: Pendiente</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Footer del modal -->
+                    <div class="nueva-prod-modal__footer">
+                        <button type="button" class="np-btn np-btn--cancel" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="np-btn np-btn--create">Crear Producción</button>
+                    </div>
+
+                </form>
             </div>
-
-            <div class="modal-body">
-
-                <p><strong>Orden:</strong> OP001</p>
-
-                <p><strong>Producto:</strong> Mesa Nórdica</p>
-
-                <p><strong>Estado:</strong> En Producción</p>
-
-                <p><strong>Materia Prima:</strong> MDF, Tornillos y Barniz</p>
-
-                <p><strong>Resultado esperado:</strong> 10 unidades terminadas</p>
-
-            </div>
-
-            <div class="modal-footer">
-
-                <button type="button"
-                        class="btn btn-primary"
-                        data-bs-dismiss="modal">
-
-                    Cerrar
-
-                </button>
-
-            </div>
-
         </div>
-
     </div>
 
-</div>
+        <aside>
+            <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 position-fixed"
+                aria-label="Menú principal">
+                <span id="sidebarExpandedState" class="sidebar-state sidebar-toggle-target collapse"
+                    aria-hidden="true"></span>
+                <div class="sidebar-brand p-4 d-flex">
+                    <img id="sidebarFullLogo" src="../css/assets/logo.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-full sidebar-toggle-target collapse">
+                    <img id="sidebarCollapsedLogo" src="../css/assets/logo-only.png" alt="Logo de la aplicación"
+                        class="sidebar-logo sidebar-logo-collapsed sidebar-toggle-target collapse">
+                    <button class="btn-close btn-close-white d-md-none sidebar-toggle-target collapse" type="button"
+                        data-bs-toggle="collapse" data-bs-target=".sidebar-toggle-target"
+                        aria-label="Cerrar menú"></button>
+                </div>
 
-<script src="../dist/js/bootstrap.bundle.min.js"></script>
+                <div class="nav flex-column">
+                    <a href="user_view_produccion.html" class="sidebar-link active text-decoration-none p-3">
+                        <img src="../css/assets/icons8-gear-50.png" class="sidebar-icon" alt="Ícono de producción"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Producción</span>
+                    </a>
+                    <a href="user_view.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/materias_primas.png" class="sidebar-icon" alt="Ícono de materia prima"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Materias Primas</span>
+                    </a>
+                    <a href="user_view_productos.html" class="sidebar-link text-decoration-none p-3">
+                        <img src="../css/assets/bag.svg" class="sidebar-icon" alt="Ícono de productos"
+                            aria-hidden="true">
+                        <span class="hide-on-collapse sidebar-toggle-target collapse">Productos</span>
+                    </a>
+                </div>
+
+                <div class="profile-section mt-auto p-4">
+                    <div class="d-flex align-items-center">
+                        <img src="../css/assets/avatar.jpg" class="rounded-circle profile-avatar" alt="Foto de perfil">
+                        <div id="sidebarProfileInfo" class="ms-3 profile-info sidebar-toggle-target collapse">
+                            <span class="text-white mb-0 d-block fw-bold">Usuario</span>
+                            <small class="text-muted">Empleado</small>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+    </main>
+
+    <footer class="main_footer">
+        <div class="main_footer_inner">
+            <div class="main_footer_brand">
+                <img src="../css/assets/logo.png" alt="Logo QuantiaStudio" class="main_footer_logo">
+                <span class="main_footer_name">Gestor de Producción e Inventario</span>
+            </div>
+            <p>&copy; 2026 QuantiaStudio. Todos los derechos reservados.</p>
+            <p>Proyecto académico &mdash; Full Stack I (2026)</p>
+            <p>
+                <a href="home.html" target="_blank" rel="noopener">Ir a la Página de Inicio</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="../dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
