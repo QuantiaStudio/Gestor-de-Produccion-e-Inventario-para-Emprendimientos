@@ -1,0 +1,21 @@
+.main_header {
+    background-color: var(--color-brand);
+    padding: 10px 40px;        
+    display: flex;            
+    align-items: center;
+    justify-content: center;
+}
+
+
+.nav_bar ul {
+    display: flex;          
+    list-style: none;        
+    gap: 30px;              
+}
+
+
+.nav_bar a {
+    text-decoration: none;
+    color: white;           
+    font-weight: 600;
+}
