@@ -247,6 +247,7 @@
     height: 36px;
     margin-bottom: 16px;
     object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(32%) sepia(95%) saturate(1903%) hue-rotate(248deg) brightness(96%) contrast(94%);
 }
 
 .feature-card h2 {
@@ -266,25 +267,6 @@
 }
 
 @media (max-width: 992px) {
-    .hero-section {
-        flex-direction: column;
-    }
-    .hero-content {
-        padding: 40px 24px;
-    }
-    .title {
-        font-size: 2.5rem;
-    }
-    .actions {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 24px;
-    }
-    .contact-card {
-        position: relative;
-        left: 0;
-        width: 100%;
-    }
     .features-section {
         padding: 56px 0 72px;
     }
