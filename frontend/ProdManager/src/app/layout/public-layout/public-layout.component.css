@@ -1,0 +1,40 @@
+:host {
+	display: block;
+}
+
+.public_layout {
+	--public-navbar-height: 56px;
+	--public-footer-height: 170px;
+	min-height: 100dvh;
+}
+
+app-navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	display: block;
+}
+
+app-footer {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	display: block;
+}
+
+.public_layout_content {
+	min-height: 100dvh;
+	padding-top: var(--public-navbar-height);
+	padding-bottom: var(--public-footer-height);
+}
+
+@media (max-width: 768px) {
+	.public_layout {
+		--public-navbar-height: 56px;
+		--public-footer-height: 210px;
+	}
+}
