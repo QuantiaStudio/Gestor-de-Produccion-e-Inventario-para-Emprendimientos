@@ -1,1 +1,268 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    /* Colores principales */
+    --color-brand: #7C3AED;
+    --primary-color: #7C3AED;
+    --secondary-color: #111827;
+    --background-color: #F5F3FF;
+    --color-surface: #FFFFFF;
+
+    --color-bg-light: #F5F3FF;
+    --color-white: #FFFFFF;
+    --color-text-dark: #111827;
+    --color-text-light: #6b7280;
+    --color-border: #E5E7EB;
+
+    /* Estados */
+    --color-success: #10B981;
+    --color-error: #DC2626;
+    --color-warning: #F59E0B;
+    --color-info: #7C3AED;
+
+    /* Grises base */
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9096a0;
+    --gray-600: #4B5563;
+    --gray-900: #111827;
+
+    /* Tipografía */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Bordes */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+
+    /* Transiciones */
+    --transition-fast: 150ms ease-in-out;
+}
+
+
+/* ---------- BASE GLOBAL ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 14px;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    background-color: var(--background-color);
+    color: var(--gray-900);
+    line-height: 1.5;
+}
+
+/* ---------- TIPOGRAFÍA ---------- */
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 700;
+}
+
+h2 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--gray-600);
+}
+
+code,
+.mono {
+    font-family: var(--font-mono);
+    font-size: 11px;
+}
+
+/* ---------- UTILIDADES DE ESTADO ---------- */
+
+.text-success {
+    color: var(--color-success) !important;
+}
+
+.text-error {
+    color: var(--color-error) !important;
+}
+
+.text-warning {
+    color: var(--color-warning) !important;
+}
+
+.text-info {
+    color: var(--color-info) !important;
+}
+
+.bg-success-10 {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.bg-error-10 {
+    background-color: rgba(220, 38, 38, 0.1);
+}
+
+.bg-warning-10 {
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.bg-info-10 {
+    background-color: rgba(124, 58, 237, 0.1);
+}
+
+/* ---------- BOTONES ---------- */
+
+.btn {
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: var(--transition-fast);
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+/* Primario */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+/* Outline */
+.btn-outline {
+    border: 1px solid var(--gray-300);
+    background-color: rgba(124, 58, 237, 0.05);
+}
+
+/* Ghost */
+.btn-ghost {
+    background: transparent;
+    color: var(--gray-600);
+    border-color: var(--gray-300);
+}
+
+/* ---------- INPUTS ---------- */
+
+.input {
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 8px 12px;
+    transition: var(--transition-fast);
+    font-family: var(--font-body);
+}
+
+.input:hover {
+    border-color: var(--gray-300);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--gray-300);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    background-color: white;
+}
+
+.input-error {
+    border-color: var(--color-error);
+}
+
+/* Deshabilitado */
+.input:disabled {
+    background-color: var(--gray-200);
+    color: var(--gray-400);
+    cursor: not-allowed;
+}
+
+/* ---------- CARDS ---------- */
+
+.card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: var(--transition-fast);
+}
+
+.card:hover {
+    transform: translateY(-1px);
+}
+
+/* ---------- MODAL ---------- */
+
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.modal {
+    border-radius: var(--radius-md);
+    background-color: white;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- TABLAS ---------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    font-weight: 600;
+    padding: 12px 8px;
+}
+
+td {
+    padding: 12px 8px;
+}
+
+td.numeric {
+    text-align: right;
+}
+
+td.actions {
+    text-align: center;
+}
+
+/* ---------- BADGES DE ESTADO ---------- */
+
+.estado-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge--success {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.badge--warning {
+    background-color: rgba(245, 158, 11, 0.12);
+    color: #B45309;
+}
+
+.badge--error {
+    background-color: rgba(220, 38, 38, 0.12);
+    color: var(--color-error);
+}
