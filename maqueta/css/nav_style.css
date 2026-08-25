@@ -1,4 +1,5 @@
 .main_header {
+    margin: 0;
     background-color: #7C3AED;
     padding: 10px 40px;        
     display: flex;            
