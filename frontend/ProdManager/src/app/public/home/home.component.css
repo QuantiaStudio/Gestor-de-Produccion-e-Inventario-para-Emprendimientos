@@ -85,6 +85,17 @@
     gap: 12px;
 }
 
+.icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    display: block;
+}
+
+.icon-light {
+    filter: brightness(0) invert(1);
+}
+
 .btn-primary:hover {
     background-color: #6d28d9;
     transform: translateY(-2px);
@@ -131,7 +142,17 @@
     color: var(--color-brand);
     text-decoration: none;
     font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    filter: brightness(0) saturate(100%) invert(32%) sepia(95%) saturate(1903%) hue-rotate(248deg) brightness(96%) contrast(94%);
 }
 
 .social-links a:hover {
@@ -203,9 +224,13 @@
 }
 
 .feature-icon {
-    font-size: 2rem;
-    color: var(--color-brand);
+    width: 36px;
+    height: 36px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(32%) sepia(95%) saturate(1903%) hue-rotate(248deg) brightness(96%) contrast(94%);
 }
 
 /* Responsive */
