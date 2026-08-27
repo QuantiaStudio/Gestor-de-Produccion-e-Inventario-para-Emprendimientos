@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { MateriaPrima } from '../materia-prima.model';
+import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-prima-detalle.component';
 
 @Component({
   selector: 'app-materia-prima-listado',
   standalone: true,
-  imports: [],
+  imports: [MateriaPrimaDetalleComponent],
   templateUrl: './materia-prima-listado.component.html',
   styleUrl: './materia-prima-listado.component.css'
 })
 export class MateriaPrimaListadoComponent {
+  materiaPrimaSeleccionada: MateriaPrima | null = null;
+
   materiasPrimas: MateriaPrima[] = [
     {
       id: 'M001', nombre: 'Madera de Roble', categoria: 'Madera',
@@ -41,4 +44,12 @@ export class MateriaPrimaListadoComponent {
       proveedor: 'Maderas del Sur S.A.', ultimaActualizacion: '20/06/2026'
     },
   ];
+
+  seleccionar(materiaPrima: MateriaPrima) {
+    this.materiaPrimaSeleccionada = materiaPrima;
+  }
+
+  cerrarDetalle() {
+    this.materiaPrimaSeleccionada = null;
+  }
 }

@@ -1,0 +1,20 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Detalle de Materia Prima</h2>
+      <button type="button" (click)="cerrar.emit()">Cerrar</button>
+    </div>
+    <table>
+      <tbody>
+        <tr><th>ID</th><td>#{{ materiaPrima.id }}</td></tr>
+        <tr><th>Material</th><td>{{ materiaPrima.nombre }}</td></tr>
+        <tr><th>Categoría</th><td>{{ materiaPrima.categoria }}</td></tr>
+        <tr><th>Stock total</th><td>{{ materiaPrima.cantidad }} {{ materiaPrima.unidadMedida }}</td></tr>
+        <tr><th>Estado</th><td>{{ materiaPrima.estado }}</td></tr>
+        <tr><th>Descripción</th><td>{{ materiaPrima.descripcion }}</td></tr>
+        <tr><th>Proveedor</th><td>{{ materiaPrima.proveedor }}</td></tr>
+        <tr><th>Última actualización</th><td>{{ materiaPrima.ultimaActualizacion }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

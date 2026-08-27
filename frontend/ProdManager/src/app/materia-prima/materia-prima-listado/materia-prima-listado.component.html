@@ -10,7 +10,7 @@
   </thead>
   <tbody>
     @for (mp of materiasPrimas; track mp.id) {
-      <tr>
+      <tr (click)="seleccionar(mp)">
         <td>#{{ mp.id }}</td>
         <td>{{ mp.nombre }}</td>
         <td>{{ mp.categoria }}</td>
@@ -20,3 +20,10 @@
     }
   </tbody>
 </table>
+
+@if (materiaPrimaSeleccionada) {
+  <app-materia-prima-detalle
+    [materiaPrima]="materiaPrimaSeleccionada"
+    (cerrar)="cerrarDetalle()"
+  />
+}
