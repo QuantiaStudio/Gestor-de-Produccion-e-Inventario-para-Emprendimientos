@@ -1,20 +1,20 @@
 <table>
   <thead>
     <tr>
-      <th>Nombre</th>
+      <th>ID</th>
+      <th>Material</th>
       <th>Categoría</th>
-      <th>Unidad</th>
-      <th>Stock disponible</th>
+      <th>Cantidad</th>
       <th>Estado</th>
     </tr>
   </thead>
   <tbody>
     @for (mp of materiasPrimas; track mp.id) {
       <tr>
+        <td>#{{ mp.id }}</td>
         <td>{{ mp.nombre }}</td>
         <td>{{ mp.categoria }}</td>
-        <td>{{ mp.unidadMedida }}</td>
-        <td>{{ mp.stockDisponible }}</td>
+        <td>{{ mp.cantidad }} {{ mp.unidadMedida }}</td>
         <td>{{ mp.estado }}</td>
       </tr>
     }

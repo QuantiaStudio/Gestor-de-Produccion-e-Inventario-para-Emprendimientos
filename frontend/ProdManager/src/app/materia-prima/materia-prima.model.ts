@@ -1,13 +1,14 @@
-export type EstadoMateriaPrima = 'Activo' | 'Inactivo';
+export type EstadoMateriaPrima = 'Disponible' | 'Bajo stock' | 'Sin stock';
 
 export interface MateriaPrima {
-  id: number;
+  id: string;
   nombre: string;
   categoria: string;
+  cantidad: number;
   unidadMedida: string;
-  stockTotal: number;
-  stockReservado: number;
-  stockDisponible: number;
   stockMinimo: number;
   estado: EstadoMateriaPrima;
+  descripcion: string;
+  proveedor: string;
+  ultimaActualizacion: string;
 }
