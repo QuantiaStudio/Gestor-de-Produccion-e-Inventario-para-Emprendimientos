@@ -1,13 +1,11 @@
-<div class="public_layout">
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
 
-<main class="public_layout_content">
-
+  <div class="dashboard-layout__main">
     <app-header></app-header>
 
-
-    <router-outlet></router-outlet>
-
-
-    <app-sidebar></app-sidebar>
-</main>
+    <main class="dashboard-layout__content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
