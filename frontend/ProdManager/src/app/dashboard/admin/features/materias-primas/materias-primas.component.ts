@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
 import { MateriaPrima } from './materias-primas.model';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-materias-primas',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './materias-primas.component.html',
   styleUrl: './materias-primas.component.css'
 })
 export class MateriasPrimasComponent {
+
+  constructor(private formBuilder: FormBuilder){
+
+    
+  }
 
   materiasPrimas: MateriaPrima[] = [
     {
