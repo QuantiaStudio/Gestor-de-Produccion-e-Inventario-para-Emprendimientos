@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MateriaPrima } from '../materia-prima.model';
+import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
 
 @Component({
   selector: 'app-materia-prima-detalle',

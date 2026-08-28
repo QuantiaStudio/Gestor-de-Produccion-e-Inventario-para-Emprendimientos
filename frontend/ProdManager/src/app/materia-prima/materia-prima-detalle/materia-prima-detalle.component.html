@@ -9,8 +9,16 @@
         <tr><th>ID</th><td>#{{ materiaPrima.id }}</td></tr>
         <tr><th>Material</th><td>{{ materiaPrima.nombre }}</td></tr>
         <tr><th>Categoría</th><td>{{ materiaPrima.categoria }}</td></tr>
-        <tr><th>Stock total</th><td>{{ materiaPrima.cantidad }} {{ materiaPrima.unidadMedida }}</td></tr>
-        <tr><th>Estado</th><td>{{ materiaPrima.estado }}</td></tr>
+        <tr><th>Stock total</th><td>{{ materiaPrima.stockTotal }} {{ materiaPrima.unidadMedida }}</td></tr>
+        <tr><th>Estado</th>
+          <td>
+            @switch (materiaPrima.estado) {
+              @case ('optimo') { Disponible }
+              @case ('bajo_minimo') { Bajo stock }
+              @case ('sin_stock') { Sin stock }
+            }
+          </td>
+        </tr>
         <tr><th>Descripción</th><td>{{ materiaPrima.descripcion }}</td></tr>
         <tr><th>Proveedor</th><td>{{ materiaPrima.proveedor }}</td></tr>
         <tr><th>Última actualización</th><td>{{ materiaPrima.ultimaActualizacion }}</td></tr>
