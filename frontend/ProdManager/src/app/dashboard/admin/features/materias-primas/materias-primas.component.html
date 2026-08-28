@@ -1,0 +1,153 @@
+<div class="row body">
+  <div class="col-lg-8 inventory-table-col">
+    <div class="inventory-content">
+      
+      <!-- Cabecera de la página -->
+      <section class="page-header">
+        <div class="page-header__content">
+          <h1>Materia Prima</h1>
+          <p>Consulta y gestión del inventario de materias primas.</p>
+        </div>
+        <div class="page-header__actions d-flex gap-2">
+          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
+            Registrar Materia
+          </button>
+          <button type="button" class="btn btn-outline-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalActualizar">
+            Actualizar Materia
+          </button>
+        </div>
+      </section>
+
+      <!-- Filtros -->
+      <section class="inventory-filters card">
+        <div class="filters-row">
+          <div class="search-box">
+            <span class="search-icon">
+              <img src="../css/assets/search.svg" class="icon-gray" alt="" />
+            </span>
+            <input type="text" placeholder="Buscar materia prima...">
+          </div>
+          <div class="filter-select">
+            <span class="filter-label">Categoría</span>
+            <select>
+              <option>Todas</option>
+            </select>
+          </div>
+          <div class="filter-select">
+            <span class="filter-label">Estado</span>
+            <select>
+              <option>Todos</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+            <img src="../css/assets/filter.svg" class="icon-gray" alt="" />
+            Limpiar filtros
+          </button>
+        </div>
+      </section>
+
+      <!-- Tarjetas de Estadísticas (KPIs) -->
+      <section class="inventory-stats">
+        <article class="stat-card">
+          <div class="stat-card__icon">
+            <img src="../css/assets/box.svg" class="icon-primary" alt="" />
+          </div>
+          <div class="stat-card__content">
+            <span>Total materias primas</span>
+            <span class="stat-value">32</span>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-card__icon">
+            <img src="../css/assets/bag.svg" class="icon-primary" alt="" />
+          </div>
+          <div class="stat-card__content">
+            <span>Stock total</span>
+            <span class="stat-value">12,450.75 <span class="stat-unit">unidades</span></span>
+          </div>
+        </article>
+
+        <article class="stat-card warning">
+          <div class="stat-card__icon">
+            <img src="../css/assets/exclamation-triangle.svg" class="icon-danger" alt="" />
+          </div>
+          <div class="stat-card__content">
+            <span>Por debajo del mínimo</span>
+            <span class="stat-value">5</span>
+          </div>
+        </article>
+
+        <article class="stat-card danger">
+          <div class="stat-card__icon">
+            <img src="../css/assets/box.svg" class="icon-danger" alt="" />
+          </div>
+          <div class="stat-card__content">
+            <span>Sin stock</span>
+            <span class="stat-value">2</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- Tabla de Datos -->
+      <section class="inventory-table card">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Materia Prima ↕</th>
+              <th>Categoría</th>
+              <th>unidad</th>
+              <th>Stock Total</th>
+              <th>Stock Disponible</th>
+              <th>Nivel Mínimo</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of materiasPrimas; track item.id) {
+              <tr>
+                <td>
+                  <div class="material-info">
+                    <span class="material-name">{{ item.nombre }}</span>
+                    <small>{{ item.id }}</small>
+                  </div>
+                </td>
+                <td>{{ item.categoria }}</td>
+                <td>{{ item.unidad }}</td>
+                <td>{{ item.stockTotal }}</td>
+                <td>{{ item.stockDisponible }}</td>
+                <td>{{ item.nivelMinimo }}</td>
+                <td>
+                  @switch (item.estado) {
+                    @case ('optimo') {
+                      <span class="badge badge-success">Óptimo</span>
+                    }
+                    @case ('bajo_minimo') {
+                      <span class="badge" style="background-color: rgba(245, 158, 11, 0.12); color: #d97706;">Bajo Mínimo</span>
+                    }
+                    @case ('sin_stock') {
+                      <span class="badge" style="background-color: rgba(239, 68, 68, 0.12); color: #dc2626;">Sin Stock</span>
+                    }
+                  }
+                </td>
+                <td class="text-end">
+                  <a href="#detalle" class="btn-ver-detalle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                      <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" class="text-center py-4 text-muted">No se encontraron materias primas.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+  </div>
+</div>
