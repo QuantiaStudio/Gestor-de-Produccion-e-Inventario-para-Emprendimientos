@@ -1,1 +1,29 @@
-<p>sidebar works!</p>
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <img src="assets/logo.png" alt="Logo de la aplicación" class="sidebar-logo" />
+    <span class="sidebar-brand-name">ProdManager</span>
+  </div>
+
+  <div class="sidebar-links">
+    <a routerLink="/dashboard/materias-primas-consulta" routerLinkActive="active" class="sidebar-link">
+      <img src="assets/materias_primas.png" alt="" class="sidebar-icon" />
+      <span>Materias Primas</span>
+    </a>
+    <a routerLink="/dashboard/materias-primas" routerLinkActive="active" class="sidebar-link">
+      <img src="assets/gear.svg" alt="" class="sidebar-icon" />
+      <span>Gestión de Materia Prima</span>
+    </a>
+    <a routerLink="/dashboard/new-product" routerLinkActive="active" class="sidebar-link">
+      <img src="assets/bag.svg" alt="" class="sidebar-icon" />
+      <span>Productos</span>
+    </a>
+  </div>
+
+  <div class="sidebar-profile">
+    <img src="assets/avatar.jpg" alt="Foto de perfil" class="sidebar-avatar" />
+    <div class="sidebar-profile-info">
+      <span class="sidebar-profile-name">Usuario</span>
+      <small class="sidebar-profile-role">Invitado</small>
+    </div>
+  </div>
+</nav>
