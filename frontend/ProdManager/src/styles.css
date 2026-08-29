@@ -38,6 +38,24 @@
     --transition-fast: 150ms ease-in-out;
 }
 
+/* Estados de validación de formularios */
+.ng-valid:not(form).ng-touched {
+  border-color: var(--color-success);
+  border-width: 2px;
+  border-left: 5px solid var(--color-success);
+}
+
+.ng-invalid:not(form).ng-touched {
+  border-color: var(--color-error);
+  border-width: 2px;
+  border-left: 5px solid var(--color-error);
+}
+
+.error{
+  color: var(--color-error);
+  font-size: 14px;
+  margin-bottom: 30px;
+}
 
 /* ---------- BASE GLOBAL ---------- */
 
@@ -177,8 +195,12 @@ code,
     background-color: white;
 }
 
-.input-error {
+.input.input-error,
+.input.input-error.ng-valid.ng-touched,
+.input.input-error.ng-invalid.ng-touched {
     border-color: var(--color-error);
+    border-width: 2px;
+    border-left: 5px solid var(--color-error);
 }
 
 /* Deshabilitado */

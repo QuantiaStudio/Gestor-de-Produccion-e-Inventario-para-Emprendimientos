@@ -150,7 +150,8 @@
                                     Material
                                 </label>
 
-                                <select class="input form-select" id="materialSelect" formControlName="materialId">
+                                <select class="input form-select" id="materialSelect" formControlName="materialId"
+                                    [class.input-error]="materialesInvalidos">
 
                                     <option value="">
                                         Seleccionar material...
@@ -172,7 +173,7 @@
                                 </label>
 
                                 <input type="number" min="1" class="input" id="materialCantidad" placeholder="0"
-                                    formControlName="cantidadMaterial">
+                                    formControlName="cantidadMaterial" [class.input-error]="materialesInvalidos">
 
                             </div>
 
