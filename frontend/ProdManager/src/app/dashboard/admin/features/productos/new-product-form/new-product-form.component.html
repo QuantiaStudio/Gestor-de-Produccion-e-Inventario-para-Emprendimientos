@@ -38,6 +38,12 @@
                             formControlName="nombre">
                     </div>
 
+                    @if (nombre?.errors && nombre?.touched){
+                        @if (nombre?.hasError('required')){
+                            <p class="error">El campo nombre es obligatorio</p>
+                        }
+                    }
+
                     <!-- Categoría -->
                     <div class="row g-3 mb-3">
 
@@ -68,7 +74,11 @@
 
                                 </a>
                             </div>
-
+                            @if (categoria?.errors && categoria?.touched){
+                                @if (categoria?.hasError('required')){
+                                    <p class="error">El campo categoría es obligatorio</p>
+                                }
+                            }
                         </div>
 
                     </div>
@@ -102,6 +112,14 @@
                                 formControlName="stockInicial">
 
                         </div>
+                        @if (stockInicial?.errors && stockInicial?.touched){
+                            @if (stockInicial?.hasError('required')){
+                                <p class="error">El campo stock inicial es obligatorio</p>
+                            }
+                            @if (stockInicial?.hasError('min')){
+                                <p class="error">El stock inicial no puede ser negativo ni nulo</p>
+                            }
+                        }
 
                     </div>
 
@@ -143,9 +161,7 @@
                                     <option [value]="material.id">
                                         {{ material.nombre }}
                                     </option>
-
                                     }
-
                                 </select>
                             </div>
 
@@ -162,7 +178,7 @@
 
                             <div class="col-md-3">
 
-                                <button type="button" class="btn btn-primary w-100" click()="agregarMaterial()">
+                                <button type="button" class="btn btn-primary w-100" (click)="agregarMaterial()">
 
                                     Agregar
 
@@ -191,7 +207,7 @@
 
                                     @for (
                                     material of materialesAgregados;
-                                    track material.materiaPrimaId;
+                                    track material;
                                     let i = $index
                                     ) {
 
@@ -225,7 +241,14 @@
                                 </tbody>
 
                             </table>
-
+                            @if (materialesInvalidos) {
+                                <p class="error">Debe agregar al menos una materia prima</p>
+                            }
+                            @if (cantidadMaterial?.errors && cantidadMaterial?.touched) {
+                                @if (cantidadMaterial?.hasError('min')) {
+                                    <p class="error">La cantidad de material debe ser mayor a 0</p>
+                                }
+                            }
                         </div>
 
                     </div>

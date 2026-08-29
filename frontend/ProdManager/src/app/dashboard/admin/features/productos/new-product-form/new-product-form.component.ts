@@ -17,18 +17,18 @@ export class NewProductFormComponent {
   productForm = this.formBuilder.group({
     nombre: ['', Validators.required],
     descripcion: [''],
-    stockInicial: [0, [Validators.required, Validators.min(0)]],
+    stockInicial: [0, [Validators.required, Validators.min(1)]],
     codigo: ['', Validators.required],
     categoria: ['', Validators.required],
     nuevaCategoria: [''],
+    materiales: this.formBuilder.nonNullable.control<any[]>([], Validators.required),
 
 
     // Campos temporales para agregar un material
-    materialId: ['', Validators.required],
+    materialId: [''],
     cantidadMaterial: [
       null as number | null,
       [
-        Validators.required,
         Validators.min(1)
       ]
     ]
@@ -37,6 +37,32 @@ export class NewProductFormComponent {
   get nombre() {
     return this.productForm.get('nombre');
   } 
+  get categoria() {
+    return this.productForm.get('categoria');
+  }
+  get stockInicial() {
+    return this.productForm.get('stockInicial');
+  }
+  get codigo() {
+    return this.productForm.get('codigo');
+  }
+  get materialId() {
+    return this.productForm.get('materialId');
+  }
+  get cantidadMaterial() {
+    return this.productForm.get('cantidadMaterial');
+  }
+  /*Falta  implementar la validación de nueva categoría. TERMINAR FEATURE AL INTEGRAR MÓDULO DE PRODUCTOS*/
+  get nuevaCategoria() {
+    return this.productForm.get('nuevaCategoria');
+  }
+  get materiales() {
+    return this.productForm.get('materiales');
+  }
+ 
+  get materialesInvalidos() {
+    return this.materiales?.hasError('required') && this.materiales?.touched;
+  }
 
   agregarMaterial() {
 
@@ -44,8 +70,9 @@ export class NewProductFormComponent {
       this.productForm.get('materialId')?.value
     );
 
-    const cantidad =
-      this.productForm.get('cantidad')?.value;
+    const cantidad = Number(
+      this.productForm.get('cantidadMaterial')?.value
+    );
 
     if (!materialId || !cantidad) {
       return;
@@ -66,6 +93,8 @@ export class NewProductFormComponent {
       unidad: material.unidad
     });
 
+    this.actualizarMaterialesControl();
+
     this.productForm.patchValue({
       materialId: '',
       cantidadMaterial: null
@@ -76,6 +105,7 @@ export class NewProductFormComponent {
     eliminarMaterial(index: number) {
 
     this.materialesAgregados.splice(index, 1);
+    this.actualizarMaterialesControl();
 
   }
 
@@ -97,12 +127,18 @@ export class NewProductFormComponent {
 
       formula: this.materialesAgregados.map(material => ({
         materiaPrimaId: material.materiaPrimaId,
-        cantidad: material.cantidad
+        cantidad: material.cantidadMaterial
       }))
     };
 
     console.log(producto);
 
+  }
+
+  private actualizarMaterialesControl() {
+    this.materiales?.setValue([...this.materialesAgregados]);
+    this.materiales?.markAsTouched();
+    this.materiales?.updateValueAndValidity();
   }
 
   materiasPrimas = [
