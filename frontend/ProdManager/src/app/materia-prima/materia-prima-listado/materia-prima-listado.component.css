@@ -1,0 +1,49 @@
+.listado-header {
+  margin-bottom: 24px;
+}
+
+.listado-header p {
+  color: var(--gray-400);
+  margin: 4px 0 0;
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-bar .input {
+  flex: 1;
+}
+
+.table-wrapper {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-wrapper table {
+  margin: 0;
+}
+
+.table-wrapper thead th {
+  background-color: #FAFAFA;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+}
+
+.table-wrapper tbody tr {
+  border-top: 1px solid var(--gray-200);
+}
+
+.fila-clickeable {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.fila-clickeable:hover {
+  background-color: rgba(124, 58, 237, 0.03);
+}

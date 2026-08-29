@@ -1,21 +1,23 @@
 <div class="modal-overlay" (click)="cerrar.emit()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h2>Detalle de Materia Prima</h2>
-      <button type="button" (click)="cerrar.emit()">Cerrar</button>
+      <button type="button" class="btn-close" (click)="cerrar.emit()" aria-label="Cerrar"></button>
     </div>
+
     <table>
       <tbody>
-        <tr><th>ID</th><td>#{{ materiaPrima.id }}</td></tr>
+        <tr><th>ID</th><td class="mono">#{{ materiaPrima.id }}</td></tr>
         <tr><th>Material</th><td>{{ materiaPrima.nombre }}</td></tr>
         <tr><th>Categoría</th><td>{{ materiaPrima.categoria }}</td></tr>
         <tr><th>Stock total</th><td>{{ materiaPrima.stockTotal }} {{ materiaPrima.unidadMedida }}</td></tr>
-        <tr><th>Estado</th>
+        <tr>
+          <th>Estado</th>
           <td>
             @switch (materiaPrima.estado) {
-              @case ('optimo') { Disponible }
-              @case ('bajo_minimo') { Bajo stock }
-              @case ('sin_stock') { Sin stock }
+              @case ('optimo') { <span class="estado-badge badge--success">Disponible</span> }
+              @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo stock</span> }
+              @case ('sin_stock') { <span class="estado-badge badge--error">Sin stock</span> }
             }
           </td>
         </tr>
@@ -24,5 +26,9 @@
         <tr><th>Última actualización</th><td>{{ materiaPrima.ultimaActualizacion }}</td></tr>
       </tbody>
     </table>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="cerrar.emit()">Cerrar</button>
+    </div>
   </div>
 </div>
