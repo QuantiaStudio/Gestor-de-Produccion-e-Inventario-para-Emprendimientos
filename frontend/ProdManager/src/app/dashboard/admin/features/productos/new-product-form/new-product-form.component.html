@@ -16,7 +16,7 @@
 
             <div class="modal-body">
 
-                <form id="formRegistrar">
+                <form [formGroup]="productForm" (ngSubmit)="guardarProducto()">
 
                     <!-- Código -->
                     <div class="mb-3">
@@ -24,7 +24,8 @@
                             Código
                         </label>
 
-                        <input type="text" class="input" id="regCodigo" placeholder="Ej: PT-002" required>
+                        <input type="text" class="input" id="regCodigo" placeholder="Ej: PT-002"
+                            formControlName="codigo">
                     </div>
 
                     <!-- Nombre -->
@@ -33,7 +34,8 @@
                             Nombre
                         </label>
 
-                        <input type="text" class="input" id="regNombre" placeholder="Nombre del producto" required>
+                        <input type="text" class="input" id="regNombre" placeholder="Nombre del producto"
+                            formControlName="nombre">
                     </div>
 
                     <!-- Categoría -->
@@ -45,7 +47,7 @@
                                 Categoría
                             </label>
 
-                            <select class="input form-select" id="regCategoria" required>
+                            <select class="input form-select" id="regCategoria" formControlName="categoria">
 
                                 <option value="">Seleccionar...</option>
                                 <option>Mesas</option>
@@ -80,7 +82,8 @@
                                 Nombre de la nueva categoría
                             </label>
 
-                            <input type="text" class="input" id="regNuevaCategoria" placeholder="Categoría">
+                            <input type="text" class="input" id="regNuevaCategoria" placeholder="Categoría"
+                                formControlName="nuevaCategoria">
 
                         </div>
 
@@ -95,7 +98,8 @@
                                 Stock Inicial
                             </label>
 
-                            <input type="number" class="input" id="regStock" min="0" placeholder="0" required>
+                            <input type="number" class="input" id="regStock" min="0" placeholder="0"
+                                formControlName="stockInicial">
 
                         </div>
 
@@ -109,7 +113,7 @@
                         </label>
 
                         <textarea class="input" id="regDescripcion" rows="3"
-                            placeholder="Breve descripción del producto..."></textarea>
+                            placeholder="Breve descripción del producto..." formControlName="descripcion"></textarea>
 
                     </div>
 
@@ -128,21 +132,21 @@
                                     Material
                                 </label>
 
-                                <select class="input form-select" id="materialSelect">
+                                <select class="input form-select" id="materialSelect" formControlName="materialId">
 
-                                    <option value="">Seleccionar material...</option>
-                                    <option>Tablero MDF 18 mm</option>
-                                    <option>Patas de pino cepillado</option>
-                                    <option>Tornillos para madera 3.5x16 mm</option>
-                                    <option>Adhesivo para madera</option>
-                                    <option>Barniz transparente</option>
+                                    <option value="">
+                                        Seleccionar material...
+                                    </option>
+
+                                    @for (material of materiasPrimas; track material.id) {
+
+                                    <option [value]="material.id">
+                                        {{ material.nombre }}
+                                    </option>
+
+                                    }
 
                                 </select>
-
-                                <small class="text-muted">
-                                    Stock disponible: 120 unidades
-                                </small>
-
                             </div>
 
                             <div class="col-md-3">
@@ -151,13 +155,14 @@
                                     Cantidad
                                 </label>
 
-                                <input type="number" min="1" class="input" id="materialCantidad" placeholder="0">
+                                <input type="number" min="1" class="input" id="materialCantidad" placeholder="0"
+                                    formControlName="cantidadMaterial">
 
                             </div>
 
                             <div class="col-md-3">
 
-                                <button type="button" class="btn btn-primary w-100">
+                                <button type="button" class="btn btn-primary w-100" click()="agregarMaterial()">
 
                                     Agregar
 
@@ -182,18 +187,40 @@
 
                                 </thead>
 
-                                <tbody id="materialesTableBody">
+                                <tbody>
+
+                                    @for (
+                                    material of materialesAgregados;
+                                    track material.materiaPrimaId;
+                                    let i = $index
+                                    ) {
 
                                     <tr>
-                                        <td>Tablero MDF 18 mm</td>
-                                        <td>1</td>
-                                        <td>unidad</td>
+
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-outline-danger">
+                                            {{ material.nombre }}
+                                        </td>
+
+                                        <td>
+                                            {{ material.cantidadMaterial }}
+                                        </td>
+
+                                        <td>
+                                            {{ material.unidad }}
+                                        </td>
+
+                                        <td>
+
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                (click)="eliminarMaterial(i)">
                                                 Eliminar
                                             </button>
+
                                         </td>
+
                                     </tr>
+
+                                    }
 
                                 </tbody>
 
