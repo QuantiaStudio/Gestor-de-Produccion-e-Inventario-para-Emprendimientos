@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FiltroProductoTerminado, ProductoTerminado, ResumenAlertas } from '../models/producto-terminado/producto-terminado.model';
+import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../models/producto-terminado/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -237,9 +237,7 @@ export class ProductoTerminadoService {
     return this.productosTerminados.filter(pt => {
       if (busqueda && !this.normalizar(pt.id).includes(busqueda) && !this.normalizar(pt.nombre).includes(busqueda)) return false;
       if (filtros.categoria && pt.categoria !== filtros.categoria) return false;
-      if (filtros.soloStockBajo && pt.estado === 'optimo') return false;
-      if (filtros.stockDesde !== undefined && pt.stockActual < filtros.stockDesde) return false;
-      if (filtros.stockHasta !== undefined && pt.stockActual > filtros.stockHasta) return false;
+      if (filtros.estado && pt.estado !== filtros.estado) return false;
       return true;
     });
   }
@@ -249,10 +247,16 @@ export class ProductoTerminadoService {
     return [...categorias].sort((a, b) => a.localeCompare(b));
   }
 
-  obtenerResumenAlertas(): ResumenAlertas {
-    const bajoMinimo = this.productosTerminados.filter(pt => pt.estado === 'bajo_minimo').length;
-    const sinStock = this.productosTerminados.filter(pt => pt.estado === 'sin_stock').length;
-    return { bajoMinimo, sinStock, total: bajoMinimo + sinStock };
+  obtenerResumenInventario(productos: ProductoTerminado[] = this.productosTerminados): ResumenInventario {
+    const bajoMinimo = productos.filter(pt => pt.estado === 'bajo_minimo').length;
+    const sinStock = productos.filter(pt => pt.estado === 'sin_stock').length;
+    return {
+      totalProductos: productos.length,
+      unidadesEnStock: productos.reduce((total, pt) => total + pt.stockActual, 0),
+      bajoMinimo,
+      sinStock,
+      enAlerta: bajoMinimo + sinStock
+    };
   }
 
   private normalizar(texto: string): string {

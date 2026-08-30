@@ -33,13 +33,13 @@ export interface ProductoTerminado {
 export interface FiltroProductoTerminado {
   busqueda?: string;
   categoria?: string;
-  soloStockBajo?: boolean;
-  stockDesde?: number;
-  stockHasta?: number;
+  estado?: EstadoProductoTerminado;
 }
 
-export interface ResumenAlertas {
+export interface ResumenInventario {
+  totalProductos: number;
+  unidadesEnStock: number;
   bajoMinimo: number;
   sinStock: number;
-  total: number;
+  enAlerta: number;
 }
