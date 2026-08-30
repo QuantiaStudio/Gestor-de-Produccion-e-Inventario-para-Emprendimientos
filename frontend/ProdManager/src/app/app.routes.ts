@@ -6,6 +6,7 @@ import { NewProductFormComponent } from './dashboard/admin/features/productos/ne
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
 import { MateriaPrimaListadoComponent } from './materia-prima/materia-prima-listado/materia-prima-listado.component';
+import { LoginComponent } from './auth/components/login/login.component';
 
 export const routes: Routes = [
   {
@@ -26,4 +27,5 @@ export const routes: Routes = [
     ],
   },
 
+  { path: 'login', component: LoginComponent },
 ];

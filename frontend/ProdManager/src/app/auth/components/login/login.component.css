@@ -36,20 +36,13 @@
     margin-bottom: 0.5rem;
 }
 
-.input {
-    width: 100%;
-}
-
-.input.input-error {
-    border-color: var(--color-error);
-}
-
 .error-message {
     margin-top: 0.4rem;
     color: var(--color-error);
     font-size: 0.8rem;
 }
 
+/* Alertas de error/éxito locales */
 .alert {
     padding: 0.75rem 1rem;
     margin-bottom: 1rem;
