@@ -7,6 +7,7 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
 import { ProductoTerminadoListadoComponent } from './producto-terminado/producto-terminado-listado/producto-terminado-listado.component';
 import { UsersComponent } from './dashboard/admin/features/users/users.component';
+import { NotFoundComponent } from './public/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -14,7 +15,7 @@ export const routes: Routes = [
     component: PublicLayoutComponent,
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'about-us', component: AboutUsComponent }
+      { path: 'about-us', component: AboutUsComponent },
     ],
   },
   {
@@ -27,5 +28,9 @@ export const routes: Routes = [
       { path: 'productos-terminados', component: ProductoTerminadoListadoComponent },
     ],
   },
-
+  {
+    path: '**',
+    component: NotFoundComponent,
+  },
 ];
+
