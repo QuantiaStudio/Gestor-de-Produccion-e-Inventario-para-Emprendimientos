@@ -321,6 +321,16 @@ body:has(#sidebarExpandedState:not(.show)) .content {
     justify-content: center;
     transition: transform 0.2s ease, color 0.2s ease;
     text-decoration: none;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.btn-eliminar-fila:hover {
+    color: var(--color-error, #dc2626);
+    transform: none;
 }
 
 .btn-ver-detalle:hover {

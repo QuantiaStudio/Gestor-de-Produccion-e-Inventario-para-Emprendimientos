@@ -132,11 +132,17 @@
                   }
                 </td>
                 <td class="text-end">
-                  <a href="#detalle" class="btn-ver-detalle">
+                  <button type="button" class="btn-ver-detalle btn-eliminar-fila" (click)="pedirConfirmacionEliminar(item); $event.stopPropagation()" aria-label="Eliminar materia prima" title="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3V2h11v1h-11Z"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="btn-ver-detalle" (click)="seleccionar(item); $event.stopPropagation()" aria-label="Ver detalle" title="Ver detalle">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
                       <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                     </svg>
-                  </a>
+                  </button>
                 </td>
               </tr>
             } @empty {
@@ -212,6 +218,67 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="modalActualizar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="formActualizar" (ngSubmit)="actualizarMateriaPrima()">
+        <div class="modal-header">
+          <h5 class="modal-title">Actualizar Materia Prima</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Seleccionar Materia</label>
+            <select class="form-select" formControlName="id" (change)="cargarMateriaParaActualizar(formActualizar.value.id!)">
+              <option value="" disabled selected>Seleccione materia prima...</option>
+              @for (mp of materiasPrimas; track mp.id) {
+                <option [value]="mp.id">{{ mp.nombre }} ({{ mp.id }})</option>
+              }
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Stock Total</label>
+            <input type="number" class="form-control" formControlName="stockTotal">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nivel Mínimo</label>
+            <input type="number" class="form-control" formControlName="stockMinimo">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="formActualizar.invalid" data-bs-dismiss="modal">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" [class.show]="materiaPrimaAEliminar" [style.display]="materiaPrimaAEliminar ? 'block' : 'none'" tabindex="-1" [attr.aria-hidden]="!materiaPrimaAEliminar">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Eliminar Materia Prima</h5>
+        <button type="button" class="btn-close" (click)="cancelarEliminar()"></button>
+      </div>
+      <div class="modal-body">
+        @if (materiaPrimaAEliminar) {
+          <p>¿Estás seguro de eliminar <strong>{{ materiaPrimaAEliminar.nombre }}</strong>? Esta acción no se puede deshacer.</p>
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="cancelarEliminar()">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="confirmarEliminar()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+@if (materiaPrimaAEliminar) {
+  <div class="modal-backdrop fade show"></div>
+}
 
 @if (materiaPrimaSeleccionada) {
   <app-materia-prima-detalle
