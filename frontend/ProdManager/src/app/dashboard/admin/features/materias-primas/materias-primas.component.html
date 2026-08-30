@@ -106,7 +106,7 @@
           </thead>
           <tbody>
             @for (item of materiasPrimas; track item.id) {
-              <tr>
+              <tr (click)="seleccionar(item)" style="cursor: pointer;">
                 <td>
                   <div class="material-info">
                     <span class="material-name">{{ item.nombre }}</span>
@@ -212,3 +212,10 @@
     </div>
   </div>
 </div>
+
+@if (materiaPrimaSeleccionada) {
+  <app-materia-prima-detalle
+    [materiaPrima]="materiaPrimaSeleccionada"
+    (cerrar)="cerrarDetalle()"
+  />
+}
