@@ -14,7 +14,7 @@
 
 .table-wrapper table {
   margin: 0;
-  min-width: 720px;
+  min-width: 560px;
 }
 
 .table-wrapper thead th {
@@ -58,18 +58,28 @@
   font-size: 11px;
 }
 
-.ubicacion {
-  color: var(--gray-400);
-  font-size: 13px;
+.fila-clickeable {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.fila-clickeable:hover {
+  background-color: rgba(124, 58, 237, 0.03);
+}
+
+.fila-activa {
+  background-color: rgba(124, 58, 237, 0.07);
+}
+
+.icono-detalle {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
 }
 
 @media (max-width: 768px) {
   .producto-thumb {
     width: 32px;
     height: 32px;
-  }
-
-  .ubicacion {
-    font-size: 12px;
   }
 }
