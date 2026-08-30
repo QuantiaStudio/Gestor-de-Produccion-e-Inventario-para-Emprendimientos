@@ -15,6 +15,7 @@ import { MateriaPrimaDetalleComponent } from '../../../../materia-prima/materia-
 export class MateriasPrimasComponent {
   materiasPrimas: MateriaPrima[];
   materiaPrimaSeleccionada: MateriaPrima | null = null;
+  materiaPrimaAEliminar: MateriaPrima | null = null;
 
    categoriasDisponibles = ['Materia Textil', 'Insumos', 'Envases', 'Químicos'];
    unidadesDisponibles = ['kg', 'unidades', 'litros', 'metros'];
@@ -28,7 +29,13 @@ export class MateriasPrimasComponent {
     nivelMinimo: new FormControl(0, [Validators.required, Validators.min(0)]),
     descripcion: new FormControl('')
   });
-  
+
+  formActualizar = new FormGroup({
+    id: new FormControl('', Validators.required),
+    stockTotal: new FormControl(0, [Validators.required, Validators.min(0)]),
+    stockMinimo: new FormControl(0, [Validators.required, Validators.min(0)]),
+  });
+
   constructor(private materiaPrimaService: MateriaPrimaService) {
     this.materiasPrimas = this.materiaPrimaService.obtenerMateriasPrimas();
   }
@@ -39,6 +46,38 @@ export class MateriasPrimasComponent {
 
   cerrarDetalle() {
     this.materiaPrimaSeleccionada = null;
+  }
+
+  cargarMateriaParaActualizar(id: string) {
+    const materiaPrima = this.materiasPrimas.find(mp => mp.id === id);
+    if (!materiaPrima) return;
+    this.formActualizar.setValue({
+      id: materiaPrima.id,
+      stockTotal: materiaPrima.stockTotal,
+      stockMinimo: materiaPrima.stockMinimo,
+    });
+  }
+
+  actualizarMateriaPrima() {
+    const valoresForm = this.formActualizar.value;
+    if (!valoresForm.id) return;
+
+    this.materiaPrimaService.actualizarStock(valoresForm.id, valoresForm.stockTotal!, valoresForm.stockMinimo!);
+    this.formActualizar.reset({ id: '', stockTotal: 0, stockMinimo: 0 });
+  }
+
+  pedirConfirmacionEliminar(materiaPrima: MateriaPrima) {
+    this.materiaPrimaAEliminar = materiaPrima;
+  }
+
+  cancelarEliminar() {
+    this.materiaPrimaAEliminar = null;
+  }
+
+  confirmarEliminar() {
+    if (!this.materiaPrimaAEliminar) return;
+    this.materiaPrimaService.eliminar(this.materiaPrimaAEliminar.id);
+    this.materiaPrimaAEliminar = null;
   }
 
   guardarMateriaPrima() {
