@@ -6,6 +6,7 @@ import { NewProductFormComponent } from './dashboard/admin/features/productos/ne
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
 import { ProductoTerminadoListadoComponent } from './producto-terminado/producto-terminado-listado/producto-terminado-listado.component';
+import { UsersComponent } from './dashboard/admin/features/users/users.component';
 
 export const routes: Routes = [
   {
@@ -21,7 +22,8 @@ export const routes: Routes = [
     component: DashboardLayoutComponent,
     children: [
       { path: 'new-product', component: NewProductFormComponent },
-      { path: 'materias-primas', component: MateriasPrimasComponent},
+      { path: 'materias-primas', component: MateriasPrimasComponent },
+      { path: 'users', component: UsersComponent },
       { path: 'productos-terminados', component: ProductoTerminadoListadoComponent },
     ],
   },
