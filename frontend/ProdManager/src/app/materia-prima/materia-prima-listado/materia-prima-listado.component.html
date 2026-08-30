@@ -28,9 +28,9 @@
           <td class="numeric">{{ mp.stockDisponible }} {{ mp.unidadMedida }}</td>
           <td>
             @switch (mp.estado) {
-              @case ('optimo') { <span class="estado-badge badge--success">Disponible</span> }
-              @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo stock</span> }
-              @case ('sin_stock') { <span class="estado-badge badge--error">Sin stock</span> }
+              @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
+              @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
+              @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
             }
           </td>
         </tr>

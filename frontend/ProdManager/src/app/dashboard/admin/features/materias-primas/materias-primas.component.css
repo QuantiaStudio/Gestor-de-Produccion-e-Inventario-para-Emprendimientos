@@ -310,6 +310,8 @@ body:has(#sidebarExpandedState:not(.show)) .content {
     padding: 0.42rem 0.7rem;
     font-weight: 600;
     font-size: 0.78rem;
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #059669;
 }
 
 .btn-ver-detalle {
