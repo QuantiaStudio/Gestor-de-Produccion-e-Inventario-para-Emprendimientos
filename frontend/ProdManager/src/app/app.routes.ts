@@ -5,7 +5,6 @@ import { PublicLayoutComponent } from './layout/public-layout/public-layout.comp
 import { NewProductFormComponent } from './dashboard/admin/features/productos/new-product-form/new-product-form.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
-import { MateriaPrimaListadoComponent } from './materia-prima/materia-prima-listado/materia-prima-listado.component';
 
 export const routes: Routes = [
   {
@@ -22,7 +21,6 @@ export const routes: Routes = [
     children: [
       { path: 'new-product', component: NewProductFormComponent },
       { path: 'materias-primas', component: MateriasPrimasComponent},
-      { path: 'materias-primas-consulta', component: MateriaPrimaListadoComponent },
     ],
   },
 
