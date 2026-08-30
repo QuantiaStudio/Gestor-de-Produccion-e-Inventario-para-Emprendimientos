@@ -1,31 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export interface MaterialAgregadoProducto {
-  materiaPrimaId: number;
-  nombre: string;
-  cantidadMaterial: number;
-  unidad: string;
-}
-
-export interface NuevoProductoFormValue {
-  codigo: string | null;
-  nombre: string | null;
-  categoria: string | null;
-  stockInicial: number | null;
-  descripcion: string | null;
-}
-
-export interface NuevoProducto {
-  codigo: string | null;
-  nombre: string | null;
-  categoria: string | null;
-  stockInicial: number | null;
-  descripcion: string | null;
-  formula: {
-    materiaPrimaId: number;
-    cantidad: number;
-  }[];
-}
+import type { MaterialAgregadoProducto, NuevoProducto, NuevoProductoFormValue } from '../../models/productos/productos.module';
 
 @Injectable({
   providedIn: 'root'
@@ -39,15 +13,16 @@ export class ProductosService {
     materialesAgregados: MaterialAgregadoProducto[]
   ): NuevoProducto {
 
-    const producto = {
-      codigo: formValue.codigo,
-      nombre: formValue.nombre,
-      categoria: formValue.categoria,
-      stockInicial: formValue.stockInicial,
-      descripcion: formValue.descripcion,
+    const producto: NuevoProducto = {
+      codigo: formValue.codigo ?? '',
+      nombre: formValue.nombre ?? '',
+      categoria: formValue.categoria ?? '',
+      stockInicial: formValue.stockInicial ?? 0,
+      descripcion: formValue.descripcion ?? '',
 
       formula: materialesAgregados.map(material => ({
         materiaPrimaId: material.materiaPrimaId,
+        nombreMateriaPrima: material.nombre,
         cantidad: material.cantidadMaterial
       }))
     };

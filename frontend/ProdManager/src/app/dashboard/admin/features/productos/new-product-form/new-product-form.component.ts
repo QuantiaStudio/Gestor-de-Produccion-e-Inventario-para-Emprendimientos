@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MaterialAgregadoProducto, ProductosService } from '../../../../../services/productos/productos.service';
+import type { MaterialAgregadoProducto } from '../../../../../models/productos/productos.module';
+import { ProductosService } from '../../../../../services/productos/productos.service';
 
 @Component({
   selector: 'app-new-product-form',
