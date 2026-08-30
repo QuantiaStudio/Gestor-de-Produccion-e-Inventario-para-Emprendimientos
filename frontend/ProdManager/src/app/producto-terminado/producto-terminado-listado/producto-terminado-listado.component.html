@@ -3,6 +3,11 @@
   <p>Consulta el inventario de productos terminados disponibles en el taller.</p>
 </div>
 
+<app-producto-terminado-filtros
+  [categorias]="categorias"
+  (filtrosCambiaron)="aplicarFiltros($event)"
+/>
+
 <app-producto-terminado-alertas [resumen]="resumen" />
 
 <div class="row g-4">
