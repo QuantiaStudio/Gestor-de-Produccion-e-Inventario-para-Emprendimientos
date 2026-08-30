@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MaterialAgregadoProducto, ProductosService } from '../../../../../services/productos/productos.service';
 
 @Component({
   selector: 'app-new-product-form',
@@ -10,9 +10,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   styleUrl: './new-product-form.component.css'
 })
 export class NewProductFormComponent {
+  private productosService = inject(ProductosService);
   private formBuilder = inject(FormBuilder);
 
-  materialesAgregados: any[] = [];
+  materialesAgregados: MaterialAgregadoProducto[] = [];
 
   productForm = this.formBuilder.group({
     nombre: ['', Validators.required],
@@ -118,20 +119,10 @@ export class NewProductFormComponent {
       return;
     }
 
-    const producto = {
-      codigo: this.productForm.value.codigo,
-      nombre: this.productForm.value.nombre,
-      categoria: this.productForm.value.categoria,
-      stockInicial: this.productForm.value.stockInicial,
-      descripcion: this.productForm.value.descripcion,
-
-      formula: this.materialesAgregados.map(material => ({
-        materiaPrimaId: material.materiaPrimaId,
-        cantidad: material.cantidadMaterial
-      }))
-    };
-
-    console.log(producto);
+    this.productosService.crearProducto(
+      this.productForm.getRawValue(),
+      this.materialesAgregados
+    );
 
   }
 
