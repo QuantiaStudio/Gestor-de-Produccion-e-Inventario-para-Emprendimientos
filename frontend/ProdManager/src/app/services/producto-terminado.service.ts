@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EstadoProductoTerminado, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
-import type { MaterialAgregadoProducto, NuevoProductoFormValue } from '../models/producto/producto-terminado.model';
+import { EstadoProductoTerminado, FiltroProductoTerminado, MovimientoInventario, ProductoTerminado, ResumenInventario } from '../models/producto-terminado/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -300,6 +299,44 @@ export class ProductoTerminadoService {
       sinStock,
       enAlerta: bajoMinimo + sinStock
     };
+  }
+
+  actualizarStock(id: string, stockActual: number, stockMinimo: number): void {
+    const producto = this.obtenerPorId(id);
+    if (!producto) return;
+
+    const fecha = this.fechaDeHoy();
+    const diferencia = stockActual - producto.stockActual;
+
+    if (diferencia !== 0) {
+      const movimiento: MovimientoInventario = {
+        id: `MOV-${producto.id.replace('-', '')}-${producto.movimientos.length + 1}`,
+        fecha,
+        tipo: 'ajuste',
+        cantidad: Math.abs(diferencia),
+        origen: 'Ajuste manual de stock',
+        stockResultante: stockActual
+      };
+      producto.movimientos.push(movimiento);
+    }
+
+    producto.stockActual = stockActual;
+    producto.stockMinimo = stockMinimo;
+    producto.estado = this.calcularEstado(stockActual, stockMinimo);
+    producto.ultimaActualizacion = fecha;
+  }
+
+  private calcularEstado(stockActual: number, stockMinimo: number): EstadoProductoTerminado {
+    if (stockActual === 0) return 'sin_stock';
+    if (stockActual <= stockMinimo) return 'bajo_minimo';
+    return 'optimo';
+  }
+
+  private fechaDeHoy(): string {
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, '0');
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    return `${dia}/${mes}/${hoy.getFullYear()}`;
   }
 
   private normalizar(texto: string): string {

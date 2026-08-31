@@ -39,6 +39,12 @@ export interface FiltroProductoTerminado {
   estado?: EstadoProductoTerminado;
 }
 
+export interface ActualizacionStock {
+  id: string;
+  stockActual: number;
+  stockMinimo: number;
+}
+
 export interface ResumenInventario {
   totalProductos: number;
   unidadesEnStock: number;

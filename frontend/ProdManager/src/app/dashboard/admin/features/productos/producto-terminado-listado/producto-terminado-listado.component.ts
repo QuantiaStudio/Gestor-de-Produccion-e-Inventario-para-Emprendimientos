@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
+import { RouterLink } from '@angular/router';
+import { ActualizacionStock, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto-terminado/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
+import { ProductoTerminadoActualizarStockComponent } from '../producto-terminado-actualizar-stock/producto-terminado-actualizar-stock.component';
 import { ProductoTerminadoAlertasComponent } from '../producto-terminado-alertas/producto-terminado-alertas.component';
 import { ProductoTerminadoDetalleComponent } from '../producto-terminado-detalle/producto-terminado-detalle.component';
 import { ProductoTerminadoFiltrosComponent } from '../producto-terminado-filtros/producto-terminado-filtros.component';
@@ -8,30 +10,38 @@ import { ProductoTerminadoFiltrosComponent } from '../producto-terminado-filtros
 @Component({
   selector: 'app-producto-terminado-listado',
   standalone: true,
-  imports: [ProductoTerminadoAlertasComponent, ProductoTerminadoDetalleComponent, ProductoTerminadoFiltrosComponent],
+  imports: [
+    RouterLink,
+    ProductoTerminadoActualizarStockComponent,
+    ProductoTerminadoAlertasComponent,
+    ProductoTerminadoDetalleComponent,
+    ProductoTerminadoFiltrosComponent
+  ],
   templateUrl: './producto-terminado-listado.component.html',
   styleUrl: './producto-terminado-listado.component.css'
 })
 export class ProductoTerminadoListadoComponent {
   productoSeleccionado: ProductoTerminado | null = null;
-  productosTerminados: ProductoTerminado[];
+  productosTerminados: ProductoTerminado[] = [];
+  catalogo: ProductoTerminado[] = [];
   categorias: string[];
   resumen: ResumenInventario;
+  private filtrosActuales: FiltroProductoTerminado = {};
 
   constructor(private productoTerminadoService: ProductoTerminadoService) {
-    this.productosTerminados = this.productoTerminadoService.obtenerProductosTerminados();
     this.categorias = this.productoTerminadoService.obtenerCategorias();
-    this.resumen = this.productoTerminadoService.obtenerResumenInventario(this.productosTerminados);
+    this.resumen = this.productoTerminadoService.obtenerResumenInventario([]);
+    this.refrescar();
   }
 
   aplicarFiltros(filtros: FiltroProductoTerminado) {
-    this.productosTerminados = this.productoTerminadoService.filtrar(filtros);
-    this.resumen = this.productoTerminadoService.obtenerResumenInventario(this.productosTerminados);
+    this.filtrosActuales = filtros;
+    this.refrescar();
+  }
 
-    const seleccionado = this.productoSeleccionado;
-    if (seleccionado && !this.productosTerminados.some(pt => pt.id === seleccionado.id)) {
-      this.cerrarDetalle();
-    }
+  actualizarStock(datos: ActualizacionStock) {
+    this.productoTerminadoService.actualizarStock(datos.id, datos.stockActual, datos.stockMinimo);
+    this.refrescar();
   }
 
   seleccionar(producto: ProductoTerminado) {
@@ -40,5 +50,16 @@ export class ProductoTerminadoListadoComponent {
 
   cerrarDetalle() {
     this.productoSeleccionado = null;
+  }
+
+  private refrescar() {
+    this.catalogo = this.productoTerminadoService.obtenerProductosTerminados();
+    this.productosTerminados = this.productoTerminadoService.filtrar(this.filtrosActuales);
+    this.resumen = this.productoTerminadoService.obtenerResumenInventario(this.productosTerminados);
+
+    const seleccionado = this.productoSeleccionado;
+    if (seleccionado && !this.productosTerminados.some(pt => pt.id === seleccionado.id)) {
+      this.cerrarDetalle();
+    }
   }
 }
