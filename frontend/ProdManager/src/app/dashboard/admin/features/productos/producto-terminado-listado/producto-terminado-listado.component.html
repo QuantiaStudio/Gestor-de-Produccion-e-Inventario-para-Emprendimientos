@@ -4,7 +4,7 @@
     <p>Consulta el inventario de productos terminados disponibles en el taller.</p>
   </div>
   <div class="listado-header-acciones">
-    <a routerLink="/dashboard/new-product" class="btn btn-primary">Nuevo Producto</a>
+    <button type="button" class="btn btn-primary" (click)="abrirFormularioNuevoProducto()">Nuevo Producto</button>
     <button type="button" class="btn btn-outline" (click)="modalStock.abrir()">Actualizar Stock</button>
   </div>
 </div>
@@ -83,3 +83,10 @@
   [productos]="catalogo"
   (actualizar)="actualizarStock($event)"
 />
+
+@if (mostrarFormularioNuevoProducto) {
+  <app-new-product-form
+    (cerrar)="cerrarFormularioNuevoProducto()"
+    (productoCreado)="productoCreado()"
+  />
+}

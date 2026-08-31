@@ -4,7 +4,7 @@ import { AboutUsComponent } from './public/about-us/about-us.component';
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
 import { DashboardComponent } from './dashboard/admin/dashboard/dashboard.component'; 
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
-import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
+import { MateriasPrimasComponent } from './materia-prima/materias-primas/materias-primas.component';
 import { ProductoTerminadoListadoComponent } from './dashboard/admin/features/productos/producto-terminado-listado/producto-terminado-listado.component';
 import { UsersComponent } from './dashboard/admin/features/users/users.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';

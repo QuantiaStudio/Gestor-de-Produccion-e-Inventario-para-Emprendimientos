@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ActualizacionStock, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
+import { NewProductFormComponent } from '../new-product-form/new-product-form.component';
 import { ProductoTerminadoActualizarStockComponent } from '../producto-terminado-actualizar-stock/producto-terminado-actualizar-stock.component';
 import { ProductoTerminadoAlertasComponent } from '../producto-terminado-alertas/producto-terminado-alertas.component';
 import { ProductoTerminadoDetalleComponent } from '../producto-terminado-detalle/producto-terminado-detalle.component';
@@ -11,7 +11,7 @@ import { ProductoTerminadoFiltrosComponent } from '../producto-terminado-filtros
   selector: 'app-producto-terminado-listado',
   standalone: true,
   imports: [
-    RouterLink,
+    NewProductFormComponent,
     ProductoTerminadoActualizarStockComponent,
     ProductoTerminadoAlertasComponent,
     ProductoTerminadoDetalleComponent,
@@ -26,6 +26,7 @@ export class ProductoTerminadoListadoComponent {
   catalogo: ProductoTerminado[] = [];
   categorias: string[];
   resumen: ResumenInventario;
+  mostrarFormularioNuevoProducto = false;
   private filtrosActuales: FiltroProductoTerminado = {};
 
   constructor(private productoTerminadoService: ProductoTerminadoService) {
@@ -41,6 +42,19 @@ export class ProductoTerminadoListadoComponent {
 
   actualizarStock(datos: ActualizacionStock) {
     this.productoTerminadoService.actualizarStock(datos.id, datos.stockActual, datos.stockMinimo);
+    this.refrescar();
+  }
+
+  abrirFormularioNuevoProducto() {
+    this.mostrarFormularioNuevoProducto = true;
+  }
+
+  cerrarFormularioNuevoProducto() {
+    this.mostrarFormularioNuevoProducto = false;
+  }
+
+  productoCreado() {
+    this.categorias = this.productoTerminadoService.obtenerCategorias();
     this.refrescar();
   }
 
