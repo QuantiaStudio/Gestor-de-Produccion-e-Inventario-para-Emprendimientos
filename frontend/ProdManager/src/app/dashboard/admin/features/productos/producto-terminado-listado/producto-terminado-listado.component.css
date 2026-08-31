@@ -1,10 +1,26 @@
 .listado-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
 .listado-header p {
   color: var(--gray-400);
   margin: 4px 0 0;
+}
+
+.listado-header-acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.listado-header-acciones .btn {
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .table-wrapper {

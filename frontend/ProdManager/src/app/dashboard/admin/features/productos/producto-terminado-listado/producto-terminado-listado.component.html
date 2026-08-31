@@ -1,6 +1,12 @@
 <div class="listado-header">
-  <h1>Productos Terminados</h1>
-  <p>Consulta el inventario de productos terminados disponibles en el taller.</p>
+  <div class="listado-header-texto">
+    <h1>Productos Terminados</h1>
+    <p>Consulta el inventario de productos terminados disponibles en el taller.</p>
+  </div>
+  <div class="listado-header-acciones">
+    <a routerLink="/dashboard/new-product" class="btn btn-primary">Nuevo Producto</a>
+    <button type="button" class="btn btn-outline" (click)="modalStock.abrir()">Actualizar Stock</button>
+  </div>
 </div>
 
 <app-producto-terminado-filtros
@@ -71,3 +77,9 @@
     </div>
   }
 </div>
+
+<app-producto-terminado-actualizar-stock
+  #modalStock
+  [productos]="catalogo"
+  (actualizar)="actualizarStock($event)"
+/>

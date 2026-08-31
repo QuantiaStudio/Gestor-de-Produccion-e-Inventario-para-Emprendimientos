@@ -1,0 +1,48 @@
+@if (abierto) {
+  <div class="modal-overlay" (click)="cerrar()">
+    <div class="modal-caja" (click)="$event.stopPropagation()">
+      <div class="modal-encabezado">
+        <h2>Actualizar Stock</h2>
+        <button type="button" class="btn-close" (click)="cerrar()" aria-label="Cerrar"></button>
+      </div>
+
+      <form [formGroup]="formulario" (ngSubmit)="guardar()">
+        <label class="campo">
+          <span class="campo-label">Seleccionar producto</span>
+          <select
+            class="input"
+            formControlName="id"
+            (change)="seleccionarProducto(formulario.controls.id.value)"
+          >
+            <option value="">Seleccione producto...</option>
+            @for (pt of productos; track pt.id) {
+              <option [value]="pt.id">{{ pt.nombre }} ({{ pt.id }})</option>
+            }
+          </select>
+        </label>
+
+        <div class="campos-fila">
+          <label class="campo">
+            <span class="campo-label">Stock actual</span>
+            <input type="number" class="input" formControlName="stockActual" min="0" />
+          </label>
+          <label class="campo">
+            <span class="campo-label">Stock mínimo</span>
+            <input type="number" class="input" formControlName="stockMinimo" min="0" />
+          </label>
+        </div>
+
+        @if (formulario.invalid && formulario.touched) {
+          <p class="campo-error">Elegí un producto e ingresá cantidades de 0 o más.</p>
+        }
+
+        <p class="campo-nota">El estado se recalcula solo a partir del stock y del mínimo.</p>
+
+        <div class="modal-pie">
+          <button type="button" class="btn btn-ghost" (click)="cerrar()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
