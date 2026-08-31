@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
-import type { MaterialAgregadoProducto } from '../../../../../models/productos/productos.module';
+import type { MaterialAgregadoProducto } from '../../../../../models/producto/producto-terminado.model';
 import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 
