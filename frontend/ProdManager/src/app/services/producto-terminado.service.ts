@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../models/producto-terminado/producto-terminado.model';
+import type { MaterialAgregadoProducto, NuevoProductoFormValue } from '../models/productos/productos.module';
 
 @Injectable({
   providedIn: 'root'
@@ -227,6 +228,48 @@ export class ProductoTerminadoService {
     return [...this.productosTerminados];
   }
 
+  crearProducto(
+    formValue: NuevoProductoFormValue,
+    materialesAgregados: MaterialAgregadoProducto[]
+  ): ProductoTerminado {
+    const stockActual = formValue.stockInicial ?? 0;
+    const stockMinimo = 1;
+    const fechaActual = new Date().toLocaleDateString();
+
+    const producto: ProductoTerminado = {
+      id: formValue.codigo ?? this.generarNuevoId(),
+      nombre: formValue.nombre ?? '',
+      categoria: formValue.categoria ?? '',
+      descripcion: formValue.descripcion ?? '',
+      imagen: 'assets/mesa_nordica.jpg',
+      unidadMedida: 'unidad',
+      stockActual,
+      stockMinimo,
+      stockMaximo: Math.max(stockActual * 2, stockActual),
+      estado: this.calcularEstado(stockActual, stockMinimo),
+      ubicacion: 'Sin asignar',
+      ultimaActualizacion: fechaActual,
+      formula: materialesAgregados.map(material => ({
+        materiaPrimaId: material.materiaPrimaId,
+        nombreMateriaPrima: material.nombre,
+        cantidad: material.cantidadMaterial
+      })),
+      movimientos: stockActual > 0
+        ? [{
+          id: `MOV-${formValue.codigo ?? 'PT'}-1`,
+          fecha: fechaActual,
+          tipo: 'ingreso',
+          cantidad: stockActual,
+          origen: 'Alta inicial de producto',
+          stockResultante: stockActual
+        }]
+        : []
+    };
+
+    this.productosTerminados = [producto, ...this.productosTerminados];
+    return producto;
+  }
+
   obtenerPorId(id: string): ProductoTerminado | undefined {
     return this.productosTerminados.find(pt => pt.id === id);
   }
@@ -261,5 +304,20 @@ export class ProductoTerminadoService {
 
   private normalizar(texto: string): string {
     return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+  }
+
+  private calcularEstado(stockActual: number, stockMinimo: number) {
+    if (stockActual === 0) return 'sin_stock';
+    if (stockActual <= stockMinimo) return 'bajo_minimo';
+    return 'optimo';
+  }
+
+  private generarNuevoId(): string {
+    const ultimoNumero = this.productosTerminados
+      .map(pt => Number(pt.id.replace('PT-', '')))
+      .filter(numero => !Number.isNaN(numero))
+      .reduce((maximo, numero) => Math.max(maximo, numero), 0);
+
+    return `PT-${String(ultimoNumero + 1).padStart(3, '0')}`;
   }
 }

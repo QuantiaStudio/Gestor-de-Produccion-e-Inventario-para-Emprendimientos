@@ -1,3 +1,5 @@
+import type { DetalleFormula } from '../formula/formula.module';
+
 // sin_stock: stockActual === 0 | bajo_minimo: stockActual > 0 && stockActual <= stockMinimo | optimo: el resto
 export type EstadoProductoTerminado = 'optimo' | 'bajo_minimo' | 'sin_stock';
 
@@ -27,6 +29,7 @@ export interface ProductoTerminado {
   ultimaActualizacion: string;
   lote?: string;
   fechaVencimiento?: string;
+  formula?: DetalleFormula[];
   movimientos: MovimientoInventario[];
 }
 
