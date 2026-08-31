@@ -1,0 +1,39 @@
+<form class="card filtros" [formGroup]="formulario">
+  <div class="filtros-fila">
+    <div class="filtro-busqueda">
+      <img src="assets/search.svg" alt="" class="filtro-icono" />
+      <input
+        type="text"
+        class="input"
+        formControlName="busqueda"
+        placeholder="Buscar producto..."
+        aria-label="Buscar producto por nombre o código"
+      />
+    </div>
+
+    <label class="filtro-campo">
+      <span class="filtro-label">Categoría</span>
+      <select class="input" formControlName="categoria">
+        <option value="">Todas</option>
+        @for (categoria of categorias; track categoria) {
+          <option [value]="categoria">{{ categoria }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="filtro-campo">
+      <span class="filtro-label">Estado</span>
+      <select class="input" formControlName="estado">
+        <option value="">Todos</option>
+        <option value="optimo">Óptimo</option>
+        <option value="bajo_minimo">Bajo Mínimo</option>
+        <option value="sin_stock">Sin Stock</option>
+      </select>
+    </label>
+
+    <button type="button" class="btn btn-outline" (click)="limpiar()">
+      <img src="assets/funnel.svg" alt="" class="filtro-icono" />
+      Limpiar filtros
+    </button>
+  </div>
+</form>

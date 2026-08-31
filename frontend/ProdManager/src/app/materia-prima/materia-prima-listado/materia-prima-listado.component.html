@@ -1,0 +1,47 @@
+<div class="listado-header">
+  <h1>Materias Primas</h1>
+  <p>Consulta el estado actual de los materiales disponibles en el taller.</p>
+</div>
+
+<div class="search-bar">
+  <input type="text" class="input" placeholder="Buscar material..." />
+  <button type="button" class="btn btn-primary">Buscar</button>
+</div>
+
+<div class="card table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Material</th>
+        <th>Categoría</th>
+        <th class="numeric">Cantidad</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (mp of materiasPrimas; track mp.id) {
+        <tr (click)="seleccionar(mp)" class="fila-clickeable">
+          <td class="mono">#{{ mp.id }}</td>
+          <td>{{ mp.nombre }}</td>
+          <td>{{ mp.categoria }}</td>
+          <td class="numeric">{{ mp.stockDisponible }} {{ mp.unidadMedida }}</td>
+          <td>
+            @switch (mp.estado) {
+              @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
+              @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
+              @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (materiaPrimaSeleccionada) {
+  <app-materia-prima-detalle
+    [materiaPrima]="materiaPrimaSeleccionada"
+    (cerrar)="cerrarDetalle()"
+  />
+}

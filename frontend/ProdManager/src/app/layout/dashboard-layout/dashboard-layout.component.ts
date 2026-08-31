@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { FooterComponent } from '../../public/footer/footer.component';
-import { NavbarComponent } from '../../public/navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
+import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, SidebarComponent, HeaderComponent],
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css'
 })
