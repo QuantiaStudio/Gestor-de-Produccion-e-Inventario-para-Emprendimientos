@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { EstadoProductoTerminado, FiltroProductoTerminado } from '../../models/producto-terminado/producto-terminado.model';
+import { EstadoProductoTerminado, FiltroProductoTerminado } from '../../models/producto/producto-terminado.model';
 
 type FormularioFiltros = {
   busqueda: FormControl<string>;

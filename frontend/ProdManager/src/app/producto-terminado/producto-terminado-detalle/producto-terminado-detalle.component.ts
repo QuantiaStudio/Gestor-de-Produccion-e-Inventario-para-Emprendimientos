@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductoTerminado } from '../../models/producto-terminado/producto-terminado.model';
+import { ProductoTerminado } from '../../models/producto/producto-terminado.model';
 
 type TabDetalle = 'informacion' | 'movimientos';
 

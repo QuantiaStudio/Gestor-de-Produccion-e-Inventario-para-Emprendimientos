@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../models/producto-terminado/producto-terminado.model';
+import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../services/producto-terminado.service';
 import { ProductoTerminadoAlertasComponent } from '../producto-terminado-alertas/producto-terminado-alertas.component';
 import { ProductoTerminadoDetalleComponent } from '../producto-terminado-detalle/producto-terminado-detalle.component';

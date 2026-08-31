@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EstadoProductoTerminado, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../models/producto-terminado/producto-terminado.model';
-import type { MaterialAgregadoProducto, NuevoProductoFormValue } from '../models/productos/productos.module';
+import { EstadoProductoTerminado, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
+import type { MaterialAgregadoProducto, NuevoProductoFormValue } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
