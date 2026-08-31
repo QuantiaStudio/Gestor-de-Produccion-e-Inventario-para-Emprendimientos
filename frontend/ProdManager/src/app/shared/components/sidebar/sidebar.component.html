@@ -5,6 +5,15 @@
   </div>
 
   <div class="sidebar-links">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="sidebar-link"
+    >
+      <img src="assets/house-door.svg" alt="" class="sidebar-icon" />
+      <span>Panel</span>
+    </a>
     <a routerLink="/dashboard/materias-primas" routerLinkActive="active" class="sidebar-link">
       <img src="assets/gear.svg" alt="" class="sidebar-icon" />
       <span>Gestión de Materia Prima</span>
