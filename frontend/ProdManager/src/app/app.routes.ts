@@ -8,6 +8,8 @@ import { MateriasPrimasComponent } from './dashboard/admin/features/materias-pri
 import { ProductoTerminadoListadoComponent } from './producto-terminado/producto-terminado-listado/producto-terminado-listado.component';
 import { UsersComponent } from './dashboard/admin/features/users/users.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';
+import { MateriaPrimaListadoComponent } from './materia-prima/materia-prima-listado/materia-prima-listado.component';
+import { LoginComponent } from './auth/components/login/login.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +18,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'about-us', component: AboutUsComponent },
+      { path: 'login', component: LoginComponent },
     ],
   },
   {
@@ -33,4 +36,3 @@ export const routes: Routes = [
     component: NotFoundComponent,
   },
 ];
-
