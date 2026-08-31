@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EstadoProductoTerminado, FiltroProductoTerminado, MovimientoInventario, ProductoTerminado, ResumenInventario } from '../models/producto-terminado/producto-terminado.model';
+import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, NuevoProductoFormValue, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -341,12 +341,6 @@ export class ProductoTerminadoService {
 
   private normalizar(texto: string): string {
     return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
-  }
-
-  private calcularEstado(stockActual: number, stockMinimo: number): EstadoProductoTerminado {
-    if (stockActual === 0) return 'sin_stock';
-    if (stockActual <= stockMinimo) return 'bajo_minimo';
-    return 'optimo';
   }
 
   private generarNuevoId(): string {

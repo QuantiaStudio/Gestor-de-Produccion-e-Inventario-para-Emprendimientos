@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActualizacionStock, ProductoTerminado } from '../../../../../models/producto-terminado/producto-terminado.model';
+import { ActualizacionStock, ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
 
 type FormularioStock = {
   id: FormControl<string>;

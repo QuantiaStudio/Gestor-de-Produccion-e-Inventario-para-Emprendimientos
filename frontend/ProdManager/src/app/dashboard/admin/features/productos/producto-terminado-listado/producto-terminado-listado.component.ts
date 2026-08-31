@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ActualizacionStock, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto-terminado/producto-terminado.model';
+import { ActualizacionStock, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 import { ProductoTerminadoActualizarStockComponent } from '../producto-terminado-actualizar-stock/producto-terminado-actualizar-stock.component';
 import { ProductoTerminadoAlertasComponent } from '../producto-terminado-alertas/producto-terminado-alertas.component';
