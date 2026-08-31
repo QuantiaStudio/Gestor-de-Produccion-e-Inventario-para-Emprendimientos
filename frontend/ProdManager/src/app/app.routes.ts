@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './public/home/home.component';
 import { AboutUsComponent } from './public/about-us/about-us.component';
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
+import { DashboardComponent } from './dashboard/admin/dashboard/dashboard.component';
 import { NewProductFormComponent } from './dashboard/admin/features/productos/new-product-form/new-product-form.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
@@ -25,6 +26,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardLayoutComponent,
     children: [
+      { path: '', component: DashboardComponent, pathMatch: 'full' },
       { path: 'new-product', component: NewProductFormComponent },
       { path: 'materias-primas', component: MateriasPrimasComponent },
       { path: 'users', component: UsersComponent },
