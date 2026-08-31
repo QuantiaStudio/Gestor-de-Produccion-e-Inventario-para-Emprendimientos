@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import type { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
 import type { MaterialAgregadoProducto } from '../../../../../models/productos/productos.module';
-import { ProductosService } from '../../../../../services/productos/productos.service';
+import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
+import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 
 @Component({
   selector: 'app-new-product-form',
@@ -11,9 +13,11 @@ import { ProductosService } from '../../../../../services/productos/productos.se
   styleUrl: './new-product-form.component.css'
 })
 export class NewProductFormComponent {
-  private productosService = inject(ProductosService);
+  private materiaPrimaService = inject(MateriaPrimaService);
+  private productoTerminadoService = inject(ProductoTerminadoService);
   private formBuilder = inject(FormBuilder);
 
+  materiasPrimas: MateriaPrima[] = this.materiaPrimaService.obtenerMateriasPrimas();
   materialesAgregados: MaterialAgregadoProducto[] = [];
 
   productForm = this.formBuilder.group({
@@ -68,9 +72,7 @@ export class NewProductFormComponent {
 
   agregarMaterial() {
 
-    const materialId = Number(
-      this.productForm.get('materialId')?.value
-    );
+    const materialId = this.productForm.get('materialId')?.value;
 
     const cantidad = Number(
       this.productForm.get('cantidadMaterial')?.value
@@ -92,7 +94,7 @@ export class NewProductFormComponent {
       materiaPrimaId: material.id,
       nombre: material.nombre,
       cantidadMaterial: cantidad,
-      unidad: material.unidad
+      unidad: material.unidadMedida
     });
 
     this.actualizarMaterialesControl();
@@ -120,10 +122,23 @@ export class NewProductFormComponent {
       return;
     }
 
-    this.productosService.crearProducto(
+    this.productoTerminadoService.crearProducto(
       this.productForm.getRawValue(),
       this.materialesAgregados
     );
+
+    this.materialesAgregados = [];
+    this.productForm.reset({
+      nombre: '',
+      descripcion: '',
+      stockInicial: 0,
+      codigo: '',
+      categoria: '',
+      nuevaCategoria: '',
+      materiales: [],
+      materialId: '',
+      cantidadMaterial: null
+    });
 
   }
 
@@ -133,36 +148,4 @@ export class NewProductFormComponent {
     this.materiales?.updateValueAndValidity();
   }
 
-  materiasPrimas = [
-    {
-      id: 1,
-      nombre: 'Tablero MDF 18 mm',
-      stock: 120,
-      unidad: 'unidad'
-    },
-    {
-      id: 2,
-      nombre: 'Patas de pino cepillado',
-      stock: 50,
-      unidad: 'unidad'
-    },
-    {
-      id: 3,
-      nombre: 'Tornillos para madera 3.5x16 mm',
-      stock: 500,
-      unidad: 'unidad'
-    },
-    {
-      id: 4,
-      nombre: 'Adhesivo para madera',
-      stock: 20,
-      unidad: 'litros'
-    },
-    {
-      id: 5,
-      nombre: 'Barniz transparente',
-      stock: 15,
-      unidad: 'litros'
-    }
-  ];
 }
