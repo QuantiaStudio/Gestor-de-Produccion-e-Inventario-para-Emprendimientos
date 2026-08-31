@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
 import type { MaterialAgregadoProducto } from '../../../../../models/producto/producto-terminado.model';
@@ -13,6 +13,9 @@ import { ProductoTerminadoService } from '../../../../../services/producto-termi
   styleUrl: './new-product-form.component.css'
 })
 export class NewProductFormComponent {
+  @Output() cerrar = new EventEmitter<void>();
+  @Output() productoCreado = new EventEmitter<void>();
+
   private materiaPrimaService = inject(MateriaPrimaService);
   private productoTerminadoService = inject(ProductoTerminadoService);
   private formBuilder = inject(FormBuilder);
@@ -127,6 +130,18 @@ export class NewProductFormComponent {
       this.materialesAgregados
     );
 
+    this.limpiarFormulario();
+    this.productoCreado.emit();
+    this.cerrar.emit();
+
+  }
+
+  cancelar() {
+    this.limpiarFormulario();
+    this.cerrar.emit();
+  }
+
+  private limpiarFormulario() {
     this.materialesAgregados = [];
     this.productForm.reset({
       nombre: '',
@@ -139,7 +154,6 @@ export class NewProductFormComponent {
       materialId: '',
       cantidadMaterial: null
     });
-
   }
 
   private actualizarMaterialesControl() {
