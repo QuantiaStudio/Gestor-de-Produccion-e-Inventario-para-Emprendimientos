@@ -1,0 +1,126 @@
+.detalle {
+  position: sticky;
+  top: 16px;
+}
+
+.detalle-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.detalle-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.detalle-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.detalle-titulo-texto h2 {
+  font-size: 18px;
+  margin: 0 0 2px;
+}
+
+.detalle-titulo-texto small {
+  display: block;
+  color: var(--gray-400);
+  margin-bottom: 6px;
+}
+
+.detalle-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 16px 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.detalle-tabs button {
+  border: none;
+  background: none;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-400);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.detalle-tabs button:hover {
+  color: var(--primary-color);
+}
+
+.detalle-tabs button.activa {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.detalle-bloque {
+  margin-bottom: 16px;
+}
+
+.detalle-bloque p {
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+
+.detalle-fila {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--gray-200);
+  font-size: 13px;
+}
+
+.detalle-label {
+  color: var(--gray-400);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.detalle-destacado {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.tabla-movimientos {
+  margin: 0;
+  font-size: 12px;
+}
+
+.tabla-movimientos th {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+}
+
+.tabla-movimientos td {
+  border-top: 1px solid var(--gray-200);
+  vertical-align: top;
+}
+
+.movimiento-origen {
+  display: block;
+  color: var(--gray-400);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+@media (max-width: 991.98px) {
+  .detalle {
+    position: static;
+  }
+}

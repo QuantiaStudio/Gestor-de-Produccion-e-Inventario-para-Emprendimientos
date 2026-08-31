@@ -1,0 +1,73 @@
+<div class="listado-header">
+  <h1>Productos Terminados</h1>
+  <p>Consulta el inventario de productos terminados disponibles en el taller.</p>
+</div>
+
+<app-producto-terminado-filtros
+  [categorias]="categorias"
+  (filtrosCambiaron)="aplicarFiltros($event)"
+/>
+
+<app-producto-terminado-alertas [resumen]="resumen" />
+
+<div class="row g-4">
+  <div class="col-12" [class.col-lg-8]="productoSeleccionado">
+    <div class="card table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th class="numeric">Stock</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pt of productosTerminados; track pt.id) {
+            <tr
+              class="fila-clickeable"
+              [class.fila-activa]="pt.id === productoSeleccionado?.id"
+              (click)="seleccionar(pt)"
+            >
+              <td>
+                <div class="producto-celda">
+                  <img [src]="pt.imagen" [alt]="pt.nombre" class="producto-thumb" />
+                  <div class="producto-info">
+                    <span class="producto-nombre">{{ pt.nombre }}</span>
+                    <small class="mono">{{ pt.id }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>{{ pt.categoria }}</td>
+              <td class="numeric">{{ pt.stockActual }} {{ pt.unidadMedida }}</td>
+              <td>
+                @switch (pt.estado) {
+                  @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
+                  @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
+                  @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
+                }
+              </td>
+              <td class="actions">
+                <img src="assets/chevron-right.svg" alt="" class="icono-detalle" />
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="text-center py-4 text-muted">No se encontraron productos terminados.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (productoSeleccionado) {
+    <div class="col-lg-4">
+      <app-producto-terminado-detalle
+        [producto]="productoSeleccionado"
+        (cerrar)="cerrarDetalle()"
+      />
+    </div>
+  }
+</div>
