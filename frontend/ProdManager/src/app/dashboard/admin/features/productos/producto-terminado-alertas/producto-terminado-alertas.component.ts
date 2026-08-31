@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ResumenInventario } from '../../models/producto/producto-terminado.model';
+import { ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
 
 @Component({
   selector: 'app-producto-terminado-alertas',
