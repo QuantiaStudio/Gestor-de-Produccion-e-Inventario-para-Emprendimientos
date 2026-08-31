@@ -11,7 +11,7 @@ export interface Producto {
 }
 
 export interface MaterialAgregadoProducto {
-  materiaPrimaId: number;
+  materiaPrimaId: string;
   nombre: string;
   cantidadMaterial: number;
   unidad: string;

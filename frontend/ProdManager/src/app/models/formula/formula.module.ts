@@ -1,5 +1,5 @@
 export interface DetalleFormula {
-  materiaPrimaId: number;
+  materiaPrimaId: string;
   nombreMateriaPrima: string;
   cantidad: number;
 }
