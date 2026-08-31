@@ -25,7 +25,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardLayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      { path: '', component: DashboardComponent, pathMatch: 'full' },
       { path: 'materias-primas', component: MateriasPrimasComponent },
       { path: 'users', component: UsersComponent },
       { path: 'productos-terminados', component: ProductoTerminadoListadoComponent },
