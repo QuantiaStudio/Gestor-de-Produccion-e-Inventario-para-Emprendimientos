@@ -1,0 +1,34 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Detalle de Materia Prima</h2>
+      <button type="button" class="btn-close" (click)="cerrar.emit()" aria-label="Cerrar"></button>
+    </div>
+
+    <table>
+      <tbody>
+        <tr><th>ID</th><td class="mono">#{{ materiaPrima.id }}</td></tr>
+        <tr><th>Material</th><td>{{ materiaPrima.nombre }}</td></tr>
+        <tr><th>Categoría</th><td>{{ materiaPrima.categoria }}</td></tr>
+        <tr><th>Stock total</th><td>{{ materiaPrima.stockTotal }} {{ materiaPrima.unidadMedida }}</td></tr>
+        <tr>
+          <th>Estado</th>
+          <td>
+            @switch (materiaPrima.estado) {
+              @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
+              @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
+              @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
+            }
+          </td>
+        </tr>
+        <tr><th>Descripción</th><td>{{ materiaPrima.descripcion }}</td></tr>
+        <tr><th>Proveedor</th><td>{{ materiaPrima.proveedor }}</td></tr>
+        <tr><th>Última actualización</th><td>{{ materiaPrima.ultimaActualizacion }}</td></tr>
+      </tbody>
+    </table>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="cerrar.emit()">Cerrar</button>
+    </div>
+  </div>
+</div>

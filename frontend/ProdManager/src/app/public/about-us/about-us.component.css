@@ -1,0 +1,445 @@
+/* =========================================================
+   ABOUT US
+   ========================================================= */
+
+
+/* ---------- CONTENEDOR PRINCIPAL ---------- */
+
+.about-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.about-hero {
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 80px 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111827d1,
+            #11182794
+        ),
+        linear-gradient(
+            0deg,
+            #7c3aed33,
+            #7c3aed0d
+        ),
+        url("../../../assets/pexels-fauxels-3184418.jpg");
+    background-position: center 42%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.about-hero-content {
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+}
+
+
+.about-hero .subtitle,
+.section-header .subtitle,
+.more-info-section .subtitle {
+    margin: 0 0 12px;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+
+    color: var(--primary-color);
+}
+
+
+.about-hero .subtitle {
+    color: #ede9fe;
+}
+
+
+.about-hero .title {
+    max-width: 750px;
+    margin: 0 auto 24px;
+
+    font-size: clamp(2.3rem, 5vw, 4.2rem);
+    line-height: 1.15;
+
+    color: var(--color-white);
+}
+
+
+.about-hero .description {
+    max-width: 680px;
+    margin: 0 auto;
+
+    font-size: 1.05rem;
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, 0.88);
+}
+
+
+/* =========================================================
+   SECCIONES GENERALES
+   ========================================================= */
+
+.about-section {
+    width: 100%;
+    padding: 90px 24px;
+}
+
+
+.section-header {
+    width: 100%;
+    max-width: 800px;
+
+    margin: 0 auto 48px;
+
+    text-align: center;
+}
+
+
+.section-header h2 {
+    margin: 0;
+
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1.25;
+
+    color: var(--color-text-dark);
+}
+
+
+.section-header > p:not(.subtitle) {
+    max-width: 600px;
+
+    margin: 18px auto 0;
+
+    color: var(--color-text-light);
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   PROPÓSITO
+   ========================================================= */
+
+.purpose-section {
+    background-color: var(--color-white);
+    padding: 2rem;
+}
+
+
+.purpose-content {
+    max-width: 850px;
+
+    margin: 0 auto;
+    padding: 36px;
+
+    background-color: var(--background-color);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+
+.purpose-content p {
+    margin: 0 0 18px;
+
+    font-size: 1rem;
+    line-height: 1.8;
+
+    color: var(--color-text-light);
+}
+
+
+.purpose-content p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   PROYECTO
+   ========================================================= */
+
+.project-section {
+    background-color: var(--background-color);
+    padding: 2rem;
+}
+
+
+.project-content {
+    max-width: 850px;
+
+    margin: 0 auto;
+    padding: 36px;
+
+    background-color: var(--color-surface);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    box-shadow: 0 8px 30px rgba(17, 24, 39, 0.05);
+}
+
+
+.project-content p {
+    margin: 0 0 18px;
+
+    font-size: 1rem;
+    line-height: 1.8;
+
+    color: var(--color-text-light);
+}
+
+
+.project-content p:last-child {
+    margin-bottom: 0;
+}
+
+
+.project-content strong {
+    color: var(--color-text-dark);
+}
+
+
+/* =========================================================
+   EQUIPO
+   ========================================================= */
+
+.team-section {
+    background-color: var(--color-white);
+    padding: 2rem;
+}
+
+
+.team-grid {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+}
+
+
+.member-card {
+    min-height: 250px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 32px 24px;
+
+    text-align: center;
+
+    background-color: var(--color-surface);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+
+.member-card:hover {
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(124, 58, 237, 0.35);
+
+    box-shadow:
+        0 12px 30px rgba(124, 58, 237, 0.12);
+}
+
+
+/* ---------- AVATAR ---------- */
+
+.avatar {
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 50%;
+
+    background-color:
+        rgba(124, 58, 237, 0.1);
+
+    color: var(--primary-color);
+
+    font-family: var(--font-heading);
+
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+
+/* ---------- NOMBRE ---------- */
+
+.member-card h3 {
+    margin: 0 0 10px;
+
+    font-family: var(--font-heading);
+
+    font-size: 1.1rem;
+    line-height: 1.4;
+
+    color: var(--color-text-dark);
+}
+
+
+/* ---------- ROL ---------- */
+
+.member-card p {
+    margin: 0;
+
+    color: var(--color-text-light);
+
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MÁS INFORMACIÓN
+   ========================================================= */
+
+.more-info-section {
+    padding: 100px 24px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, 0.1),
+            rgba(124, 58, 237, 0.03)
+        );
+}
+
+
+.more-info-section h2 {
+    margin: 0 0 16px;
+
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+
+    color: var(--color-text-dark);
+}
+
+
+.more-info-section > p:not(.subtitle) {
+    max-width: 600px;
+
+    margin: 0 auto 28px;
+
+    color: var(--color-text-light);
+
+    line-height: 1.7;
+}
+
+
+.more-info-section .btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .about-section {
+        padding: 70px 24px;
+    }
+
+
+    .team-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .about-hero {
+        min-height: 420px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .about-hero {
+        min-height: auto;
+
+        padding: 70px 20px;
+    }
+
+
+    .about-section {
+        padding: 60px 20px;
+    }
+
+
+    .section-header {
+        margin-bottom: 32px;
+    }
+
+
+    .purpose-content,
+    .project-content {
+        padding: 24px;
+    }
+
+
+    .team-grid {
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+    }
+
+
+    .member-card {
+        min-height: 220px;
+    }
+
+
+    .more-info-section {
+        padding: 70px 20px;
+    }
+
+}

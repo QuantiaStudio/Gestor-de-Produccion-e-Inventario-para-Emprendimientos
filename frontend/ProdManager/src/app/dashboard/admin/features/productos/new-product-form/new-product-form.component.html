@@ -1,0 +1,281 @@
+<!-- Descomentar para que el modal se cierre al hacer clic fuera de él -->
+<!-- <div class="modal fade" id="modalCrear" role="dialog" tabindex="-1" aria-labelledby="modalCrearLabel"
+    aria-hidden="true"> -->
+<div class="modal show d-block" id="modalCrear" role="dialog" tabindex="-1" aria-labelledby="modalCrearLabel"
+    aria-hidden="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content card">
+
+            <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                <h2 class="modal-title fw-bold text-gray-900 fs-5" id="modalCrearLabel">
+                    Registrar Nuevo Producto
+                </h2>
+
+                <button type="button" class="btn-close" aria-label="Cerrar" (click)="cancelar()"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form [formGroup]="productForm" (ngSubmit)="guardarProducto()">
+
+                    <!-- Código -->
+                    <div class="mb-3">
+                        <!-- En el futuro este campo debe generarse automáticamente y no ser editable por el usuario, 
+                        pero por ahora se deja así para poder probar la funcionalidad de registro de productos desde front-->
+                        <label for="regCodigo" class="form-label mb-1">
+                            Código
+                        </label>
+
+                        <input type="text" class="input" id="regCodigo" placeholder="Ej: PT-002"
+                            formControlName="codigo">
+                    </div>
+
+                    <!-- Nombre -->
+                    <div class="mb-3">
+                        <label for="regNombre" class="form-label mb-1">
+                            Nombre
+                        </label>
+
+                        <input type="text" class="input" id="regNombre" placeholder="Nombre del producto"
+                            formControlName="nombre">
+                    </div>
+
+                    @if (nombre?.errors && nombre?.touched){
+                        @if (nombre?.hasError('required')){
+                            <p class="error">El campo nombre es obligatorio</p>
+                        }
+                    }
+
+                    <!-- Categoría -->
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-6">
+
+                            <label for="regCategoria" class="form-label mb-1">
+                                Categoría
+                            </label>
+
+                            <select class="input form-select" id="regCategoria" formControlName="categoria">
+
+                                <option value="">Seleccionar...</option>
+                                <option>Mesas</option>
+                                <option>Escritorios</option>
+                                <option>Decks</option>
+                                <option>Cómodas</option>
+                                <option>Bibliotecas</option>
+                                <option>Banquetas</option>
+                                <option>Sillas</option>
+
+                            </select>
+
+                            <div class="mt-1">
+                                <a href="#collapseNuevaCategoria" class="text-decoration-none" data-bs-toggle="collapse"
+                                    role="button">
+
+                                    + Nueva categoría
+
+                                </a>
+                            </div>
+                            @if (categoria?.errors && categoria?.touched){
+                                @if (categoria?.hasError('required')){
+                                    <p class="error">El campo categoría es obligatorio</p>
+                                }
+                            }
+                        </div>
+
+                    </div>
+
+                    <!-- Nueva Categoría -->
+                    <div class="collapse" id="collapseNuevaCategoria">
+
+                        <div class="mb-3">
+
+                            <label for="regNuevaCategoria" class="form-label mb-1">
+                                Nombre de la nueva categoría
+                            </label>
+
+                            <input type="text" class="input" id="regNuevaCategoria" placeholder="Categoría"
+                                formControlName="nuevaCategoria">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-6">
+
+                            <label for="regStock" class="form-label mb-1">
+                                Stock Inicial
+                            </label>
+
+                            <input type="number" class="input" id="regStock" min="0" placeholder="0"
+                                formControlName="stockInicial">
+
+                        </div>
+                        @if (stockInicial?.errors && stockInicial?.touched){
+                            @if (stockInicial?.hasError('required')){
+                                <p class="error">El campo stock inicial es obligatorio</p>
+                            }
+                            @if (stockInicial?.hasError('min')){
+                                <p class="error">El stock inicial no puede ser negativo ni nulo</p>
+                            }
+                        }
+
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-4">
+
+                        <label for="regDescripcion" class="form-label mb-1">
+                            Descripción
+                        </label>
+
+                        <textarea class="input" id="regDescripcion" rows="3"
+                            placeholder="Breve descripción del producto..." formControlName="descripcion"></textarea>
+
+                    </div>
+
+                    <!-- Materiales Requeridos -->
+                    <div class="mb-4">
+
+                        <label class="form-label mb-2">
+                            Materiales Requeridos
+                        </label>
+
+                        <div class="row g-2 align-items-end mb-3">
+
+                            <div class="col-md-6">
+
+                                <label for="materialSelect" class="form-label mb-1">
+                                    Material
+                                </label>
+
+                                <select class="input form-select" id="materialSelect" formControlName="materialId"
+                                    [class.input-error]="materialesInvalidos">
+
+                                    <option value="">
+                                        Seleccionar material...
+                                    </option>
+
+                                    @for (material of materiasPrimas; track material.id) {
+
+                                    <option [value]="material.id">
+                                        {{ material.nombre }}
+                                    </option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <label for="materialCantidad" class="form-label mb-1">
+                                    Cantidad
+                                </label>
+
+                                <input type="number" min="1" class="input" id="materialCantidad" placeholder="0"
+                                    formControlName="cantidadMaterial" [class.input-error]="materialesInvalidos">
+
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <button type="button" class="btn btn-primary w-100" (click)="agregarMaterial()">
+
+                                    Agregar
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="materials-container">
+
+                            <table class="table align-middle mb-0">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Cantidad</th>
+                                        <th>Unidad</th>
+                                        <th></th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    @for (
+                                    material of materialesAgregados;
+                                    track material;
+                                    let i = $index
+                                    ) {
+
+                                    <tr>
+
+                                        <td>
+                                            {{ material.nombre }}
+                                        </td>
+
+                                        <td>
+                                            {{ material.cantidadMaterial }}
+                                        </td>
+
+                                        <td>
+                                            {{ material.unidad }}
+                                        </td>
+
+                                        <td>
+
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                (click)="eliminarMaterial(i)">
+                                                Eliminar
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                    }
+
+                                </tbody>
+
+                            </table>
+                            @if (materialesInvalidos) {
+                                <p class="error">Debe agregar al menos una materia prima</p>
+                            }
+                            @if (cantidadMaterial?.errors && cantidadMaterial?.touched) {
+                                @if (cantidadMaterial?.hasError('min')) {
+                                    <p class="error">La cantidad de material debe ser mayor a 0</p>
+                                }
+                            }
+                        </div>
+
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+
+                        <button type="button" class="btn btn-ghost" (click)="cancelar()">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit" class="btn btn-primary">
+
+                            Guardar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+:host {
+	display: block;
+}
+
+.public_layout {
+	--public-navbar-height: 56px;
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+}
+
+app-navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	display: block;
+}
+
+app-footer {
+	display: block;
+	margin-top: auto;
+}
+
+.public_layout_content {
+	flex: 1 0 auto;
+	padding-top: var(--public-navbar-height);
+}
+
+@media (max-width: 768px) {
+	.public_layout {
+		--public-navbar-height: 56px;
+	}
+}

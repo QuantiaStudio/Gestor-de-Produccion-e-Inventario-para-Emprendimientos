@@ -1,0 +1,272 @@
+<section class="dashboard-page" aria-labelledby="dashboardTitle">
+  <div class="dashboard-heading">
+    <div>
+      <p class="eyebrow">Panel administrativo</p>
+      <h1 id="dashboardTitle">Dashboard</h1>
+    </div>
+  </div>
+
+  <div class="alerts-container">
+    <div class="metric-card card">
+      <div class="card-summary">
+        <span class="card-icon">
+          <img src="assets/people.svg" alt="" aria-hidden="true" />
+        </span>
+        <span class="card-summary-text">
+          <span class="alert-type">Usuarios Activos</span>
+          <span class="alert-num">50</span>
+        </span>
+      </div>
+
+      <div class="card-detail">
+        <span class="alert-description">Equipo disponible en el taller</span>
+      </div>
+    </div>
+
+    <div class="metric-card card">
+      <div class="card-summary">
+        <span class="card-icon">
+          <img src="assets/clipboard-check.svg" alt="" aria-hidden="true" />
+        </span>
+        <span class="card-summary-text">
+          <span class="alert-type">Productos en Producción</span>
+          <span class="alert-num">80</span>
+        </span>
+      </div>
+
+      <div class="card-detail">
+        <span class="alert-insight">
+          <img src="assets/arrow-up.svg" alt="" aria-hidden="true" />
+          <span>15% más que el mes anterior</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="metric-card card">
+      <div class="card-summary">
+        <span class="card-icon">
+          <img src="assets/box.svg" alt="" aria-hidden="true" />
+        </span>
+        <span class="card-summary-text">
+          <span class="alert-type">Diseños en Catálogo</span>
+          <span class="alert-num">30</span>
+        </span>
+      </div>
+
+      <div class="card-detail">
+        <span class="alert-insight negative">
+          <img src="assets/arrow-down.svg" alt="" aria-hidden="true" />
+          <span>10% menos que el mes anterior</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="metric-card card">
+      <div class="card-summary">
+        <span class="card-icon">
+          <img src="assets/bricks.svg" alt="" aria-hidden="true" />
+        </span>
+        <span class="card-summary-text">
+          <span class="alert-type">Madera en Stock</span>
+          <span class="alert-num">100</span>
+        </span>
+      </div>
+
+      <div class="card-detail">
+        <span class="alert-insight">
+          <img src="assets/arrow-up.svg" alt="" aria-hidden="true" />
+          <span>10% más que el mes anterior</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="graphics-container">
+    <div class="graphic-panel">
+      <img
+        src="assets/histo-prod.png"
+        alt="Histograma de producción de muebles"
+        class="graphic-img graphic-img-histogram"
+      />
+    </div>
+    <div class="graphic-panel">
+      <img
+        src="assets/chart-prod.png"
+        alt="Gráfico de distribución de trabajos de carpintería"
+        class="graphic-img graphic-img-cake"
+      />
+    </div>
+  </div>
+
+  <div class="table-container">
+    <section class="card table-pedidos">
+      <div class="table-header">
+        <h2>Órdenes de Producción</h2>
+        <button class="btn btn-ghost" type="button">Ver todos</button>
+      </div>
+      <div class="table-responsive">
+        <table class="pedidos-table">
+          <thead>
+            <tr>
+              <th>ID Orden</th>
+              <th>Cliente</th>
+              <th>Estado</th>
+              <th>Mueble</th>
+              <th>Fecha</th>
+              <th class="actions" aria-label="Acciones"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>#1024</strong></td>
+              <td>María López</td>
+              <td><span class="status-badge bg-warning-10 text-warning">Pendiente</span></td>
+              <td>Mesa de roble</td>
+              <td>18 May 2024, 10:45</td>
+              <td class="actions">
+                <button class="table-action" type="button" aria-label="Opciones de la orden 1024">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>#1023</strong></td>
+              <td>María López</td>
+              <td><span class="status-badge bg-info-10 text-info">En Producción</span></td>
+              <td>Biblioteca a medida</td>
+              <td>18 May 2024, 09:30</td>
+              <td class="actions">
+                <button class="table-action" type="button" aria-label="Opciones de la orden 1023">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>#1022</strong></td>
+              <td>Carlos García</td>
+              <td><span class="status-badge bg-success-10 text-success">Finalizado</span></td>
+              <td>Silla tapizada</td>
+              <td>17 May 2024, 16:20</td>
+              <td class="actions">
+                <button class="table-action" type="button" aria-label="Opciones de la orden 1022">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>#1021</strong></td>
+              <td>Ana Martínez</td>
+              <td><span class="status-badge bg-success-10 text-success">Finalizado</span></td>
+              <td>Placard empotrado</td>
+              <td>17 May 2024, 14:10</td>
+              <td class="actions">
+                <button class="table-action" type="button" aria-label="Opciones de la orden 1021">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>#1020</strong></td>
+              <td>Diego Hernández</td>
+              <td><span class="status-badge bg-error-10 text-error">Cancelado</span></td>
+              <td>Escritorio flotante</td>
+              <td>17 May 2024, 11:05</td>
+              <td class="actions">
+                <button class="table-action" type="button" aria-label="Opciones de la orden 1020">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card table-users">
+      <div class="table-header">
+        <h2>Rendimiento de Empleados</h2>
+        <button class="btn btn-ghost" type="button">Ver todos</button>
+      </div>
+      <div class="table-responsive">
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th>Empleado</th>
+              <th>Asignadas</th>
+              <th>Terminadas</th>
+              <th>Eficiencia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="employee-cell">
+                  <span class="employee-avatar avatar-purple">ML</span>
+                  <span>
+                    <strong>María López</strong>
+                    <small>Lijado y acabado</small>
+                  </span>
+                </div>
+              </td>
+              <td>24</td>
+              <td>16</td>
+              <td>67%</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="employee-cell">
+                  <span class="employee-avatar avatar-blue">CG</span>
+                  <span>
+                    <strong>Carlos García</strong>
+                    <small>Corte de madera</small>
+                  </span>
+                </div>
+              </td>
+              <td>19</td>
+              <td>19</td>
+              <td>100%</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="employee-cell">
+                  <span class="employee-avatar avatar-green">AM</span>
+                  <span>
+                    <strong>Ana Martínez</strong>
+                    <small>Ensamble y control</small>
+                  </span>
+                </div>
+              </td>
+              <td>21</td>
+              <td>18</td>
+              <td>86%</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="employee-cell">
+                  <span class="employee-avatar avatar-red">DH</span>
+                  <span>
+                    <strong>Diego Hernández</strong>
+                    <small>Barnizado y despacho</small>
+                  </span>
+                </div>
+              </td>
+              <td>14</td>
+              <td>14</td>
+              <td>100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</section>
