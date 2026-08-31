@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../models/producto-terminado/producto-terminado.model';
-import { ProductoTerminadoService } from '../../services/producto-terminado.service';
+import { FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto-terminado/producto-terminado.model';
+import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 import { ProductoTerminadoAlertasComponent } from '../producto-terminado-alertas/producto-terminado-alertas.component';
 import { ProductoTerminadoDetalleComponent } from '../producto-terminado-detalle/producto-terminado-detalle.component';
 import { ProductoTerminadoFiltrosComponent } from '../producto-terminado-filtros/producto-terminado-filtros.component';

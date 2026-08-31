@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProductoTerminadoAlertasComponent } from './producto-terminado-alertas.component';
-import { ProductoTerminadoService } from '../../services/producto-terminado.service';
+import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 
 describe('ProductoTerminadoAlertasComponent', () => {
   let component: ProductoTerminadoAlertasComponent;

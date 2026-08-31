@@ -5,7 +5,7 @@ import { PublicLayoutComponent } from './layout/public-layout/public-layout.comp
 import { NewProductFormComponent } from './dashboard/admin/features/productos/new-product-form/new-product-form.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { MateriasPrimasComponent } from './dashboard/admin/features/materias-primas/materias-primas.component';
-import { ProductoTerminadoListadoComponent } from './producto-terminado/producto-terminado-listado/producto-terminado-listado.component';
+import { ProductoTerminadoListadoComponent } from './dashboard/admin/features/productos/producto-terminado-listado/producto-terminado-listado.component';
 import { UsersComponent } from './dashboard/admin/features/users/users.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';
 import { MateriaPrimaListadoComponent } from './materia-prima/materia-prima-listado/materia-prima-listado.component';
