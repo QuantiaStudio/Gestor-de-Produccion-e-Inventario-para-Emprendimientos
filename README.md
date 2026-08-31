@@ -1,83 +1,159 @@
 # Gestor de Producción e Inventario para Emprendimientos
 
-Sistema web orientado a microemprendimientos que necesitan administrar, en un mismo lugar, su materia prima, su flujo de producción y su inventario de productos terminados.
+Aplicación web desarrollada con Angular para gestionar producción, materias primas, productos terminados, usuarios y paneles de control orientados a microemprendimientos y pequeños talleres productivos.
 
-## Introducción
+El objetivo del sistema es centralizar información clave del negocio en una interfaz clara: stock disponible, materiales que requieren reposición, productos terminados, órdenes de trabajo y vistas diferenciadas para administradores y usuarios operativos.
 
-### ¿De qué se trata el sistema?
+## Información general
 
-Este proyecto es una aplicación web pensada para acompañar el día a día de pequeños emprendedores y talleres productivos. Su objetivo es ofrecer una herramienta simple, accesible y visualmente clara que permita controlar todo el ciclo productivo de un negocio: desde la compra y el registro de materia prima, pasando por el seguimiento de la producción, hasta el control del stock final de productos listos para la venta.
+Este repositorio contiene:
 
-### ¿Qué problema busca resolver?
+- `frontend/ProdManager`: aplicación principal desarrollada con Angular 17.
+- `maqueta`: prototipo HTML/CSS inicial utilizado como base visual del proyecto.
+- `backend`: carpeta reservada para el futuro desarrollo del backend.
 
-Los emprendimientos pequeños suelen quedar atrapados en una situación intermedia: ya no alcanzan con un cuaderno o una hoja de cálculo improvisada, pero todavía no tienen el volumen ni el presupuesto para acceder a un ERP empresarial. En ese punto medio aparecen problemas concretos como:
+La versión Angular actual funciona como frontend y utiliza datos definidos dentro de la aplicación. Por el momento no requiere levantar un backend para visualizar las pantallas principales.
 
-- **Desconocimiento del stock real** de materias primas e insumos, lo que lleva a comprar de más o quedarse sin material en medio de una producción.
-- **Falta de visibilidad sobre el flujo de producción**: no se sabe con claridad qué se está fabricando, en qué etapa está cada pedido o qué órdenes están demoradas.
-- **Pérdida de información histórica** que podría servir para proyectar compras, ventas y producción futura.
-- **Dependencia de la memoria del dueño o dueña** del emprendimiento, lo cual no escala cuando el negocio crece.
+## Funcionalidades principales
 
-Este sistema busca dar respuesta directa a esas necesidades mediante una interfaz amigable, organizada por roles (administrador y usuario operativo) y centrada en mostrar la información clave de forma inmediata: cuánto hay, qué se está produciendo, qué falta reponer y cómo está rindiendo el equipo.
+- Página de inicio pública.
+- Sección institucional "Quiénes somos".
+- Inicio de sesión.
+- Dashboard administrativo.
+- Gestión visual de materias primas.
+- Listado de productos terminados.
+- Gestión de usuarios.
+- Navegación mediante layouts públicos y privados.
+- Pantalla de error para rutas no encontradas.
 
-## Funcionalidades del sistema
+## Tecnologías utilizadas
 
-A continuación se describen las funcionalidades previstas para el producto final. La maqueta actual representa visualmente la mayoría de estas pantallas y sirve como base para el desarrollo posterior.
+- Angular 17.3
+- Angular CLI 17.3
+- TypeScript 5.4
+- Bootstrap 5.3
+- RxJS
+- Karma y Jasmine para pruebas unitarias
 
-- **Acceso y gestión de usuarios**:
-  1. Pantalla de bienvenida (landing page)
-  2. Inicio de sesión
-  3. Registro de nuevos usuarios
-  4. Diferenciación por roles (Administrador y Usuario operativo)
+## Requisitos previos
 
-- **Panel de Administrador (Dashboard Admin)**:
-  1. Indicadores clave (KPIs) comparados con el mes anterior.
-  2. Gráficos de producción para análisis visual.
-  3. Tabla de órdenes de trabajo donde se listan los pedidos con cada detalle.
-  4. Menú expandible lateral para navegación.
+Antes de instalar el proyecto, asegurate de tener instalado:
 
-- **Panel de Usuario operativo**:
+- Node.js 18 o superior compatible con Angular 17.
+- npm.
+- Git, si vas a clonar el repositorio desde GitHub.
 
-  1. Listado de materias primas con cada detalle
-  2. Buscador de materiales para filtrar rápidamente entre los insumos del taller.
-  3. Indicadores visuales que destacan en color los materiales que requieren reposición urgente.
-  4. Menú lateral expandible con accesos a Producción, Materias Primas, Productos terminados y Métricas.
+Para comprobar las versiones instaladas:
 
-- **Páginas institucionales**:
+```bash
+node -v
+npm -v
+git --version
+```
 
-  1. Página de inicio (Home).
-  2. Sección "Quiénes somos" con la presentación del equipo de desarrollo.
-  3. Footer institucional con información del estudio (QuantiaStudio) y del proyecto.
+## Instalación
 
-## Instalación y ejecución del prototipo
-
-### 1. Obtener el código fuente
-
-**Opción A — Clonando con Git (recomendada):**
-
-Abrí una terminal y ejecutá los siguientes comandos:
+### 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/QuantiaStudio/Gestor-de-Produccion-e-Inventario-para-Emprendimientos.git
 cd Gestor-de-Produccion-e-Inventario-para-Emprendimientos
 ```
 
-**Opción B — Descargando el ZIP:**
+### 2. Ingresar al proyecto Angular
 
-1. Ingresá a la página del repositorio en GitHub.
-2. Hacé clic en el botón verde **"Code"**.
-3. Seleccioná **"Download ZIP"**.
-4. Descomprimí el archivo en la carpeta de tu preferencia.
+```bash
+cd frontend/ProdManager
+```
 
+### 3. Instalar dependencias
 
-### 2. Levantar un servidor local con la extensión Live Server de Visual Studio Code
+```bash
+npm install
+```
 
-  1. Instalá la extensión **Live Server** desde el marketplace de VS Code.
-  2. Abrí la carpeta del proyecto en VS Code.
-  3. Hacé clic derecho sobre `maqueta/html/landing.html` y selecciona **"Open with Live Server"**.
+Si querés instalar exactamente las versiones registradas en `package-lock.json`, podés usar:
+
+```bash
+npm ci
+```
+
+## Ejecución en desarrollo
+
+Desde la carpeta `frontend/ProdManager`, ejecutar:
+
+```bash
+npm start
+```
+
+Este comando ejecuta `ng serve` y levanta la aplicación en:
+
+```text
+http://localhost:4200/
+```
+
+La aplicación se recarga automáticamente cuando se modifican archivos del frontend.
+
+## Rutas disponibles
+
+Algunas rutas principales de la aplicación son:
+
+- `/`: página de inicio.
+- `/about-us`: información del equipo.
+- `/login`: inicio de sesión.
+- `/dashboard`: panel administrativo.
+- `/dashboard/materias-primas`: vista de materias primas.
+- `/dashboard/users`: gestión de usuarios.
+- `/dashboard/productos-terminados`: listado de productos terminados.
+
+## Compilación para producción
+
+Para generar una versión compilada del frontend:
+
+```bash
+npm run build
+```
+
+Los archivos generados quedan dentro de:
+
+```text
+frontend/ProdManager/dist/prod-manager
+```
+
+## Pruebas
+
+Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine:
+
+```bash
+npm test
+```
+
+## Estructura del frontend
+
+```text
+frontend/ProdManager/
+|-- src/
+|   |-- app/
+|   |   |-- auth/              # Componentes, modelos y servicios de autenticación
+|   |   |-- dashboard/         # Vistas administrativas
+|   |   |-- layout/            # Layouts públicos y de dashboard
+|   |   |-- materia-prima/     # Componentes de materias primas
+|   |   |-- models/            # Modelos de datos
+|   |   |-- public/            # Páginas públicas
+|   |   |-- services/          # Servicios del frontend
+|   |   `-- shared/            # Componentes reutilizables
+|   |-- assets/                # Imágenes e iconos
+|   |-- index.html
+|   |-- main.ts
+|   `-- styles.css
+|-- angular.json
+|-- package.json
+`-- package-lock.json
+```
 
 ## Equipo de desarrollo
 
-Este proyecto está siendo desarrollado por **QuantiaStudio**, un equipo de estudiantes de la **Tecnicatura Superior en Desarrollo de Software** del **Instituto Superior Politécnico de Córdoba (ISPC)**.
+Proyecto desarrollado por **QuantiaStudio**, equipo de estudiantes de la **Tecnicatura Superior en Desarrollo de Software** del **Instituto Superior Politécnico de Córdoba (ISPC)**.
 
 - [Altamirano Rocío](https://github.com/rocioaltamirano19)
 - [Cáceres Cesia](https://github.com/Cesiaf)
