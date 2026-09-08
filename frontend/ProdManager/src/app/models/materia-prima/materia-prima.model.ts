@@ -13,3 +13,14 @@ export interface MateriaPrima {
   proveedor: string;
   ultimaActualizacion: string;
 }
+
+export type TipoMovimientoStock = 'ingreso' | 'consumo';
+
+export interface MovimientoStock {
+  id: string;
+  materiaPrimaId: string;
+  fecha: string;
+  tipo: TipoMovimientoStock;
+  cantidad: number;
+  stockResultante: number;
+}
