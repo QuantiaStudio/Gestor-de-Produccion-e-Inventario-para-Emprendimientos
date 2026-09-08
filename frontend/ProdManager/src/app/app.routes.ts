@@ -27,6 +27,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent, pathMatch: 'full' },
       { path: 'materias-primas', component: MateriasPrimasComponent },
+      { path: 'movimientos-stock', component: MateriaPrimaListadoComponent },
       { path: 'users', component: UsersComponent },
       { path: 'productos-terminados', component: ProductoTerminadoListadoComponent },
     ],
