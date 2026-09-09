@@ -6,6 +6,7 @@
 <div class="search-bar">
   <input type="text" class="input" placeholder="Buscar material..." />
   <button type="button" class="btn btn-primary">Buscar</button>
+  <button type="button" class="btn btn-primary" (click)="abrirFormMovimiento()">Registrar Movimiento</button>
 </div>
 
 <div class="card table-wrapper">
@@ -43,5 +44,12 @@
   <app-materia-prima-detalle
     [materiaPrima]="materiaPrimaSeleccionada"
     (cerrar)="cerrarDetalle()"
+  />
+}
+
+@if (mostrarFormMovimiento) {
+  <app-materia-prima-movimiento-form
+    [materiasPrimas]="materiasPrimas"
+    (cerrar)="cerrarFormMovimiento()"
   />
 }

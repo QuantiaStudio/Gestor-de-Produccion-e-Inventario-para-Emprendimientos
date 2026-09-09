@@ -1,0 +1,38 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Registrar Movimiento de Stock</h2>
+      <button type="button" class="btn-close" (click)="cerrar.emit()" aria-label="Cerrar"></button>
+    </div>
+
+    <form [formGroup]="formMovimiento">
+      <div class="mb-3">
+        <label class="form-label">Materia Prima</label>
+        <select class="form-select" formControlName="materiaPrimaId">
+          <option value="" disabled selected>Seleccione materia prima...</option>
+          @for (mp of materiasPrimas; track mp.id) {
+            <option [value]="mp.id">{{ mp.nombre }} ({{ mp.id }})</option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Tipo de movimiento</label>
+        <select class="form-select" formControlName="tipo">
+          <option value="ingreso">Ingreso</option>
+          <option value="consumo">Consumo</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Cantidad</label>
+        <input type="number" class="form-control" formControlName="cantidad">
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="cerrar.emit()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="formMovimiento.invalid">Registrar</button>
+      </div>
+    </form>
+  </div>
+</div>
