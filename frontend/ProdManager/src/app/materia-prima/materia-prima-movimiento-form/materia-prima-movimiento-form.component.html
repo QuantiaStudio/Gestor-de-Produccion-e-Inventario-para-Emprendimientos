@@ -8,12 +8,22 @@
     <form [formGroup]="formMovimiento">
       <div class="mb-3">
         <label class="form-label">Materia Prima</label>
-        <select class="form-select" formControlName="materiaPrimaId">
+        <select
+          class="form-select"
+          formControlName="materiaPrimaId"
+          [class.is-invalid]="formMovimiento.get('materiaPrimaId')?.invalid && formMovimiento.get('materiaPrimaId')?.touched"
+        >
           <option value="" disabled selected>Seleccione materia prima...</option>
           @for (mp of materiasPrimas; track mp.id) {
             <option [value]="mp.id">{{ mp.nombre }} ({{ mp.id }})</option>
           }
         </select>
+        @if (formMovimiento.get('materiaPrimaId')?.invalid && formMovimiento.get('materiaPrimaId')?.touched) {
+          <div class="invalid-feedback">Seleccioná una materia prima.</div>
+        }
+        @if (materiaSeleccionada) {
+          <div class="form-text">Stock disponible: {{ materiaSeleccionada.stockDisponible }} {{ materiaSeleccionada.unidadMedida }}</div>
+        }
       </div>
 
       <div class="mb-3">
@@ -26,7 +36,21 @@
 
       <div class="mb-3">
         <label class="form-label">Cantidad</label>
-        <input type="number" class="form-control" formControlName="cantidad">
+        <input
+          type="number"
+          class="form-control"
+          formControlName="cantidad"
+          [class.is-invalid]="(formMovimiento.get('cantidad')?.invalid && formMovimiento.get('cantidad')?.touched) || (formMovimiento.errors?.['stockInsuficiente'] && formMovimiento.get('cantidad')?.touched)"
+        >
+        @if (formMovimiento.get('cantidad')?.hasError('required') && formMovimiento.get('cantidad')?.touched) {
+          <div class="invalid-feedback">Ingresá una cantidad.</div>
+        }
+        @if (formMovimiento.get('cantidad')?.hasError('min') && formMovimiento.get('cantidad')?.touched) {
+          <div class="invalid-feedback">La cantidad debe ser mayor a 0.</div>
+        }
+        @if (formMovimiento.errors?.['stockInsuficiente'] && formMovimiento.get('cantidad')?.touched) {
+          <div class="invalid-feedback">La cantidad supera el stock disponible.</div>
+        }
       </div>
 
       <div class="modal-footer">
