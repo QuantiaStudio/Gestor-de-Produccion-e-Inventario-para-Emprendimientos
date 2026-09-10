@@ -1,1 +1,544 @@
-<p>produccion works!</p>
+<div class="content">
+
+    <div class="page-header mb-4 d-flex align-items-start justify-content-between">
+        <div>
+            <h1>Producción</h1>
+            <p>Seguimiento de tus órdenes de producción.</p>
+        </div>
+        <button type="button" class="btn-nueva-produccion" data-bs-toggle="modal"
+            data-bs-target="#modalNuevaProduccion">
+            + Nueva Producción
+        </button>
+    </div>
+
+    <!-- Estadísticas -->
+    <section class="inventory-stats mb-4">
+        <article class="stat-card">
+            <div class="stat-card__icon icon-circle-blue">
+                <img src="../../../../../assets/clock.svg" class="icon-blue" alt="" >
+            </div>
+            <div class="stat-card__content">
+                <span class="stat-label">Pendientes</span>
+                <span class="stat-value">5</span>
+                <span class="stat-desc">Órdenes Esperando Inicio</span>
+            </div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-card__icon icon-circle-yellow">
+                <img src="../../../../../assets/gear.svg" class="icon-yellow" alt="" >
+            </div>
+            <div class="stat-card__content">
+                <span class="stat-label">En Proceso</span>
+                <span class="stat-value">5</span>
+                <span class="stat-desc">Órdenes en Ejecución</span>
+            </div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-card__icon icon-circle-green">
+                <img src="../../../../../assets/check-circle.svg" class="icon-green" alt="">
+            </div>
+            <div class="stat-card__content">
+                <span class="stat-label">Finalizadas</span>
+                <span class="stat-value">32</span>
+                <span class="stat-desc">Órdenes Completadas</span>
+            </div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-card__icon icon-circle-red">
+                <img src="../../../../../assets/x-circle.svg" class="icon-red" alt="" >
+            </div>
+            <div class="stat-card__content">
+                <span class="stat-label">Canceladas</span>
+                <span class="stat-value">3</span>
+                <span class="stat-desc">Órdenes canceladas</span>
+            </div>
+        </article>
+    </section>
+
+    <!-- Filtros -->
+    <section class="inventory-filters mb-4">
+        <div class="filters-row">
+            <div class="search-box">
+                <span class="search-icon">
+                    <img src="../../../../../assets/search.svg" class="icon-gray" alt="" >
+                </span>
+                <input type="text" placeholder="Buscar orden..." class="input" >
+            </div>
+            <div class="filter-select">
+                <span class="filter-label">Estado</span>
+                <select class="input form-select">
+                    <option>Todos</option>
+                </select>
+            </div>
+            <div class="filter-select">
+                <span class="filter-label">Producto</span>
+                <select class="input form-select">
+                    <option>Todos</option>
+                </select>
+            </div>
+            <button type="button" class="btn-limpiar">
+                <img src="../../../../../assets/filter.svg" class="icon-gray" alt="" >
+                Limpiar filtros
+            </button>
+        </div>
+    </section>
+
+    <div class="inventory-layout row g-4" id="inventario">
+        <div class="col-lg-12 inventory-table-col">
+            <div class="stock-table-wrapper">
+
+                <table class="stock-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>#OP001</td>
+                            <td>Mesa Nórdica</td>
+                            <td>10 unidades</td>
+                            <td>
+                                <span class="badge badge-produccion">
+                                    En Producción
+                                </span>
+                            </td>
+                            <td>07/06/2026</td>
+                            <td>
+                                <a href="#detail-OP001" class="btn-ver-detalle" title="Ver detalle">
+                                    <img src="../../../../../assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>#OP002</td>
+                            <td>Biblioteca Moderna</td>
+                            <td>5 unidades</td>
+                            <td>
+                                <span class="badge badge-finalizada">
+                                    Finalizada
+                                </span>
+                            </td>
+                            <td>05/06/2026</td>
+                            <td>
+                                <a href="#detail-OP002" class="btn-ver-detalle" title="Ver detalle">
+                                    <img src="../../../../../assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>#OP003</td>
+                            <td>Silla Nórdica</td>
+                            <td>15 unidades</td>
+                            <td>
+                                <span class="badge badge-pendiente">
+                                    Pendiente
+                                </span>
+                            </td>
+                            <td>08/06/2026</td>
+                            <td>
+                                <a href="#detail-OP003" class="btn-ver-detalle" title="Ver detalle">
+                                    <img src="../../../../../assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>#OP004</td>
+                            <td>Escritorio Minimalista</td>
+                            <td>2 unidades</td>
+                            <td>
+                                <span class="badge badge-cancelada">
+                                    Cancelada
+                                </span>
+                            </td>
+                            <td>04/06/2026</td>
+                            <td>
+                                <a href="#detail-OP004" class="btn-ver-detalle" title="Ver detalle">
+                                    <img src="../../../../../assets/chevron-right.svg" class="icon-gray" alt="ver detalle">
+                                </a>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+        <!-- Columna de Detalle -->
+        <div class="col-lg-4 detail-col">
+
+            <!-- Panel de Detalle: Orden #OP001 -->
+            <aside class="inventory-detail card" id="detail-OP001">
+
+                <header class="detail-header">
+                    <h2 class="detail-title">Producción #OP001</h2>
+                    <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                </header>
+
+                <section class="detail-info-grid">
+                    <span class="detail-info-label">Producto</span>
+                    <span class="detail-info-value">Mesa Nórdica</span>
+
+                    <span class="detail-info-label">Cantidad</span>
+                    <span class="detail-info-value">10 unidades</span>
+
+                    <span class="detail-info-label">Estado actual</span>
+                    <span class="detail-info-value">
+                        <span class="badge badge-produccion">En Proceso</span>
+                    </span>
+
+                    <span class="detail-info-label">Fecha de creación</span>
+                    <span class="detail-info-value">07/06/2026</span>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Materiales reservados</h3>
+                    <table class="detail-materials-table">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tablero MDF 18mm</td>
+                                <td>20 u</td>
+                            </tr>
+                            <tr>
+                                <td>Tornillos para madera</td>
+                                <td>80 u</td>
+                            </tr>
+                            <tr>
+                                <td>Barniz transparente satinado</td>
+                                <td>5 L</td>
+                            </tr>
+                            <tr>
+                                <td>Cola para madera</td>
+                                <td>2 L</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="detail-section cambiar-estado-section">
+                    <h3 class="detail-section-title">Cambiar estado</h3>
+                    <label for="estado-OP001" class="detail-estado-label">Nuevo estado</label>
+                    <select id="estado-OP001" class="input form-select mt-1">
+                        <option value="en-proceso" selected>En Proceso</option>
+                        <option value="finalizado">Finalizado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                    <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Historial</h3>
+                    <ul class="detail-timeline">
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">07/06/2026 &nbsp; 09:00</span>
+                                <span class="detail-timeline-text">Producción creada</span>
+                            </div>
+                        </li>
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">07/06/2026 &nbsp; 09:00</span>
+                                <span class="detail-timeline-text">Materiales reservados</span>
+                            </div>
+                        </li>
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">07/06/2026 &nbsp; 10:30</span>
+                                <span class="detail-timeline-text">Estado cambiado a En Proceso</span>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+            </aside>
+
+            <!-- Panel de Detalle: Orden #OP002 -->
+            <aside class="inventory-detail card" id="detail-OP002">
+
+                <header class="detail-header">
+                    <h2 class="detail-title">Producción #OP002</h2>
+                    <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                </header>
+
+                <section class="detail-info-grid">
+                    <span class="detail-info-label">Producto</span>
+                    <span class="detail-info-value">Biblioteca Moderna</span>
+
+                    <span class="detail-info-label">Cantidad</span>
+                    <span class="detail-info-value">5 unidades</span>
+
+                    <span class="detail-info-label">Estado actual</span>
+                    <span class="detail-info-value">
+                        <span class="badge badge-finalizada">Finalizada</span>
+                    </span>
+
+                    <span class="detail-info-label">Fecha de creación</span>
+                    <span class="detail-info-value">05/06/2026</span>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Materiales reservados</h3>
+                    <table class="detail-materials-table">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tableros MDF 18mm</td>
+                                <td>10 u</td>
+                            </tr>
+                            <tr>
+                                <td>Fondo MDF 3mm</td>
+                                <td>5 u</td>
+                            </tr>
+                            <tr>
+                                <td>Tornillos para madera</td>
+                                <td>40 u</td>
+                            </tr>
+                            <tr>
+                                <td>Barniz transparente satinado</td>
+                                <td>3 L</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="detail-section cambiar-estado-section">
+                    <h3 class="detail-section-title">Cambiar estado</h3>
+                    <label for="estado-OP002" class="detail-estado-label">Nuevo estado</label>
+                    <select id="estado-OP002" class="input form-select mt-1">
+                        <option value="en-proceso">En Proceso</option>
+                        <option value="finalizado" selected>Finalizado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                    <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Historial</h3>
+                    <ul class="detail-timeline">
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">05/06/2026 &nbsp; 08:00</span>
+                                <span class="detail-timeline-text">Producción creada</span>
+                            </div>
+                        </li>
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">05/06/2026 &nbsp; 08:00</span>
+                                <span class="detail-timeline-text">Materiales reservados</span>
+                            </div>
+                        </li>
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">05/06/2026 &nbsp; 14:45</span>
+                                <span class="detail-timeline-text">Estado cambiado a Finalizado</span>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+            </aside>
+
+            <!-- Panel de Detalle: Orden #OP003 -->
+            <aside class="inventory-detail card" id="detail-OP003">
+
+                <header class="detail-header">
+                    <h2 class="detail-title">Producción #OP003</h2>
+                    <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                </header>
+
+                <section class="detail-info-grid">
+                    <span class="detail-info-label">Producto</span>
+                    <span class="detail-info-value">Silla Nórdica</span>
+
+                    <span class="detail-info-label">Cantidad</span>
+                    <span class="detail-info-value">15 unidades</span>
+
+                    <span class="detail-info-label">Estado actual</span>
+                    <span class="detail-info-value">
+                        <span class="badge badge-pendiente">Pendiente</span>
+                    </span>
+
+                    <span class="detail-info-label">Fecha de creación</span>
+                    <span class="detail-info-value">08/06/2026</span>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Materiales reservados</h3>
+                    <table class="detail-materials-table">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Madera Maciza Pino 3"</td>
+                                <td>30 u</td>
+                            </tr>
+                            <tr>
+                                <td>Tornillos para madera 1.5"</td>
+                                <td>60 u</td>
+                            </tr>
+                            <tr>
+                                <td>Cola para madera resistente</td>
+                                <td>1 L</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="detail-section cambiar-estado-section">
+                    <h3 class="detail-section-title">Cambiar estado</h3>
+                    <label for="estado-OP003" class="detail-estado-label">Nuevo estado</label>
+                    <select id="estado-OP003" class="input form-select mt-1">
+                        <option value="pendiente" selected>Pendiente</option>
+                        <option value="en-proceso">En Proceso</option>
+                        <option value="finalizado">Finalizado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                    <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Historial</h3>
+                    <ul class="detail-timeline">
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">08/06/2026 &nbsp; 11:20</span>
+                                <span class="detail-timeline-text">Producción creada (Pendiente de inicio)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+            </aside>
+
+            <!-- Panel de Detalle: Orden #OP004 -->
+            <aside class="inventory-detail card" id="detail-OP004">
+
+                <header class="detail-header">
+                    <h2 class="detail-title">Producción #OP004</h2>
+                    <a href="#inventario" class="btn-cerrar" aria-label="Cerrar detalle">&times;</a>
+                </header>
+
+                <section class="detail-info-grid">
+                    <span class="detail-info-label">Producto</span>
+                    <span class="detail-info-value">Escritorio Minimalista</span>
+
+                    <span class="detail-info-label">Cantidad</span>
+                    <span class="detail-info-value">2 unidades</span>
+
+                    <span class="detail-info-label">Estado actual</span>
+                    <span class="detail-info-value">
+                        <span class="badge badge-cancelada">Cancelada</span>
+                    </span>
+
+                    <span class="detail-info-label">Fecha de creación</span>
+                    <span class="detail-info-value">04/06/2026</span>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Materiales liberados</h3>
+                    <table class="detail-materials-table">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tableros de Madera de Roble</td>
+                                <td>4 u</td>
+                            </tr>
+                            <tr>
+                                <td>Patas de Hierro Negras</td>
+                                <td>4 u</td>
+                            </tr>
+                            <tr>
+                                <td>Tornillos de ensamble</td>
+                                <td>20 u</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="detail-section cambiar-estado-section">
+                    <h3 class="detail-section-title">Cambiar estado</h3>
+                    <label for="estado-OP004" class="detail-estado-label">Nuevo estado</label>
+                    <select id="estado-OP004" class="input form-select mt-1">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en-proceso">En Proceso</option>
+                        <option value="finalizado">Finalizado</option>
+                        <option value="cancelado" selected>Cancelado</option>
+                    </select>
+                    <button type="button" class="btn-guardar-estado mt-2">Guardar cambio</button>
+                </section>
+
+                <section class="detail-section">
+                    <h3 class="detail-section-title">Historial</h3>
+                    <ul class="detail-timeline">
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">04/06/2026 &nbsp; 10:00</span>
+                                <span class="detail-timeline-text">Producción creada</span>
+                            </div>
+                        </li>
+                        <li class="detail-timeline-item">
+                            <span class="detail-timeline-dot"></span>
+                            <div class="detail-timeline-body">
+                                <span class="detail-timeline-date">04/06/2026 &nbsp; 15:30</span>
+                                <span class="detail-timeline-text">Orden Cancelada (Falta de insumos importados)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+            </aside>
+        </div>
+    </div>
+
+</div>
