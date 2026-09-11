@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
+import { MateriaPrimaService } from '../../services/materia-prima.service';
+import { MovimientoStockService } from '../../services/movimiento-stock.service';
 
 function stockDisponibleValidator(getMateriasPrimas: () => MateriaPrima[]) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -35,12 +37,26 @@ export class MateriaPrimaMovimientoFormComponent {
     cantidad: new FormControl<number | null>(null, [Validators.required, Validators.min(0.01)]),
   });
 
-  constructor() {
+  constructor(
+    private materiaPrimaService: MateriaPrimaService,
+    private movimientoStockService: MovimientoStockService,
+  ) {
     this.formMovimiento.setValidators(stockDisponibleValidator(() => this.materiasPrimas));
   }
 
   get materiaSeleccionada(): MateriaPrima | undefined {
     const id = this.formMovimiento.get('materiaPrimaId')?.value;
     return this.materiasPrimas.find(mp => mp.id === id);
+  }
+
+  registrar() {
+    if (this.formMovimiento.invalid) return;
+
+    const { materiaPrimaId, tipo, cantidad } = this.formMovimiento.getRawValue();
+    const stockResultante = this.materiaPrimaService.registrarMovimiento(materiaPrimaId!, tipo!, cantidad!);
+    if (stockResultante === undefined) return;
+
+    this.movimientoStockService.registrarMovimiento(materiaPrimaId!, tipo!, cantidad!, stockResultante);
+    this.cerrar.emit();
   }
 }

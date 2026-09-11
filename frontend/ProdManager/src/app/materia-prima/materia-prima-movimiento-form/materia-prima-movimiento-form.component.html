@@ -5,7 +5,7 @@
       <button type="button" class="btn-close" (click)="cerrar.emit()" aria-label="Cerrar"></button>
     </div>
 
-    <form [formGroup]="formMovimiento">
+    <form [formGroup]="formMovimiento" (ngSubmit)="registrar()">
       <div class="mb-3">
         <label class="form-label">Materia Prima</label>
         <select
