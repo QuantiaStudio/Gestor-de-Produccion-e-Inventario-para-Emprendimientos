@@ -37,6 +37,85 @@ export class ProduccionService {
             material => material.cantidadDisponible >= material.cantidadRequerida
         );
     }
+    private generarNuevoId(): string {
+        return `OP-${String(this.ordenesProduccion.length + 1).padStart(3, '0')}`;
+    }
+    crearOrden(datos: NuevaOrdenProduccion): OrdenProduccion {
+
+        if (datos.cantidad <= 0) {
+            throw new Error('La cantidad debe ser mayor a cero.');
+        }
+
+        const fechaActual = new Date().toISOString();
+
+        const operador = this.userService.getCurrentUser();
+
+        if (!operador) {
+            throw new Error('No hay un operador autenticado.');
+        }
+
+        const producto = this.productoTerminadoService.obtenerPorId(datos.productoId);
+
+        if (!producto) {
+            throw new Error('El producto no existe.');
+        }
+
+        const materialesRequeridos = producto.formula.map(detalle => {
+            const materiaPrima = this.materiaPrimaService.obtenerPorId(
+                detalle.materiaPrimaId
+            );
+
+            if (!materiaPrima) {
+                throw new Error(
+                    `No existe la materia prima ${detalle.nombreMateriaPrima}.`
+                );
+            }
+
+            const cantidadRequerida = detalle.cantidad * datos.cantidad;
+            const cantidadDisponible = materiaPrima.stockDisponible;
+
+            return {
+                materiaPrima: {
+                    id: materiaPrima.id,
+                    nombre: materiaPrima.nombre,
+                    unidadMedida: materiaPrima.unidadMedida
+                },
+                cantidadRequerida,
+                cantidadDisponible,
+                disponible: cantidadDisponible >= cantidadRequerida
+            };
+        });
+
+        const nuevaOrden: OrdenProduccion = {
+            id: this.generarNuevoId(),
+            producto: {
+                id: producto.id,
+                nombre: producto.nombre,
+                unidadMedida: producto.unidadMedida
+            },
+            materialesRequeridos,
+            disponibilidadMateriales: materialesRequeridos.every(
+                material => material.disponible
+            )
+                ? 'disponible'
+                : 'insuficiente',
+            cantidad: datos.cantidad,
+            cantidadProducida: 0,
+            estado: 'pendiente',
+            fechaCreacion: fechaActual,
+            operadorId: String(operador.id),
+            operadorNombre:`${operador.firstName} ${operador.lastName}`,
+            observaciones: datos.observaciones,
+            historialEstados: [
+                {
+                    estado: 'pendiente',
+                    fecha: fechaActual
+                }
+            ]
+        };
+        this.ordenesProduccion.push(nuevaOrden);
+        return nuevaOrden;
+    }
     private ordenesProduccion: OrdenProduccion[] = [
         {
             id: 'OP-001',
