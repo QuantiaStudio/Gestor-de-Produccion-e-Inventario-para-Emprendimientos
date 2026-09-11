@@ -12,6 +12,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/mesa_nordica.jpg', unidadMedida: 'unidad',
       stockActual: 28, stockMinimo: 8, stockMaximo: 60, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante A1', ultimaActualizacion: '18/02/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 4 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 12 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.5 },
+      ],
       movimientos: [
         { id: 'MOV-PT001-1', fecha: '12/11/2025', tipo: 'ingreso', cantidad: 30, origen: 'Orden de producción OP-101', stockResultante: 30 },
         { id: 'MOV-PT001-2', fecha: '05/12/2025', tipo: 'egreso', cantidad: 8, origen: 'Venta #287', stockResultante: 22 },
@@ -25,6 +30,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/biblioteca_moderna.webp', unidadMedida: 'unidad',
       stockActual: 4, stockMinimo: 6, stockMaximo: 40, estado: 'bajo_minimo',
       ubicacion: 'Depósito Central - Estante B2', ultimaActualizacion: '02/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 6 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 20 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.75 },
+      ],
       movimientos: [
         { id: 'MOV-PT002-1', fecha: '03/10/2025', tipo: 'ingreso', cantidad: 20, origen: 'Orden de producción OP-092', stockResultante: 20 },
         { id: 'MOV-PT002-2', fecha: '14/11/2025', tipo: 'egreso', cantidad: 7, origen: 'Venta #265', stockResultante: 13 },
@@ -38,6 +48,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/escritorio_gamer.jpg', unidadMedida: 'unidad',
       stockActual: 29, stockMinimo: 10, stockMaximo: 70, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante A3', ultimaActualizacion: '10/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 3 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 16 },
+        { materiaPrimaId: 'M005', nombreMateriaPrima: 'Contrachapado 18mm', cantidad: 1 },
+      ],
       movimientos: [
         { id: 'MOV-PT003-1', fecha: '21/09/2025', tipo: 'ingreso', cantidad: 25, origen: 'Orden de producción OP-088', stockResultante: 25 },
         { id: 'MOV-PT003-2', fecha: '30/10/2025', tipo: 'ingreso', cantidad: 20, origen: 'Orden de producción OP-095', stockResultante: 45 },
@@ -52,6 +67,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/mesa_ratona.webp', unidadMedida: 'unidad',
       stockActual: 0, stockMinimo: 5, stockMaximo: 45, estado: 'sin_stock',
       ubicacion: 'Depósito Central - Estante A2', ultimaActualizacion: '27/02/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 2.5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 10 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.3 },
+      ],
       movimientos: [
         { id: 'MOV-PT004-1', fecha: '08/10/2025', tipo: 'ingreso', cantidad: 18, origen: 'Orden de producción OP-090', stockResultante: 18 },
         { id: 'MOV-PT004-2', fecha: '19/11/2025', tipo: 'egreso', cantidad: 6, origen: 'Venta #270', stockResultante: 12 },
@@ -65,6 +85,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/comoda_6_cajones.webp', unidadMedida: 'unidad',
       stockActual: 15, stockMinimo: 4, stockMaximo: 30, estado: 'optimo',
       ubicacion: 'Depósito Norte - Sector C', ultimaActualizacion: '06/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 18 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.6 },
+      ],
       lote: 'L-2026-014', fechaVencimiento: '14/02/2028',
       movimientos: [
         { id: 'MOV-PT005-1', fecha: '05/11/2025', tipo: 'ingreso', cantidad: 14, origen: 'Orden de producción OP-099', stockResultante: 14 },
@@ -79,6 +104,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/rack_tv.jpg', unidadMedida: 'unidad',
       stockActual: 23, stockMinimo: 6, stockMaximo: 50, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante D1', ultimaActualizacion: '04/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 3.5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 14 },
+        { materiaPrimaId: 'M005', nombreMateriaPrima: 'Contrachapado 18mm', cantidad: 1 },
+      ],
       movimientos: [
         { id: 'MOV-PT006-1', fecha: '17/10/2025', tipo: 'ingreso', cantidad: 22, origen: 'Orden de producción OP-093', stockResultante: 22 },
         { id: 'MOV-PT006-2', fecha: '28/11/2025', tipo: 'egreso', cantidad: 5, origen: 'Venta #274', stockResultante: 17 },
@@ -92,6 +122,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/banqueta_alta.jpg', unidadMedida: 'caja',
       stockActual: 7, stockMinimo: 10, stockMaximo: 60, estado: 'bajo_minimo',
       ubicacion: 'Depósito Norte - Sector A', ultimaActualizacion: '19/02/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 1.5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 8 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.2 },
+      ],
       movimientos: [
         { id: 'MOV-PT007-1', fecha: '02/10/2025', tipo: 'ingreso', cantidad: 32, origen: 'Orden de producción OP-091', stockResultante: 32 },
         { id: 'MOV-PT007-2', fecha: '11/11/2025', tipo: 'egreso', cantidad: 12, origen: 'Venta #268', stockResultante: 20 },
@@ -105,6 +140,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/banqueta_alta.jpg', unidadMedida: 'unidad',
       stockActual: 40, stockMinimo: 12, stockMaximo: 80, estado: 'optimo',
       ubicacion: 'Depósito Norte - Sector A', ultimaActualizacion: '11/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 1 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 6 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.15 },
+      ],
       lote: 'L-2026-008', fechaVencimiento: '29/01/2028',
       movimientos: [
         { id: 'MOV-PT008-1', fecha: '25/09/2025', tipo: 'ingreso', cantidad: 40, origen: 'Orden de producción OP-089', stockResultante: 40 },
@@ -120,6 +160,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/mesa_nordica.jpg', unidadMedida: 'unidad',
       stockActual: 9, stockMinimo: 5, stockMaximo: 35, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante A4', ultimaActualizacion: '21/02/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 4.5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 16 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.5 },
+      ],
       movimientos: [
         { id: 'MOV-PT009-1', fecha: '30/10/2025', tipo: 'ingreso', cantidad: 16, origen: 'Orden de producción OP-096', stockResultante: 16 },
         { id: 'MOV-PT009-2', fecha: '13/12/2025', tipo: 'egreso', cantidad: 4, origen: 'Venta #283', stockResultante: 12 },
@@ -132,6 +177,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/escritorio_gamer.jpg', unidadMedida: 'unidad',
       stockActual: 15, stockMinimo: 8, stockMaximo: 55, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante A3', ultimaActualizacion: '24/02/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 3 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 12 },
+        { materiaPrimaId: 'M005', nombreMateriaPrima: 'Contrachapado 18mm', cantidad: 1 },
+      ],
       movimientos: [
         { id: 'MOV-PT010-1', fecha: '09/10/2025', tipo: 'ingreso', cantidad: 26, origen: 'Orden de producción OP-094', stockResultante: 26 },
         { id: 'MOV-PT010-2', fecha: '20/11/2025', tipo: 'egreso', cantidad: 7, origen: 'Venta #272', stockResultante: 19 },
@@ -145,6 +195,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/mesa_nordica.jpg', unidadMedida: 'caja',
       stockActual: 0, stockMinimo: 15, stockMaximo: 120, estado: 'sin_stock',
       ubicacion: 'Depósito Sur - Playón cubierto', ultimaActualizacion: '05/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 2 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 10 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.25 },
+      ],
       movimientos: [
         { id: 'MOV-PT011-1', fecha: '07/11/2025', tipo: 'ingreso', cantidad: 60, origen: 'Orden de producción OP-100', stockResultante: 60 },
         { id: 'MOV-PT011-2', fecha: '12/12/2025', tipo: 'egreso', cantidad: 25, origen: 'Venta #282', stockResultante: 35 },
@@ -158,6 +213,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/biblioteca_moderna.webp', unidadMedida: 'unidad',
       stockActual: 12, stockMinimo: 4, stockMaximo: 28, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante B3', ultimaActualizacion: '09/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 5.5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 18 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.7 },
+      ],
       lote: 'L-2026-021', fechaVencimiento: '03/02/2028',
       movimientos: [
         { id: 'MOV-PT012-1', fecha: '15/10/2025', tipo: 'ingreso', cantidad: 12, origen: 'Orden de producción OP-097', stockResultante: 12 },
@@ -172,6 +232,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/comoda_6_cajones.webp', unidadMedida: 'unidad',
       stockActual: 6, stockMinimo: 6, stockMaximo: 32, estado: 'bajo_minimo',
       ubicacion: 'Depósito Norte - Sector C', ultimaActualizacion: '13/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 2.5 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 10 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.3 },
+      ],
       movimientos: [
         { id: 'MOV-PT013-1', fecha: '22/10/2025', tipo: 'ingreso', cantidad: 20, origen: 'Orden de producción OP-098', stockResultante: 20 },
         { id: 'MOV-PT013-2', fecha: '04/12/2025', tipo: 'egreso', cantidad: 6, origen: 'Venta #278', stockResultante: 14 },
@@ -185,6 +250,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/rack_tv.jpg', unidadMedida: 'unidad',
       stockActual: 17, stockMinimo: 5, stockMaximo: 40, estado: 'optimo',
       ubicacion: 'Depósito Central - Estante D2', ultimaActualizacion: '12/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 3 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 14 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.4 },
+      ],
       lote: 'L-2026-030', fechaVencimiento: '17/02/2028',
       movimientos: [
         { id: 'MOV-PT014-1', fecha: '11/11/2025', tipo: 'ingreso', cantidad: 18, origen: 'Orden de producción OP-102', stockResultante: 18 },
@@ -199,6 +269,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/banqueta_alta.jpg', unidadMedida: 'caja',
       stockActual: 30, stockMinimo: 10, stockMaximo: 90, estado: 'optimo',
       ubicacion: 'Depósito Sur - Playón cubierto', ultimaActualizacion: '16/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 1.25 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 8 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.15 },
+      ],
       movimientos: [
         { id: 'MOV-PT015-1', fecha: '18/09/2025', tipo: 'ingreso', cantidad: 45, origen: 'Orden de producción OP-087', stockResultante: 45 },
         { id: 'MOV-PT015-2', fecha: '29/10/2025', tipo: 'egreso', cantidad: 11, origen: 'Venta #262', stockResultante: 34 },
@@ -214,6 +289,11 @@ export class ProductoTerminadoService {
       imagen: 'assets/banqueta_alta.jpg', unidadMedida: 'unidad',
       stockActual: 3, stockMinimo: 8, stockMaximo: 48, estado: 'bajo_minimo',
       ubicacion: 'Depósito Norte - Sector A', ultimaActualizacion: '14/03/2026',
+      formula: [
+        { materiaPrimaId: 'M001', nombreMateriaPrima: 'Madera de Roble', cantidad: 1 },
+        { materiaPrimaId: 'M003', nombreMateriaPrima: 'Tornillos 3mm', cantidad: 6 },
+        { materiaPrimaId: 'M004', nombreMateriaPrima: 'Barniz Transparente', cantidad: 0.1 },
+      ],
       movimientos: [
         { id: 'MOV-PT016-1', fecha: '24/10/2025', tipo: 'ingreso', cantidad: 24, origen: 'Orden de producción OP-103', stockResultante: 24 },
         { id: 'MOV-PT016-2', fecha: '05/12/2025', tipo: 'egreso', cantidad: 9, origen: 'Venta #284', stockResultante: 15 },

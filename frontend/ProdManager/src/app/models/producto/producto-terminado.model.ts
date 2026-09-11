@@ -29,7 +29,7 @@ export interface ProductoTerminado {
   ultimaActualizacion: string;
   lote?: string;
   fechaVencimiento?: string;
-  formula?: DetalleFormula[];
+  formula: DetalleFormula[];
   movimientos: MovimientoInventario[];
 }
 
