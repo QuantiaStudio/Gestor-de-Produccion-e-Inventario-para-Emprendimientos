@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, NuevoProductoFormValue, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 import { NuevaOrdenProduccion, OrdenProduccion } from '../models/orden-produccion/orden-produccion.model';
+import { ProductoTerminadoService } from './producto-terminado.service';
+import { MateriaPrimaService } from './materia-prima.service';
 import type {
     CambioEstadoOrdenProduccion,
     EstadoDisponibilidadMaterial,
@@ -47,7 +49,7 @@ export class ProduccionService {
             materialesRequeridos: [],
             fechaCreacion: '03/06/2026',
             historialEstados: [
-                {   
+                {
                     estado: 'pendiente',
                     fecha: '03/06/2026',
                 },
