@@ -14,6 +14,27 @@ import type {
     providedIn: 'root'
 })
 export class ProduccionService {
+
+    constructor(
+        private materiaPrimaService: MateriaPrimaService,
+        private productoTerminadoService: ProductoTerminadoService
+    ) { }
+
+    obtenerOrdenes(): OrdenProduccion[] {
+        return [...this.ordenesProduccion];
+    }
+    obtenerPorId(id: string): OrdenProduccion | undefined {
+        return this.obtenerOrdenes().find(orden => orden.id === id);
+    }
+    verificarDisponibilidad(id: string): boolean {
+        const orden = this.obtenerPorId(id);
+        if (!orden) {
+            return false;
+        }
+        return orden.materialesRequeridos.every(
+            material => material.cantidadDisponible >= material.cantidadRequerida
+        );
+    }
     private ordenesProduccion: OrdenProduccion[] = [
         {
             id: 'OP-001',
@@ -108,29 +129,4 @@ export class ProduccionService {
             ]
         }
     ];
-
-    obtenerOrdenes(): OrdenProduccion[] {
-        // Implementación para obtener las órdenes de producción
-        return [];
-    }
-    obtenerPorId(id: string): OrdenProduccion | undefined {
-        return this.obtenerOrdenes().find(orden => orden.id === id);
-    }
-    crearOrden(datos: NuevaOrdenProduccion): OrdenProduccion {
-        // Implementación para crear una nueva orden de producción
-        return {} as OrdenProduccion;
-    }
-    verificarDisponibilidad(id: string): boolean {
-        // Implementación para verificar la disponibilidad de materiales
-        return false;
-    }
-    iniciarProduccion(id: string): void {
-        // Implementación para iniciar la producción
-    }
-    finalizarProduccion(id: string): void {
-        // Implementación para finalizar la producción
-    }
-    cancelarProduccion(id: string, motivo: string): void {
-        // Implementación para cancelar la producción
-    }
 }
