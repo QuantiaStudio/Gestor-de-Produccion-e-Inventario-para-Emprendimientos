@@ -3,6 +3,7 @@ import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProdu
 import { NuevaOrdenProduccion, OrdenProduccion } from '../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminadoService } from './producto-terminado.service';
 import { MateriaPrimaService } from './materia-prima.service';
+import { UserService } from './user.service';
 import type {
     CambioEstadoOrdenProduccion,
     EstadoDisponibilidadMaterial,
@@ -17,6 +18,7 @@ export class ProduccionService {
 
     constructor(
         private materiaPrimaService: MateriaPrimaService,
+        private userService: UserService,
         private productoTerminadoService: ProductoTerminadoService
     ) { }
 

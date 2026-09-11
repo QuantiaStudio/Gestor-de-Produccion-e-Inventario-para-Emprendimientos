@@ -57,6 +57,5 @@ export interface OrdenProduccion {
 export interface NuevaOrdenProduccion {
     productoId: string;
     cantidad: number;
-    operadorId?: string;
     observaciones?: string;
 }
