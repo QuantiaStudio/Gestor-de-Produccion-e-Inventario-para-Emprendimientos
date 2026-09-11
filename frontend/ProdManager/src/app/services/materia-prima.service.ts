@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EstadoMateriaPrima, MateriaPrima } from '../models/materia-prima/materia-prima.model';
+import { EstadoMateriaPrima, MateriaPrima, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +55,19 @@ export class MateriaPrimaService {
     materiaPrima.stockMinimo = stockMinimo;
     materiaPrima.estado = this.calcularEstado(stockTotal, stockMinimo);
     materiaPrima.ultimaActualizacion = new Date().toLocaleDateString();
+  }
+
+  registrarMovimiento(id: string, tipo: TipoMovimientoStock, cantidad: number): number | undefined {
+    const materiaPrima = this.obtenerPorId(id);
+    if (!materiaPrima) return undefined;
+
+    const delta = tipo === 'ingreso' ? cantidad : -cantidad;
+    materiaPrima.stockTotal += delta;
+    materiaPrima.stockDisponible += delta;
+    materiaPrima.estado = this.calcularEstado(materiaPrima.stockTotal, materiaPrima.stockMinimo);
+    materiaPrima.ultimaActualizacion = new Date().toLocaleDateString();
+
+    return materiaPrima.stockDisponible;
   }
 
   eliminar(id: string): void {
