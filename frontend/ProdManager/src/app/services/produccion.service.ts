@@ -220,8 +220,27 @@ export class ProduccionService {
             cantidad: 10,
             cantidadProducida: 0,
             estado: 'en_produccion',
-            disponibilidadMateriales: 'disponible',
-            materialesRequeridos: [],
+            disponibilidadMateriales: 'insuficiente',
+            materialesRequeridos: [
+                {
+                    materiaPrima: { id: 'M001', nombre: 'Madera de Roble', unidadMedida: 'kg' },
+                    cantidadRequerida: 40,
+                    cantidadDisponible: 320,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M003', nombre: 'Tornillos 3mm', unidadMedida: 'u' },
+                    cantidadRequerida: 120,
+                    cantidadDisponible: 1800,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M004', nombre: 'Barniz Transparente', unidadMedida: 'L' },
+                    cantidadRequerida: 5,
+                    cantidadDisponible: 3,
+                    disponible: false
+                }
+            ],
             fechaCreacion: '10/09/2026',
             historialEstados: [
                 {
@@ -240,8 +259,27 @@ export class ProduccionService {
             cantidad: 5,
             cantidadProducida: 5,
             estado: 'finalizada',
-            disponibilidadMateriales: 'disponible',
-            materialesRequeridos: [],
+            disponibilidadMateriales: 'insuficiente',
+            materialesRequeridos: [
+                {
+                    materiaPrima: { id: 'M001', nombre: 'Madera de Roble', unidadMedida: 'kg' },
+                    cantidadRequerida: 30,
+                    cantidadDisponible: 320,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M003', nombre: 'Tornillos 3mm', unidadMedida: 'u' },
+                    cantidadRequerida: 100,
+                    cantidadDisponible: 1800,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M004', nombre: 'Barniz Transparente', unidadMedida: 'L' },
+                    cantidadRequerida: 3.75,
+                    cantidadDisponible: 3,
+                    disponible: false
+                }
+            ],
             fechaCreacion: '03/06/2026',
             historialEstados: [
                 {
@@ -269,7 +307,26 @@ export class ProduccionService {
             cantidadProducida: 0,
             estado: 'pendiente',
             disponibilidadMateriales: 'disponible',
-            materialesRequeridos: [],
+            materialesRequeridos: [
+                {
+                    materiaPrima: { id: 'M001', nombre: 'Madera de Roble', unidadMedida: 'kg' },
+                    cantidadRequerida: 15,
+                    cantidadDisponible: 320,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M003', nombre: 'Tornillos 3mm', unidadMedida: 'u' },
+                    cantidadRequerida: 90,
+                    cantidadDisponible: 1800,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M004', nombre: 'Barniz Transparente', unidadMedida: 'L' },
+                    cantidadRequerida: 2.25,
+                    cantidadDisponible: 3,
+                    disponible: true
+                }
+            ],
             fechaCreacion: '08/06/2026',
             historialEstados: [
                 {
@@ -289,7 +346,26 @@ export class ProduccionService {
             cantidadProducida: 0,
             estado: 'cancelada',
             disponibilidadMateriales: 'disponible',
-            materialesRequeridos: [],
+            materialesRequeridos: [
+                {
+                    materiaPrima: { id: 'M001', nombre: 'Madera de Roble', unidadMedida: 'kg' },
+                    cantidadRequerida: 6,
+                    cantidadDisponible: 320,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M003', nombre: 'Tornillos 3mm', unidadMedida: 'u' },
+                    cantidadRequerida: 24,
+                    cantidadDisponible: 1800,
+                    disponible: true
+                },
+                {
+                    materiaPrima: { id: 'M005', nombre: 'Contrachapado 18mm', unidadMedida: 'planchas' },
+                    cantidadRequerida: 2,
+                    cantidadDisponible: 45,
+                    disponible: true
+                }
+            ],
             fechaCreacion: '04/06/2026',
             historialEstados: [
                 {
