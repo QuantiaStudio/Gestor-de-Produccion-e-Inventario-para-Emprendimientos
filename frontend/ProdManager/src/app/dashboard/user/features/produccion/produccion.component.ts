@@ -12,7 +12,7 @@ import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produ
 })
 export class ProduccionComponent implements OnInit {
   ordenes: OrdenProduccion[] = [];
-  Ordenseleccionada?: OrdenProduccion;
+  ordenSeleccionada?: OrdenProduccion;
 
   constructor(private produccionService: ProduccionService) {}
 
@@ -21,6 +21,6 @@ export class ProduccionComponent implements OnInit {
   }
 
   seleccionarOrden(orden: OrdenProduccion): void {
-    this.Ordenseleccionada = orden;
+    this.ordenSeleccionada = orden;
   }
 }
