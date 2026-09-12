@@ -142,6 +142,22 @@ export class ProduccionService {
             fecha: fechaActual
         });
     }
+    finalizarProduccion(id: string): void {
+        const orden = this.ordenesProduccion.find(o => o.id === id);
+        if (!orden) {
+            throw new Error('La orden no existe.');
+        }
+        if (orden.estado !== 'en_produccion') {
+            throw new Error('Solo se pueden finalizar órdenes en producción.');
+        }
+        orden.cantidadProducida = orden.cantidad;
+        orden.estado = 'finalizada';
+        orden.fechaFinalizacion = new Date().toISOString();
+        orden.historialEstados.push({
+            estado: 'finalizada',
+            fecha: orden.fechaFinalizacion
+        });
+    }
     private ordenesProduccion: OrdenProduccion[] = [
         {
             id: 'OP-001',
