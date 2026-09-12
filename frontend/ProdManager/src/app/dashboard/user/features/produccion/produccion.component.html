@@ -3,7 +3,7 @@
         <h1>Producción</h1>
         <p>Seguimiento de tus órdenes de producción.</p>
     </div>
-    <button type="button" class="btn-nueva-produccion" data-bs-target="#modalNuevaProduccion">
+    <button type="button" class="btn-nueva-produccion" (click)="abrirFormulario()">
         + Nueva Producción
     </button>
 </div>
@@ -131,7 +131,7 @@
     <!-- Columna de Detalle -->
     <div class="col-lg-4 detail-col">
 
-        @if (ordenSeleccionada; as orden) {
+        @if (Ordenseleccionada; as orden) {
         <section class="detail-section">
             <h3 class="detail-section-title">Materiales requeridos</h3>
 
@@ -162,3 +162,35 @@
         }
     </div>
 </div>
+@if (mostrarFormulario) {
+<section id="modalNuevaProduccion" class="modal-produccion">
+    <form [formGroup]="ordenForm" (ngSubmit)="crearOrden()">
+        <h2>Nueva producción</h2>
+
+        <label for="producto">Producto</label>
+        <select id="producto" formControlName="productoId">
+            <option value="">Seleccionar producto</option>
+
+            @for (producto of productos; track producto.id) {
+            <option [value]="producto.id">
+                {{ producto.nombre }}
+            </option>
+            }
+        </select>
+
+        <label for="cantidad">Cantidad</label>
+        <input id="cantidad" type="number" min="1" formControlName="cantidad">
+
+        <label for="observaciones">Observaciones</label>
+        <textarea id="observaciones" formControlName="observaciones">
+        </textarea>
+
+        <button type="submit">
+            Crear orden
+        </button>
+        <button type="button" (click)="cerrarFormulario()">
+            Cancelar
+        </button>
+    </form>
+</section>
+}
