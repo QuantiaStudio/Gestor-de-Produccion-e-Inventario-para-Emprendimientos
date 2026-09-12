@@ -141,6 +141,11 @@ export class ProduccionService {
             estado: 'finalizada',
             fecha: orden.fechaFinalizacion
         });
+        this.productoTerminadoService.agregarProduccion(
+            orden.producto.id,
+            orden.cantidadProducida,
+            `Orden de producción ${orden.id}`
+        );
     }
 
     cancelarProduccion(id: string, motivo: string): void {
