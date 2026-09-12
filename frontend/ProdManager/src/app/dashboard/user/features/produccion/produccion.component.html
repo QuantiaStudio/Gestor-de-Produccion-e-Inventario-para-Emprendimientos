@@ -167,23 +167,28 @@
     <form [formGroup]="ordenForm" (ngSubmit)="crearOrden()">
         <h2>Nueva producción</h2>
 
-        <label for="producto">Producto</label>
-        <select id="producto" formControlName="productoId">
-            <option value="">Seleccionar producto</option>
+        <div class="form-field">
+            <label for="producto">Producto</label>
+            <select id="producto" formControlName="productoId">
+                <option value="">Seleccionar producto</option>
 
-            @for (producto of productos; track producto.id) {
-            <option [value]="producto.id">
-                {{ producto.nombre }}
-            </option>
-            }
-        </select>
+                @for (producto of productos; track producto.id) {
+                <option [value]="producto.id">
+                    {{ producto.nombre }}
+                </option>
+                }
+            </select>
+        </div>
 
-        <label for="cantidad">Cantidad</label>
-        <input id="cantidad" type="number" min="1" formControlName="cantidad">
+        <div class="form-field">
+            <label for="cantidad">Cantidad</label>
+            <input id="cantidad" type="number" min="1" formControlName="cantidad">
+        </div>
 
-        <label for="observaciones">Observaciones</label>
-        <textarea id="observaciones" formControlName="observaciones">
-        </textarea>
+        <div class="form-field form-field--full">
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" formControlName="observaciones"></textarea>
+        </div>
 
         <button type="submit">
             Crear orden
