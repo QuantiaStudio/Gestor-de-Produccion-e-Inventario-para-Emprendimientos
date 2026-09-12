@@ -107,7 +107,7 @@ export class ProduccionService {
             estado: 'pendiente',
             fechaCreacion: fechaActual,
             operadorId: String(operador.id),
-            operadorNombre:`${operador.firstName} ${operador.lastName}`,
+            operadorNombre: `${operador.firstName} ${operador.lastName}`,
             observaciones: datos.observaciones,
             historialEstados: [
                 {
@@ -118,6 +118,29 @@ export class ProduccionService {
         };
         this.ordenesProduccion.push(nuevaOrden);
         return nuevaOrden;
+    }
+    iniciarProduccion(id: string): void {
+        // Implementación para iniciar la producción
+        const orden = this.ordenesProduccion.find(o => o.id === id);
+        if (!orden) {
+            throw new Error('La orden no existe.');
+        }
+        if (orden.estado !== 'pendiente') {
+            throw new Error('Solo se pueden iniciar órdenes pendientes.');
+        }
+        const disponible = this.verificarDisponibilidad(id);
+        if (!disponible) {
+            throw new Error('No hay materiales suficientes para iniciar la producción.');
+        }
+        const fechaActual = new Date().toISOString();
+
+        orden.estado = 'en_produccion';
+        orden.fechaInicio = fechaActual;
+
+        orden.historialEstados.push({
+            estado: 'en_produccion',
+            fecha: fechaActual
+        });
     }
     private ordenesProduccion: OrdenProduccion[] = [
         {
