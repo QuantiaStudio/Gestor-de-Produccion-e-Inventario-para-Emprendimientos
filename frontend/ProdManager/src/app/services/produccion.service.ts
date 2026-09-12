@@ -34,6 +34,10 @@ export class ProduccionService {
             return false;
         }
 
+        orden.materialesRequeridos = this.calcularMaterialesRequeridos(
+            orden.producto.id,
+            orden.cantidad
+        );
         const disponible = orden.materialesRequeridos.every(
             material => material.cantidadDisponible >= material.cantidadRequerida
         );
