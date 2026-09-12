@@ -431,4 +431,36 @@ export class ProductoTerminadoService {
 
     return `PT-${String(ultimoNumero + 1).padStart(3, '0')}`;
   }
+
+  agregarProduccion(
+    id: string,
+    cantidad: number,
+    origen: string
+  ): void {
+    const producto = this.obtenerPorId(id);
+
+    if (!producto) {
+      throw new Error('El producto no existe.');
+    }
+
+    const stockAnterior = producto.stockActual;
+    const nuevoStock = stockAnterior + cantidad;
+    const fecha = this.fechaDeHoy();
+
+    producto.stockActual = nuevoStock;
+    producto.estado = this.calcularEstado(
+      nuevoStock,
+      producto.stockMinimo
+    );
+    producto.ultimaActualizacion = fecha;
+
+    producto.movimientos.push({
+      id: `MOV-${producto.id.replace('-', '')}-${producto.movimientos.length + 1}`,
+      fecha,
+      tipo: 'ingreso',
+      cantidad,
+      origen,
+      stockResultante: nuevoStock
+    });
+  }
 }
