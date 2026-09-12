@@ -33,9 +33,12 @@ export class ProduccionService {
         if (!orden) {
             return false;
         }
-        return orden.materialesRequeridos.every(
+
+        const disponible = orden.materialesRequeridos.every(
             material => material.cantidadDisponible >= material.cantidadRequerida
         );
+        orden.disponibilidadMateriales = disponible ? 'disponible' : 'insuficiente';
+        return disponible;
     }
     private generarNuevoId(): string {
         return `OP-${String(this.ordenesProduccion.length + 1).padStart(3, '0')}`;
