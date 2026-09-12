@@ -158,6 +158,38 @@ export class ProduccionService {
             fecha: orden.fechaFinalizacion
         });
     }
+
+    cancelarProduccion(id: string, motivo: string): void {
+        const orden = this.ordenesProduccion.find(o => o.id === id);
+        if (!orden) {
+            throw new Error('La orden no existe.');
+        }
+        if (
+            orden.estado === 'finalizada' ||
+            orden.estado === 'cancelada'
+        ) {
+            throw new Error(
+                'No se puede cancelar una orden finalizada o ya cancelada.'
+            );
+        }
+        if (!motivo.trim()) {
+            throw new Error('Debes indicar un motivo de cancelación.');
+        }
+        orden.estado = 'cancelada';
+        orden.fechaCancelacion = new Date().toISOString();
+        orden.historialEstados.push({
+            estado: 'cancelada',
+            fecha: orden.fechaCancelacion,
+            observacion: motivo
+        });
+        orden.historialEstados.push({
+            estado: 'cancelada',
+            fecha: orden.fechaCancelacion,
+            observacion: motivo.trim()
+        });
+
+    }
+
     private ordenesProduccion: OrdenProduccion[] = [
         {
             id: 'OP-001',
