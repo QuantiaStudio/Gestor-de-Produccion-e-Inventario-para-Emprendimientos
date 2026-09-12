@@ -63,31 +63,11 @@ export class ProduccionService {
             throw new Error('El producto no existe.');
         }
 
-        const materialesRequeridos = producto.formula.map(detalle => {
-            const materiaPrima = this.materiaPrimaService.obtenerPorId(
-                detalle.materiaPrimaId
+        const materialesRequeridos =
+            this.calcularMaterialesRequeridos(
+                datos.productoId,
+                datos.cantidad
             );
-
-            if (!materiaPrima) {
-                throw new Error(
-                    `No existe la materia prima ${detalle.nombreMateriaPrima}.`
-                );
-            }
-
-            const cantidadRequerida = detalle.cantidad * datos.cantidad;
-            const cantidadDisponible = materiaPrima.stockDisponible;
-
-            return {
-                materiaPrima: {
-                    id: materiaPrima.id,
-                    nombre: materiaPrima.nombre,
-                    unidadMedida: materiaPrima.unidadMedida
-                },
-                cantidadRequerida,
-                cantidadDisponible,
-                disponible: cantidadDisponible >= cantidadRequerida
-            };
-        });
 
         const nuevaOrden: OrdenProduccion = {
             id: this.generarNuevoId(),
@@ -180,14 +160,50 @@ export class ProduccionService {
         orden.historialEstados.push({
             estado: 'cancelada',
             fecha: orden.fechaCancelacion,
-            observacion: motivo
-        });
-        orden.historialEstados.push({
-            estado: 'cancelada',
-            fecha: orden.fechaCancelacion,
             observacion: motivo.trim()
         });
 
+    }
+
+    private calcularMaterialesRequeridos(
+        productoId: string,
+        cantidadProductos: number
+    ): MaterialRequeridoOrden[] {
+        const producto = this.productoTerminadoService.obtenerPorId(productoId);
+
+        if (!producto) {
+            throw new Error('El producto no existe.');
+        }
+
+        return producto.formula.map(detalle => {
+            const materiaPrima = this.materiaPrimaService.obtenerPorId(
+                detalle.materiaPrimaId
+            );
+
+            if (!materiaPrima) {
+                throw new Error(
+                    `No existe la materia prima ${detalle.nombreMateriaPrima}.`
+                );
+            }
+
+            const cantidadRequerida =
+                detalle.cantidad * cantidadProductos;
+
+            const cantidadDisponible =
+                materiaPrima.stockDisponible;
+
+            return {
+                materiaPrima: {
+                    id: materiaPrima.id,
+                    nombre: materiaPrima.nombre,
+                    unidadMedida: materiaPrima.unidadMedida
+                },
+                cantidadRequerida,
+                cantidadDisponible,
+                disponible:
+                    cantidadDisponible >= cantidadRequerida
+            };
+        });
     }
 
     private ordenesProduccion: OrdenProduccion[] = [
