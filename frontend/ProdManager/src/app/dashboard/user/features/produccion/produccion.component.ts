@@ -12,12 +12,19 @@ import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produ
 })
 export class ProduccionComponent implements OnInit {
   ordenes: OrdenProduccion[] = [];
+  productos: ProductoTerminado[] = [];
+
+    cantidad: [1, [Validators.required, Validators.min(1)]],
+    observaciones: ['']
+  });
+
   Ordenseleccionada?: OrdenProduccion;
 
-  constructor(private produccionService: ProduccionService) {}
+  constructor(private produccionService: ProduccionService, private formBuilder: FormBuilder, private productoTerminadoService: ProductoTerminadoService) { }
 
   ngOnInit(): void {
     this.ordenes = this.produccionService.obtenerOrdenes();
+    this.productos = this.productoTerminadoService.obtenerProductosTerminados();
   }
 
   seleccionarOrden(orden: OrdenProduccion): void {
@@ -34,5 +41,31 @@ export class ProduccionComponent implements OnInit {
     this.produccionService.finalizarProduccion(orden.id);
     this.recargarOrdenes();
   }
-  
+  cancelar(orden: OrdenProduccion): void {
+    const motivo = prompt('Ingrese el motivo de la cancelación:');
+    if (motivo) {
+      this.produccionService.cancelarProduccion(orden.id, motivo);
+      this.recargarOrdenes();
+    }
+  }
+  crearOrden(): void {
+    if (this.ordenForm.invalid) {
+      this.ordenForm.markAllAsTouched();
+      return;
+    }
+
+    const datos: NuevaOrdenProduccion = this.ordenForm.getRawValue();
+
+    this.produccionService.crearOrden(datos);
+
+    this.ordenes = this.produccionService.obtenerOrdenes();
+    this.ordenForm.reset({
+      productoId: '',
+      cantidad: 1,
+      observaciones: ''
+    });
+  }
+
+
+
 }
