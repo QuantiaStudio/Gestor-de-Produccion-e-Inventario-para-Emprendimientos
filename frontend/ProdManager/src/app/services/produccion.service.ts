@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, NuevoProductoFormValue, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
-import { NuevaOrdenProduccion, OrdenProduccion } from '../models/orden-produccion/orden-produccion.model';
+import { NuevaOrdenProduccion, OrdenProduccion, MaterialRequeridoOrden } from '../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminadoService } from './producto-terminado.service';
 import { MateriaPrimaService } from './materia-prima.service';
 import { UserService } from './user.service';
-import type {
-    CambioEstadoOrdenProduccion,
-    EstadoDisponibilidadMaterial,
-    EstadoOrdenProduccion,
-    MaterialRequeridoOrden,
-    ProductoOrdenProduccion
-} from '../models/orden-produccion/orden-produccion.model';
+
 @Injectable({
     providedIn: 'root'
 })
