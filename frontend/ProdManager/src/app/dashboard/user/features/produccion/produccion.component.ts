@@ -61,6 +61,11 @@ export class ProduccionComponent implements OnInit {
   seleccionarOrden(orden: OrdenProduccion): void {
     this.Ordenseleccionada = orden;
   }
+
+  cerrarDetalle(): void {
+    this.Ordenseleccionada = undefined;
+  }
+
   private recargarOrdenes(): void {
     this.ordenes = this.produccionService.obtenerOrdenes();
   }

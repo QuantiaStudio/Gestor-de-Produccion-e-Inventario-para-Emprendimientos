@@ -81,7 +81,10 @@
 </section>
 
 <div class="inventory-layout row g-4" id="inventario">
-    <div class="col-lg-12 inventory-table-col">
+    <div
+        class="inventory-table-col"
+        [class.col-lg-8]="Ordenseleccionada"
+        [class.col-lg-12]="!Ordenseleccionada">
         <div class="stock-table-wrapper">
 
             <table class="stock-table">
@@ -128,11 +131,32 @@
         </div>
     </div>
 
+    @if (Ordenseleccionada; as orden) {
     <!-- Columna de Detalle -->
     <div class="col-lg-4 detail-col">
-
-        @if (Ordenseleccionada; as orden) {
         <section class="detail-section">
+            <header class="detail-header">
+                <h2 class="detail-title">Orden #{{ orden.id }}</h2>
+                <button
+                    type="button"
+                    class="btn-cerrar-detalle"
+                    aria-label="Cerrar detalle"
+                    (click)="cerrarDetalle()">
+                    &times;
+                </button>
+            </header>
+
+            <div class="detail-info-grid">
+                <span class="detail-info-label">Producto</span>
+                <span class="detail-info-value">{{ orden.producto.nombre }}</span>
+                <span class="detail-info-label">Cantidad</span>
+                <span class="detail-info-value">
+                    {{ orden.cantidad }} {{ orden.producto.unidadMedida }}
+                </span>
+                <span class="detail-info-label">Estado</span>
+                <span class="detail-info-value">{{ orden.estado }}</span>
+            </div>
+
             <h3 class="detail-section-title">Materiales requeridos</h3>
 
             <table class="detail-materials-table">
@@ -159,8 +183,8 @@
                 </tbody>
             </table>
         </section>
-        }
     </div>
+    }
 </div>
 @if (mostrarFormulario) {
 <section id="modalNuevaProduccion" class="modal-produccion">
