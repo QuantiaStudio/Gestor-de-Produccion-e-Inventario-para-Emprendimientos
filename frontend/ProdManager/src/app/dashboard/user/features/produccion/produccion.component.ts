@@ -26,6 +26,7 @@ import {
 export class ProduccionComponent implements OnInit {
   ordenes: OrdenProduccion[] = [];
   productos: ProductoTerminado[] = [];
+  mensajeError = '';
   ordenForm!: FormGroup<{
     productoId: FormControl<string>;
     cantidad: FormControl<number>;
@@ -51,13 +52,27 @@ export class ProduccionComponent implements OnInit {
     this.productos = this.productoTerminadoService.obtenerProductosTerminados();
   }
 
+  get productoId(): FormControl<string> {
+    return this.ordenForm.controls.productoId;
+  }
+
+  get cantidad(): FormControl<number> {
+    return this.ordenForm.controls.cantidad;
+  }
+
+  get observaciones(): FormControl<string> {
+    return this.ordenForm.controls.observaciones;
+  }
+
   mostrarFormulario = false;
 
   abrirFormulario(): void {
+    this.mensajeError = '';
     this.mostrarFormulario = true;
   }
 
   cerrarFormulario(): void {
+    this.mensajeError = '';
     this.mostrarFormulario = false;
   }
 
@@ -119,7 +134,14 @@ export class ProduccionComponent implements OnInit {
 
     const datos: NuevaOrdenProduccion = this.ordenForm.getRawValue();
 
-    this.produccionService.crearOrden(datos);
+    try {
+      this.produccionService.crearOrden(datos);
+    } catch (error) {
+      this.mensajeError = error instanceof Error
+        ? error.message
+        : 'No se pudo crear la orden de producción.';
+      return;
+    }
 
     this.ordenes = this.produccionService.obtenerOrdenes();
     this.ordenForm.reset({

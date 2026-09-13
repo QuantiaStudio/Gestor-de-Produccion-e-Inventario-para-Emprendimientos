@@ -255,9 +255,17 @@
     <form [formGroup]="ordenForm" (ngSubmit)="crearOrden()">
         <h2>Nueva producción</h2>
 
+        @if (mensajeError) {
+        <p class="error" role="alert">{{ mensajeError }}</p>
+        }
+
         <div class="form-field">
             <label for="producto">Producto</label>
-            <select id="producto" formControlName="productoId">
+            <select
+                id="producto"
+                class="input"
+                formControlName="productoId"
+                [class.input-error]="productoId.invalid && productoId.touched">
                 <option value="">Seleccionar producto</option>
 
                 @for (producto of productos; track producto.id) {
@@ -266,19 +274,45 @@
                 </option>
                 }
             </select>
+            @if (productoId.invalid) {
+            @if (productoId.touched) {
+            @if (productoId.hasError('required')) {
+            <p class="error">Debes seleccionar un producto.</p>
+            }
+            }
+            }
         </div>
 
         <div class="form-field">
             <label for="cantidad">Cantidad</label>
-            <input id="cantidad" type="number" min="1" formControlName="cantidad">
+            <input
+                id="cantidad"
+                type="number"
+                min="1"
+                class="input"
+                formControlName="cantidad"
+                [class.input-error]="cantidad.invalid && cantidad.touched">
+            @if (cantidad.invalid) {
+            @if (cantidad.touched) {
+            @if (cantidad.hasError('required')) {
+            <p class="error">La cantidad es obligatoria.</p>
+            }
+            @if (cantidad.hasError('min')) {
+            <p class="error">La cantidad debe ser mayor que cero.</p>
+            }
+            }
+            }
         </div>
 
         <div class="form-field form-field--full">
             <label for="observaciones">Observaciones</label>
-            <textarea id="observaciones" formControlName="observaciones"></textarea>
+            <textarea
+                id="observaciones"
+                class="input"
+                formControlName="observaciones"></textarea>
         </div>
 
-        <button type="submit">
+        <button type="submit" [disabled]="ordenForm.invalid">
             Crear orden
         </button>
         <button type="button" (click)="cerrarFormulario()">

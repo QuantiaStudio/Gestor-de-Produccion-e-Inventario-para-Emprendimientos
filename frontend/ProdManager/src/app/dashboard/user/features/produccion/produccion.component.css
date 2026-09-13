@@ -95,6 +95,12 @@
 	color: #ffffff;
 }
 
+.modal-produccion button[type='submit']:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+	transform: none;
+}
+
 .modal-produccion button[type='button'] {
 	position: absolute;
 	left: 1.5rem;
