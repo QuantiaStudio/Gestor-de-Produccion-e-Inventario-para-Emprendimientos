@@ -203,17 +203,18 @@
                 <select
                     class="input"
                     [id]="'estado-' + orden.id"
+                    [value]="orden.estado"
                     #nuevoEstado>
-                    <option [selected]="orden.estado === 'pendiente'" value="pendiente">
+                    <option value="pendiente">
                         Pendiente
                     </option>
-                    <option [selected]="orden.estado === 'en_produccion'" value="en_produccion">
+                    <option value="en_produccion">
                         En producción
                     </option>
-                    <option [selected]="orden.estado === 'finalizada'" value="finalizada">
+                    <option value="finalizada">
                         Finalizada
                     </option>
-                    <option [selected]="orden.estado === 'cancelada'" value="cancelada">
+                    <option value="cancelada">
                         Cancelada
                     </option>
                 </select>
@@ -223,6 +224,11 @@
                     (click)="cambiarEstado(orden, nuevoEstado.value)">
                     Guardar cambio
                 </button>
+                @if (mensajeEstadoError) {
+                <p class="error detail-state-error" role="alert">
+                    {{ mensajeEstadoError }}
+                </p>
+                }
             </section>
 
             <section class="detail-subsection">

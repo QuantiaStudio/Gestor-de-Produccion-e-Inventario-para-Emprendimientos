@@ -27,6 +27,7 @@ export class ProduccionComponent implements OnInit {
   ordenes: OrdenProduccion[] = [];
   productos: ProductoTerminado[] = [];
   mensajeError = '';
+  mensajeEstadoError = '';
   ordenForm!: FormGroup<{
     productoId: FormControl<string>;
     cantidad: FormControl<number>;
@@ -78,10 +79,12 @@ export class ProduccionComponent implements OnInit {
 
   seleccionarOrden(orden: OrdenProduccion): void {
     this.Ordenseleccionada = orden;
+    this.mensajeEstadoError = '';
   }
 
   cerrarDetalle(): void {
     this.Ordenseleccionada = undefined;
+    this.mensajeEstadoError = '';
   }
 
   textoEstado(estado: EstadoOrdenProduccion): string {
@@ -96,12 +99,36 @@ export class ProduccionComponent implements OnInit {
   }
 
   cambiarEstado(orden: OrdenProduccion, nuevoEstado: string): void {
-    if (nuevoEstado === 'en_produccion') {
-      this.iniciar(orden);
-    } else if (nuevoEstado === 'finalizada') {
-      this.finalizar(orden);
-    } else if (nuevoEstado === 'cancelada') {
-      this.cancelar(orden);
+    this.mensajeEstadoError = '';
+
+    try {
+      if (
+        nuevoEstado === 'cancelada' &&
+        (orden.estado === 'finalizada' || orden.estado === 'cancelada')
+      ) {
+        throw new Error(
+          'No se puede cancelar una orden finalizada o ya cancelada.'
+        );
+      }
+
+      if (nuevoEstado === 'en_produccion') {
+        this.iniciar(orden);
+      } else if (nuevoEstado === 'finalizada') {
+        this.finalizar(orden);
+      } else if (nuevoEstado === 'cancelada') {
+        this.cancelar(orden);
+      } else if (nuevoEstado === 'pendiente') {
+        throw new Error(
+          'No se puede regresar una orden al estado pendiente.'
+        );
+      } else {
+        throw new Error('El estado seleccionado no es válido.');
+      }
+    } catch (error) {
+      this.mensajeEstadoError = error instanceof Error
+        ? error.message
+        : 'No se pudo cambiar el estado de la orden.';
+      return;
     }
 
     this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
@@ -124,6 +151,8 @@ export class ProduccionComponent implements OnInit {
     if (motivo) {
       this.produccionService.cancelarProduccion(orden.id, motivo);
       this.recargarOrdenes();
+    } else {
+      throw new Error('Debes indicar un motivo de cancelación.');
     }
   }
   crearOrden(): void {

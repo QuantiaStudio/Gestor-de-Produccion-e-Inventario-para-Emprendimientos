@@ -463,6 +463,15 @@
 	background: #6d28d9;
 }
 
+.detail-state-error {
+	margin: 0.65rem 0 0;
+	padding: 0.65rem 0.75rem;
+	border-left: 3px solid var(--color-error);
+	border-radius: 0.25rem;
+	background: rgba(220, 38, 38, 0.08);
+	font-size: 0.8rem;
+}
+
 .detail-timeline {
 	margin: 0;
 	padding: 0;
