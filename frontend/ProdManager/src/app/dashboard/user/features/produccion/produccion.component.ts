@@ -4,7 +4,10 @@ import { ProduccionService } from '../../../../services/produccion.service';
 import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminado } from '../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../services/producto-terminado.service';
-import { NuevaOrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
+import {
+  EstadoOrdenProduccion,
+  NuevaOrdenProduccion
+} from '../../../../models/orden-produccion/orden-produccion.model';
 import {
   FormBuilder,
   FormControl,
@@ -64,6 +67,30 @@ export class ProduccionComponent implements OnInit {
 
   cerrarDetalle(): void {
     this.Ordenseleccionada = undefined;
+  }
+
+  textoEstado(estado: EstadoOrdenProduccion): string {
+    const textos: Record<EstadoOrdenProduccion, string> = {
+      pendiente: 'Pendiente',
+      en_produccion: 'En producción',
+      finalizada: 'Finalizada',
+      cancelada: 'Cancelada'
+    };
+
+    return textos[estado];
+  }
+
+  cambiarEstado(orden: OrdenProduccion, nuevoEstado: string): void {
+    if (nuevoEstado === 'en_produccion') {
+      this.iniciar(orden);
+    } else if (nuevoEstado === 'finalizada') {
+      this.finalizar(orden);
+    } else if (nuevoEstado === 'cancelada') {
+      this.cancelar(orden);
+    }
+
+    this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
+    this.recargarOrdenes();
   }
 
   private recargarOrdenes(): void {

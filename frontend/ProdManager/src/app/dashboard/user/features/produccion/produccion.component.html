@@ -153,35 +153,99 @@
                 <span class="detail-info-value">
                     {{ orden.cantidad }} {{ orden.producto.unidadMedida }}
                 </span>
-                <span class="detail-info-label">Estado</span>
-                <span class="detail-info-value">{{ orden.estado }}</span>
+                <span class="detail-info-label">Estado actual</span>
+                <span class="detail-info-value">
+                    <span
+                        class="badge"
+                        [class.badge-pendiente]="orden.estado === 'pendiente'"
+                        [class.badge-produccion]="orden.estado === 'en_produccion'"
+                        [class.badge-finalizada]="orden.estado === 'finalizada'"
+                        [class.badge-cancelada]="orden.estado === 'cancelada'">
+                        {{ textoEstado(orden.estado) }}
+                    </span>
+                </span>
+                <span class="detail-info-label">Fecha de creación</span>
+                <span class="detail-info-value">
+                    {{ orden.fechaCreacion | date:'dd/MM/yyyy' }}
+                </span>
             </div>
 
-            <h3 class="detail-section-title">Materiales requeridos</h3>
+            <section class="detail-subsection">
+                <h3 class="detail-section-title">Materiales requeridos</h3>
 
-            <table class="detail-materials-table">
-                <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Cantidad</th>
-                    </tr>
-                </thead>
+                <table class="detail-materials-table">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    @for (
-                    material of orden.materialesRequeridos;
-                    track material.materiaPrima.id
-                    ) {
-                    <tr>
-                        <td>{{ material.materiaPrima.nombre }}</td>
-                        <td>
-                            {{ material.cantidadRequerida }}
-                            {{ material.materiaPrima.unidadMedida }}
-                        </td>
-                    </tr>
+                    <tbody>
+                        @for (material of orden.materialesRequeridos; track material.materiaPrima.id) {
+                        <tr>
+                            <td>{{ material.materiaPrima.nombre }}</td>
+                            <td>
+                                {{ material.cantidadRequerida }}
+                                {{ material.materiaPrima.unidadMedida }}
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="detail-subsection cambiar-estado-section">
+                <h3 class="detail-section-title">Cambiar estado</h3>
+                <label class="detail-estado-label" [for]="'estado-' + orden.id">
+                    Nuevo estado
+                </label>
+                <select
+                    class="input"
+                    [id]="'estado-' + orden.id"
+                    #nuevoEstado>
+                    <option [selected]="orden.estado === 'pendiente'" value="pendiente">
+                        Pendiente
+                    </option>
+                    <option [selected]="orden.estado === 'en_produccion'" value="en_produccion">
+                        En producción
+                    </option>
+                    <option [selected]="orden.estado === 'finalizada'" value="finalizada">
+                        Finalizada
+                    </option>
+                    <option [selected]="orden.estado === 'cancelada'" value="cancelada">
+                        Cancelada
+                    </option>
+                </select>
+                <button
+                    type="button"
+                    class="btn-guardar-estado"
+                    (click)="cambiarEstado(orden, nuevoEstado.value)">
+                    Guardar cambio
+                </button>
+            </section>
+
+            <section class="detail-subsection">
+                <h3 class="detail-section-title">Historial</h3>
+                <ul class="detail-timeline">
+                    @for (cambio of orden.historialEstados; track $index) {
+                    <li class="detail-timeline-item">
+                        <span class="detail-timeline-dot"></span>
+                        <div class="detail-timeline-body">
+                            <span class="detail-timeline-date">
+                                {{ cambio.fecha | date:'dd/MM/yyyy HH:mm' }}
+                            </span>
+                            <span class="detail-timeline-text">
+                                Estado cambiado a {{ textoEstado(cambio.estado) }}
+                                @if (cambio.observacion) {
+                                <span> ({{ cambio.observacion }})</span>
+                                }
+                            </span>
+                        </div>
+                    </li>
                     }
-                </tbody>
-            </table>
+                </ul>
+            </section>
         </section>
     </div>
     }
