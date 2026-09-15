@@ -25,8 +25,8 @@ export class AuthService {
    * Simula el proceso de autenticación.
    *
    * Credenciales de prueba:
-   * email: admin@correo.com
-   * contraseña: 123456
+   *email: admin@correo.com     | contraseña: 123456  (rol ADMIN)
+   * email: operario@correo.com  | contraseña: 123456  (rol OPERARIO)
    */
   login(
     credenciales: CredencialesLogin
@@ -133,4 +133,14 @@ export class AuthService {
 
     this.usuarioSubject.next(null);
   }
+  obtenerRutaPorRol(rol: string): string {
+  switch (rol) {
+    case 'ADMIN':
+      return '/admin/dashboard';
+    case 'OPERARIO':
+      return '/operador/dashboard';
+    default:
+      return '/login';
+  }
+}
 }
