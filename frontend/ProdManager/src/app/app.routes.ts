@@ -10,6 +10,8 @@ import { UsersComponent } from './dashboard/admin/features/users/users.component
 import { NotFoundComponent } from './public/not-found/not-found.component';
 import { MateriaPrimaListadoComponent } from './materia-prima/materia-prima-listado/materia-prima-listado.component';
 import { LoginComponent } from './auth/components/login/login.component';
+import { UserPanelComponent } from './dashboard/user/user-panel/user-panel.component';
+import { ProduccionComponent } from './dashboard/user/features/produccion/produccion.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +33,15 @@ export const routes: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'productos-terminados', component: ProductoTerminadoListadoComponent },
     ],
+  },
+
+  {
+    path: 'user-panel',
+    component: DashboardLayoutComponent,
+    children: [
+      { path: '', component: UserPanelComponent, pathMatch: 'full' },
+      { path: 'produccion', component: ProduccionComponent },
+    ]
   },
   {
     path: '**',

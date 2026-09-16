@@ -274,6 +274,39 @@ td.actions {
     text-transform: uppercase;
 }
 
+/* Estados de las órdenes de producción */
+.badge-pendiente,
+.badge-produccion,
+.badge-finalizada,
+.badge-cancelada {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.badge.badge-pendiente {
+    background-color: #FEF3C7 !important;
+    color: #D97706 !important;
+}
+
+.badge.badge-produccion {
+    background-color: #EEF2FF !important;
+    color: #4F46E5 !important;
+}
+
+.badge.badge-finalizada {
+    background-color: #D1FAE5 !important;
+    color: #059669 !important;
+}
+
+.badge.badge-cancelada {
+    background-color: #FEE2E2 !important;
+    color: #DC2626 !important;
+}
+
 .badge--success {
     background-color: rgba(16, 185, 129, 0.12);
     color: #059669;
