@@ -1,7 +1,7 @@
     {
     "usuarios": [
         {
-        "id_usuario": 1,
+        "id": 1,
         "nombre": "Admin",
         "apellido": "Sistema",
         "email": "admin@correo.com",
@@ -10,7 +10,7 @@
         "estado": true
         },
         {
-        "id_usuario": 2,
+        "id": 2,
         "nombre": "Rocío",
         "apellido": "Altamirano",
         "email": "rocio.altamirano@correo.com",
@@ -19,7 +19,7 @@
         "estado": true
         },
         {
-        "id_usuario": 3,
+        "id": 3,
         "nombre": "Genaro",
         "apellido": "Cura",
         "email": "genaro.cura@correo.com",
@@ -28,7 +28,7 @@
         "estado": true
         },
         {
-        "id_usuario": 4,
+        "id": 4,
         "nombre": "Cesia",
         "apellido": "Cáceres",
         "email": "cesia.caceres@correo.com",
