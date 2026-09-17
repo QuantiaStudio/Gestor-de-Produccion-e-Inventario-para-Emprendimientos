@@ -51,6 +51,7 @@
 
     "materiasPrimas": [
         {
+        "id": 1,
         "id_materia_prima": 1,
         "nombre": "Madera de Roble",
         "descripcion": "Madera dura de alta calidad para muebles estructurales.",
@@ -59,6 +60,7 @@
         "stock_minimo": 8
         },
         {
+        "id": 2,
         "id_materia_prima": 2,
         "nombre": "Biblioteca Moderna",
         "descripcion": "Pintura blanca mate para acabado de superficies.",
@@ -67,6 +69,7 @@
         "stock_minimo": 20
         },
         {
+        "id": 3,
         "id_materia_prima": 3,
         "nombre": "Tornillos 3mm",
         "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
@@ -75,6 +78,7 @@
         "stock_minimo": 500
         },
         {
+        "id": 4,
         "id_materia_prima": 4,
         "nombre": "Barniz Transparente",
         "descripcion": "Barniz transparente brillante para protección de madera.",
@@ -83,6 +87,7 @@
         "stock_minimo": 10
         },
         {
+        "id": 5,
         "id_materia_prima": 5,
         "nombre": "Contrachapado 18mm",
         "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
@@ -323,14 +328,14 @@
     ],
 
     "movimientosStockMateriaPrima": [
-        {"id_movimiento": 1, "id_materia_prima": 1, "fecha": "2026-08-20T10:00:00", "tipo_movimiento": "ingreso", "cantidad": 50, "observacion": "Compra a proveedor habitual", "id_usuario": 1 },
-        {"id_movimiento": 2, "id_materia_prima": 1, "fecha": "2026-09-01T09:15:00", "tipo_movimiento": "consumo", "cantidad": 20, "observacion": "Orden de producción #1", "id_usuario": 3 },
-        {"id_movimiento": 3, "id_materia_prima": 2, "fecha": "2026-08-18T11:00:00", "tipo_movimiento": "ingreso", "cantidad": 20, "observacion": "Reposición mensual", "id_usuario": 1 },
-        {"id_movimiento": 4, "id_materia_prima": 2, "fecha": "2026-09-05T11:00:00", "tipo_movimiento": "consumo", "cantidad": 12, "observacion": "Orden de producción #2", "id_usuario": 3 },
-        {"id_movimiento": 5, "id_materia_prima": 6, "fecha": "2026-08-15T09:30:00", "tipo_movimiento": "ingreso", "cantidad": 5, "observacion": "Compra inicial", "id_usuario": 2 },
-        {"id_movimiento": 6, "id_materia_prima": 6, "fecha": "2026-09-04T15:00:00", "tipo_movimiento": "consumo", "cantidad": 2, "observacion": "Prueba de receta", "id_usuario": 4 },
-        {"id_movimiento": 7, "id_materia_prima": 5, "fecha": "2026-08-22T08:00:00", "tipo_movimiento": "ingreso", "cantidad": 60, "observacion": "Compra a granja local", "id_usuario": 1 },
-        {"id_movimiento": 8, "id_materia_prima": 5, "fecha": "2026-09-05T11:05:00", "tipo_movimiento": "consumo", "cantidad": 24, "observacion": "Orden de producción #2", "id_usuario": 3 }
+        {"id": 1, "id_movimiento": 1, "id_materia_prima": 1, "fecha": "2026-08-20T10:00:00", "tipo_movimiento": "ingreso", "cantidad": 50, "observacion": "Compra a proveedor habitual", "id_usuario": 1 },
+        {"id": 2, "id_movimiento": 2, "id_materia_prima": 1, "fecha": "2026-09-01T09:15:00", "tipo_movimiento": "consumo", "cantidad": 20, "observacion": "Orden de producción #1", "id_usuario": 3 },
+        {"id": 3, "id_movimiento": 3, "id_materia_prima": 2, "fecha": "2026-08-18T11:00:00", "tipo_movimiento": "ingreso", "cantidad": 20, "observacion": "Reposición mensual", "id_usuario": 1 },
+        {"id": 4, "id_movimiento": 4, "id_materia_prima": 2, "fecha": "2026-09-05T11:00:00", "tipo_movimiento": "consumo", "cantidad": 12, "observacion": "Orden de producción #2", "id_usuario": 3 },
+        {"id": 5, "id_movimiento": 5, "id_materia_prima": 6, "fecha": "2026-08-15T09:30:00", "tipo_movimiento": "ingreso", "cantidad": 5, "observacion": "Compra inicial", "id_usuario": 2 },
+        {"id": 6, "id_movimiento": 6, "id_materia_prima": 6, "fecha": "2026-09-04T15:00:00", "tipo_movimiento": "consumo", "cantidad": 2, "observacion": "Prueba de receta", "id_usuario": 4 },
+        {"id": 7, "id_movimiento": 7, "id_materia_prima": 5, "fecha": "2026-08-22T08:00:00", "tipo_movimiento": "ingreso", "cantidad": 60, "observacion": "Compra a granja local", "id_usuario": 1 },
+        {"id": 8, "id_movimiento": 8, "id_materia_prima": 5, "fecha": "2026-09-05T11:05:00", "tipo_movimiento": "consumo", "cantidad": 24, "observacion": "Orden de producción #2", "id_usuario": 3 }
     ],
 
     "movimientosInventarioProducto": [
