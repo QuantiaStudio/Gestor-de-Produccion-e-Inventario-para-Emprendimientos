@@ -76,3 +76,19 @@ export interface NuevoProducto {
   descripcion?: string;
   formula: DetalleFormula[];
 }
+
+export interface DetalleFormulaApiDTO {
+  id_materia_prima: number;
+  nombre_materia_prima: string;
+  cantidad: number;
+}
+
+export interface ProductoApiDTO {
+  id?: number;
+  nombre: string;
+  descripcion: string;
+  stock_actual: number;
+  id_categoria: number;
+  estado: boolean;
+  formula: DetalleFormulaApiDTO[];
+}

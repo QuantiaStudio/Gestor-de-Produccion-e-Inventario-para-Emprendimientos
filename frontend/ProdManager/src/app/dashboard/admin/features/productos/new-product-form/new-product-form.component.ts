@@ -109,7 +109,7 @@ export class NewProductFormComponent {
 
   }
 
-    eliminarMaterial(index: number) {
+  eliminarMaterial(index: number) {
 
     this.materialesAgregados.splice(index, 1);
     this.actualizarMaterialesControl();
@@ -128,11 +128,16 @@ export class NewProductFormComponent {
     this.productoTerminadoService.crearProducto(
       this.productForm.getRawValue(),
       this.materialesAgregados
-    );
-
-    this.limpiarFormulario();
-    this.productoCreado.emit();
-    this.cerrar.emit();
+    ).subscribe({
+      next: () => {
+        this.limpiarFormulario();
+        this.productoCreado.emit();
+        this.cerrar.emit();
+      },
+      error: error => {
+        console.error('Error al registrar el producto', error);
+      }
+    });
 
   }
 

@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, NuevoProductoFormValue, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoTerminadoService {
+  constructor(private http: HttpClient) { }
   private productosTerminados: ProductoTerminado[] = [
     {
       id: 'PT-001', nombre: 'Mesa Nórdica', categoria: 'Mesas',
@@ -310,7 +313,7 @@ export class ProductoTerminadoService {
   crearProducto(
     formValue: NuevoProductoFormValue,
     materialesAgregados: MaterialAgregadoProducto[]
-  ): ProductoTerminado {
+  ): Observable<ProductoApiDTO> {
     const stockActual = formValue.stockInicial ?? 0;
     const stockMinimo = 1;
     const fechaActual = new Date().toLocaleDateString();
@@ -345,8 +348,42 @@ export class ProductoTerminadoService {
         : []
     };
 
-    this.productosTerminados = [producto, ...this.productosTerminados];
-    return producto;
+    const payload: ProductoApiDTO = {
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      stock_actual: producto.stockActual,
+      id_categoria: this.obtenerIdCategoria(producto.categoria),
+      estado: producto.estado !== 'sin_stock',
+      formula: producto.formula.map(material => ({
+        id_materia_prima: Number(material.materiaPrimaId.replace('M', '')),
+        nombre_materia_prima: material.nombreMateriaPrima,
+        cantidad: material.cantidad
+      }))
+    };
+
+    return this.http.post<ProductoApiDTO>(
+      'http://localhost:3000/productos',
+      payload
+    ).pipe(
+      tap(() => {
+        this.productosTerminados = [producto, ...this.productosTerminados];
+      })
+    );
+  }
+
+  private obtenerIdCategoria(categoria: string): number {
+    const categorias: Record<string, number> = {
+      Mesas: 1,
+      Bibliotecas: 2,
+      Escritorios: 3,
+      Cómodas: 4,
+      Racks: 5,
+      Banquetas: 6,
+      Sillas: 7,
+      Decks: 8
+    };
+
+    return categorias[categoria] ?? 0;
   }
 
   obtenerPorId(id: string): ProductoTerminado | undefined {
