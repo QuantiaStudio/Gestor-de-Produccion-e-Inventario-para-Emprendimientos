@@ -12,7 +12,7 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
-  private apiUrl = 'http://localhost:3000'
+  private apiUrl = 'http://localhost:3000/usuarios'
 
   private usuarioSubject = new BehaviorSubject<UsuarioAutenticado | null>(
     this.obtenerUsuarioDeStorage()
@@ -23,11 +23,21 @@ export class AuthService {
   constructor(private http: HttpClient){}
 
   login(credenciales: CredencialesLogin): Observable<RespuestaAutenticacion> {
-    return this.http.get<any[]>(`${this.apiUrl}?email=${credenciales.email}&contrasena=${credenciales.password}`).pipe(
+    const url = `${this.apiUrl}?email=${credenciales.email}&contrasena=${credenciales.password}`;
+    console.log('URL enviada:', url);
+    return this.http.get<any[]>(url).pipe(
     map(usuarios => {
+      console.log('Usuarios recibidos:', usuarios);
       if (usuarios && usuarios.length > 0) {
         const usuarioDb = usuarios[0]
         
+        if (usuarioDb.estado === false){
+          return {
+            exito:false,
+            mensaje: 'El usuario se encuentra inactivo. Contacta a un administrador.'
+          }
+        }
+
         const usuarioAutenticado: UsuarioAutenticado = {
           id: usuarioDb.id || usuarioDb.id_usuario,
           nombre: usuarioDb.nombre,
