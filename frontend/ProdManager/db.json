@@ -1,38 +1,38 @@
     {
     "usuarios": [
         {
-        "id_usuario": 1,
+        "id": 1,
         "nombre": "Admin",
         "apellido": "Sistema",
         "email": "admin@correo.com",
-        "contrasena": "123456",
+        "contrasena": 123456,
         "rol": "ADMIN",
         "estado": true
         },
         {
-        "id_usuario": 2,
+        "id": 2,
         "nombre": "Rocío",
         "apellido": "Altamirano",
         "email": "rocio.altamirano@correo.com",
-        "contrasena": "123456",
+        "contrasena": 123456,
         "rol": "ADMIN",
         "estado": true
         },
         {
-        "id_usuario": 3,
+        "id": 3,
         "nombre": "Genaro",
         "apellido": "Cura",
         "email": "genaro.cura@correo.com",
-        "contrasena": "123456",
+        "contrasena": "abcabc",
         "rol": "OPERARIO",
         "estado": true
         },
         {
-        "id_usuario": 4,
+        "id": 4,
         "nombre": "Cesia",
         "apellido": "Cáceres",
         "email": "cesia.caceres@correo.com",
-        "contrasena": "123456",
+        "contrasena": "abcabc",
         "rol": "OPERARIO",
         "estado": false
         }
