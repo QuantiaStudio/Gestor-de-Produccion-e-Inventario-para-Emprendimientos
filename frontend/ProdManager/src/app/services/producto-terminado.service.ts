@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
+import { AuthService } from '../auth/services/auth.service';
 import { environment } from '../../environments/environment';
 import { CategoriaApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
@@ -8,7 +9,10 @@ import { CategoriaApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, Mate
   providedIn: 'root'
 })
 export class ProductoTerminadoService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
   private readonly productosUrl = `${environment.apiUrl}/productos`;
   private readonly movimientosInventarioUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
   private readonly categoriasUrl = `${environment.apiUrl}/categorias`;
@@ -102,7 +106,7 @@ export class ProductoTerminadoService {
             tipo_movimiento: 'ingreso',
             cantidad: stockActual,
             id_producto: Number(respuesta.id),
-            id_usuario: 1,
+            id_usuario: this.obtenerIdUsuarioActual(),
             observacion: 'Alta inicial de producto'
           };
 
@@ -152,7 +156,7 @@ export class ProductoTerminadoService {
           tipo_movimiento: 'modificacion',
           cantidad: Number(formValue.stockInicial ?? producto.stockActual) - producto.stockActual,
           id_producto: producto.apiId,
-          id_usuario: 1,
+          id_usuario: this.obtenerIdUsuarioActual(),
           observacion: 'Producto modificado'
         };
 
@@ -267,6 +271,16 @@ export class ProductoTerminadoService {
       .find(([, nombre]) => nombre === nombreCategoria);
 
     return categoria?.[0] ?? 0;
+  }
+
+  private obtenerIdUsuarioActual(): number {
+    const idUsuario = Number(this.authService.getUsuarioActual()?.id);
+
+    if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
+      throw new Error('No hay un usuario autenticado válido para registrar el movimiento.');
+    }
+
+    return idUsuario;
   }
 
   obtenerPorId(id: string): ProductoTerminado | undefined {
