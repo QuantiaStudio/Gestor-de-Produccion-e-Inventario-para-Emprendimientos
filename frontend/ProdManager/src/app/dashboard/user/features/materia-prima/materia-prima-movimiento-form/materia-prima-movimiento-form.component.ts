@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
-import { MateriaPrimaService } from '../../services/materia-prima.service';
-import { MovimientoStockService } from '../../services/movimiento-stock.service';
+import { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
+import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
+import { MovimientoStockService } from '../../../../../services/movimiento-stock.service';
 
 function stockDisponibleValidator(getMateriasPrimas: () => MateriaPrima[]) {
   return (control: AbstractControl): ValidationErrors | null => {
