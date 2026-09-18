@@ -14,7 +14,6 @@
       <tr>
         <th>ID</th>
         <th>Material</th>
-        <th>Categoría</th>
         <th class="numeric">Cantidad</th>
         <th>Estado</th>
       </tr>
@@ -24,7 +23,6 @@
         <tr (click)="seleccionar(mp)" class="fila-clickeable">
           <td class="mono">#{{ mp.id }}</td>
           <td>{{ mp.nombre }}</td>
-          <td>{{ mp.categoria }}</td>
           <td class="numeric">{{ mp.stockDisponible }} {{ mp.unidadMedida }}</td>
           <td>
             @switch (mp.estado) {
