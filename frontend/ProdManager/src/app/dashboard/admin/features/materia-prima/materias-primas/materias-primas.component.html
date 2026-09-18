@@ -28,12 +28,6 @@
             <input type="text" placeholder="Buscar materia prima...">
           </div>
           <div class="filter-select">
-            <span class="filter-label">Categoría</span>
-            <select>
-              <option>Todas</option>
-            </select>
-          </div>
-          <div class="filter-select">
             <span class="filter-label">Estado</span>
             <select>
               <option>Todos</option>
@@ -95,7 +89,6 @@
           <thead>
             <tr>
               <th>Materia Prima ↕</th>
-              <th>Categoría</th>
               <th>unidad</th>
               <th>Stock Total</th>
               <th>Stock Disponible</th>
@@ -113,7 +106,6 @@
                     <small>{{ item.id }}</small>
                   </div>
                 </td>
-                <td>{{ item.categoria }}</td>
                 <td>{{ item.unidadMedida }}</td>
                 <td>{{ item.stockTotal }}</td>
                 <td>{{ item.stockDisponible }}</td>
@@ -179,17 +171,6 @@
           <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre"
             [class.is-invalid]="formRegistro.get('nombre')?.invalid && formRegistro.get('nombre')?.touched">
           <div class="invalid-feedback">El nombre es obligatorio.</div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Categoría</label>
-           <select class="form-select" formControlName="categoria"
-             [class.is-invalid]="formRegistro.get('categoria')?.invalid && formRegistro.get('categoria')?.touched">
-            <option value="" disabled selected>Seleccionar...</option>
-            @for (cat of categoriasDisponibles; track cat) {
-            <option [value]="cat">{{ cat }}</option>
-            }
-          </select>
-          <div class="invalid-feedback">Seleccioná una categoría.</div>
           </div>
           <div class="mb-3">
           <label class="form-label">Unidad de Medida</label>

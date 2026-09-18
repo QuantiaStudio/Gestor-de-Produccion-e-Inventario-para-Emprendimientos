@@ -47,3 +47,7 @@
 .fila-clickeable:hover {
   background-color: rgba(124, 58, 237, 0.03);
 }
+
+.table-wrapper thead th.numeric {
+  text-align: right;
+}

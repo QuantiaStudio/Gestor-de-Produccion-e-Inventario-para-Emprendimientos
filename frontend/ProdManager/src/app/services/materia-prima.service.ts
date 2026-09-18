@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
+import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, MovimientoStockApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import { Observable, forkJoin, map, shareReplay, tap } from 'rxjs';
 
 const API_URL = `${environment.apiUrl}/materiasPrimas`;
+const MOVIMIENTOS_URL = `${environment.apiUrl}/movimientosStockMateriaPrima`;
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,11 @@ export class MateriaPrimaService {
   readonly materiasPrimas$: Observable<MateriaPrima[]>;
 
   constructor(private http: HttpClient) {
-    this.materiasPrimas$ = this.http.get<MateriaPrimaApi[]>(API_URL).pipe(
-      map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
+    this.materiasPrimas$ = forkJoin({
+      materias: this.http.get<MateriaPrimaApi[]>(API_URL),
+      movimientos: this.http.get<MovimientoStockApi[]>(MOVIMIENTOS_URL),
+    }).pipe(
+      map(({ materias, movimientos }) => materias.map(mp => this.mapearDesdeApi(mp, movimientos))),
       tap(materias => {
         this.materiasPrimas = materias;
       }),
@@ -23,7 +27,7 @@ export class MateriaPrimaService {
     );
   }
 
-  private mapearDesdeApi(mp: MateriaPrimaApi): MateriaPrima {
+  private mapearDesdeApi(mp: MateriaPrimaApi, movimientos: MovimientoStockApi[]): MateriaPrima {
     return {
       id: String(mp.id_materia_prima),
       nombre: mp.nombre,
@@ -33,11 +37,16 @@ export class MateriaPrimaService {
       stockDisponible: mp.stock_actual,
       stockMinimo: mp.stock_minimo,
       estado: this.calcularEstado(mp.stock_actual, mp.stock_minimo),
-      // db.json todavía no tiene estos campos; se completan por defecto.
-      categoria: '',
-      proveedor: '',
-      ultimaActualizacion: '',
+      ultimaActualizacion: this.ultimaFechaDeMovimiento(mp.id_materia_prima, movimientos),
     };
+  }
+
+  private ultimaFechaDeMovimiento(idMateriaPrima: number, movimientos: MovimientoStockApi[]): string {
+    const fechas = movimientos
+      .filter(m => m.id_materia_prima === idMateriaPrima)
+      .map(m => new Date(m.fecha).getTime());
+    if (fechas.length === 0) return '';
+    return new Date(Math.max(...fechas)).toLocaleDateString('es-AR');
   }
 
   obtenerMateriasPrimas(): MateriaPrima[] {
@@ -60,7 +69,7 @@ export class MateriaPrimaService {
     materiaPrima.stockDisponible = stockTotal;
     materiaPrima.stockMinimo = stockMinimo;
     materiaPrima.estado = this.calcularEstado(stockTotal, stockMinimo);
-    materiaPrima.ultimaActualizacion = new Date().toLocaleDateString();
+    materiaPrima.ultimaActualizacion = new Date().toLocaleDateString('es-AR');
 
     this.http.patch(`${API_URL}/${id}`, {
       stock_actual: stockTotal,
@@ -76,7 +85,7 @@ export class MateriaPrimaService {
     materiaPrima.stockTotal += delta;
     materiaPrima.stockDisponible += delta;
     materiaPrima.estado = this.calcularEstado(materiaPrima.stockTotal, materiaPrima.stockMinimo);
-    materiaPrima.ultimaActualizacion = new Date().toLocaleDateString();
+    materiaPrima.ultimaActualizacion = new Date().toLocaleDateString('es-AR');
 
     this.http.patch(`${API_URL}/${id}`, { stock_actual: materiaPrima.stockTotal }).subscribe();
 

@@ -2,9 +2,8 @@ export type EstadoMateriaPrima = 'optimo' | 'bajo_minimo' | 'sin_stock';
 
 /**
  * Forma real de la tabla "materiasPrimas" en db.json (json-server).
- * No incluye categoria/proveedor/ultimaActualizacion: esos campos todavía
- * no existen en la base de datos del equipo, se completan por defecto en
- * el service hasta que se sumen al modelo relacional real.
+ * No incluye categoría ni proveedor: no forman parte del modelo de datos del equipo.
+ * ultimaActualizacion se calcula en el service a partir de los movimientos de stock.
  */
 export interface MateriaPrimaApi {
   id_materia_prima: number;
@@ -18,14 +17,12 @@ export interface MateriaPrimaApi {
 export interface MateriaPrima {
   id: string;
   nombre: string;
-  categoria: string;
   unidadMedida: string;
   stockTotal: number;
   stockDisponible: number;
   stockMinimo: number;
   estado: EstadoMateriaPrima;
   descripcion: string;
-  proveedor: string;
   ultimaActualizacion: string;
 }
 
