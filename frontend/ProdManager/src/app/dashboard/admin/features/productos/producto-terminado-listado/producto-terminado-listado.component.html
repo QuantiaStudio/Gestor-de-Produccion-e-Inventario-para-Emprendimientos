@@ -75,6 +75,7 @@
         [producto]="productoSeleccionado"
         (cerrar)="cerrarDetalle()"
         (eliminado)="productoEliminado()"
+        (editar)="editarProducto()"
       />
     </div>
   }
@@ -95,7 +96,9 @@
 
 @if (mostrarFormularioNuevoProducto) {
   <app-new-product-form
+    [productoEditar]="productoEnEdicion"
     (cerrar)="cerrarFormularioNuevoProducto()"
     (productoCreado)="productoCreado()"
+    (productoActualizado)="productoActualizado()"
   />
 }

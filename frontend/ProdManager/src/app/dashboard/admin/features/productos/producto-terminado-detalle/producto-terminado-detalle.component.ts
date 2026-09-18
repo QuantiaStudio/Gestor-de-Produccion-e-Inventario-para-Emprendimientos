@@ -15,6 +15,7 @@ export class ProductoTerminadoDetalleComponent {
   @Input({ required: true }) producto!: ProductoTerminado;
   @Output() cerrar = new EventEmitter<void>();
   @Output() eliminado = new EventEmitter<void>();
+  @Output() editar = new EventEmitter<void>();
 
   tabActiva: TabDetalle = 'informacion';
   confirmarEliminacion = false;

@@ -27,6 +27,7 @@ export class ProductoTerminadoListadoComponent {
   categorias: string[];
   resumen: ResumenInventario;
   mostrarFormularioNuevoProducto = false;
+  productoEnEdicion: ProductoTerminado | null = null;
   mensajeExito = '';
   private filtrosActuales: FiltroProductoTerminado = {};
 
@@ -48,11 +49,30 @@ export class ProductoTerminadoListadoComponent {
 
   abrirFormularioNuevoProducto() {
     this.mensajeExito = '';
+    this.productoEnEdicion = null;
     this.mostrarFormularioNuevoProducto = true;
   }
 
   cerrarFormularioNuevoProducto() {
     this.mostrarFormularioNuevoProducto = false;
+    this.productoEnEdicion = null;
+  }
+
+  editarProducto() {
+    if (!this.productoSeleccionado) return;
+
+    this.mensajeExito = '';
+    this.productoEnEdicion = this.productoSeleccionado;
+    this.productoSeleccionado = null;
+    this.mostrarFormularioNuevoProducto = true;
+  }
+
+  productoActualizado() {
+    this.cargarProductosDesdeApi(() => {
+      this.mostrarFormularioNuevoProducto = false;
+      this.productoEnEdicion = null;
+      this.mensajeExito = 'El producto se actualizó correctamente.';
+    });
   }
 
   productoCreado() {

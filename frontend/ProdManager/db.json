@@ -181,10 +181,29 @@
       "id": 8,
       "nombre": "Silla Nórdica",
       "descripcion": "Silla de comedor con asiento tapizado y patas de haya barnizadas.",
-      "precio": 40000,
-      "estado": true,
       "stock_actual": 40,
-      "id_categoria": 7
+      "stock_minimo": 1,
+      "stock_maximo": 80,
+      "id_categoria": 7,
+      "estado": "finalizado",
+      "codigo": "PT-008",
+      "formula": [
+        {
+          "id_materia_prima": 1,
+          "nombre_materia_prima": "Madera de Roble",
+          "cantidad": 3
+        },
+        {
+          "id_materia_prima": 4,
+          "nombre_materia_prima": "Barniz Transparente",
+          "cantidad": 0.5
+        },
+        {
+          "id_materia_prima": 3,
+          "nombre_materia_prima": "Tornillos 3mm",
+          "cantidad": 20
+        }
+      ]
     },
     {
       "id": 9,
@@ -259,9 +278,12 @@
       "id_categoria": 6
     },
     {
+      "id": 17,
       "nombre": "Escritorio Boho",
       "descripcion": "",
       "stock_actual": 5,
+      "stock_minimo": 3,
+      "stock_maximo": 10,
       "id_categoria": 3,
       "estado": "pendiente",
       "codigo": "MS-200",
@@ -281,8 +303,7 @@
           "nombre_materia_prima": "Tornillos 3mm",
           "cantidad": 211
         }
-      ],
-      "id": 17
+      ]
     }
   ],
   "detalleFormula": [

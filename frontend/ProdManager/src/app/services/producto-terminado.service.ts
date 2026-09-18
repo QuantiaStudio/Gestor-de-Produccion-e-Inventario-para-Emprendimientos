@@ -116,6 +116,31 @@ export class ProductoTerminadoService {
     return this.http.delete<void>(`${this.productosUrl}/${id}`);
   }
 
+  actualizarProducto(
+    producto: ProductoTerminado,
+    formValue: NuevoProductoFormValue,
+    materialesAgregados: MaterialAgregadoProducto[]
+  ): Observable<ProductoApiDTO> {
+    const payload: ProductoApiDTO = {
+      id: producto.apiId,
+      nombre: formValue.nombre ?? '',
+      descripcion: formValue.descripcion ?? '',
+      stock_actual: formValue.stockInicial ?? producto.stockActual,
+      stock_minimo: formValue.stockMinimo ?? producto.stockMinimo,
+      stock_maximo: formValue.stockMaximo ?? producto.stockMaximo,
+      id_categoria: this.obtenerIdCategoria(formValue.categoria ?? producto.categoria),
+      estado: producto.estado,
+      codigo: formValue.codigo ?? producto.id,
+      formula: materialesAgregados.map(material => ({
+        id_materia_prima: Number(material.materiaPrimaId.replace('M', '')),
+        nombre_materia_prima: material.nombre,
+        cantidad: material.cantidadMaterial
+      }))
+    };
+
+    return this.http.put<ProductoApiDTO>(`${this.productosUrl}/${producto.apiId}`, payload);
+  }
+
   private mapearProducto(
     apiProducto: ProductoApiDTO,
     movimientosInventario: MovimientoInventarioApiDTO[] = [],

@@ -1,7 +1,7 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
-import type { MaterialAgregadoProducto } from '../../../../../models/producto/producto-terminado.model';
+import type { MaterialAgregadoProducto, ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
 import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 
@@ -12,9 +12,11 @@ import { ProductoTerminadoService } from '../../../../../services/producto-termi
   templateUrl: './new-product-form.component.html',
   styleUrl: './new-product-form.component.css'
 })
-export class NewProductFormComponent {
+export class NewProductFormComponent implements OnChanges {
+  @Input() productoEditar: ProductoTerminado | null = null;
   @Output() cerrar = new EventEmitter<void>();
   @Output() productoCreado = new EventEmitter<void>();
+  @Output() productoActualizado = new EventEmitter<void>();
 
   private materiaPrimaService = inject(MateriaPrimaService);
   private productoTerminadoService = inject(ProductoTerminadoService);
@@ -22,6 +24,12 @@ export class NewProductFormComponent {
 
   materiasPrimas: MateriaPrima[] = this.materiaPrimaService.obtenerMateriasPrimas();
   materialesAgregados: MaterialAgregadoProducto[] = [];
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['productoEditar']?.currentValue) {
+      this.cargarProductoEnFormulario(changes['productoEditar'].currentValue);
+    }
+  }
 
   productForm = this.formBuilder.group({
     nombre: ['', Validators.required],
@@ -142,13 +150,18 @@ export class NewProductFormComponent {
       return;
     }
 
-    this.productoTerminadoService.crearProducto(
-      this.productForm.getRawValue(),
-      this.materialesAgregados
-    ).subscribe({
+    const guardado = this.productoEditar
+      ? this.productoTerminadoService.actualizarProducto(this.productoEditar, this.productForm.getRawValue(), this.materialesAgregados)
+      : this.productoTerminadoService.crearProducto(this.productForm.getRawValue(), this.materialesAgregados);
+
+    guardado.subscribe({
       next: () => {
         this.limpiarFormulario();
-        this.productoCreado.emit();
+        if (this.productoEditar) {
+          this.productoActualizado.emit();
+        } else {
+          this.productoCreado.emit();
+        }
       },
       error: error => {
         console.error('Error al registrar el producto', error);
@@ -177,6 +190,30 @@ export class NewProductFormComponent {
       materialId: '',
       cantidadMaterial: null
     });
+  }
+
+  private cargarProductoEnFormulario(producto: ProductoTerminado) {
+    this.productForm.patchValue({
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      stockInicial: producto.stockActual,
+      stockMinimo: producto.stockMinimo,
+      stockMaximo: producto.stockMaximo,
+      codigo: producto.id,
+      categoria: producto.categoria,
+      nuevaCategoria: ''
+    });
+
+    this.materialesAgregados = producto.formula.map(material => {
+      const materiaPrima = this.materiasPrimas.find(item => item.id === material.materiaPrimaId);
+      return {
+        materiaPrimaId: material.materiaPrimaId,
+        nombre: material.nombreMateriaPrima,
+        cantidadMaterial: material.cantidad,
+        unidad: materiaPrima?.unidadMedida ?? 'unidad'
+      };
+    });
+    this.actualizarMaterialesControl();
   }
 
   private actualizarMaterialesControl() {
