@@ -25,6 +25,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
 
   materiasPrimas: MateriaPrima[] = [];
   materialesAgregados: MaterialAgregadoProducto[] = [];
+  imagenSeleccionada: string | null = null;
 
   ngOnInit() {
     this.materiaPrimaService.obtenerMateriasPrimas$().subscribe({
@@ -89,6 +90,16 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   }
   get cantidadMaterial() {
     return this.productForm.get('cantidadMaterial');
+  }
+
+  seleccionarImagen(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    if (!archivo) return;
+
+    const lector = new FileReader();
+    lector.onload = () => this.imagenSeleccionada = String(lector.result);
+    lector.readAsDataURL(archivo);
   }
   /*Falta  implementar la validación de nueva categoría. TERMINAR FEATURE AL INTEGRAR MÓDULO DE PRODUCTOS*/
   get nuevaCategoria() {
@@ -164,8 +175,8 @@ export class NewProductFormComponent implements OnChanges, OnInit {
     }
 
     const guardado = this.productoEditar
-      ? this.productoTerminadoService.actualizarProducto(this.productoEditar, this.productForm.getRawValue(), this.materialesAgregados)
-      : this.productoTerminadoService.crearProducto(this.productForm.getRawValue(), this.materialesAgregados);
+      ? this.productoTerminadoService.actualizarProducto(this.productoEditar, { ...this.productForm.getRawValue(), imagen: this.imagenSeleccionada }, this.materialesAgregados)
+      : this.productoTerminadoService.crearProducto({ ...this.productForm.getRawValue(), imagen: this.imagenSeleccionada }, this.materialesAgregados);
 
     guardado.subscribe({
       next: () => {
@@ -190,6 +201,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
 
   private limpiarFormulario() {
     this.materialesAgregados = [];
+    this.imagenSeleccionada = null;
     this.productForm.reset({
       nombre: '',
       descripcion: '',
@@ -216,6 +228,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       categoria: producto.categoria,
       nuevaCategoria: ''
     });
+    this.imagenSeleccionada = producto.imagen || null;
 
     this.materialesAgregados = producto.formula.map(material => {
       const materiaPrima = this.materiasPrimas.find(item => item.id === material.materiaPrimaId);

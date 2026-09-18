@@ -47,7 +47,7 @@ export class ProductoTerminadoService {
       nombre: formValue.nombre ?? '',
       categoria: formValue.categoria ?? '',
       descripcion: formValue.descripcion ?? '',
-      imagen: 'assets/mesa_nordica.jpg',
+      imagen: formValue.imagen ?? '',
       unidadMedida: 'unidad',
       stockActual,
       stockMinimo,
@@ -80,6 +80,7 @@ export class ProductoTerminadoService {
       id_categoria: this.obtenerIdCategoria(producto.categoria),
       estado: producto.estado,
       codigo: producto.id,
+      imagen: producto.imagen,
       formula: producto.formula.map(material => ({
         id_materia_prima: Number(material.materiaPrimaId.replace('M', '')),
         nombre_materia_prima: material.nombreMateriaPrima,
@@ -134,6 +135,7 @@ export class ProductoTerminadoService {
       id_categoria: this.obtenerIdCategoria(formValue.categoria ?? producto.categoria),
       estado: producto.estado,
       codigo: formValue.codigo ?? producto.id,
+      imagen: formValue.imagen ?? producto.imagen,
       formula: materialesAgregados.map(material => ({
         id_materia_prima: Number(material.materiaPrimaId.replace('M', '')),
         nombre_materia_prima: material.nombre,
@@ -177,7 +179,7 @@ export class ProductoTerminadoService {
       nombre: apiProducto.nombre ?? '',
       categoria: this.categorias.get(apiProducto.id_categoria) ?? productoLocal?.categoria ?? '',
       descripcion: apiProducto.descripcion ?? '',
-      imagen: productoLocal?.imagen ?? '',
+      imagen: apiProducto.imagen ?? productoLocal?.imagen ?? '',
       unidadMedida: productoLocal?.unidadMedida ?? '',
       stockActual,
       stockMinimo,

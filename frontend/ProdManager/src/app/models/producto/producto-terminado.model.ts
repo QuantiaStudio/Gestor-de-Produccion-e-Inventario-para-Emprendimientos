@@ -73,6 +73,7 @@ export interface NuevoProductoFormValue {
   stockMinimo: number | null;
   stockMaximo: number | null;
   descripcion: string | null;
+  imagen?: string | null;
 }
 
 export interface NuevoProducto {
@@ -101,6 +102,7 @@ export interface ProductoApiDTO {
   id_categoria: number;
   estado: boolean | EstadoProductoTerminado;
   formula?: DetalleFormulaApiDTO[];
+  imagen?: string;
 }
 
 export interface CategoriaApiDTO {
