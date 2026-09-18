@@ -26,7 +26,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   materialesAgregados: MaterialAgregadoProducto[] = [];
 
   ngOnInit() {
-    this.materiaPrimaService.materiasPrimas$.subscribe({
+    this.materiaPrimaService.obtenerMateriasPrimas$().subscribe({
       next: materiasPrimas => {
         this.materiasPrimas = materiasPrimas;
         if (this.productoEditar) {

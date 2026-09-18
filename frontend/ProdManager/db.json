@@ -1,6 +1,4 @@
 {
-  "usuarios": [
-    {
     "usuarios": [
         {
         "id": 1,
@@ -431,9 +429,7 @@
         {"id_movimiento_producto": 4, "fecha": "2026-09-13T13:00:00", "tipo_movimiento": "venta", "cantidad": 5, "id_producto": 5, "id_usuario": 2 },
         {"id_movimiento_producto": 5, "fecha": "2026-09-07T16:30:00", "tipo_movimiento": "ajuste", "cantidad": -1, "id_producto": 3, "id_usuario": 1 },
         {"id_movimiento_producto": 6, "fecha": "2026-09-09T17:00:00", "tipo_movimiento": "venta", "cantidad": 3, "id_producto": 4, "id_usuario": 2 }
-    ]
-    }
-  ],
+    ],
   "ordenesProduccion": [
     {
       "id": 1,

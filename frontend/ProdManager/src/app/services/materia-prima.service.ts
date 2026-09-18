@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
-import { map, shareReplay, tap } from 'rxjs';
+import { Observable, map, shareReplay, tap } from 'rxjs';
 
 const API_URL = `${environment.apiUrl}/materiasPrimas`;
 
@@ -11,8 +11,17 @@ const API_URL = `${environment.apiUrl}/materiasPrimas`;
 })
 export class MateriaPrimaService {
   private materiasPrimas: MateriaPrima[] = [];
+  readonly materiasPrimas$: Observable<MateriaPrima[]>;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.materiasPrimas$ = this.http.get<MateriaPrimaApi[]>(API_URL).pipe(
+      map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
+      tap(materias => {
+        this.materiasPrimas = materias;
+      }),
+      shareReplay(1)
+    );
+  }
 
   private mapearDesdeApi(mp: MateriaPrimaApi): MateriaPrima {
     return {
@@ -33,6 +42,10 @@ export class MateriaPrimaService {
 
   obtenerMateriasPrimas(): MateriaPrima[] {
     return this.materiasPrimas;
+  }
+
+  obtenerMateriasPrimas$(): Observable<MateriaPrima[]> {
+    return this.materiasPrimas$;
   }
 
   obtenerPorId(id: string): MateriaPrima | undefined {
@@ -83,11 +96,4 @@ export class MateriaPrimaService {
     return 'optimo';
   }
 
-  materiasPrimas$ = this.http.get<MateriaPrimaApi[]>(API_URL).pipe(
-    map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
-    tap(materias => {
-      this.materiasPrimas = materias;
-    }),
-    shareReplay(1)
-  );
 }

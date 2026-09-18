@@ -20,7 +20,7 @@ export class MateriaPrimaListadoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.materiaPrimaService.materiasPrimas$.subscribe({
+    this.materiaPrimaService.obtenerMateriasPrimas$().subscribe({
       next: materiasPrimas => this.materiasPrimas = materiasPrimas,
       error: error => console.error('Error al cargar materias primas', error)
     });
