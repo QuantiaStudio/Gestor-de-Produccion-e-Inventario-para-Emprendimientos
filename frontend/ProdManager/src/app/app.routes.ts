@@ -40,7 +40,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: UserPanelComponent, pathMatch: 'full' },
       { path: 'produccion', component: ProduccionComponent },
-      { path: 'movimientos-stock', component: MateriaPrimaListadoComponent },
+      { path: 'materia-prima', component: MateriaPrimaListadoComponent },
     ]
   },
   {
