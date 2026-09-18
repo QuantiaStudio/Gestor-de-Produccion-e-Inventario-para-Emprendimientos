@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
-import { MateriaPrimaService } from '../../services/materia-prima.service';
+import { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
+import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
 import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-prima-detalle.component';
 import { MateriaPrimaMovimientoFormComponent } from '../materia-prima-movimiento-form/materia-prima-movimiento-form.component';
 
