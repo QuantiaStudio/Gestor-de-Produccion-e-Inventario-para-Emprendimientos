@@ -6,9 +6,10 @@
         <h2>{{ producto.nombre }}</h2>
         <small class="mono">{{ producto.id }}</small>
         @switch (producto.estado) {
-          @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
-          @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
-          @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
+          @case ('pendiente') { <span class="estado-badge badge--warning">Pendiente</span> }
+          @case ('en_produccion') { <span class="estado-badge badge--info">En producción</span> }
+          @case ('finalizado') { <span class="estado-badge badge--success">Finalizado</span> }
+          @case ('cancelado') { <span class="estado-badge badge--error">Cancelado</span> }
         }
       </div>
     </div>
@@ -48,22 +49,6 @@
           <span class="detalle-label">Stock máximo</span>
           <span>{{ producto.stockMaximo }}</span>
         </div>
-        <div class="detalle-fila">
-          <span class="detalle-label">Ubicación</span>
-          <span>{{ producto.ubicacion }}</span>
-        </div>
-        @if (producto.lote) {
-          <div class="detalle-fila">
-            <span class="detalle-label">Lote</span>
-            <span class="mono">{{ producto.lote }}</span>
-          </div>
-        }
-        @if (producto.fechaVencimiento) {
-          <div class="detalle-fila">
-            <span class="detalle-label">Vencimiento</span>
-            <span>{{ producto.fechaVencimiento }}</span>
-          </div>
-        }
         <div class="detalle-fila">
           <span class="detalle-label">Última actualización</span>
           <span>{{ producto.ultimaActualizacion }}</span>

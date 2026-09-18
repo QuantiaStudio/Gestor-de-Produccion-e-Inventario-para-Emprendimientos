@@ -1,7 +1,10 @@
 import type { DetalleFormula } from '../formula/formula.module';
 
-// sin_stock: stockActual === 0 | bajo_minimo: stockActual > 0 && stockActual <= stockMinimo | optimo: el resto
-export type EstadoProductoTerminado = 'optimo' | 'bajo_minimo' | 'sin_stock';
+export type EstadoProductoTerminado =
+  | 'pendiente'
+  | 'en_produccion'
+  | 'finalizado'
+  | 'cancelado';
 
 export type TipoMovimiento = 'ingreso' | 'egreso' | 'ajuste';
 
@@ -25,7 +28,6 @@ export interface ProductoTerminado {
   stockMinimo: number;
   stockMaximo: number;
   estado: EstadoProductoTerminado;
-  ubicacion: string;
   ultimaActualizacion: string;
   lote?: string;
   fechaVencimiento?: string;
@@ -85,10 +87,21 @@ export interface DetalleFormulaApiDTO {
 
 export interface ProductoApiDTO {
   id?: number;
+  codigo?: string;
   nombre: string;
   descripcion: string;
   stock_actual: number;
   id_categoria: number;
-  estado: boolean;
-  formula: DetalleFormulaApiDTO[];
+  estado: boolean | EstadoProductoTerminado;
+  formula?: DetalleFormulaApiDTO[];
+}
+
+export interface MovimientoInventarioApiDTO {
+  id_movimiento_producto?: number;
+  fecha: string;
+  tipo_movimiento: string;
+  cantidad: number;
+  id_producto: number;
+  id_usuario?: number;
+  observacion?: string;
 }

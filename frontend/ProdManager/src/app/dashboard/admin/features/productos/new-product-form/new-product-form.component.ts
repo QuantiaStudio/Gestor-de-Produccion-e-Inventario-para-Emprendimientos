@@ -132,7 +132,6 @@ export class NewProductFormComponent {
       next: () => {
         this.limpiarFormulario();
         this.productoCreado.emit();
-        this.cerrar.emit();
       },
       error: error => {
         console.error('Error al registrar el producto', error);

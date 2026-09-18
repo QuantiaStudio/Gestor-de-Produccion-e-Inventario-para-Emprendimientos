@@ -27,12 +27,13 @@ export class ProductoTerminadoListadoComponent {
   categorias: string[];
   resumen: ResumenInventario;
   mostrarFormularioNuevoProducto = false;
+  mensajeExito = '';
   private filtrosActuales: FiltroProductoTerminado = {};
 
   constructor(private productoTerminadoService: ProductoTerminadoService) {
-    this.categorias = this.productoTerminadoService.obtenerCategorias();
+    this.categorias = [];
     this.resumen = this.productoTerminadoService.obtenerResumenInventario([]);
-    this.refrescar();
+    this.cargarProductosDesdeApi();
   }
 
   aplicarFiltros(filtros: FiltroProductoTerminado) {
@@ -46,6 +47,7 @@ export class ProductoTerminadoListadoComponent {
   }
 
   abrirFormularioNuevoProducto() {
+    this.mensajeExito = '';
     this.mostrarFormularioNuevoProducto = true;
   }
 
@@ -54,8 +56,10 @@ export class ProductoTerminadoListadoComponent {
   }
 
   productoCreado() {
-    this.categorias = this.productoTerminadoService.obtenerCategorias();
-    this.refrescar();
+    this.cargarProductosDesdeApi(() => {
+      this.mostrarFormularioNuevoProducto = false;
+      this.mensajeExito = 'El producto se creó correctamente.';
+    });
   }
 
   seleccionar(producto: ProductoTerminado) {
@@ -66,10 +70,29 @@ export class ProductoTerminadoListadoComponent {
     this.productoSeleccionado = null;
   }
 
+  private cargarProductosDesdeApi(alCargar?: () => void) {
+    this.productoTerminadoService.cargarProductosTerminados().subscribe({
+      next: (productos) => {
+        this.catalogo = productos;
+        this.categorias = this.productoTerminadoService.obtenerCategorias();
+        this.refrescar();
+        alCargar?.();
+      },
+      error: (error) => {
+        console.error('Error al cargar productos desde la API', error);
+        this.catalogo = [];
+        this.productosTerminados = [];
+        this.categorias = [];
+        this.resumen = this.productoTerminadoService.obtenerResumenInventario([]);
+      }
+    });
+  }
+
   private refrescar() {
     this.catalogo = this.productoTerminadoService.obtenerProductosTerminados();
     this.productosTerminados = this.productoTerminadoService.filtrar(this.filtrosActuales);
     this.resumen = this.productoTerminadoService.obtenerResumenInventario(this.productosTerminados);
+    this.categorias = this.productoTerminadoService.obtenerCategorias();
 
     const seleccionado = this.productoSeleccionado;
     if (seleccionado && !this.productosTerminados.some(pt => pt.id === seleccionado.id)) {

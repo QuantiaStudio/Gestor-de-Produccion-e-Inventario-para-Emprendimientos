@@ -50,7 +50,15 @@ export class ProduccionComponent implements OnInit {
 
   ngOnInit(): void {
     this.ordenes = this.produccionService.obtenerOrdenes();
-    this.productos = this.productoTerminadoService.obtenerProductosTerminados();
+    this.productoTerminadoService.cargarProductosTerminados().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos para producción', error);
+        this.productos = [];
+      }
+    });
   }
 
   get productoId(): FormControl<string> {

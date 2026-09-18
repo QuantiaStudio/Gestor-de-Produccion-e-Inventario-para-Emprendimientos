@@ -49,9 +49,10 @@
               <td class="numeric">{{ pt.stockActual }} {{ pt.unidadMedida }}</td>
               <td>
                 @switch (pt.estado) {
-                  @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
-                  @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
-                  @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
+                  @case ('pendiente') { <span class="estado-badge badge--warning">Pendiente</span> }
+                  @case ('en_produccion') { <span class="estado-badge badge--info">En producción</span> }
+                  @case ('finalizado') { <span class="estado-badge badge--success">Finalizado</span> }
+                  @case ('cancelado') { <span class="estado-badge badge--error">Cancelado</span> }
                 }
               </td>
               <td class="actions">
@@ -77,6 +78,13 @@
     </div>
   }
 </div>
+
+@if (mensajeExito) {
+  <div class="alert alert-success d-flex justify-content-between align-items-center" role="status">
+    <span>{{ mensajeExito }}</span>
+    <button type="button" class="btn-close" aria-label="Cerrar confirmación" (click)="mensajeExito = ''"></button>
+  </div>
+}
 
 <app-producto-terminado-actualizar-stock
   #modalStock
