@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
 import type { MaterialAgregadoProducto, ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
@@ -12,7 +12,7 @@ import { ProductoTerminadoService } from '../../../../../services/producto-termi
   templateUrl: './new-product-form.component.html',
   styleUrl: './new-product-form.component.css'
 })
-export class NewProductFormComponent implements OnChanges {
+export class NewProductFormComponent implements OnChanges, OnInit {
   @Input() productoEditar: ProductoTerminado | null = null;
   @Output() cerrar = new EventEmitter<void>();
   @Output() productoCreado = new EventEmitter<void>();
@@ -22,8 +22,20 @@ export class NewProductFormComponent implements OnChanges {
   private productoTerminadoService = inject(ProductoTerminadoService);
   private formBuilder = inject(FormBuilder);
 
-  materiasPrimas: MateriaPrima[] = this.materiaPrimaService.obtenerMateriasPrimas();
+  materiasPrimas: MateriaPrima[] = [];
   materialesAgregados: MaterialAgregadoProducto[] = [];
+
+  ngOnInit() {
+    this.materiaPrimaService.materiasPrimas$.subscribe({
+      next: materiasPrimas => {
+        this.materiasPrimas = materiasPrimas;
+        if (this.productoEditar) {
+          this.cargarProductoEnFormulario(this.productoEditar);
+        }
+      },
+      error: error => console.error('Error al cargar materias primas', error)
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['productoEditar']?.currentValue) {

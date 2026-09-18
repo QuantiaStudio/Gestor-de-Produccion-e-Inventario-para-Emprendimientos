@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
 import { MateriaPrimaService } from '../../services/materia-prima.service';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -12,8 +12,8 @@ import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-p
   templateUrl: './materias-primas.component.html',
   styleUrl: './materias-primas.component.css'
 })
-export class MateriasPrimasComponent {
-  materiasPrimas: MateriaPrima[];
+export class MateriasPrimasComponent implements OnInit {
+  materiasPrimas: MateriaPrima[] = [];
   materiaPrimaSeleccionada: MateriaPrima | null = null;
   materiaPrimaAEliminar: MateriaPrima | null = null;
 
@@ -37,7 +37,13 @@ export class MateriasPrimasComponent {
   });
 
   constructor(private materiaPrimaService: MateriaPrimaService) {
-    this.materiasPrimas = this.materiaPrimaService.obtenerMateriasPrimas();
+  }
+
+  ngOnInit() {
+    this.materiaPrimaService.materiasPrimas$.subscribe({
+      next: materiasPrimas => this.materiasPrimas = materiasPrimas,
+      error: error => console.error('Error al cargar materias primas', error)
+    });
   }
 
   seleccionar(materiaPrima: MateriaPrima) {

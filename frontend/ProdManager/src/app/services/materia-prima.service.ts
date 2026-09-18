@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
+import { map, shareReplay, tap } from 'rxjs';
 
 const API_URL = `${environment.apiUrl}/materiasPrimas`;
 
@@ -11,11 +12,7 @@ const API_URL = `${environment.apiUrl}/materiasPrimas`;
 export class MateriaPrimaService {
   private materiasPrimas: MateriaPrima[] = [];
 
-  constructor(private http: HttpClient) {
-    this.http.get<MateriaPrimaApi[]>(API_URL).subscribe(materiasPrimasApi => {
-      this.materiasPrimas.push(...materiasPrimasApi.map(mp => this.mapearDesdeApi(mp)));
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   private mapearDesdeApi(mp: MateriaPrimaApi): MateriaPrima {
     return {
@@ -85,4 +82,12 @@ export class MateriaPrimaService {
     if (stockTotal <= stockMinimo) return 'bajo_minimo';
     return 'optimo';
   }
+
+  materiasPrimas$ = this.http.get<MateriaPrimaApi[]>(API_URL).pipe(
+    map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
+    tap(materias => {
+      this.materiasPrimas = materias;
+    }),
+    shareReplay(1)
+  );
 }

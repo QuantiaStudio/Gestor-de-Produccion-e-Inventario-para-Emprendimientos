@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
 import { MateriaPrimaService } from '../../services/materia-prima.service';
 import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-prima-detalle.component';
@@ -11,13 +11,19 @@ import { MateriaPrimaMovimientoFormComponent } from '../materia-prima-movimiento
   templateUrl: './materia-prima-listado.component.html',
   styleUrl: './materia-prima-listado.component.css'
 })
-export class MateriaPrimaListadoComponent {
+export class MateriaPrimaListadoComponent implements OnInit {
   materiaPrimaSeleccionada: MateriaPrima | null = null;
   mostrarFormMovimiento = false;
-  materiasPrimas: MateriaPrima[];
+  materiasPrimas: MateriaPrima[] = [];
 
   constructor(private materiaPrimaService: MateriaPrimaService) {
-    this.materiasPrimas = this.materiaPrimaService.obtenerMateriasPrimas();
+  }
+
+  ngOnInit() {
+    this.materiaPrimaService.materiasPrimas$.subscribe({
+      next: materiasPrimas => this.materiasPrimas = materiasPrimas,
+      error: error => console.error('Error al cargar materias primas', error)
+    });
   }
 
   seleccionar(materiaPrima: MateriaPrima) {
