@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActualizacionStock, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
+import { ActualizacionStock, EstadoProductoTerminado, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 import { NewProductFormComponent } from '../new-product-form/new-product-form.component';
 import { ProductoTerminadoActualizarStockComponent } from '../producto-terminado-actualizar-stock/producto-terminado-actualizar-stock.component';
@@ -25,6 +25,7 @@ export class ProductoTerminadoListadoComponent {
   productosTerminados: ProductoTerminado[] = [];
   catalogo: ProductoTerminado[] = [];
   categorias: string[];
+  estados: EstadoProductoTerminado[] = [];
   resumen: ResumenInventario;
   mostrarFormularioNuevoProducto = false;
   productoEnEdicion: ProductoTerminado | null = null;
@@ -112,6 +113,7 @@ export class ProductoTerminadoListadoComponent {
       next: (productos) => {
         this.catalogo = productos;
         this.categorias = this.productoTerminadoService.obtenerCategorias();
+        this.estados = this.productoTerminadoService.obtenerEstados();
         this.refrescar();
         alCargar?.();
       },

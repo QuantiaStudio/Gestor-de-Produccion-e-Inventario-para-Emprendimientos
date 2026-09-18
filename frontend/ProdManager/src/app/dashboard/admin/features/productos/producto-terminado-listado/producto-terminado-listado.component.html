@@ -105,6 +105,7 @@
 @if (mostrarFormularioNuevoProducto) {
   <app-new-product-form
     [categorias]="categorias"
+    [estados]="estados"
     [productoEditar]="productoEnEdicion"
     (cerrar)="cerrarFormularioNuevoProducto()"
     (productoCreado)="productoCreado()"

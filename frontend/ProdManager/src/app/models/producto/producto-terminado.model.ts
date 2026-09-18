@@ -69,6 +69,7 @@ export interface NuevoProductoFormValue {
   codigo: string | null;
   nombre: string | null;
   categoria: string | null;
+  estado: EstadoProductoTerminado | null;
   stockInicial: number | null;
   stockMinimo: number | null;
   stockMaximo: number | null;
@@ -106,6 +107,11 @@ export interface ProductoApiDTO {
 }
 
 export interface CategoriaApiDTO {
+  id: number;
+  nombre: string;
+}
+
+export interface EstadoApiDTO {
   id: number;
   nombre: string;
 }

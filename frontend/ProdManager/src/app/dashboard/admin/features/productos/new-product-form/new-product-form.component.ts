@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
-import type { MaterialAgregadoProducto, ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
+import type { EstadoProductoTerminado, MaterialAgregadoProducto, ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
 import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 
@@ -14,6 +14,7 @@ import { ProductoTerminadoService } from '../../../../../services/producto-termi
 })
 export class NewProductFormComponent implements OnChanges, OnInit {
   @Input() categorias: string[] = [];
+  @Input() estados: EstadoProductoTerminado[] = [];
   @Input() productoEditar: ProductoTerminado | null = null;
   @Output() cerrar = new EventEmitter<void>();
   @Output() productoCreado = new EventEmitter<void>();
@@ -53,6 +54,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
     stockMaximo: [1, [Validators.required, Validators.min(0)]],
     codigo: ['', Validators.required],
     categoria: ['', Validators.required],
+    estado: ['', Validators.required],
     nuevaCategoria: [''],
     materiales: this.formBuilder.nonNullable.control<any[]>([], Validators.required),
 
@@ -84,6 +86,9 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   }
   get codigo() {
     return this.productForm.get('codigo')!;
+  }
+  get estado() {
+    return this.productForm.get('estado')!;
   }
   get materialId() {
     return this.productForm.get('materialId')!;
@@ -174,9 +179,15 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       return;
     }
 
+    const valoresFormulario = {
+      ...this.productForm.getRawValue(),
+      estado: this.estado.value as EstadoProductoTerminado,
+      imagen: this.imagenSeleccionada
+    };
+
     const guardado = this.productoEditar
-      ? this.productoTerminadoService.actualizarProducto(this.productoEditar, { ...this.productForm.getRawValue(), imagen: this.imagenSeleccionada }, this.materialesAgregados)
-      : this.productoTerminadoService.crearProducto({ ...this.productForm.getRawValue(), imagen: this.imagenSeleccionada }, this.materialesAgregados);
+      ? this.productoTerminadoService.actualizarProducto(this.productoEditar, valoresFormulario, this.materialesAgregados)
+      : this.productoTerminadoService.crearProducto(valoresFormulario, this.materialesAgregados);
 
     guardado.subscribe({
       next: () => {
@@ -210,6 +221,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       stockMaximo: 1,
       codigo: '',
       categoria: '',
+      estado: '',
       nuevaCategoria: '',
       materiales: [],
       materialId: '',
@@ -226,6 +238,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       stockMaximo: producto.stockMaximo,
       codigo: producto.id,
       categoria: producto.categoria,
+      estado: producto.estado,
       nuevaCategoria: ''
     });
     this.imagenSeleccionada = producto.imagen || null;

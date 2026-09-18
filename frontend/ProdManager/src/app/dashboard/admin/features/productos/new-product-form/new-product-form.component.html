@@ -30,6 +30,19 @@
                             formControlName="codigo">
                     </div>
 
+                    <div class="mb-3">
+                        <label for="regEstado" class="form-label mb-1">Estado</label>
+                        <select class="input form-select" id="regEstado" formControlName="estado">
+                            <option value="">Seleccionar...</option>
+                            @for (estado of estados; track estado) {
+                                <option [value]="estado">{{ estado }}</option>
+                            }
+                        </select>
+                        @if (estado.errors && estado.touched && estado.hasError('required')) {
+                            <p class="error">El estado es obligatorio</p>
+                        }
+                    </div>
+
                     <!-- Nombre -->
                     <div class="mb-3">
                         <label for="regNombre" class="form-label mb-1">

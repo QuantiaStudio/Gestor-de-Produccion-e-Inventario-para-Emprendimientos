@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 import { environment } from '../../environments/environment';
-import { CategoriaApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
+import { CategoriaApiDTO, EstadoApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,9 @@ export class ProductoTerminadoService {
   private readonly productosUrl = `${environment.apiUrl}/productos`;
   private readonly movimientosInventarioUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
   private readonly categoriasUrl = `${environment.apiUrl}/categorias`;
+  private readonly estadosUrl = `${environment.apiUrl}/estados`;
   private categorias = new Map<number, string>();
+  private estados = new Map<number, EstadoProductoTerminado>();
   private productosTerminados: ProductoTerminado[] = [];
 
   obtenerProductosTerminados(): ProductoTerminado[] {
@@ -27,10 +29,12 @@ export class ProductoTerminadoService {
     return forkJoin({
       productos: this.http.get<ProductoApiDTO[]>(this.productosUrl),
       movimientos: this.http.get<MovimientoInventarioApiDTO[]>(this.movimientosInventarioUrl),
-      categorias: this.http.get<CategoriaApiDTO[]>(this.categoriasUrl)
+      categorias: this.http.get<CategoriaApiDTO[]>(this.categoriasUrl),
+      estados: this.http.get<EstadoApiDTO[]>(this.estadosUrl)
     }).pipe(
-      map(({ productos, movimientos, categorias }) => {
+      map(({ productos, movimientos, categorias, estados }) => {
         this.categorias = new Map(categorias.map(categoria => [categoria.id, categoria.nombre]));
+        this.estados = new Map(estados.map(estado => [estado.id, this.normalizarEstadoNombre(estado.nombre)]));
         return productos.map(producto => this.mapearProducto(producto, movimientos));
       }),
       tap(productos => this.productosTerminados = productos)
@@ -56,7 +60,7 @@ export class ProductoTerminadoService {
       stockActual,
       stockMinimo,
       stockMaximo,
-      estado: 'pendiente',
+      estado: formValue.estado!,
       ultimaActualizacion: fechaActual,
       formula: materialesAgregados.map(material => ({
         materiaPrimaId: material.materiaPrimaId,
@@ -273,6 +277,16 @@ export class ProductoTerminadoService {
     return categoria?.[0] ?? 0;
   }
 
+  private normalizarEstadoNombre(nombre: string): EstadoProductoTerminado {
+    const estado = nombre
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .replace(/\s+/g, '_');
+
+    return estado === 'finalizada' ? 'finalizado' : estado as EstadoProductoTerminado;
+  }
+
   private obtenerIdUsuarioActual(): number {
     const idUsuario = Number(this.authService.getUsuarioActual()?.id);
 
@@ -314,6 +328,10 @@ export class ProductoTerminadoService {
   obtenerCategorias(): string[] {
     const categorias = new Set(this.productosTerminados.map(pt => pt.categoria));
     return [...categorias].sort((a, b) => a.localeCompare(b));
+  }
+
+  obtenerEstados(): EstadoProductoTerminado[] {
+    return [...this.estados.values()];
   }
 
   obtenerResumenInventario(productos: ProductoTerminado[] = this.productosTerminados): ResumenInventario {
