@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
-import { MateriaPrimaService } from '../../services/materia-prima.service';
+import { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
+import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-prima-detalle.component';
