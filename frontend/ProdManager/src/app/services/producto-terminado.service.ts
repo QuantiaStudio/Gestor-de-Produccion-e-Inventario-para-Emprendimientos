@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
-import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
+import { environment } from '../../environments/environment';
+import { CategoriaApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoTerminadoService {
   constructor(private http: HttpClient) { }
-  private readonly productosUrl = 'http://localhost:3000/productos';
-  private readonly movimientosInventarioUrl = 'http://localhost:3000/movimientosInventarioProducto';
-  private readonly categorias = new Map<number, string>([
-    [1, 'Mesas'], [2, 'Bibliotecas'], [3, 'Escritorios'], [4, 'Cómodas'],
-    [5, 'Racks'], [6, 'Banquetas'], [7, 'Sillas'], [8, 'Decks']
-  ]);
+  private readonly productosUrl = `${environment.apiUrl}/productos`;
+  private readonly movimientosInventarioUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
+  private readonly categoriasUrl = `${environment.apiUrl}/categorias`;
+  private categorias = new Map<number, string>();
   private productosTerminados: ProductoTerminado[] = [];
 
   obtenerProductosTerminados(): ProductoTerminado[] {
@@ -23,9 +22,13 @@ export class ProductoTerminadoService {
   cargarProductosTerminados(): Observable<ProductoTerminado[]> {
     return forkJoin({
       productos: this.http.get<ProductoApiDTO[]>(this.productosUrl),
-      movimientos: this.http.get<MovimientoInventarioApiDTO[]>(this.movimientosInventarioUrl)
+      movimientos: this.http.get<MovimientoInventarioApiDTO[]>(this.movimientosInventarioUrl),
+      categorias: this.http.get<CategoriaApiDTO[]>(this.categoriasUrl)
     }).pipe(
-      map(({ productos, movimientos }) => productos.map(producto => this.mapearProducto(producto, movimientos))),
+      map(({ productos, movimientos, categorias }) => {
+        this.categorias = new Map(categorias.map(categoria => [categoria.id, categoria.nombre]));
+        return productos.map(producto => this.mapearProducto(producto, movimientos));
+      }),
       tap(productos => this.productosTerminados = productos)
     );
   }
@@ -172,10 +175,10 @@ export class ProductoTerminadoService {
       id: apiProducto.codigo ?? productoLocal?.id ?? `PT-${String(apiProducto.id ?? 0).padStart(3, '0')}`,
       apiId: apiProducto.id ?? productoLocal?.apiId,
       nombre: apiProducto.nombre ?? '',
-      categoria: this.categorias.get(apiProducto.id_categoria) ?? productoLocal?.categoria ?? 'Sin categoría',
+      categoria: this.categorias.get(apiProducto.id_categoria) ?? productoLocal?.categoria ?? '',
       descripcion: apiProducto.descripcion ?? '',
-      imagen: productoLocal?.imagen ?? 'assets/mesa_nordica.jpg',
-      unidadMedida: productoLocal?.unidadMedida ?? 'unidad',
+      imagen: productoLocal?.imagen ?? '',
+      unidadMedida: productoLocal?.unidadMedida ?? '',
       stockActual,
       stockMinimo,
       stockMaximo: Number(apiProducto.stock_maximo ?? productoLocal?.stockMaximo ?? Math.max(stockActual * 2, stockActual)),
@@ -257,19 +260,11 @@ export class ProductoTerminadoService {
     return `${dia}/${mes}/${anio}`;
   }
 
-  private obtenerIdCategoria(categoria: string): number {
-    const categorias: Record<string, number> = {
-      Mesas: 1,
-      Bibliotecas: 2,
-      Escritorios: 3,
-      Cómodas: 4,
-      Racks: 5,
-      Banquetas: 6,
-      Sillas: 7,
-      Decks: 8
-    };
+  private obtenerIdCategoria(nombreCategoria: string): number {
+    const categoria = [...this.categorias.entries()]
+      .find(([, nombre]) => nombre === nombreCategoria);
 
-    return categorias[categoria] ?? 0;
+    return categoria?.[0] ?? 0;
   }
 
   obtenerPorId(id: string): ProductoTerminado | undefined {

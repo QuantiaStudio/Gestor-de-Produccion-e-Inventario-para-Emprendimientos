@@ -13,6 +13,7 @@ import { ProductoTerminadoService } from '../../../../../services/producto-termi
   styleUrl: './new-product-form.component.css'
 })
 export class NewProductFormComponent implements OnChanges, OnInit {
+  @Input() categorias: string[] = [];
   @Input() productoEditar: ProductoTerminado | null = null;
   @Output() cerrar = new EventEmitter<void>();
   @Output() productoCreado = new EventEmitter<void>();

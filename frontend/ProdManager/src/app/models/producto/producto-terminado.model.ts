@@ -103,6 +103,11 @@ export interface ProductoApiDTO {
   formula?: DetalleFormulaApiDTO[];
 }
 
+export interface CategoriaApiDTO {
+  id: number;
+  nombre: string;
+}
+
 export interface MovimientoInventarioApiDTO {
   id_movimiento_producto?: number;
   fecha: string;
