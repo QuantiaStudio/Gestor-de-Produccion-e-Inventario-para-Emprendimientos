@@ -1,11 +1,12 @@
 <div class="listado-header">
-  <h1>Materias Primas</h1>
-  <p>Consulta el estado actual de los materiales disponibles en el taller.</p>
+  <h1>Gestión de Movimientos de Stock</h1>
+  <p>Consultá el stock disponible de cada materia prima antes de registrar un ingreso o consumo.</p>
 </div>
 
 <div class="search-bar">
   <input type="text" class="input" placeholder="Buscar material..." />
   <button type="button" class="btn btn-primary">Buscar</button>
+  <button type="button" class="btn btn-primary" (click)="abrirFormMovimiento()">Registrar Movimiento</button>
 </div>
 
 <div class="card table-wrapper">
@@ -43,5 +44,12 @@
   <app-materia-prima-detalle
     [materiaPrima]="materiaPrimaSeleccionada"
     (cerrar)="cerrarDetalle()"
+  />
+}
+
+@if (mostrarFormMovimiento) {
+  <app-materia-prima-movimiento-form
+    [materiasPrimas]="materiasPrimas"
+    (cerrar)="cerrarFormMovimiento()"
   />
 }

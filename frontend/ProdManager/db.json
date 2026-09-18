@@ -1,118 +1,104 @@
 {
   "usuarios": [
     {
-      "id": 1,
-      "nombre": "Admin",
-      "apellido": "Sistema",
-      "email": "admin@correo.com",
-      "contrasena": 123456,
-      "rol": "ADMIN",
-      "estado": true
-    },
-    {
-      "id": 2,
-      "nombre": "Rocío",
-      "apellido": "Altamirano",
-      "email": "rocio.altamirano@correo.com",
-      "contrasena": 123456,
-      "rol": "ADMIN",
-      "estado": true
-    },
-    {
-      "id": 3,
-      "nombre": "Genaro",
-      "apellido": "Cura",
-      "email": "genaro.cura@correo.com",
-      "contrasena": "abcabc",
-      "rol": "OPERARIO",
-      "estado": true
-    },
-    {
-      "id": 4,
-      "nombre": "Cesia",
-      "apellido": "Cáceres",
-      "email": "cesia.caceres@correo.com",
-      "contrasena": "abcabc",
-      "rol": "OPERARIO",
-      "estado": false
-    }
-  ],
-  "categorias": [
-    {
-      "id": 1,
-      "nombre": "Mesas"
-    },
-    {
-      "id": 2,
-      "nombre": "Bibliotecas"
-    },
-    {
-      "id": 3,
-      "nombre": "Escritorios"
-    },
-    {
-      "id": 4,
-      "nombre": "Comodas"
-    },
-    {
-      "id": 5,
-      "nombre": "Racks"
-    },
-    {
-      "id": 6,
-      "nombre": "Banquetas"
-    },
-    {
-      "id": 7,
-      "nombre": "Sillas"
-    },
-    {
-      "id": 8,
-      "nombre": "Decks"
-    }
-  ],
-  "materiasPrimas": [
-    {
-      "id_materia_prima": 1,
-      "nombre": "Madera de Roble",
-      "descripcion": "Madera dura de alta calidad para muebles estructurales.",
-      "unidad_medida": "unidad",
-      "stock_actual": 28,
-      "stock_minimo": 8
-    },
-    {
-      "id_materia_prima": 2,
-      "nombre": "Biblioteca Moderna",
-      "descripcion": "Pintura blanca mate para acabado de superficies.",
-      "unidad_medida": "L",
-      "stock_actual": 15,
-      "stock_minimo": 20
-    },
-    {
-      "id_materia_prima": 3,
-      "nombre": "Tornillos 3mm",
-      "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
-      "unidad_medida": "u",
-      "stock_actual": 1800,
-      "stock_minimo": 500
-    },
-    {
-      "id_materia_prima": 4,
-      "nombre": "Barniz Transparente",
-      "descripcion": "Barniz transparente brillante para protección de madera.",
-      "unidad_medida": "L",
-      "stock_actual": 3,
-      "stock_minimo": 10
-    },
-    {
-      "id_materia_prima": 5,
-      "nombre": "Contrachapado 18mm",
-      "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
-      "unidad_medida": "planchas",
-      "stock_actual": 45,
-      "stock_minimo": 15
-    }
-  ],
+    "usuarios": [
+        {
+        "id": 1,
+        "nombre": "Admin",
+        "apellido": "Sistema",
+        "email": "admin@correo.com",
+        "contrasena": 123456,
+        "rol": "ADMIN",
+        "estado": true
+        },
+        {
+        "id": 2,
+        "nombre": "Rocío",
+        "apellido": "Altamirano",
+        "email": "rocio.altamirano@correo.com",
+        "contrasena": 123456,
+        "rol": "ADMIN",
+        "estado": true
+        },
+        {
+        "id": 3,
+        "nombre": "Genaro",
+        "apellido": "Cura",
+        "email": "genaro.cura@correo.com",
+        "contrasena": "abcabc",
+        "rol": "OPERARIO",
+        "estado": true
+        },
+        {
+        "id": 4,
+        "nombre": "Cesia",
+        "apellido": "Cáceres",
+        "email": "cesia.caceres@correo.com",
+        "contrasena": "abcabc",
+        "rol": "OPERARIO",
+        "estado": false
+        }
+    ],
+
+    "categorias": [
+        { "id": 1, "nombre": "Mesas" },
+        { "id": 2, "nombre": "Bibliotecas" },
+        { "id": 3, "nombre": "Escritorios" },
+        { "id": 4, "nombre": "Comodas" },
+        { "id": 5, "nombre": "Racks" },
+        { "id": 6, "nombre": "Banquetas" },
+        { "id": 7, "nombre": "Sillas" },
+        { "id": 8, "nombre": "Decks" }
+    ],
+
+    "materiasPrimas": [
+        {
+        "id": 1,
+        "id_materia_prima": 1,
+        "nombre": "Madera de Roble",
+        "descripcion": "Madera dura de alta calidad para muebles estructurales.",
+        "unidad_medida": "unidad",
+        "stock_actual": 28,
+        "stock_minimo": 8
+        },
+        {
+        "id": 2,
+        "id_materia_prima": 2,
+        "nombre": "Biblioteca Moderna",
+        "descripcion": "Pintura blanca mate para acabado de superficies.",
+        "unidad_medida": "L",
+        "stock_actual": 15,
+        "stock_minimo": 20
+        },
+        {
+        "id": 3,
+        "id_materia_prima": 3,
+        "nombre": "Tornillos 3mm",
+        "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
+        "unidad_medida": "u",
+        "stock_actual": 1800,
+        "stock_minimo": 500
+        },
+        {
+        "id": 4,
+        "id_materia_prima": 4,
+        "nombre": "Barniz Transparente",
+        "descripcion": "Barniz transparente brillante para protección de madera.",
+        "unidad_medida": "L",
+        "stock_actual": 3,
+        "stock_minimo": 10
+        },
+        {
+        "id": 5,
+        "id_materia_prima": 5,
+        "nombre": "Contrachapado 18mm",
+        "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
+        "unidad_medida": "planchas",
+        "stock_actual": 45,
+        "stock_minimo": 15
+        }
+    ],
+
   "productos": [
     {
       "id": 1,
@@ -415,6 +401,37 @@
     {
       "id": 4,
       "nombre": "Cancelada"
+    }
+],
+
+    "detalleOrdenProduccion": [
+        {"id_detalle_produccion": 1, "id_orden": 1, "id_producto": 1, "cantidad_planificada": 20, "cantidad_producida": 20 },
+        {"id_detalle_produccion": 2, "id_orden": 2, "id_producto": 2, "cantidad_planificada": 15, "cantidad_producida": 6 },
+        {"id_detalle_produccion": 3, "id_orden": 3, "id_producto": 4, "cantidad_planificada": 10, "cantidad_producida": 0 },
+        {"id_detalle_produccion": 4, "id_orden": 4, "id_producto": 3, "cantidad_planificada": 8, "cantidad_producida": 0 },
+        {"id_detalle_produccion": 5, "id_orden": 5, "id_producto": 5, "cantidad_planificada": 30, "cantidad_producida": 30 },
+        {"id_detalle_produccion": 6, "id_orden": 6, "id_producto": 1, "cantidad_planificada": 25, "cantidad_producida": 0 }
+    ],
+
+    "movimientosStockMateriaPrima": [
+        {"id": 1, "id_movimiento": 1, "id_materia_prima": 1, "fecha": "2026-08-20T10:00:00", "tipo_movimiento": "ingreso", "cantidad": 50, "observacion": "Compra a proveedor habitual", "id_usuario": 1 },
+        {"id": 2, "id_movimiento": 2, "id_materia_prima": 1, "fecha": "2026-09-01T09:15:00", "tipo_movimiento": "consumo", "cantidad": 20, "observacion": "Orden de producción #1", "id_usuario": 3 },
+        {"id": 3, "id_movimiento": 3, "id_materia_prima": 2, "fecha": "2026-08-18T11:00:00", "tipo_movimiento": "ingreso", "cantidad": 20, "observacion": "Reposición mensual", "id_usuario": 1 },
+        {"id": 4, "id_movimiento": 4, "id_materia_prima": 2, "fecha": "2026-09-05T11:00:00", "tipo_movimiento": "consumo", "cantidad": 12, "observacion": "Orden de producción #2", "id_usuario": 3 },
+        {"id": 5, "id_movimiento": 5, "id_materia_prima": 6, "fecha": "2026-08-15T09:30:00", "tipo_movimiento": "ingreso", "cantidad": 5, "observacion": "Compra inicial", "id_usuario": 2 },
+        {"id": 6, "id_movimiento": 6, "id_materia_prima": 6, "fecha": "2026-09-04T15:00:00", "tipo_movimiento": "consumo", "cantidad": 2, "observacion": "Prueba de receta", "id_usuario": 4 },
+        {"id": 7, "id_movimiento": 7, "id_materia_prima": 5, "fecha": "2026-08-22T08:00:00", "tipo_movimiento": "ingreso", "cantidad": 60, "observacion": "Compra a granja local", "id_usuario": 1 },
+        {"id": 8, "id_movimiento": 8, "id_materia_prima": 5, "fecha": "2026-09-05T11:05:00", "tipo_movimiento": "consumo", "cantidad": 24, "observacion": "Orden de producción #2", "id_usuario": 3 }
+    ],
+
+    "movimientosInventarioProducto": [
+        {"id_movimiento_producto": 1, "fecha": "2026-09-01T12:00:00", "tipo_movimiento": "ingreso", "cantidad": 20, "id_producto": 1, "id_usuario": 3 },
+        {"id_movimiento_producto": 2, "fecha": "2026-09-02T09:00:00", "tipo_movimiento": "venta", "cantidad": 8, "id_producto": 1, "id_usuario": 2 },
+        {"id_movimiento_producto": 3, "fecha": "2026-09-12T10:00:00", "tipo_movimiento": "ingreso", "cantidad": 30, "id_producto": 5, "id_usuario": 3 },
+        {"id_movimiento_producto": 4, "fecha": "2026-09-13T13:00:00", "tipo_movimiento": "venta", "cantidad": 5, "id_producto": 5, "id_usuario": 2 },
+        {"id_movimiento_producto": 5, "fecha": "2026-09-07T16:30:00", "tipo_movimiento": "ajuste", "cantidad": -1, "id_producto": 3, "id_usuario": 1 },
+        {"id_movimiento_producto": 6, "fecha": "2026-09-09T17:00:00", "tipo_movimiento": "venta", "cantidad": 3, "id_producto": 4, "id_usuario": 2 }
+    ]
     }
   ],
   "ordenesProduccion": [
