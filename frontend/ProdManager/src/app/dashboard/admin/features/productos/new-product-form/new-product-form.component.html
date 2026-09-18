@@ -40,8 +40,8 @@
                             formControlName="nombre">
                     </div>
 
-                    @if (nombre?.errors && nombre?.touched){
-                        @if (nombre?.hasError('required')){
+                    @if (nombre.errors && nombre.touched){
+                        @if (nombre.hasError('required')){
                             <p class="error">El campo nombre es obligatorio</p>
                         }
                     }
@@ -65,15 +65,15 @@
                             </select>
 
                             <div class="mt-1">
-                                <a href="#collapseNuevaCategoria" class="text-decoration-none" data-bs-toggle="collapse"
-                                    role="button">
+                                <button type="button" class="btn btn-link text-decoration-none p-0" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseNuevaCategoria" aria-controls="collapseNuevaCategoria">
 
                                     + Nueva categoría
 
-                                </a>
+                                </button>
                             </div>
-                            @if (categoria?.errors && categoria?.touched){
-                                @if (categoria?.hasError('required')){
+                            @if (categoria.errors && categoria.touched){
+                                @if (categoria.hasError('required')){
                                     <p class="error">El campo categoría es obligatorio</p>
                                 }
                             }
@@ -110,11 +110,11 @@
                                 formControlName="stockInicial">
 
                         </div>
-                        @if (stockInicial?.errors && stockInicial?.touched){
-                            @if (stockInicial?.hasError('required')){
+                        @if (stockInicial.errors && stockInicial.touched){
+                            @if (stockInicial.hasError('required')){
                                 <p class="error">El campo stock inicial es obligatorio</p>
                             }
-                            @if (stockInicial?.hasError('min')){
+                            @if (stockInicial.hasError('min')){
                                 <p class="error">El stock inicial no puede ser negativo ni nulo</p>
                             }
                         }
@@ -130,8 +130,8 @@
                             </label>
                             <input type="number" class="input" id="regStockMinimo" min="0"
                                 placeholder="Cantidad mínima" formControlName="stockMinimo">
-                            @if (stockMinimo?.errors && stockMinimo?.touched) {
-                                @if (stockMinimo?.hasError('required') || stockMinimo?.hasError('min')) {
+                            @if (stockMinimo.errors && stockMinimo.touched) {
+                                @if (stockMinimo.hasError('required') || stockMinimo.hasError('min')) {
                                     <p class="error">El stock mínimo debe ser mayor o igual a 0</p>
                                 }
                             }
@@ -143,8 +143,8 @@
                             </label>
                             <input type="number" class="input" id="regStockMaximo" min="0"
                                 placeholder="Cantidad máxima" formControlName="stockMaximo">
-                            @if (stockMaximo?.errors && stockMaximo?.touched) {
-                                @if (stockMaximo?.hasError('required') || stockMaximo?.hasError('min')) {
+                            @if (stockMaximo.errors && stockMaximo.touched) {
+                                @if (stockMaximo.hasError('required') || stockMaximo.hasError('min')) {
                                     <p class="error">El stock máximo debe ser mayor o igual a 0</p>
                                 }
                             }
@@ -235,10 +235,10 @@
                                 <thead>
 
                                     <tr>
-                                        <th>Material</th>
-                                        <th>Cantidad</th>
-                                        <th>Unidad</th>
-                                        <th></th>
+                                        <th scope="col">Material</th>
+                                        <th scope="col">Cantidad</th>
+                                        <th scope="col">Unidad</th>
+                                        <th scope="col"></th>
                                     </tr>
 
                                 </thead>
@@ -284,8 +284,8 @@
                             @if (materialesInvalidos) {
                                 <p class="error">Debe agregar al menos una materia prima</p>
                             }
-                            @if (cantidadMaterial?.errors && cantidadMaterial?.touched) {
-                                @if (cantidadMaterial?.hasError('min')) {
+                            @if (cantidadMaterial.errors && cantidadMaterial.touched) {
+                                @if (cantidadMaterial.hasError('min')) {
                                     <p class="error">La cantidad de material debe ser mayor a 0</p>
                                 }
                             }

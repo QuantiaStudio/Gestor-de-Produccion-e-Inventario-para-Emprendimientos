@@ -68,28 +68,28 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   });
 
   get nombre() {
-    return this.productForm.get('nombre');
+    return this.productForm.get('nombre')!;
   } 
   get categoria() {
-    return this.productForm.get('categoria');
+    return this.productForm.get('categoria')!;
   }
   get stockInicial() {
-    return this.productForm.get('stockInicial');
+    return this.productForm.get('stockInicial')!;
   }
   get stockMinimo() {
-    return this.productForm.get('stockMinimo');
+    return this.productForm.get('stockMinimo')!;
   }
   get stockMaximo() {
-    return this.productForm.get('stockMaximo');
+    return this.productForm.get('stockMaximo')!;
   }
   get codigo() {
-    return this.productForm.get('codigo');
+    return this.productForm.get('codigo')!;
   }
   get materialId() {
-    return this.productForm.get('materialId');
+    return this.productForm.get('materialId')!;
   }
   get cantidadMaterial() {
-    return this.productForm.get('cantidadMaterial');
+    return this.productForm.get('cantidadMaterial')!;
   }
 
   seleccionarImagen(event: Event) {
@@ -103,10 +103,10 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   }
   /*Falta  implementar la validación de nueva categoría. TERMINAR FEATURE AL INTEGRAR MÓDULO DE PRODUCTOS*/
   get nuevaCategoria() {
-    return this.productForm.get('nuevaCategoria');
+    return this.productForm.get('nuevaCategoria')!;
   }
   get materiales() {
-    return this.productForm.get('materiales');
+    return this.productForm.get('materiales')!;
   }
  
   get materialesInvalidos() {

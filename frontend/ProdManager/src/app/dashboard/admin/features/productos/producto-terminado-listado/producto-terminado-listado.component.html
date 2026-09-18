@@ -12,9 +12,9 @@
 <app-producto-terminado-filtros
   [categorias]="categorias"
   (filtrosCambiaron)="aplicarFiltros($event)"
-/>
+></app-producto-terminado-filtros>
 
-<app-producto-terminado-alertas [resumen]="resumen" />
+<app-producto-terminado-alertas [resumen]="resumen"></app-producto-terminado-alertas>
 
 <div class="row g-4">
   <div class="col-12" [class.col-lg-8]="productoSeleccionado">
@@ -22,11 +22,11 @@
       <table>
         <thead>
           <tr>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th class="numeric">Stock</th>
-            <th>Estado</th>
-            <th></th>
+            <th scope="col">Producto</th>
+            <th scope="col">Categoría</th>
+            <th scope="col" class="numeric">Stock</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -84,7 +84,7 @@
         (cerrar)="cerrarDetalle()"
         (eliminado)="productoEliminado()"
         (editar)="editarProducto()"
-      />
+      ></app-producto-terminado-detalle>
     </div>
   }
 </div>
@@ -100,7 +100,7 @@
   #modalStock
   [productos]="catalogo"
   (actualizar)="actualizarStock($event)"
-/>
+></app-producto-terminado-actualizar-stock>
 
 @if (mostrarFormularioNuevoProducto) {
   <app-new-product-form
@@ -109,5 +109,5 @@
     (cerrar)="cerrarFormularioNuevoProducto()"
     (productoCreado)="productoCreado()"
     (productoActualizado)="productoActualizado()"
-  />
+  ></app-new-product-form>
 }
