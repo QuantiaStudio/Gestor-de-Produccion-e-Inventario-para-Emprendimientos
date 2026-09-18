@@ -87,12 +87,7 @@ export class LoginComponent {
           this.mensajeExito =
             respuesta.mensaje || 'Inicio de sesión exitoso.';
 
-          /*
-           * Redirección al dashboard.
-           *
-           * La redirección específica según rol
-           * corresponde a HU16.
-           */
+        
           this.router.navigate(['/dashboard']);
 
         } else {

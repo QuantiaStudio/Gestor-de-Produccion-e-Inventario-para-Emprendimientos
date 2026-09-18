@@ -1,329 +1,385 @@
-<div class="page-header mb-4 d-flex align-items-start justify-content-between">
+<div class="produccion-container">
+  <header class="produccion-header">
     <div>
-        <h1>Producción</h1>
-        <p>Seguimiento de tus órdenes de producción.</p>
+      <h1 class="title">Producción</h1>
+      <p class="subtitle">Seguimiento de tus órdenes de producción.</p>
     </div>
-    <button type="button" class="btn-nueva-produccion" (click)="abrirFormulario()">
-        + Nueva Producción
+    <button type="button" class="btn-primary" (click)="abrirFormulario()">
+      + Nueva Producción
     </button>
-</div>
+  </header>
 
-<!-- Estadísticas -->
-<section class="inventory-stats mb-4">
-    <article class="stat-card">
-        <div class="stat-card__icon icon-circle-blue">
-            <img src="../../../../../assets/clock.svg" class="icon-blue" alt="">
-        </div>
-        <div class="stat-card__content">
-            <span class="stat-label">Pendientes</span>
-            <span class="stat-value">5</span>
-            <span class="stat-desc">Órdenes Esperando Inicio</span>
-        </div>
-    </article>
-    <article class="stat-card">
-        <div class="stat-card__icon icon-circle-yellow">
-            <img src="../../../../../assets/gear.svg" class="icon-yellow" alt="">
-        </div>
-        <div class="stat-card__content">
-            <span class="stat-label">En Proceso</span>
-            <span class="stat-value">5</span>
-            <span class="stat-desc">Órdenes en Ejecución</span>
-        </div>
-    </article>
-    <article class="stat-card">
-        <div class="stat-card__icon icon-circle-green">
-            <img src="../../../../../assets/check-circle.svg" class="icon-green" alt="">
-        </div>
-        <div class="stat-card__content">
-            <span class="stat-label">Finalizadas</span>
-            <span class="stat-value">32</span>
-            <span class="stat-desc">Órdenes Completadas</span>
-        </div>
-    </article>
-    <article class="stat-card">
-        <div class="stat-card__icon icon-circle-red">
-            <img src="../../../../../assets/x-circle.svg" class="icon-red" alt="">
-        </div>
-        <div class="stat-card__content">
-            <span class="stat-label">Canceladas</span>
-            <span class="stat-value">3</span>
-            <span class="stat-desc">Órdenes canceladas</span>
-        </div>
-    </article>
-</section>
-
-<!-- Filtros -->
-<section class="inventory-filters mb-4">
-    <div class="filters-row">
-        <div class="search-box">
-            <span class="search-icon">
-                <img src="../../../../../assets/search.svg" class="icon-gray" alt="">
-            </span>
-            <input type="text" placeholder="Buscar orden..." class="input">
-        </div>
-        <div class="filter-select">
-            <span class="filter-label">Estado</span>
-            <select class="input form-select">
-                <option>Todos</option>
-            </select>
-        </div>
-        <div class="filter-select">
-            <span class="filter-label">Producto</span>
-            <select class="input form-select">
-                <option>Todos</option>
-            </select>
-        </div>
-        <button type="button" class="btn-limpiar">
-            <img src="../../../../../assets/filter.svg" class="icon-gray" alt="">
-            Limpiar filtros
-        </button>
-    </div>
-</section>
-
-<div class="inventory-layout row g-4" id="inventario">
-    <div
-        class="inventory-table-col"
-        [class.col-lg-8]="Ordenseleccionada"
-        [class.col-lg-12]="!Ordenseleccionada">
-        <div class="stock-table-wrapper">
-
-            <table class="stock-table">
-
-                <thead>
-
-                    <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                        <th>Acciones</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-                    @for (orden of ordenes; track orden.id) {
-                    <tr>
-                        <td>#{{ orden.id }}</td>
-                        <td>{{ orden.producto.nombre }}</td>
-                        <td>
-                            {{ orden.cantidad }}
-                            {{ orden.producto.unidadMedida }}
-                        </td>
-                        <td>
-                            <span class="badge">
-                                {{ orden.estado }}
-                            </span>
-                        </td>
-                        <td>{{ orden.fechaCreacion | date:'dd/MM/yyyy' }}</td>
-                        <td>
-                            <button type="button" class="btn-ver-detalle" (click)="seleccionarOrden(orden)">
-                                Ver
-                            </button>
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-
-            </table>
-
-        </div>
+  <!-- Tarjetas KPI / Resumen -->
+  <section class="kpi-grid">
+    <div class="kpi-card" (click)="filtrarPorEstado('pendiente')">
+      <div class="kpi-icon pending">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-title">Pendientes</span>
+        <span class="kpi-value">{{ totalPendientes }}</span>
+        <span class="kpi-sub">Órdenes Esperando Inicio</span>
+      </div>
     </div>
 
-    @if (Ordenseleccionada; as orden) {
-    <!-- Columna de Detalle -->
-    <div class="col-lg-4 detail-col">
-        <section class="detail-section">
-            <header class="detail-header">
-                <h2 class="detail-title">Orden #{{ orden.id }}</h2>
-                <button
-                    type="button"
-                    class="btn-cerrar-detalle"
-                    aria-label="Cerrar detalle"
-                    (click)="cerrarDetalle()">
-                    &times;
-                </button>
-            </header>
-
-            <div class="detail-info-grid">
-                <span class="detail-info-label">Producto</span>
-                <span class="detail-info-value">{{ orden.producto.nombre }}</span>
-                <span class="detail-info-label">Cantidad</span>
-                <span class="detail-info-value">
-                    {{ orden.cantidad }} {{ orden.producto.unidadMedida }}
-                </span>
-                <span class="detail-info-label">Estado actual</span>
-                <span class="detail-info-value">
-                    <span
-                        class="badge"
-                        [class.badge-pendiente]="orden.estado === 'pendiente'"
-                        [class.badge-produccion]="orden.estado === 'en_produccion'"
-                        [class.badge-finalizada]="orden.estado === 'finalizada'"
-                        [class.badge-cancelada]="orden.estado === 'cancelada'">
-                        {{ textoEstado(orden.estado) }}
-                    </span>
-                </span>
-                <span class="detail-info-label">Fecha de creación</span>
-                <span class="detail-info-value">
-                    {{ orden.fechaCreacion | date:'dd/MM/yyyy' }}
-                </span>
-            </div>
-
-            <section class="detail-subsection">
-                <h3 class="detail-section-title">Materiales requeridos</h3>
-
-                <table class="detail-materials-table">
-                    <thead>
-                        <tr>
-                            <th>Material</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @for (material of orden.materialesRequeridos; track material.materiaPrima.id) {
-                        <tr>
-                            <td>{{ material.materiaPrima.nombre }}</td>
-                            <td>
-                                {{ material.cantidadRequerida }}
-                                {{ material.materiaPrima.unidadMedida }}
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </section>
-
-            <section class="detail-subsection cambiar-estado-section">
-                <h3 class="detail-section-title">Cambiar estado</h3>
-                <label class="detail-estado-label" [for]="'estado-' + orden.id">
-                    Nuevo estado
-                </label>
-                <select
-                    class="input"
-                    [id]="'estado-' + orden.id"
-                    [value]="orden.estado"
-                    #nuevoEstado>
-                    <option value="pendiente">
-                        Pendiente
-                    </option>
-                    <option value="en_produccion">
-                        En producción
-                    </option>
-                    <option value="finalizada">
-                        Finalizada
-                    </option>
-                    <option value="cancelada">
-                        Cancelada
-                    </option>
-                </select>
-                <button
-                    type="button"
-                    class="btn-guardar-estado"
-                    (click)="cambiarEstado(orden, nuevoEstado.value)">
-                    Guardar cambio
-                </button>
-                @if (mensajeEstadoError) {
-                <p class="error detail-state-error" role="alert">
-                    {{ mensajeEstadoError }}
-                </p>
-                }
-            </section>
-
-            <section class="detail-subsection">
-                <h3 class="detail-section-title">Historial</h3>
-                <ul class="detail-timeline">
-                    @for (cambio of orden.historialEstados; track $index) {
-                    <li class="detail-timeline-item">
-                        <span class="detail-timeline-dot"></span>
-                        <div class="detail-timeline-body">
-                            <span class="detail-timeline-date">
-                                {{ cambio.fecha | date:'dd/MM/yyyy HH:mm' }}
-                            </span>
-                            <span class="detail-timeline-text">
-                                Estado cambiado a {{ textoEstado(cambio.estado) }}
-                                @if (cambio.observacion) {
-                                <span> ({{ cambio.observacion }})</span>
-                                }
-                            </span>
-                        </div>
-                    </li>
-                    }
-                </ul>
-            </section>
-        </section>
+    <div class="kpi-card" (click)="filtrarPorEstado('en_produccion')">
+      <div class="kpi-icon in-progress">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-title">En Proceso</span>
+        <span class="kpi-value">{{ totalEnProceso }}</span>
+        <span class="kpi-sub">Órdenes en Ejecución</span>
+      </div>
     </div>
-    }
-</div>
-@if (mostrarFormulario) {
-<section id="modalNuevaProduccion" class="modal-produccion">
-    <form [formGroup]="ordenForm" (ngSubmit)="crearOrden()">
-        <h2>Nueva producción</h2>
 
-        @if (mensajeError) {
-        <p class="error" role="alert">{{ mensajeError }}</p>
+    <div class="kpi-card" (click)="filtrarPorEstado('finalizada')">
+      <div class="kpi-icon completed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-title">Finalizadas</span>
+        <span class="kpi-value">{{ totalFinalizadas }}</span>
+        <span class="kpi-sub">Órdenes Completadas</span>
+      </div>
+    </div>
+
+    <div class="kpi-card" (click)="filtrarPorEstado('cancelada')">
+      <div class="kpi-icon canceled">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-title">Canceladas</span>
+        <span class="kpi-value">{{ totalCanceladas }}</span>
+        <span class="kpi-sub">Órdenes canceladas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtros de Búsqueda -->
+  <section class="filters-section">
+    <div class="search-input-wrapper">
+      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="text"
+        class="input-search"
+        placeholder="Buscar orden..."
+        [formControl]="filtroTexto"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label>ESTADO</label>
+      <select class="select-filter" [formControl]="filtroEstado">
+        <option value="todos">Todos</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="en_produccion">En Producción</option>
+        <option value="finalizada">Finalizada</option>
+        <option value="cancelada">Cancelada</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>PRODUCTO</label>
+      <select class="select-filter" [formControl]="filtroProducto">
+        <option value="todos">Todos</option>
+        @for (prod of productos; track prod.id) {
+          <option [value]="prod.id">{{ prod.nombre }}</option>
         }
+      </select>
+    </div>
 
-        <div class="form-field">
-            <label for="producto">Producto</label>
-            <select
-                id="producto"
-                class="input"
-                formControlName="productoId"
-                [class.input-error]="productoId.invalid && productoId.touched">
-                <option value="">Seleccionar producto</option>
+    <button type="button" class="btn-limpiar" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </button>
+  </section>
 
-                @for (producto of productos; track producto.id) {
-                <option [value]="producto.id">
-                    {{ producto.nombre }}
-                </option>
+  <!-- Contenido Principal: Tabla + Panel Lateral -->
+  <div class="main-content-layout">
+    <!-- Tabla de Órdenes -->
+    <div class="table-container">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>PRODUCTO</th>
+            <th>CANTIDAD</th>
+            <th>ESTADO</th>
+            <th>FECHA</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (orden of ordenesFiltradas; track orden.id) {
+            <tr>
+              <td>#{{ orden.id }}</td>
+              <td>{{ orden.producto.nombre }}</td>
+              <td>{{ orden.cantidad }} {{ orden.producto.unidadMedida }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.badge-pendiente]="orden.estado === 'pendiente'"
+                  [class.badge-produccion]="orden.estado === 'en_produccion'"
+                  [class.badge-finalizada]="orden.estado === 'finalizada'"
+                  [class.badge-cancelada]="orden.estado === 'cancelada'"
+                >
+                  {{ textoEstado(orden.estado) }}
+                </span>
+              </td>
+              <td>{{ orden.fechaCreacion | date:'dd/MM/yyyy' }}</td>
+              <td class="acciones-cell">
+                <button type="button" class="btn-ver" (click)="verDetalle(orden)">
+                  Ver
+                </button>
+
+                @if (orden.estado === 'pendiente' || orden.estado === 'en_produccion') {
+                  <button
+                    type="button"
+                    class="btn-cancelar"
+                    (click)="abrirModalIntervencion(orden, 'CANCELAR')"
+                  >
+                    Cancelar
+                  </button>
                 }
+
+                @if (orden.estado === 'en_produccion') {
+                  <button
+                    type="button"
+                    class="btn-finalizar"
+                    (click)="abrirModalIntervencion(orden, 'FINALIZAR')"
+                  >
+                    Finalizar
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Columna Lateral de Detalle -->
+    @if (Ordenseleccionada && !mostrarModalIntervencion) {
+      <div class="col-lg-4 detail-col">
+        <section class="detail-section">
+          <header class="detail-header">
+            <h2 class="detail-title">Orden #{{ Ordenseleccionada.id }}</h2>
+            <button
+              type="button"
+              class="btn-cerrar-detalle"
+              aria-label="Cerrar detalle"
+              (click)="cerrarDetalle()"
+            >
+              &times;
+            </button>
+          </header>
+
+          <div class="detail-info-grid">
+            <span class="detail-info-label">Producto</span>
+            <span class="detail-info-value">{{ Ordenseleccionada.producto.nombre }}</span>
+
+            <span class="detail-info-label">Cantidad</span>
+            <span class="detail-info-value">
+              {{ Ordenseleccionada.cantidad }} {{ Ordenseleccionada.producto.unidadMedida }}
+            </span>
+
+            <span class="detail-info-label">Estado actual</span>
+            <span class="detail-info-value">
+              <span
+                class="badge"
+                [class.badge-pendiente]="Ordenseleccionada.estado === 'pendiente'"
+                [class.badge-produccion]="Ordenseleccionada.estado === 'en_produccion'"
+                [class.badge-finalizada]="Ordenseleccionada.estado === 'finalizada'"
+                [class.badge-cancelada]="Ordenseleccionada.estado === 'cancelada'"
+              >
+                {{ textoEstado(Ordenseleccionada.estado) }}
+              </span>
+            </span>
+
+            <span class="detail-info-label">Fecha de creación</span>
+            <span class="detail-info-value">
+              {{ Ordenseleccionada.fechaCreacion | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <section class="detail-subsection">
+            <h3 class="detail-section-title">Materiales requeridos</h3>
+            <table class="detail-materials-table">
+              <thead>
+                <tr>
+                  <th>MATERIAL</th>
+                  <th>CANTIDAD</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (material of Ordenseleccionada.materialesRequeridos; track material.materiaPrima.id) {
+                  <tr>
+                    <td>{{ material.materiaPrima.nombre }}</td>
+                    <td>
+                      {{ material.cantidadRequerida }} {{ material.materiaPrima.unidadMedida }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </section>
+
+          <section class="detail-subsection cambiar-estado-section">
+            <h3 class="detail-section-title">Cambiar estado</h3>
+            <label class="detail-estado-label" [for]="'estado-' + Ordenseleccionada.id">
+              NUEVO ESTADO
+            </label>
+            <select
+              class="input"
+              [id]="'estado-' + Ordenseleccionada.id"
+              [value]="Ordenseleccionada.estado"
+              #nuevoEstado
+            >
+              <option value="pendiente">Pendiente</option>
+              <option value="en_produccion">En producción</option>
+              <option value="finalizada">Finalizada</option>
+              <option value="cancelada">Cancelada</option>
             </select>
-            @if (productoId.invalid) {
-            @if (productoId.touched) {
-            @if (productoId.hasError('required')) {
-            <p class="error">Debes seleccionar un producto.</p>
+            <button
+              type="button"
+              class="btn-guardar-estado"
+              (click)="cambiarEstado(Ordenseleccionada, nuevoEstado.value)"
+            >
+              Guardar cambio
+            </button>
+            @if (mensajeEstadoError) {
+              <p class="error detail-state-error" role="alert">
+                {{ mensajeEstadoError }}
+              </p>
             }
-            }
-            }
+          </section>
+
+          <section class="detail-subsection">
+            <h3 class="detail-section-title">Historial</h3>
+            <ul class="detail-timeline">
+              @for (cambio of Ordenseleccionada.historialEstados; track $index) {
+                <li class="detail-timeline-item">
+                  <span class="detail-timeline-dot"></span>
+                  <div class="detail-timeline-body">
+                    <span class="detail-timeline-date">
+                      {{ cambio.fecha | date:'dd/MM/yyyy HH:mm' }}
+                    </span>
+                    <span class="detail-timeline-text">
+                      Estado cambiado a {{ textoEstado(cambio.estado) }}
+                      @if (cambio.observacion) {
+                        <span> ({{ cambio.observacion }})</span>
+                      }
+                    </span>
+                  </div>
+                </li>
+              }
+            </ul>
+          </section>
+        </section>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modal 1: Nueva Producción -->
+@if (mostrarFormulario) {
+  <div class="modal-backdrop">
+    <section id="modalNuevaProduccion" class="modal-produccion">
+      <header class="modal-header">
+        <h2>Nueva producción</h2>
+      </header>
+      <form [formGroup]="ordenForm" (ngSubmit)="crearOrden()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productoSelect">PRODUCTO</label>
+            <select id="productoSelect" formControlName="productoId" class="input">
+              <option value="">Seleccione un producto</option>
+              @for (prod of productos; track prod.id) {
+                <option [value]="prod.id">{{ prod.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cantidadInput">CANTIDAD</label>
+            <input id="cantidadInput" type="number" formControlName="cantidad" class="input" min="1" />
+          </div>
         </div>
 
-        <div class="form-field">
-            <label for="cantidad">Cantidad</label>
-            <input
-                id="cantidad"
-                type="number"
-                min="1"
-                class="input"
-                formControlName="cantidad"
-                [class.input-error]="cantidad.invalid && cantidad.touched">
-            @if (cantidad.invalid) {
-            @if (cantidad.touched) {
-            @if (cantidad.hasError('required')) {
-            <p class="error">La cantidad es obligatoria.</p>
-            }
-            @if (cantidad.hasError('min')) {
-            <p class="error">La cantidad debe ser mayor que cero.</p>
-            }
-            }
-            }
+        <div class="form-group">
+          <label for="obsInput">OBSERVACIONES</label>
+          <textarea id="obsInput" formControlName="observaciones" class="textarea" rows="3"></textarea>
         </div>
 
-        <div class="form-field form-field--full">
-            <label for="observaciones">Observaciones</label>
-            <textarea
-                id="observaciones"
-                class="input"
-                formControlName="observaciones"></textarea>
-        </div>
-
-        <button type="submit" [disabled]="ordenForm.invalid">
-            Crear orden
-        </button>
-        <button type="button" (click)="cerrarFormulario()">
+        <footer class="modal-footer">
+          <button type="button" class="btn-secundario" (click)="cerrarFormulario()">
             Cancelar
-        </button>
-    </form>
-</section>
+          </button>
+
+          <button type="submit" class="btn-primary" [disabled]="ordenForm.invalid">
+            Crear orden
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}
+
+<!-- Modal 2: Modal Reactivo de Intervención -->
+@if (mostrarModalIntervencion && Ordenseleccionada) {
+  <div class="modal-backdrop">
+    <section class="modal-produccion modal-intervencion" aria-modal="true" role="dialog">
+      <header class="modal-header">
+        <h2>
+          {{ accionSeleccionada === 'CANCELAR' ? 'Cancelar Orden' : 'Finalizar Orden' }} #{{ Ordenseleccionada.id }}
+        </h2>
+      </header>
+
+      <form [formGroup]="intervencionForm" (ngSubmit)="confirmarIntervencion()">
+        <p class="modal-subtitle">
+          Producto: <strong>{{ Ordenseleccionada.producto.nombre }}</strong>
+        </p>
+
+        <div class="form-group">
+          <label for="motivoInput">MOTIVO / OBSERVACIONES</label>
+          <textarea
+            id="motivoInput"
+            formControlName="observaciones"
+            class="textarea"
+            rows="3"
+            placeholder="Ingrese el motivo de la intervención..."
+          ></textarea>
+        </div>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn-secundario" (click)="cerrarModalIntervencion()">
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="intervencionForm.invalid"
+          >
+            Confirmar
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
 }
