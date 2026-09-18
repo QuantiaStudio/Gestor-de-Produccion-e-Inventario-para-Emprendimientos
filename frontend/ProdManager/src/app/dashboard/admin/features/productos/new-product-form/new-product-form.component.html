@@ -125,6 +125,41 @@
 
                     </div>
 
+                    <!-- Configuración de stock -->
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-6">
+                            <label for="regStockMinimo" class="form-label mb-1">
+                                Stock mínimo
+                            </label>
+                            <input type="number" class="input" id="regStockMinimo" min="0"
+                                placeholder="Cantidad mínima" formControlName="stockMinimo">
+                            @if (stockMinimo?.errors && stockMinimo?.touched) {
+                                @if (stockMinimo?.hasError('required') || stockMinimo?.hasError('min')) {
+                                    <p class="error">El stock mínimo debe ser mayor o igual a 0</p>
+                                }
+                            }
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="regStockMaximo" class="form-label mb-1">
+                                Stock máximo
+                            </label>
+                            <input type="number" class="input" id="regStockMaximo" min="0"
+                                placeholder="Cantidad máxima" formControlName="stockMaximo">
+                            @if (stockMaximo?.errors && stockMaximo?.touched) {
+                                @if (stockMaximo?.hasError('required') || stockMaximo?.hasError('min')) {
+                                    <p class="error">El stock máximo debe ser mayor o igual a 0</p>
+                                }
+                            }
+                        </div>
+
+                        @if (stockRangoInvalido) {
+                            <p class="error">El stock mínimo no puede superar al stock máximo</p>
+                        }
+
+                    </div>
+
                     <!-- Descripción -->
                     <div class="mb-4">
 

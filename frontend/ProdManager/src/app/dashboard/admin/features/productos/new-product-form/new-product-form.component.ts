@@ -27,6 +27,8 @@ export class NewProductFormComponent {
     nombre: ['', Validators.required],
     descripcion: [''],
     stockInicial: [0, [Validators.required, Validators.min(1)]],
+    stockMinimo: [1, [Validators.required, Validators.min(0)]],
+    stockMaximo: [1, [Validators.required, Validators.min(0)]],
     codigo: ['', Validators.required],
     categoria: ['', Validators.required],
     nuevaCategoria: [''],
@@ -52,6 +54,12 @@ export class NewProductFormComponent {
   get stockInicial() {
     return this.productForm.get('stockInicial');
   }
+  get stockMinimo() {
+    return this.productForm.get('stockMinimo');
+  }
+  get stockMaximo() {
+    return this.productForm.get('stockMaximo');
+  }
   get codigo() {
     return this.productForm.get('codigo');
   }
@@ -71,6 +79,12 @@ export class NewProductFormComponent {
  
   get materialesInvalidos() {
     return this.materiales?.hasError('required') && this.materiales?.touched;
+  }
+
+  get stockRangoInvalido() {
+    const minimo = Number(this.stockMinimo?.value);
+    const maximo = Number(this.stockMaximo?.value);
+    return this.stockMinimo?.touched && this.stockMaximo?.touched && minimo > maximo;
   }
 
   agregarMaterial() {
@@ -118,7 +132,7 @@ export class NewProductFormComponent {
 
   guardarProducto() {
 
-    if (this.productForm.invalid) {
+    if (this.productForm.invalid || this.stockRangoInvalido) {
 
       this.productForm.markAllAsTouched();
 
@@ -151,6 +165,8 @@ export class NewProductFormComponent {
       nombre: '',
       descripcion: '',
       stockInicial: 0,
+      stockMinimo: 1,
+      stockMaximo: 1,
       codigo: '',
       categoria: '',
       nuevaCategoria: '',

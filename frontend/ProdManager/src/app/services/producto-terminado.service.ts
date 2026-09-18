@@ -35,7 +35,8 @@ export class ProductoTerminadoService {
     materialesAgregados: MaterialAgregadoProducto[]
   ): Observable<ProductoApiDTO> {
     const stockActual = formValue.stockInicial ?? 0;
-    const stockMinimo = 1;
+    const stockMinimo = formValue.stockMinimo ?? 1;
+    const stockMaximo = formValue.stockMaximo ?? Math.max(stockActual * 2, stockActual);
     const fechaActual = new Date().toLocaleDateString();
 
     const producto: ProductoTerminado = {
@@ -47,7 +48,7 @@ export class ProductoTerminadoService {
       unidadMedida: 'unidad',
       stockActual,
       stockMinimo,
-      stockMaximo: Math.max(stockActual * 2, stockActual),
+      stockMaximo,
       estado: 'pendiente',
       ultimaActualizacion: fechaActual,
       formula: materialesAgregados.map(material => ({
@@ -71,6 +72,8 @@ export class ProductoTerminadoService {
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       stock_actual: producto.stockActual,
+      stock_minimo: producto.stockMinimo,
+      stock_maximo: producto.stockMaximo,
       id_categoria: this.obtenerIdCategoria(producto.categoria),
       estado: producto.estado,
       codigo: producto.id,
@@ -115,7 +118,7 @@ export class ProductoTerminadoService {
     productoLocal?: ProductoTerminado
   ): ProductoTerminado {
     const stockActual = Number(apiProducto.stock_actual ?? 0);
-    const stockMinimo = productoLocal?.stockMinimo ?? 1;
+    const stockMinimo = Number(apiProducto.stock_minimo ?? productoLocal?.stockMinimo ?? 1);
     const productoId = Number(apiProducto.id ?? 0);
 
     return {
@@ -127,7 +130,7 @@ export class ProductoTerminadoService {
       unidadMedida: productoLocal?.unidadMedida ?? 'unidad',
       stockActual,
       stockMinimo,
-      stockMaximo: productoLocal?.stockMaximo ?? Math.max(stockActual * 2, stockActual),
+      stockMaximo: Number(apiProducto.stock_maximo ?? productoLocal?.stockMaximo ?? Math.max(stockActual * 2, stockActual)),
       estado: this.normalizarEstado(apiProducto.estado, productoLocal?.estado ?? 'pendiente'),
       ultimaActualizacion: productoLocal?.ultimaActualizacion ?? this.fechaDeHoy(),
       formula: apiProducto.formula?.map(material => ({
