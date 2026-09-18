@@ -70,6 +70,11 @@ export class ProductoTerminadoListadoComponent {
     this.productoSeleccionado = null;
   }
 
+  productoEliminado() {
+    this.productoSeleccionado = null;
+    this.cargarProductosDesdeApi();
+  }
+
   private cargarProductosDesdeApi(alCargar?: () => void) {
     this.productoTerminadoService.cargarProductosTerminados().subscribe({
       next: (productos) => {

@@ -19,6 +19,7 @@ export interface MovimientoInventario {
 
 export interface ProductoTerminado {
   id: string;
+  apiId?: number;
   nombre: string;
   descripcion: string;
   imagen: string;

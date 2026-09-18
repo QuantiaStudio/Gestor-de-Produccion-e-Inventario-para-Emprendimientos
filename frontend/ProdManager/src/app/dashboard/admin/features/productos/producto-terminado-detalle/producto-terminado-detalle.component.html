@@ -92,4 +92,29 @@
       </section>
     }
   }
+
+  <footer class="detalle-acciones">
+    <button type="button" class="btn btn-outline-danger" (click)="solicitarEliminacion()">
+      Eliminar producto
+    </button>
+  </footer>
+
+  @if (confirmarEliminacion) {
+    <div class="confirmacion-eliminacion" role="alertdialog" aria-labelledby="tituloConfirmacionEliminacion">
+      <strong id="tituloConfirmacionEliminacion">¿Eliminar este producto?</strong>
+      <p>Esta acción no se puede deshacer.</p>
+      <div class="confirmacion-acciones">
+        <button type="button" class="btn btn-ghost" [disabled]="eliminando" (click)="cancelarEliminacion()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" [disabled]="eliminando" (click)="eliminarProducto()">
+          {{ eliminando ? 'Eliminando...' : 'Confirmar eliminación' }}
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (errorEliminacion) {
+    <p class="error mensaje-eliminacion" role="alert">{{ errorEliminacion }}</p>
+  }
 </aside>

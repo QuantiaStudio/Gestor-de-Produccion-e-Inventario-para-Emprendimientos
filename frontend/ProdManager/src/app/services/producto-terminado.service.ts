@@ -112,6 +112,10 @@ export class ProductoTerminadoService {
     );
   }
 
+  eliminarProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.productosUrl}/${id}`);
+  }
+
   private mapearProducto(
     apiProducto: ProductoApiDTO,
     movimientosInventario: MovimientoInventarioApiDTO[] = [],
@@ -123,6 +127,7 @@ export class ProductoTerminadoService {
 
     return {
       id: apiProducto.codigo ?? productoLocal?.id ?? `PT-${String(apiProducto.id ?? 0).padStart(3, '0')}`,
+      apiId: apiProducto.id ?? productoLocal?.apiId,
       nombre: apiProducto.nombre ?? '',
       categoria: this.categorias.get(apiProducto.id_categoria) ?? productoLocal?.categoria ?? 'Sin categoría',
       descripcion: apiProducto.descripcion ?? '',

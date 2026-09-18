@@ -283,68 +283,6 @@
         }
       ],
       "id": 17
-    },
-    {
-      "nombre": "Escritorio Boho",
-      "descripcion": "",
-      "stock_actual": 5,
-      "id_categoria": 3,
-      "estado": "pendiente",
-      "codigo": "MS-200",
-      "formula": [
-        {
-          "id_materia_prima": 5,
-          "nombre_materia_prima": "Contrachapado 18mm",
-          "cantidad": 5
-        },
-        {
-          "id_materia_prima": 1,
-          "nombre_materia_prima": "Madera de Roble",
-          "cantidad": 4
-        },
-        {
-          "id_materia_prima": 3,
-          "nombre_materia_prima": "Tornillos 3mm",
-          "cantidad": 18
-        },
-        {
-          "id_materia_prima": 2,
-          "nombre_materia_prima": "Pintura Blanca",
-          "cantidad": 2
-        }
-      ],
-      "id": 18
-    },
-    {
-      "nombre": "Escritorio Boho",
-      "descripcion": "",
-      "stock_actual": 5,
-      "id_categoria": 3,
-      "estado": "pendiente",
-      "codigo": "MS-200",
-      "formula": [
-        {
-          "id_materia_prima": 5,
-          "nombre_materia_prima": "Contrachapado 18mm",
-          "cantidad": 5
-        },
-        {
-          "id_materia_prima": 1,
-          "nombre_materia_prima": "Madera de Roble",
-          "cantidad": 4
-        },
-        {
-          "id_materia_prima": 3,
-          "nombre_materia_prima": "Tornillos 3mm",
-          "cantidad": 18
-        },
-        {
-          "id_materia_prima": 2,
-          "nombre_materia_prima": "Pintura Blanca",
-          "cantidad": 2
-        }
-      ],
-      "id": 19
     }
   ],
   "detalleFormula": [
