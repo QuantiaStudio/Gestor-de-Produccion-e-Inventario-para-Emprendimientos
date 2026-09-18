@@ -30,7 +30,48 @@
 
 .table-wrapper table {
   margin: 0;
-  min-width: 560px;
+  min-width: 720px;
+  table-layout: fixed;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  vertical-align: middle;
+}
+
+.table-wrapper th:nth-child(1),
+.table-wrapper td:nth-child(1) {
+  width: 38%;
+}
+
+.table-wrapper th:nth-child(2),
+.table-wrapper td:nth-child(2) {
+  width: 22%;
+}
+
+.table-wrapper th:nth-child(3),
+.table-wrapper td:nth-child(3) {
+  width: 18%;
+}
+
+.table-wrapper th:nth-child(4),
+.table-wrapper td:nth-child(4) {
+  width: 17%;
+}
+
+.table-wrapper th:nth-child(5),
+.table-wrapper td:nth-child(5) {
+  width: 5%;
+}
+
+.table-wrapper th.numeric,
+.table-wrapper td.numeric {
+  text-align: left;
+}
+
+.table-wrapper th.actions,
+.table-wrapper td.actions {
+  text-align: center;
 }
 
 .table-wrapper thead th {
@@ -63,10 +104,14 @@
 .producto-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .producto-nombre {
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .producto-info small {
@@ -95,6 +140,7 @@
 
 .estados-producto {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 4px;
 }
