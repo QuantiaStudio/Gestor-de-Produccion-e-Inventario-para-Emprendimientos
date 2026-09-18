@@ -131,8 +131,11 @@ export class NewProductFormComponent {
   }
 
   guardarProducto() {
+    const minimo = Number(this.stockMinimo?.value);
+    const maximo = Number(this.stockMaximo?.value);
+    const rangoStockInvalido = minimo > maximo;
 
-    if (this.productForm.invalid || this.stockRangoInvalido) {
+    if (this.productForm.invalid || rangoStockInvalido) {
 
       this.productForm.markAllAsTouched();
 
