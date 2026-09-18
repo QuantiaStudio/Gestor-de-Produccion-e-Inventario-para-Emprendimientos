@@ -128,8 +128,9 @@
       "nombre": "Biblioteca Moderna",
       "descripcion": "Biblioteca de cinco estantes en melamina blanca con laterales de pino.",
       "precio": 95000,
-      "estado": true,
+      "estado": "en_produccion",
       "stock_actual": 4,
+      "stock_minimo": 5,
       "id_categoria": 2
     },
     {
@@ -146,7 +147,7 @@
       "nombre": "Mesa Ratona",
       "descripcion": "Mesa ratona rectangular de pino con estante inferior.",
       "precio": 45000,
-      "estado": false,
+      "estado": "en_produccion",
       "stock_actual": 0,
       "id_categoria": 1
     },
@@ -185,7 +186,7 @@
       "stock_minimo": 1,
       "stock_maximo": 80,
       "id_categoria": 7,
-      "estado": "finalizado",
+      "estado": "en_produccion",
       "codigo": "PT-008",
       "formula": [
         {
