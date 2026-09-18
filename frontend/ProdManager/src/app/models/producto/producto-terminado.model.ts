@@ -6,7 +6,7 @@ export type EstadoProductoTerminado =
   | 'finalizado'
   | 'cancelado';
 
-export type TipoMovimiento = 'ingreso' | 'egreso' | 'ajuste';
+export type TipoMovimiento = 'ingreso' | 'egreso' | 'ajuste' | 'modificacion';
 
 export interface MovimientoInventario {
   id: string;

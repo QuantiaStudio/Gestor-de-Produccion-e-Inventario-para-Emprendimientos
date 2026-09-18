@@ -33,6 +33,30 @@
           <p>{{ producto.descripcion }}</p>
         </div>
 
+        <div class="detalle-bloque materiales-necesarios">
+          <span class="detalle-label">Materiales necesarios</span>
+          @if (producto.formula.length > 0) {
+            <table class="tabla-formula">
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th class="numeric">Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (material of producto.formula; track material.materiaPrimaId) {
+                  <tr>
+                    <td>{{ material.nombreMateriaPrima }}</td>
+                    <td class="numeric">{{ material.cantidad }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p class="texto-vacio">Sin materiales registrados.</p>
+          }
+        </div>
+
         <div class="detalle-fila">
           <span class="detalle-label">Categoría</span>
           <span>{{ producto.categoria }}</span>
@@ -76,6 +100,7 @@
                     @case ('ingreso') { <span class="estado-badge badge--success">Ingreso</span> }
                     @case ('egreso') { <span class="estado-badge badge--error">Egreso</span> }
                     @case ('ajuste') { <span class="estado-badge badge--warning">Ajuste</span> }
+                    @case ('modificacion') { <span class="estado-badge badge--info">Modificación</span> }
                   }
                   <small class="movimiento-origen">{{ mov.origen }}</small>
                 </td>

@@ -138,7 +138,25 @@ export class ProductoTerminadoService {
       }))
     };
 
-    return this.http.put<ProductoApiDTO>(`${this.productosUrl}/${producto.apiId}`, payload);
+    return this.http.put<ProductoApiDTO>(`${this.productosUrl}/${producto.apiId}`, payload).pipe(
+      switchMap(respuesta => {
+        if (!producto.apiId) return of(respuesta);
+
+        const movimientoModificacion: MovimientoInventarioApiDTO = {
+          fecha: new Date().toISOString(),
+          tipo_movimiento: 'modificacion',
+          cantidad: Number(formValue.stockInicial ?? producto.stockActual) - producto.stockActual,
+          id_producto: producto.apiId,
+          id_usuario: 1,
+          observacion: 'Producto modificado'
+        };
+
+        return this.http.post<MovimientoInventarioApiDTO>(
+          this.movimientosInventarioUrl,
+          movimientoModificacion
+        ).pipe(map(() => respuesta));
+      })
+    );
   }
 
   private mapearProducto(
@@ -212,6 +230,7 @@ export class ProductoTerminadoService {
     if (tipo === 'ingreso') return 'ingreso';
     if (tipo === 'venta' || tipo === 'egreso' || tipo === 'consumo') return 'egreso';
     if (tipo === 'ajuste') return 'ajuste';
+    if (tipo === 'modificacion') return 'modificacion';
 
     return 'ajuste';
   }
@@ -223,6 +242,7 @@ export class ProductoTerminadoService {
     if (tipo === 'venta') return 'Venta';
     if (tipo === 'consumo') return 'Consumo de producción';
     if (tipo === 'ajuste') return observacion ?? 'Ajuste manual de stock';
+    if (tipo === 'modificacion') return observacion ?? 'Producto modificado';
 
     return observacion ?? 'Movimiento de inventario';
   }

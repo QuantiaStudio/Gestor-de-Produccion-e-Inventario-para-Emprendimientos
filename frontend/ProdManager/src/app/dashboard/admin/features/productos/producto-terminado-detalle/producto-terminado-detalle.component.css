@@ -74,6 +74,31 @@
   font-size: 13px;
 }
 
+.materiales-necesarios {
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.tabla-formula {
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.tabla-formula th {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+}
+
+.tabla-formula td {
+  border-top: 1px solid var(--gray-200);
+}
+
+.texto-vacio {
+  color: var(--gray-400);
+}
+
 .detalle-fila {
   display: flex;
   align-items: baseline;
