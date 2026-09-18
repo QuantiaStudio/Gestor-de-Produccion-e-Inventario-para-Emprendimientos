@@ -282,9 +282,22 @@ export class ProductoTerminadoService {
     return this.productosTerminados.filter(pt => {
       if (busqueda && !this.normalizar(pt.id).includes(busqueda) && !this.normalizar(pt.nombre).includes(busqueda)) return false;
       if (filtros.categoria && pt.categoria !== filtros.categoria) return false;
-      if (filtros.estado && pt.estado !== filtros.estado) return false;
+      if (filtros.estado && !this.coincideEstado(pt, filtros.estado)) return false;
       return true;
     });
+  }
+
+  private coincideEstado(
+    producto: ProductoTerminado,
+    estado: NonNullable<FiltroProductoTerminado['estado']>
+  ): boolean {
+    if (estado === 'bajo_minimo') {
+      return producto.stockActual > 0 && producto.stockActual <= producto.stockMinimo;
+    }
+
+    if (estado === 'sin_stock') return producto.stockActual === 0;
+    if (estado === 'optimo') return producto.stockActual > producto.stockMinimo;
+    return producto.estado === estado;
   }
 
   obtenerCategorias(): string[] {

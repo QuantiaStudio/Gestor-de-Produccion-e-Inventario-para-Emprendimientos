@@ -48,12 +48,20 @@
               <td>{{ pt.categoria }}</td>
               <td class="numeric">{{ pt.stockActual }} {{ pt.unidadMedida }}</td>
               <td>
-                @switch (pt.estado) {
-                  @case ('pendiente') { <span class="estado-badge badge--warning">Pendiente</span> }
-                  @case ('en_produccion') { <span class="estado-badge badge--info">En producción</span> }
-                  @case ('finalizado') { <span class="estado-badge badge--success">Finalizado</span> }
-                  @case ('cancelado') { <span class="estado-badge badge--error">Cancelado</span> }
-                }
+                <div class="estados-producto">
+                  @if (estaEnProduccion(pt)) {
+                    <span class="estado-badge badge--info">En producción</span>
+                  }
+                  @if (estaBajoStock(pt)) {
+                    <span class="estado-badge badge--warning">Bajo stock</span>
+                  }
+                  @if (estaSinStock(pt)) {
+                    <span class="estado-badge badge--error">Sin stock</span>
+                  }
+                  @if (!estaEnProduccion(pt) && !estaBajoStock(pt) && !estaSinStock(pt)) {
+                    <span class="estado-badge badge--success">Stock disponible</span>
+                  }
+                </div>
               </td>
               <td class="actions">
                 <img src="assets/chevron-right.svg" alt="" class="icono-detalle" />

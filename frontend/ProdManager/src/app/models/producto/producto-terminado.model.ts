@@ -6,6 +6,8 @@ export type EstadoProductoTerminado =
   | 'finalizado'
   | 'cancelado';
 
+export type EstadoInventarioProducto = 'optimo' | 'bajo_minimo' | 'sin_stock';
+
 export type TipoMovimiento = 'ingreso' | 'egreso' | 'ajuste' | 'modificacion';
 
 export interface MovimientoInventario {
@@ -39,7 +41,7 @@ export interface ProductoTerminado {
 export interface FiltroProductoTerminado {
   busqueda?: string;
   categoria?: string;
-  estado?: EstadoProductoTerminado;
+  estado?: EstadoProductoTerminado | EstadoInventarioProducto;
 }
 
 export interface ActualizacionStock {

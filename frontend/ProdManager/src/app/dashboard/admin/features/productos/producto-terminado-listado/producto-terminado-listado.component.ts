@@ -86,6 +86,18 @@ export class ProductoTerminadoListadoComponent {
     this.productoSeleccionado = producto;
   }
 
+  estaEnProduccion(producto: ProductoTerminado): boolean {
+    return producto.estado === 'en_produccion';
+  }
+
+  estaBajoStock(producto: ProductoTerminado): boolean {
+    return producto.stockActual > 0 && producto.stockActual <= producto.stockMinimo;
+  }
+
+  estaSinStock(producto: ProductoTerminado): boolean {
+    return producto.stockActual === 0;
+  }
+
   cerrarDetalle() {
     this.productoSeleccionado = null;
   }

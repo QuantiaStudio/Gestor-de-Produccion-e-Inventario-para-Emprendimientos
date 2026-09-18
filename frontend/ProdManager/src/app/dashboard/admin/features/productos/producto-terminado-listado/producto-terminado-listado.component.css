@@ -93,6 +93,12 @@
   opacity: 0.5;
 }
 
+.estados-producto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 @media (max-width: 768px) {
   .producto-thumb {
     width: 32px;
