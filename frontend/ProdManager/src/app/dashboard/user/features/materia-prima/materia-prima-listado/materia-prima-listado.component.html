@@ -1,11 +1,16 @@
 <div class="listado-header">
   <h1>Listado de Materia Prima</h1>
-  <p>Consultá el stock disponible de cada materia prima.</p>
+  <p>Consultá el stock de cada materia prima y actualizalo con un ingreso o un consumo.</p>
 </div>
 
 <div class="search-bar">
-  <input type="text" class="input" placeholder="Buscar material..." />
-  <button type="button" class="btn btn-primary">Buscar</button>
+  <input
+    type="text"
+    class="input"
+    placeholder="Buscar material..."
+    [value]="busqueda"
+    (input)="busqueda = $any($event.target).value"
+  />
 </div>
 
 <div class="card table-wrapper">
@@ -15,15 +20,18 @@
         <th>ID</th>
         <th>Material</th>
         <th class="numeric">Cantidad</th>
+        <th class="numeric">Stock mínimo</th>
         <th>Estado</th>
+        <th class="acciones"></th>
       </tr>
     </thead>
     <tbody>
-      @for (mp of materiasPrimas; track mp.id) {
+      @for (mp of materiasFiltradas; track mp.id) {
         <tr (click)="seleccionar(mp)" class="fila-clickeable">
           <td class="mono">#{{ mp.id }}</td>
           <td>{{ mp.nombre }}</td>
           <td class="numeric">{{ mp.stockDisponible }} {{ mp.unidadMedida }}</td>
+          <td class="numeric">{{ mp.stockMinimo }} {{ mp.unidadMedida }}</td>
           <td>
             @switch (mp.estado) {
               @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
@@ -31,6 +39,22 @@
               @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
             }
           </td>
+          <td class="acciones">
+            <button type="button" class="btn-accion btn-actualizar" (click)="abrirActualizarStock(mp); $event.stopPropagation()" aria-label="Actualizar stock" title="Actualizar stock">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10ZM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5Zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5Zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325Z"/>
+              </svg>
+            </button>
+            <button type="button" class="btn-accion btn-detalle" (click)="seleccionar(mp); $event.stopPropagation()" aria-label="Ver detalle" title="Ver detalle">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="sin-resultados">No se encontraron materias primas.</td>
         </tr>
       }
     </tbody>
@@ -47,6 +71,7 @@
 @if (mostrarFormMovimiento) {
   <app-materia-prima-movimiento-form
     [materiasPrimas]="materiasPrimas"
+    [materiaPrimaIdInicial]="materiaParaActualizarId"
     (cerrar)="cerrarFormMovimiento()"
   />
 }
