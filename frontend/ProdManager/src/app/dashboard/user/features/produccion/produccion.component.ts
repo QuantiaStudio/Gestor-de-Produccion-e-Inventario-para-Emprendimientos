@@ -49,7 +49,15 @@ export class ProduccionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
+    this.produccionService.cargarOrdenes().subscribe({
+      next: (ordenes) => {
+        this.ordenes = ordenes;
+      },
+      error: (error) => {
+        console.error('Error al cargar órdenes de producción', error);
+        this.ordenes = [];
+      }
+    });
     this.productoTerminadoService.cargarProductosTerminados().subscribe({
       next: (productos) => {
         this.productos = productos;
@@ -171,22 +179,22 @@ export class ProduccionComponent implements OnInit {
 
     const datos: NuevaOrdenProduccion = this.ordenForm.getRawValue();
 
-    try {
-      this.produccionService.crearOrden(datos);
-    } catch (error) {
-      this.mensajeError = error instanceof Error
-        ? error.message
-        : 'No se pudo crear la orden de producción.';
-      return;
-    }
-
-    this.ordenes = this.produccionService.obtenerOrdenes();
-    this.ordenForm.reset({
-      productoId: '',
-      cantidad: 1,
-      observaciones: ''
+    this.produccionService.crearOrden(datos).subscribe({
+      next: () => {
+        this.ordenes = this.produccionService.obtenerOrdenes();
+        this.ordenForm.reset({
+          productoId: '',
+          cantidad: 1,
+          observaciones: ''
+        });
+        this.cerrarFormulario();
+      },
+      error: (error) => {
+        this.mensajeError = error instanceof Error && !('status' in error)
+          ? error.message
+          : 'No se pudo crear la orden de producción.';
+      }
     });
-    this.cerrarFormulario();
   }
 
 

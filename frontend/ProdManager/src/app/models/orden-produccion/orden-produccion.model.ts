@@ -38,6 +38,8 @@ export type ProductoOrdenProduccion = Pick<
 
 export interface OrdenProduccion {
     id: string;
+    apiId?: number;
+    detalleApiId?: number;
     producto: ProductoOrdenProduccion;
     cantidad: number;
     cantidadProducida: number;
@@ -58,4 +60,31 @@ export interface NuevaOrdenProduccion {
     productoId: string;
     cantidad: number;
     observaciones?: string;
+}
+
+/** Forma real de la tabla "ordenesProduccion" en db.json (json-server). */
+export interface OrdenProduccionApiDTO {
+    id?: number;
+    id_orden: number;
+    fecha_creacion: string;
+    fecha_inicio?: string;
+    id_estado: number;
+}
+
+/** Forma real de la tabla "detalleOrdenProduccion" en db.json (json-server). */
+export interface DetalleOrdenProduccionApiDTO {
+    id?: number;
+    id_detalle_produccion: number;
+    id_orden: number;
+    id_producto: number;
+    cantidad_planificada: number;
+    cantidad_producida: number;
+}
+
+/** Forma real de la tabla "detalleFormula" en db.json (json-server). */
+export interface DetalleFormulaTablaApiDTO {
+    id_detalle_formula: number;
+    id_producto: number;
+    id_materia_prima: number;
+    cantidad_necesaria: number;
 }
