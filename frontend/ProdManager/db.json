@@ -441,6 +441,7 @@
   ],
   "detalleOrdenProduccion": [
     {
+      "id": 1,
       "id_detalle_produccion": 1,
       "id_orden": 1,
       "id_producto": 1,
@@ -448,6 +449,7 @@
       "cantidad_producida": 20
     },
     {
+      "id": 2,
       "id_detalle_produccion": 2,
       "id_orden": 2,
       "id_producto": 2,
@@ -455,6 +457,7 @@
       "cantidad_producida": 6
     },
     {
+      "id": 3,
       "id_detalle_produccion": 3,
       "id_orden": 3,
       "id_producto": 4,
@@ -462,6 +465,7 @@
       "cantidad_producida": 0
     },
     {
+      "id": 4,
       "id_detalle_produccion": 4,
       "id_orden": 4,
       "id_producto": 3,
@@ -469,6 +473,7 @@
       "cantidad_producida": 0
     },
     {
+      "id": 5,
       "id_detalle_produccion": 5,
       "id_orden": 5,
       "id_producto": 5,
@@ -476,6 +481,7 @@
       "cantidad_producida": 30
     },
     {
+      "id": 6,
       "id_detalle_produccion": 6,
       "id_orden": 6,
       "id_producto": 1,

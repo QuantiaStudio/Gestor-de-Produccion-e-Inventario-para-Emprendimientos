@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
 import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
@@ -117,60 +118,48 @@ export class ProduccionComponent implements OnInit {
   cambiarEstado(orden: OrdenProduccion, nuevoEstado: string): void {
     this.mensajeEstadoError = '';
 
-    try {
-      if (
-        nuevoEstado === 'cancelada' &&
-        (orden.estado === 'finalizada' || orden.estado === 'cancelada')
-      ) {
-        throw new Error(
-          'No se puede cancelar una orden finalizada o ya cancelada.'
-        );
-      }
+    let cambio$: Observable<void>;
 
-      if (nuevoEstado === 'en_produccion') {
-        this.iniciar(orden);
-      } else if (nuevoEstado === 'finalizada') {
-        this.finalizar(orden);
-      } else if (nuevoEstado === 'cancelada') {
-        this.cancelar(orden);
-      } else if (nuevoEstado === 'pendiente') {
-        throw new Error(
-          'No se puede regresar una orden al estado pendiente.'
-        );
-      } else {
-        throw new Error('El estado seleccionado no es válido.');
+    if (nuevoEstado === 'en_produccion') {
+      cambio$ = this.produccionService.iniciarProduccion(orden.id);
+    } else if (nuevoEstado === 'finalizada') {
+      cambio$ = this.produccionService.finalizarProduccion(orden.id);
+    } else if (nuevoEstado === 'cancelada') {
+      if (orden.estado === 'finalizada' || orden.estado === 'cancelada') {
+        this.mensajeEstadoError = 'No se puede cancelar una orden finalizada o ya cancelada.';
+        return;
       }
-    } catch (error) {
-      this.mensajeEstadoError = error instanceof Error
-        ? error.message
-        : 'No se pudo cambiar el estado de la orden.';
+      const motivo = prompt('Ingrese el motivo de la cancelación:');
+      if (!motivo) {
+        this.mensajeEstadoError = 'Debes indicar un motivo de cancelación.';
+        return;
+      }
+      cambio$ = this.produccionService.cancelarProduccion(orden.id, motivo);
+    } else if (nuevoEstado === 'pendiente') {
+      this.mensajeEstadoError = 'No se puede regresar una orden al estado pendiente.';
+      return;
+    } else {
+      this.mensajeEstadoError = 'El estado seleccionado no es válido.';
       return;
     }
 
-    this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
-    this.recargarOrdenes();
+    cambio$.subscribe({
+      next: () => {
+        this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
+        this.recargarOrdenes();
+      },
+      error: (error) => {
+        this.mensajeEstadoError = error instanceof Error && !('status' in error)
+          ? error.message
+          : 'No se pudo cambiar el estado de la orden.';
+      }
+    });
   }
 
   private recargarOrdenes(): void {
     this.ordenes = this.produccionService.obtenerOrdenes();
   }
-  iniciar(orden: OrdenProduccion): void {
-    this.produccionService.iniciarProduccion(orden.id);
-    this.recargarOrdenes();
-  }
-  finalizar(orden: OrdenProduccion): void {
-    this.produccionService.finalizarProduccion(orden.id);
-    this.recargarOrdenes();
-  }
-  cancelar(orden: OrdenProduccion): void {
-    const motivo = prompt('Ingrese el motivo de la cancelación:');
-    if (motivo) {
-      this.produccionService.cancelarProduccion(orden.id, motivo);
-      this.recargarOrdenes();
-    } else {
-      throw new Error('Debes indicar un motivo de cancelación.');
-    }
-  }
+
   crearOrden(): void {
     if (this.ordenForm.invalid) {
       this.ordenForm.markAllAsTouched();
