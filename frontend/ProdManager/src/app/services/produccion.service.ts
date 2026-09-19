@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, NuevoProductoFormValue, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
-import { NuevaOrdenProduccion, OrdenProduccion, MaterialRequeridoOrden } from '../models/orden-produccion/orden-produccion.model';
+import {
+    CampoOrdenOrdenProduccion,
+    EstadoOrdenProduccion,
+    FiltroOrdenProduccion,
+    MaterialRequeridoOrden,
+    NuevaOrdenProduccion,
+    OrdenamientoOrdenProduccion,
+    OrdenProduccion,
+    ProductoOrdenProduccion
+} from '../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminadoService } from './producto-terminado.service';
 import { MateriaPrimaService } from './materia-prima.service';
 import { UserService } from './user.service';
@@ -21,6 +30,53 @@ export class ProduccionService {
     }
     obtenerPorId(id: string): OrdenProduccion | undefined {
         return this.obtenerOrdenes().find(orden => orden.id === id);
+    }
+
+    filtrar(filtros: FiltroOrdenProduccion): OrdenProduccion[] {
+        const busqueda = this.normalizar(filtros.busqueda ?? '');
+
+        return this.ordenesProduccion.filter(orden => {
+            if (
+                busqueda &&
+                !this.normalizar(orden.id).includes(busqueda) &&
+                !this.normalizar(orden.producto.nombre).includes(busqueda)
+            ) {
+                return false;
+            }
+
+            if (filtros.estado && orden.estado !== filtros.estado) {
+                return false;
+            }
+
+            if (filtros.productoId && orden.producto.id !== filtros.productoId) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    ordenar(
+        ordenes: OrdenProduccion[],
+        ordenamiento: OrdenamientoOrdenProduccion
+    ): OrdenProduccion[] {
+        const factor = ordenamiento.direccion === 'asc' ? 1 : -1;
+
+        return [...ordenes].sort(
+            (a, b) => this.comparar(a, b, ordenamiento.campo) * factor
+        );
+    }
+
+    obtenerProductosDeOrdenes(): ProductoOrdenProduccion[] {
+        const productos = new Map<string, ProductoOrdenProduccion>();
+
+        for (const orden of this.ordenesProduccion) {
+            productos.set(orden.producto.id, orden.producto);
+        }
+
+        return [...productos.values()].sort(
+            (a, b) => a.nombre.localeCompare(b.nombre, 'es')
+        );
     }
     verificarDisponibilidad(id: string): boolean {
         const orden = this.obtenerPorId(id);
@@ -168,6 +224,57 @@ export class ProduccionService {
 
     }
 
+    private comparar(
+        a: OrdenProduccion,
+        b: OrdenProduccion,
+        campo: CampoOrdenOrdenProduccion
+    ): number {
+        switch (campo) {
+            case 'id':
+                return a.id.localeCompare(b.id, 'es', { numeric: true });
+            case 'producto':
+                return a.producto.nombre.localeCompare(b.producto.nombre, 'es');
+            case 'cantidad':
+                return a.cantidad - b.cantidad;
+            case 'estado':
+                return (
+                    this.flujoEstados.indexOf(a.estado) -
+                    this.flujoEstados.indexOf(b.estado)
+                );
+            case 'fechaCreacion':
+                return (
+                    this.parsearFecha(a.fechaCreacion) -
+                    this.parsearFecha(b.fechaCreacion)
+                );
+            default:
+                return 0;
+        }
+    }
+
+    private parsearFecha(fecha: string): number {
+        const formatoCorto = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(fecha);
+
+        if (formatoCorto) {
+            const [, dia, mes, anio] = formatoCorto;
+            return new Date(
+                Number(anio),
+                Number(mes) - 1,
+                Number(dia)
+            ).getTime();
+        }
+
+        const tiempo = new Date(fecha).getTime();
+        return Number.isNaN(tiempo) ? 0 : tiempo;
+    }
+
+    private normalizar(texto: string): string {
+        return texto
+            .normalize('NFD')
+            .replace(/\p{Diacritic}/gu, '')
+            .toLowerCase()
+            .trim();
+    }
+
     private calcularMaterialesRequeridos(
         productoId: string,
         cantidadProductos: number
@@ -208,6 +315,13 @@ export class ProduccionService {
             };
         });
     }
+
+    private readonly flujoEstados: EstadoOrdenProduccion[] = [
+        'pendiente',
+        'en_produccion',
+        'finalizada',
+        'cancelada'
+    ];
 
     private ordenesProduccion: OrdenProduccion[] = [
         {

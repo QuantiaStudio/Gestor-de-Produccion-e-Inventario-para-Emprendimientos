@@ -59,3 +59,23 @@ export interface NuevaOrdenProduccion {
     cantidad: number;
     observaciones?: string;
 }
+
+export interface FiltroOrdenProduccion {
+    busqueda?: string;
+    estado?: EstadoOrdenProduccion;
+    productoId?: string;
+}
+
+export type CampoOrdenOrdenProduccion =
+    | 'id'
+    | 'producto'
+    | 'cantidad'
+    | 'estado'
+    | 'fechaCreacion';
+
+export type DireccionOrden = 'asc' | 'desc';
+
+export interface OrdenamientoOrdenProduccion {
+    campo: CampoOrdenOrdenProduccion;
+    direccion: DireccionOrden;
+}
