@@ -14,6 +14,7 @@ import {
     OrdenProduccionApiDTO
 } from '../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminadoService } from './producto-terminado.service';
+import { MovimientoStockService } from './movimiento-stock.service';
 import { MateriaPrimaService } from './materia-prima.service';
 
 interface ItemFormula {
@@ -30,6 +31,8 @@ export class ProduccionService {
     private readonly detallesUrl = `${environment.apiUrl}/detalleOrdenProduccion`;
     private readonly estadosUrl = `${environment.apiUrl}/estados`;
     private readonly formulasUrl = `${environment.apiUrl}/detalleFormula`;
+    private readonly productosUrl = `${environment.apiUrl}/productos`;
+    private readonly movimientosProductoUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
 
     private ordenesProduccion: OrdenProduccion[] = [];
     private estados = new Map<number, EstadoOrdenProduccion>();
@@ -40,7 +43,8 @@ export class ProduccionService {
         private http: HttpClient,
         private authService: AuthService,
         private materiaPrimaService: MateriaPrimaService,
-        private productoTerminadoService: ProductoTerminadoService
+        private productoTerminadoService: ProductoTerminadoService,
+        private movimientoStockService: MovimientoStockService
     ) { }
 
     cargarOrdenes(): Observable<OrdenProduccion[]> {
@@ -156,74 +160,138 @@ export class ProduccionService {
         );
     }
 
-    iniciarProduccion(id: string): void {
+    iniciarProduccion(id: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
-            throw new Error('La orden no existe.');
+            return throwError(() => new Error('La orden no existe.'));
         }
         if (orden.estado !== 'pendiente') {
-            throw new Error('Solo se pueden iniciar órdenes pendientes.');
+            return throwError(() => new Error('Solo se pueden iniciar órdenes pendientes.'));
         }
-        const disponible = this.verificarDisponibilidad(id);
-        if (!disponible) {
-            throw new Error('No hay materiales suficientes para iniciar la producción.');
+        if (!this.verificarDisponibilidad(id)) {
+            return throwError(() => new Error('No hay materiales suficientes para iniciar la producción.'));
         }
+
         const fechaActual = new Date().toISOString();
 
-        orden.estado = 'en_produccion';
-        orden.fechaInicio = fechaActual;
-
-        orden.historialEstados.push({
-            estado: 'en_produccion',
-            fecha: fechaActual
-        });
-    }
-
-    finalizarProduccion(id: string): void {
-        const orden = this.ordenesProduccion.find(o => o.id === id);
-        if (!orden) {
-            throw new Error('La orden no existe.');
-        }
-        if (orden.estado !== 'en_produccion') {
-            throw new Error('Solo se pueden finalizar órdenes en producción.');
-        }
-        orden.cantidadProducida = orden.cantidad;
-        orden.estado = 'finalizada';
-        orden.fechaFinalizacion = new Date().toISOString();
-        orden.historialEstados.push({
-            estado: 'finalizada',
-            fecha: orden.fechaFinalizacion
-        });
-        this.productoTerminadoService.agregarProduccion(
-            orden.producto.id,
-            orden.cantidadProducida,
-            `Orden de producción ${orden.id}`
+        return this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
+            id_estado: this.idEstado('en_produccion'),
+            fecha_inicio: fechaActual
+        }).pipe(
+            tap(() => {
+                orden.estado = 'en_produccion';
+                orden.fechaInicio = fechaActual;
+                orden.historialEstados.push({ estado: 'en_produccion', fecha: fechaActual });
+            }),
+            map(() => undefined)
         );
     }
 
-    cancelarProduccion(id: string, motivo: string): void {
+    finalizarProduccion(id: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
-            throw new Error('La orden no existe.');
+            return throwError(() => new Error('La orden no existe.'));
         }
-        if (
-            orden.estado === 'finalizada' ||
-            orden.estado === 'cancelada'
-        ) {
-            throw new Error(
-                'No se puede cancelar una orden finalizada o ya cancelada.'
+        if (orden.estado !== 'en_produccion') {
+            return throwError(() => new Error('Solo se pueden finalizar órdenes en producción.'));
+        }
+        if (!this.verificarDisponibilidad(id)) {
+            return throwError(() => new Error('No hay materiales suficientes para finalizar la producción.'));
+        }
+
+        const producto = this.buscarProducto(orden.producto.id);
+        if (!producto || producto.apiId === undefined) {
+            return throwError(() => new Error('El producto no existe.'));
+        }
+
+        const observacion = `Orden de producción ${orden.id}`;
+        const fechaActual = new Date().toISOString();
+        const nuevoStockProducto = producto.stockActual + orden.cantidad;
+
+        // Al finalizar se descuenta la materia prima (con su movimiento) y se suma el producto terminado.
+        orden.materialesRequeridos.forEach(material => {
+            const stockResultante = this.materiaPrimaService.registrarMovimiento(
+                material.materiaPrima.id,
+                'consumo',
+                material.cantidadRequerida
             );
+            if (stockResultante !== undefined) {
+                this.movimientoStockService.registrarMovimiento(
+                    material.materiaPrima.id,
+                    'consumo',
+                    material.cantidadRequerida,
+                    stockResultante,
+                    observacion
+                );
+            }
+        });
+
+        const peticiones: Observable<unknown>[] = [
+            this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
+                id_estado: this.idEstado('finalizada')
+            }),
+            this.http.patch(`${this.productosUrl}/${producto.apiId}`, {
+                stock_actual: nuevoStockProducto
+            }),
+            this.http.post(this.movimientosProductoUrl, {
+                fecha: fechaActual,
+                tipo_movimiento: 'ingreso',
+                cantidad: orden.cantidad,
+                id_producto: producto.apiId,
+                id_usuario: this.obtenerIdUsuario(),
+                observacion
+            })
+        ];
+        if (orden.detalleApiId !== undefined) {
+            peticiones.push(this.http.patch(`${this.detallesUrl}/${orden.detalleApiId}`, {
+                cantidad_producida: orden.cantidad
+            }));
+        }
+
+        return forkJoin(peticiones).pipe(
+            tap(() => {
+                orden.cantidadProducida = orden.cantidad;
+                orden.estado = 'finalizada';
+                orden.fechaFinalizacion = fechaActual;
+                orden.historialEstados.push({ estado: 'finalizada', fecha: fechaActual });
+                this.productoTerminadoService.agregarProduccion(
+                    orden.producto.id,
+                    orden.cantidadProducida,
+                    observacion
+                );
+            }),
+            map(() => undefined)
+        );
+    }
+
+    cancelarProduccion(id: string, motivo: string): Observable<void> {
+        const orden = this.ordenesProduccion.find(o => o.id === id);
+        if (!orden) {
+            return throwError(() => new Error('La orden no existe.'));
+        }
+        if (orden.estado === 'finalizada' || orden.estado === 'cancelada') {
+            return throwError(() => new Error('No se puede cancelar una orden finalizada o ya cancelada.'));
         }
         if (!motivo.trim()) {
-            throw new Error('Debes indicar un motivo de cancelación.');
+            return throwError(() => new Error('Debes indicar un motivo de cancelación.'));
         }
-        orden.estado = 'cancelada';
-        orden.fechaCancelacion = new Date().toISOString();
-        orden.historialEstados.push({
-            estado: 'cancelada',
-            fecha: orden.fechaCancelacion,
-            observacion: motivo.trim()
-        });
+
+        const fechaActual = new Date().toISOString();
+
+        return this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
+            id_estado: this.idEstado('cancelada')
+        }).pipe(
+            tap(() => {
+                orden.estado = 'cancelada';
+                orden.fechaCancelacion = fechaActual;
+                orden.historialEstados.push({
+                    estado: 'cancelada',
+                    fecha: fechaActual,
+                    observacion: motivo.trim()
+                });
+            }),
+            map(() => undefined)
+        );
     }
 
     private mapearOrden(
@@ -320,6 +388,14 @@ export class ProduccionService {
     private buscarProducto(idProducto: string): ProductoTerminado | undefined {
         return this.productos.find(p => p.id === idProducto)
             ?? this.productoTerminadoService.obtenerPorId(idProducto);
+    }
+
+    private obtenerIdUsuario(): number {
+        const idUsuario = Number(this.authService.getUsuarioActual()?.id);
+        if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
+            throw new Error('No hay un usuario autenticado válido.');
+        }
+        return idUsuario;
     }
 
     private idEstado(estado: EstadoOrdenProduccion): number {

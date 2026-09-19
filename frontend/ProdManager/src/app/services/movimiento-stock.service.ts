@@ -38,7 +38,7 @@ export class MovimientoStockService {
     return this.movimientos.filter(m => m.materiaPrimaId === materiaPrimaId);
   }
 
-  registrarMovimiento(materiaPrimaId: string, tipo: TipoMovimientoStock, cantidad: number, stockResultante: number): MovimientoStock {
+  registrarMovimiento(materiaPrimaId: string, tipo: TipoMovimientoStock, cantidad: number, stockResultante: number, observacion = ''): MovimientoStock {
     const nuevoId = this.calcularProximoId();
 
     const movimiento: MovimientoStock = {
@@ -62,7 +62,7 @@ export class MovimientoStockService {
       fecha: movimiento.fecha,
       tipo_movimiento: tipo,
       cantidad,
-      observacion: '',
+      observacion,
       id_usuario: Number(usuarioActual?.id) || 1,
     };
 
