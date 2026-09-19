@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
 import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
@@ -27,8 +27,9 @@ function stockDisponibleValidator(getMateriasPrimas: () => MateriaPrima[]) {
   templateUrl: './materia-prima-movimiento-form.component.html',
   styleUrl: './materia-prima-movimiento-form.component.css'
 })
-export class MateriaPrimaMovimientoFormComponent {
+export class MateriaPrimaMovimientoFormComponent implements OnInit {
   @Input({ required: true }) materiasPrimas!: MateriaPrima[];
+  @Input() materiaPrimaIdInicial = '';
   @Output() cerrar = new EventEmitter<void>();
 
   formMovimiento = new FormGroup({
@@ -42,6 +43,12 @@ export class MateriaPrimaMovimientoFormComponent {
     private movimientoStockService: MovimientoStockService,
   ) {
     this.formMovimiento.setValidators(stockDisponibleValidator(() => this.materiasPrimas));
+  }
+
+  ngOnInit() {
+    if (this.materiaPrimaIdInicial) {
+      this.formMovimiento.patchValue({ materiaPrimaId: this.materiaPrimaIdInicial });
+    }
   }
 
   get materiaSeleccionada(): MateriaPrima | undefined {

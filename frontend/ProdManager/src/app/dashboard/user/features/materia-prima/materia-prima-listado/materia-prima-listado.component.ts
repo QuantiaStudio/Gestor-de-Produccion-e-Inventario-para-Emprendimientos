@@ -14,6 +14,8 @@ import { MateriaPrimaMovimientoFormComponent } from '../materia-prima-movimiento
 export class MateriaPrimaListadoComponent implements OnInit {
   materiaPrimaSeleccionada: MateriaPrima | null = null;
   mostrarFormMovimiento = false;
+  materiaParaActualizarId = '';
+  busqueda = '';
   materiasPrimas: MateriaPrima[] = [];
 
   constructor(private materiaPrimaService: MateriaPrimaService) {
@@ -26,6 +28,14 @@ export class MateriaPrimaListadoComponent implements OnInit {
     });
   }
 
+  get materiasFiltradas(): MateriaPrima[] {
+    const texto = this.busqueda.trim().toLowerCase();
+    if (!texto) return this.materiasPrimas;
+    return this.materiasPrimas.filter(mp =>
+      mp.nombre.toLowerCase().includes(texto) || mp.id.includes(texto)
+    );
+  }
+
   seleccionar(materiaPrima: MateriaPrima) {
     this.materiaPrimaSeleccionada = materiaPrima;
   }
@@ -34,7 +44,8 @@ export class MateriaPrimaListadoComponent implements OnInit {
     this.materiaPrimaSeleccionada = null;
   }
 
-  abrirFormMovimiento() {
+  abrirActualizarStock(materiaPrima: MateriaPrima) {
+    this.materiaParaActualizarId = materiaPrima.id;
     this.mostrarFormMovimiento = true;
   }
 
