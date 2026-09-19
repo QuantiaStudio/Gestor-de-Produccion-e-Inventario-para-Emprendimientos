@@ -104,6 +104,10 @@ export class ProduccionComponent implements OnInit {
     this.mensajeEstadoError = '';
   }
 
+  contarPorEstado(estado: EstadoOrdenProduccion): number {
+    return this.ordenes.filter(orden => orden.estado === estado).length;
+  }
+
   textoEstado(estado: EstadoOrdenProduccion): string {
     const textos: Record<EstadoOrdenProduccion, string> = {
       pendiente: 'Pendiente',
