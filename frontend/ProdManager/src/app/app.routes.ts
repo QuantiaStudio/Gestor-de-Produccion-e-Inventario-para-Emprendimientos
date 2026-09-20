@@ -12,6 +12,7 @@ import { MateriaPrimaListadoComponent } from './dashboard/user/features/materia-
 import { LoginComponent } from './auth/components/login/login.component';
 import { UserPanelComponent } from './dashboard/user/user-panel/user-panel.component';
 import { ProduccionComponent } from './dashboard/user/features/produccion/produccion.component';
+import { guestGuard, roleGuard } from './auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,12 +21,14 @@ export const routes: Routes = [
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'about-us', component: AboutUsComponent },
-      { path: 'login', component: LoginComponent },
+      { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
     ],
   },
   {
     path: 'dashboard',
     component: DashboardLayoutComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['ADMIN'] },
     children: [
       { path: '', component: DashboardComponent, pathMatch: 'full' },
       { path: 'materias-primas', component: MateriasPrimasComponent },
@@ -37,11 +40,17 @@ export const routes: Routes = [
   {
     path: 'user-panel',
     component: DashboardLayoutComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['OPERARIO'] },
     children: [
-      { path: '', component: UserPanelComponent, pathMatch: 'full' },
+      { path: '', redirectTo: 'produccion', pathMatch: 'full' },
       { path: 'produccion', component: ProduccionComponent },
       { path: 'materia-prima', component: MateriaPrimaListadoComponent },
     ]
+  },
+  {
+    path: 'not-found',
+    component: NotFoundComponent,
   },
   {
     path: '**',
