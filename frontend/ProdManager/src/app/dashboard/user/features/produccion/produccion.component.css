@@ -322,3 +322,34 @@
 		left: 1rem;
 	}
 }
+
+.stock-table th.th-sortable { padding: 0; }
+
+.th-sort {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+	text-align: left;
+	text-transform: inherit;
+	cursor: pointer;
+}
+
+.th-sort:hover { color: var(--primary-color); }
+
+.th-sort:focus-visible {
+	outline: 2px solid var(--primary-color);
+	outline-offset: -2px;
+}
+
+.th-sort__icono {
+	width: 0.7rem;
+	height: 0.7rem;
+	opacity: 0.75;
+}

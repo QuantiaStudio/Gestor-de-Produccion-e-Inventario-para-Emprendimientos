@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
 import {
+  CampoOrdenOrdenProduccion,
   FiltroOrdenProduccion,
+  OrdenamientoOrdenProduccion,
   OrdenProduccion,
   ProductoOrdenProduccion
 } from '../../../../models/orden-produccion/orden-produccion.model';
@@ -37,6 +39,10 @@ export class ProduccionComponent implements OnInit {
   Ordenseleccionada?: OrdenProduccion;
 
   productosDeOrdenes: ProductoOrdenProduccion[] = [];
+  ordenamiento: OrdenamientoOrdenProduccion = {
+    campo: 'fechaCreacion',
+    direccion: 'desc'
+  };
   private filtrosActuales: FiltroOrdenProduccion = {};
 
   constructor(
@@ -61,6 +67,26 @@ export class ProduccionComponent implements OnInit {
     this.refrescar();
   }
 
+  ordenarPor(campo: CampoOrdenOrdenProduccion): void {
+    const mismoCampo = this.ordenamiento.campo === campo;
+
+    this.ordenamiento = {
+      campo,
+      direccion:
+        mismoCampo && this.ordenamiento.direccion === 'asc' ? 'desc' : 'asc'
+    };
+
+    this.refrescar();
+  }
+
+  direccionDe(campo: CampoOrdenOrdenProduccion): 'ascending' | 'descending' | 'none' {
+    if (this.ordenamiento.campo !== campo) {
+      return 'none';
+    }
+
+    return this.ordenamiento.direccion === 'asc' ? 'ascending' : 'descending';
+  }
+
   mostrarFormulario = false;
 
   abrirFormulario(): void {
@@ -75,7 +101,10 @@ export class ProduccionComponent implements OnInit {
     this.Ordenseleccionada = orden;
   }
   private refrescar(): void {
-    this.ordenes = this.produccionService.filtrar(this.filtrosActuales);
+    this.ordenes = this.produccionService.ordenar(
+      this.produccionService.filtrar(this.filtrosActuales),
+      this.ordenamiento
+    );
     this.productosDeOrdenes = this.produccionService.obtenerProductosDeOrdenes();
 
     const seleccionada = this.Ordenseleccionada;

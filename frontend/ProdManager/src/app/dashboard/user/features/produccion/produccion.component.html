@@ -66,11 +66,71 @@
                 <thead>
 
                     <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('id')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('id')">
+                                ID
+                                @if (ordenamiento.campo === 'id') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('producto')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('producto')">
+                                Producto
+                                @if (ordenamiento.campo === 'producto') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('cantidad')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('cantidad')">
+                                Cantidad
+                                @if (ordenamiento.campo === 'cantidad') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('estado')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('estado')">
+                                Estado
+                                @if (ordenamiento.campo === 'estado') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('fechaCreacion')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('fechaCreacion')">
+                                Fecha
+                                @if (ordenamiento.campo === 'fechaCreacion') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
                         <th>Acciones</th>
                     </tr>
 
