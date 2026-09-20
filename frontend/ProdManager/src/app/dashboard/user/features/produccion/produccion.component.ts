@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
-import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
+import {
+  FiltroOrdenProduccion,
+  OrdenProduccion,
+  ProductoOrdenProduccion
+} from '../../../../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminado } from '../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../services/producto-terminado.service';
 import { NuevaOrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
+import { ProduccionFiltrosComponent } from './produccion-filtros/produccion-filtros.component';
 import {
   FormBuilder,
   FormControl,
@@ -16,7 +21,7 @@ import {
 @Component({
   selector: 'app-produccion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ProduccionFiltrosComponent],
   templateUrl: './produccion.component.html',
   styleUrl: './produccion.component.css'
 })
@@ -31,6 +36,9 @@ export class ProduccionComponent implements OnInit {
 
   Ordenseleccionada?: OrdenProduccion;
 
+  productosDeOrdenes: ProductoOrdenProduccion[] = [];
+  private filtrosActuales: FiltroOrdenProduccion = {};
+
   constructor(
     private produccionService: ProduccionService, 
     private formBuilder: FormBuilder, 
@@ -44,8 +52,13 @@ export class ProduccionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
     this.productos = this.productoTerminadoService.obtenerProductosTerminados();
+    this.refrescar();
+  }
+
+  aplicarFiltros(filtros: FiltroOrdenProduccion): void {
+    this.filtrosActuales = filtros;
+    this.refrescar();
   }
 
   mostrarFormulario = false;
@@ -61,22 +74,29 @@ export class ProduccionComponent implements OnInit {
   seleccionarOrden(orden: OrdenProduccion): void {
     this.Ordenseleccionada = orden;
   }
-  private recargarOrdenes(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
+  private refrescar(): void {
+    this.ordenes = this.produccionService.filtrar(this.filtrosActuales);
+    this.productosDeOrdenes = this.produccionService.obtenerProductosDeOrdenes();
+
+    const seleccionada = this.Ordenseleccionada;
+
+    if (seleccionada && !this.ordenes.some(orden => orden.id === seleccionada.id)) {
+      this.Ordenseleccionada = undefined;
+    }
   }
   iniciar(orden: OrdenProduccion): void {
     this.produccionService.iniciarProduccion(orden.id);
-    this.recargarOrdenes();
+    this.refrescar();
   }
   finalizar(orden: OrdenProduccion): void {
     this.produccionService.finalizarProduccion(orden.id);
-    this.recargarOrdenes();
+    this.refrescar();
   }
   cancelar(orden: OrdenProduccion): void {
     const motivo = prompt('Ingrese el motivo de la cancelación:');
     if (motivo) {
       this.produccionService.cancelarProduccion(orden.id, motivo);
-      this.recargarOrdenes();
+      this.refrescar();
     }
   }
   crearOrden(): void {
@@ -89,7 +109,7 @@ export class ProduccionComponent implements OnInit {
 
     this.produccionService.crearOrden(datos);
 
-    this.ordenes = this.produccionService.obtenerOrdenes();
+    this.refrescar();
     this.ordenForm.reset({
       productoId: '',
       cantidad: 1,

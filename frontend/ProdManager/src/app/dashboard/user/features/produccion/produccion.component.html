@@ -53,32 +53,9 @@
 </section>
 
 <!-- Filtros -->
-<section class="inventory-filters mb-4">
-    <div class="filters-row">
-        <div class="search-box">
-            <span class="search-icon">
-                <img src="../../../../../assets/search.svg" class="icon-gray" alt="">
-            </span>
-            <input type="text" placeholder="Buscar orden..." class="input">
-        </div>
-        <div class="filter-select">
-            <span class="filter-label">Estado</span>
-            <select class="input form-select">
-                <option>Todos</option>
-            </select>
-        </div>
-        <div class="filter-select">
-            <span class="filter-label">Producto</span>
-            <select class="input form-select">
-                <option>Todos</option>
-            </select>
-        </div>
-        <button type="button" class="btn-limpiar">
-            <img src="../../../../../assets/filter.svg" class="icon-gray" alt="">
-            Limpiar filtros
-        </button>
-    </div>
-</section>
+<app-produccion-filtros
+    [productos]="productosDeOrdenes"
+    (filtrosCambiaron)="aplicarFiltros($event)" />
 
 <div class="inventory-layout row g-4" id="inventario">
     <div class="col-lg-12 inventory-table-col">

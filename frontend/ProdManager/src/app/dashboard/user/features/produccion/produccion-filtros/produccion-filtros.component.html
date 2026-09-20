@@ -1,0 +1,41 @@
+<section class="inventory-filters mb-4" [formGroup]="formulario">
+    <div class="filters-row">
+        <div class="search-box">
+            <span class="search-icon">
+                <img src="assets/search.svg" class="icon-gray" alt="">
+            </span>
+            <input
+                type="text"
+                class="input"
+                formControlName="busqueda"
+                placeholder="Buscar orden..."
+                aria-label="Buscar orden por identificador o producto">
+        </div>
+
+        <label class="filter-select">
+            <span class="filter-label">Estado</span>
+            <select class="input form-select" formControlName="estado">
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="en_produccion">En producción</option>
+                <option value="finalizada">Finalizada</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+        </label>
+
+        <label class="filter-select">
+            <span class="filter-label">Producto</span>
+            <select class="input form-select" formControlName="productoId">
+                <option value="">Todos</option>
+                @for (producto of productos; track producto.id) {
+                <option [value]="producto.id">{{ producto.nombre }}</option>
+                }
+            </select>
+        </label>
+
+        <button type="button" class="btn-limpiar" (click)="limpiar()">
+            <img src="assets/filter.svg" class="icon-gray" alt="">
+            Limpiar filtros
+        </button>
+    </div>
+</section>
