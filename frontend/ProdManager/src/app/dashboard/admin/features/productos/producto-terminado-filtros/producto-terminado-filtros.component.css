@@ -55,6 +55,12 @@
   white-space: nowrap;
 }
 
+/* Los filtros no son campos de validación del formulario. */
+.filtros .input.ng-valid.ng-touched {
+  border: 1px solid var(--gray-200);
+  border-left: 1px solid var(--gray-200);
+}
+
 @media (max-width: 991.98px) {
   .filtros-fila {
     grid-template-columns: repeat(2, minmax(0, 1fr));

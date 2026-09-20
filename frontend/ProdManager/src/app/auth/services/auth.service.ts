@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, from, of,} from 'rxjs';
+import { map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
-import {
-  CredencialesLogin,
-  RespuestaAutenticacion,
-  UsuarioAutenticado
-} from '../models/usuario-autenticado';
+import { CredencialesLogin, RespuestaAutenticacion, UsuarioAutenticado, UsuarioBD} from '../models/usuario-autenticado';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +12,7 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
+  private apiUrl = 'http://localhost:3000/usuarios'
 
   private usuarioSubject = new BehaviorSubject<UsuarioAutenticado | null>(
     this.obtenerUsuarioDeStorage()
@@ -21,50 +20,49 @@ export class AuthService {
 
   public usuario$ = this.usuarioSubject.asObservable();
 
-  /**
-   * Simula el proceso de autenticación.
-   *
-   * Credenciales de prueba:
-   * email: admin@correo.com
-   * contraseña: 123456
-   */
-  login(
-    credenciales: CredencialesLogin
-  ): Observable<RespuestaAutenticacion> {
+  constructor(private http: HttpClient){}
 
-    if (
-      credenciales.email === 'admin@correo.com' &&
-      credenciales.password === '123456'
-    ) {
+  login(credenciales: CredencialesLogin): Observable<RespuestaAutenticacion> {
+    const url = `${this.apiUrl}?email=${credenciales.email}&contrasena=${credenciales.password}`;
+    console.log('URL enviada:', url);
+    return this.http.get<any[]>(url).pipe(
+    map(usuarios => {
+      console.log('Usuarios recibidos:', usuarios);
+      if (usuarios && usuarios.length > 0) {
+        const usuarioDb = usuarios[0]
+        
+        if (usuarioDb.estado === false){
+          return {
+            exito:false,
+            mensaje: 'El usuario se encuentra inactivo. Contacta a un administrador.'
+          }
+        }
 
-      const usuarioMock: UsuarioAutenticado = {
-        id: '1',
-        nombre: 'Usuario Demo',
-        email: credenciales.email,
-        rol: 'ADMIN',
-        token: 'token-fake-jwt-12345'
+        const usuarioAutenticado: UsuarioAutenticado = {
+          id: usuarioDb.id || usuarioDb.id_usuario,
+          nombre: usuarioDb.nombre,
+          apellido:usuarioDb.apellido,
+          email: usuarioDb.email,
+          rol: usuarioDb.rol,
+          token: 'token-simulado-json-server-123'
+          }
+        const respuestaExito: RespuestaAutenticacion = {
+          exito: true,
+          mensaje: 'Inicio de sesion exitoso',
+          usuario:usuarioAutenticado,
+          token:usuarioAutenticado.token
+        };
+
+        this.guardarSesion(respuestaExito.token!, respuestaExito.usuario!);
+        return respuestaExito;
+      }
+      return {
+        exito:false,
+        mensaje: 'Credenciales invalidas. Verifica tu correo y contraseña.'
       };
-
-      const respuestaExito: RespuestaAutenticacion = {
-        exito: true,
-        mensaje: 'Inicio de sesión exitoso',
-        usuario: usuarioMock,
-        token: usuarioMock.token
-      };
-
-      this.guardarSesion(
-        respuestaExito.token!,
-        respuestaExito.usuario!
-      );
-
-      return of(respuestaExito);
-    }
-
-    return of({
-      exito: false,
-      mensaje: 'Credenciales inválidas. Verificá tu correo y contraseña.'
-    });
-  }
+    })
+  );
+}
 
   /**
    * Guarda la información necesaria para mantener
@@ -133,4 +131,15 @@ export class AuthService {
 
     this.usuarioSubject.next(null);
   }
+  obtenerRutaPorRol(rol: string): string {
+  switch (rol) {
+    case 'ADMIN':
+      return '/dashboard';
+    case 'OPERARIO':
+      //Este se debe cambiar en un futuro al dashboard del usuario que no esta finalizado actualmente.
+      return '/dashboard/materias-primas';
+    default:
+      return '/login';
+  }
+}
 }
