@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
-import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
+import { 
+  OrdenProduccion, 
+  EstadoOrdenProduccion, 
+  NuevaOrdenProduccion 
+} from '../../../../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminado } from '../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../services/producto-terminado.service';
-import {
-  EstadoOrdenProduccion,
-  NuevaOrdenProduccion
-} from '../../../../models/orden-produccion/orden-produccion.model';
 import {
   FormBuilder,
   FormControl,
@@ -16,6 +16,8 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+
+export type TipoAccionIntervencion = 'CANCELAR' | 'FINALIZAR';
 
 @Component({
   selector: 'app-produccion',
@@ -29,13 +31,30 @@ export class ProduccionComponent implements OnInit {
   productos: ProductoTerminado[] = [];
   mensajeError = '';
   mensajeEstadoError = '';
+
+  // Controles de Filtros
+  filtroTexto = new FormControl('', { nonNullable: true });
+  filtroEstado = new FormControl('todos', { nonNullable: true });
+  filtroProducto = new FormControl('todos', { nonNullable: true });
+
+  // Formulario para Nueva Orden
   ordenForm!: FormGroup<{
     productoId: FormControl<string>;
     cantidad: FormControl<number>;
     observaciones: FormControl<string>;
   }>;
 
+  // Formulario reactivo para el modal de intervención (TSK-11.1 / 11.3)
+  intervencionForm!: FormGroup<{
+    observaciones: FormControl<string>;
+  }>;
+  mensajeIntervencionError = '';
+
   Ordenseleccionada?: OrdenProduccion;
+  mostrarFormulario = false;
+
+  accionSeleccionada: TipoAccionIntervencion | null = null;
+  mostrarModalIntervencion = false;
 
   constructor(
     private produccionService: ProduccionService, 
@@ -46,6 +65,10 @@ export class ProduccionComponent implements OnInit {
       productoId: ['', Validators.required],
       cantidad: [1, [Validators.required, Validators.min(1)]],
       observaciones: ['']
+    });
+
+    this.intervencionForm = this.formBuilder.nonNullable.group({
+      observaciones: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -70,19 +93,62 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-  get productoId(): FormControl<string> {
-    return this.ordenForm.controls.productoId;
+  // Getters para KPIS
+  get totalPendientes(): number {
+    return this.ordenes.filter(o => o.estado === 'pendiente').length;
   }
 
-  get cantidad(): FormControl<number> {
-    return this.ordenForm.controls.cantidad;
+  get totalEnProceso(): number {
+    return this.ordenes.filter(o => o.estado === 'en_produccion').length;
   }
 
-  get observaciones(): FormControl<string> {
-    return this.ordenForm.controls.observaciones;
+  get totalFinalizadas(): number {
+    return this.ordenes.filter(o => o.estado === 'finalizada').length;
   }
 
-  mostrarFormulario = false;
+  get totalCanceladas(): number {
+    return this.ordenes.filter(o => o.estado === 'cancelada').length;
+  }
+
+  // Getters para Filtrado
+  get ordenesFiltradas(): OrdenProduccion[] {
+    const texto = this.filtroTexto.value.toLowerCase().trim();
+    const estado = this.filtroEstado.value;
+    const productoId = this.filtroProducto.value;
+
+    return this.ordenes.filter(orden => {
+      const coincideTexto = !texto || 
+        orden.id.toLowerCase().includes(texto) || 
+        orden.producto.nombre.toLowerCase().includes(texto);
+
+      const coincideEstado = estado === 'todos' || orden.estado === estado;
+      const coincideProducto = productoId === 'todos' || orden.producto.id === productoId;
+
+      return coincideTexto && coincideEstado && coincideProducto;
+    });
+  }
+
+  // Métodos de Filtro
+  filtrarPorEstado(estado: string): void {
+    this.filtroEstado.setValue(estado);
+  }
+
+  limpiarFiltros(): void {
+    this.filtroTexto.setValue('');
+    this.filtroEstado.setValue('todos');
+    this.filtroProducto.setValue('todos');
+  }
+
+  // Métodos de Navegación / Detalle
+  verDetalle(orden: OrdenProduccion): void {
+    this.Ordenseleccionada = orden;
+    this.mensajeEstadoError = '';
+  }
+
+  cerrarDetalle(): void {
+    this.Ordenseleccionada = undefined;
+    this.mensajeEstadoError = '';
+  }
 
   abrirFormulario(): void {
     this.mensajeError = '';
@@ -94,14 +160,41 @@ export class ProduccionComponent implements OnInit {
     this.mostrarFormulario = false;
   }
 
-  seleccionarOrden(orden: OrdenProduccion): void {
+  // Modal de Intervención (TSK-11.1 / TSK-11.3)
+  abrirModalIntervencion(orden: OrdenProduccion, accion: TipoAccionIntervencion): void {
     this.Ordenseleccionada = orden;
-    this.mensajeEstadoError = '';
+    this.accionSeleccionada = accion;
+    this.mensajeIntervencionError = '';
+    this.intervencionForm.reset();
+    this.mostrarModalIntervencion = true;
   }
 
-  cerrarDetalle(): void {
-    this.Ordenseleccionada = undefined;
-    this.mensajeEstadoError = '';
+  cerrarModalIntervencion(): void {
+    this.mostrarModalIntervencion = false;
+    this.accionSeleccionada = null;
+    this.mensajeIntervencionError = '';
+    this.intervencionForm.reset();
+  }
+
+  confirmarIntervencion(): void {
+    if (this.intervencionForm.invalid || !this.Ordenseleccionada || !this.accionSeleccionada) {
+      this.intervencionForm.markAllAsTouched();
+      return;
+    }
+
+    const motivo = this.intervencionForm.get('observaciones')?.value || '';
+    const nuevoEstado = this.accionSeleccionada === 'CANCELAR' ? 'cancelada' : 'finalizada';
+
+    this.produccionService.cancelarProduccion(this.Ordenseleccionada.id, motivo).subscribe({
+      next: () => {
+        this.recargarOrdenes();
+        this.cerrarModalIntervencion();
+      },
+      error: (err) => {
+        console.error('Error al intervenir la orden:', err);
+        this.mensajeIntervencionError = 'No se pudo procesar la solicitud.';
+      }
+    });
   }
 
   contarPorEstado(estado: EstadoOrdenProduccion): number {
@@ -115,8 +208,7 @@ export class ProduccionComponent implements OnInit {
       finalizada: 'Finalizada',
       cancelada: 'Cancelada'
     };
-
-    return textos[estado];
+    return textos[estado] || estado;
   }
 
   cambiarEstado(orden: OrdenProduccion, nuevoEstado: string): void {
@@ -160,10 +252,6 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-  private recargarOrdenes(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
-  }
-
   crearOrden(): void {
     if (this.ordenForm.invalid) {
       this.ordenForm.markAllAsTouched();
@@ -174,7 +262,7 @@ export class ProduccionComponent implements OnInit {
 
     this.produccionService.crearOrden(datos).subscribe({
       next: () => {
-        this.ordenes = this.produccionService.obtenerOrdenes();
+        this.recargarOrdenes();
         this.ordenForm.reset({
           productoId: '',
           cantidad: 1,
@@ -190,6 +278,12 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-
-
+  private recargarOrdenes(): void {
+    this.produccionService.cargarOrdenes().subscribe({
+      next: (ordenes) => {
+        this.ordenes = ordenes;
+      },
+      error: (err) => console.error('Error al recargar órdenes:', err)
+    });
+  }
 }
