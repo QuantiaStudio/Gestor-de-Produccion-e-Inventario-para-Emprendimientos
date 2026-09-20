@@ -1,9 +1,14 @@
 import type { DetalleFormula } from '../formula/formula.module';
 
-// sin_stock: stockActual === 0 | bajo_minimo: stockActual > 0 && stockActual <= stockMinimo | optimo: el resto
-export type EstadoProductoTerminado = 'optimo' | 'bajo_minimo' | 'sin_stock';
+export type EstadoProductoTerminado =
+  | 'pendiente'
+  | 'en_produccion'
+  | 'finalizado'
+  | 'cancelado';
 
-export type TipoMovimiento = 'ingreso' | 'egreso' | 'ajuste';
+export type EstadoInventarioProducto = 'optimo' | 'bajo_minimo' | 'sin_stock';
+
+export type TipoMovimiento = 'ingreso' | 'egreso' | 'ajuste' | 'modificacion';
 
 export interface MovimientoInventario {
   id: string;
@@ -16,6 +21,7 @@ export interface MovimientoInventario {
 
 export interface ProductoTerminado {
   id: string;
+  apiId?: number;
   nombre: string;
   descripcion: string;
   imagen: string;
@@ -25,7 +31,6 @@ export interface ProductoTerminado {
   stockMinimo: number;
   stockMaximo: number;
   estado: EstadoProductoTerminado;
-  ubicacion: string;
   ultimaActualizacion: string;
   lote?: string;
   fechaVencimiento?: string;
@@ -36,7 +41,7 @@ export interface ProductoTerminado {
 export interface FiltroProductoTerminado {
   busqueda?: string;
   categoria?: string;
-  estado?: EstadoProductoTerminado;
+  estado?: EstadoProductoTerminado | EstadoInventarioProducto;
 }
 
 export interface ActualizacionStock {
@@ -64,8 +69,12 @@ export interface NuevoProductoFormValue {
   codigo: string | null;
   nombre: string | null;
   categoria: string | null;
+  estado: EstadoProductoTerminado | null;
   stockInicial: number | null;
+  stockMinimo: number | null;
+  stockMaximo: number | null;
   descripcion: string | null;
+  imagen?: string | null;
 }
 
 export interface NuevoProducto {
@@ -75,4 +84,44 @@ export interface NuevoProducto {
   stockInicial: number;
   descripcion?: string;
   formula: DetalleFormula[];
+}
+
+export interface DetalleFormulaApiDTO {
+  id_materia_prima: number;
+  nombre_materia_prima: string;
+  cantidad: number;
+}
+
+export interface ProductoApiDTO {
+  id?: number;
+  codigo?: string;
+  nombre: string;
+  descripcion: string;
+  stock_actual: number;
+  stock_minimo?: number;
+  stock_maximo?: number;
+  id_categoria: number;
+  estado: boolean | EstadoProductoTerminado;
+  formula?: DetalleFormulaApiDTO[];
+  imagen?: string;
+}
+
+export interface CategoriaApiDTO {
+  id: number;
+  nombre: string;
+}
+
+export interface EstadoApiDTO {
+  id: number;
+  nombre: string;
+}
+
+export interface MovimientoInventarioApiDTO {
+  id_movimiento_producto?: number;
+  fecha: string;
+  tipo_movimiento: string;
+  cantidad: number;
+  id_producto: number;
+  id_usuario?: number;
+  observacion?: string;
 }

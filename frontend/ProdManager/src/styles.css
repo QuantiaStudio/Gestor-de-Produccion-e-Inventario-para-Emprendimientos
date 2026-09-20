@@ -317,6 +317,11 @@ td.actions {
     color: #B45309;
 }
 
+.badge--info {
+    background-color: rgba(124, 58, 237, 0.12);
+    color: var(--primary-color);
+}
+
 .badge--error {
     background-color: rgba(220, 38, 38, 0.12);
     color: var(--color-error);

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MateriaPrima } from '../../models/materia-prima/materia-prima.model';
-import { MateriaPrimaService } from '../../services/materia-prima.service';
+import { Component, OnInit } from '@angular/core';
+import { MateriaPrima } from '../../../../../models/materia-prima/materia-prima.model';
+import { MateriaPrimaService } from '../../../../../services/materia-prima.service';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-prima-detalle.component';
@@ -12,18 +12,16 @@ import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-p
   templateUrl: './materias-primas.component.html',
   styleUrl: './materias-primas.component.css'
 })
-export class MateriasPrimasComponent {
-  materiasPrimas: MateriaPrima[];
+export class MateriasPrimasComponent implements OnInit {
+  materiasPrimas: MateriaPrima[] = [];
   materiaPrimaSeleccionada: MateriaPrima | null = null;
   materiaPrimaAEliminar: MateriaPrima | null = null;
 
-   categoriasDisponibles = ['Materia Textil', 'Insumos', 'Envases', 'Químicos'];
    unidadesDisponibles = ['kg', 'unidades', 'litros', 'metros'];
   
   formRegistro = new FormGroup({
     codigo: new FormControl('', Validators.required),
     nombre: new FormControl('', Validators.required),
-    categoria: new FormControl('', Validators.required),
     unidad: new FormControl('', Validators.required),
     stock: new FormControl(0, [Validators.required, Validators.min(0)]),
     nivelMinimo: new FormControl(0, [Validators.required, Validators.min(0)]),
@@ -37,7 +35,13 @@ export class MateriasPrimasComponent {
   });
 
   constructor(private materiaPrimaService: MateriaPrimaService) {
-    this.materiasPrimas = this.materiaPrimaService.obtenerMateriasPrimas();
+  }
+
+  ngOnInit() {
+    this.materiaPrimaService.obtenerMateriasPrimas$().subscribe({
+      next: materiasPrimas => this.materiasPrimas = materiasPrimas,
+      error: error => console.error('Error al cargar materias primas', error)
+    });
   }
 
   seleccionar(materiaPrima: MateriaPrima) {
@@ -90,14 +94,12 @@ export class MateriasPrimasComponent {
     const nuevaMateriaPrima = {
       id: valoresForm.codigo!,
       nombre: valoresForm.nombre!,
-      categoria: valoresForm.categoria!,
       unidadMedida: valoresForm.unidad!,
       stockTotal: valoresForm.stock!,
       stockDisponible: valoresForm.stock!, 
       stockMinimo: valoresForm.nivelMinimo!,
       estado: estadoCalculado,
       descripcion: valoresForm.descripcion || '',
-      proveedor: 'Sin asignar',
       ultimaActualizacion: new Date().toLocaleDateString()
     };
 }

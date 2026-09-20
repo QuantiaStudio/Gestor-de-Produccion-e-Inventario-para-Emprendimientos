@@ -13,10 +13,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -37,17 +34,11 @@ export class LoginComponent {
     this.loginForm = this.formBuilder.group({
       email: [
         '',
-        [
-          Validators.required,
-          Validators.email
-        ]
+        [Validators.required,Validators.email]
       ],
       password: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(6)
-        ]
+        [Validators.required,Validators.minLength(6)]
       ]
     });
   }
@@ -77,6 +68,8 @@ export class LoginComponent {
       password: this.loginForm.value.password
     };
 
+    console.log('credenciales enviadas:', credenciales)
+
     this.authService.login(credenciales).subscribe({
       next: (respuesta) => {
 
@@ -87,8 +80,8 @@ export class LoginComponent {
           this.mensajeExito =
             respuesta.mensaje || 'Inicio de sesión exitoso.';
 
-        
-          this.router.navigate(['/dashboard']);
+          const ruta = this.authService.obtenerRutaPorRol(respuesta.usuario!.rol);
+          this.router.navigate([ruta]);
 
         } else {
 

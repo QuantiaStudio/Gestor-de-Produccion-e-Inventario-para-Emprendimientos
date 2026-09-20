@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
 import { 
@@ -72,8 +73,24 @@ export class ProduccionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.recargarOrdenes();
-    this.productos = this.productoTerminadoService.obtenerProductosTerminados();
+    this.produccionService.cargarOrdenes().subscribe({
+      next: (ordenes) => {
+        this.ordenes = ordenes;
+      },
+      error: (error) => {
+        console.error('Error al cargar órdenes de producción', error);
+        this.ordenes = [];
+      }
+    });
+    this.productoTerminadoService.cargarProductosTerminados().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos para producción', error);
+        this.productos = [];
+      }
+    });
   }
 
   // Getters para KPIS
@@ -146,45 +163,18 @@ export class ProduccionComponent implements OnInit {
   // Modal de Intervención (TSK-11.3)
   abrirModalIntervencion(orden: OrdenProduccion, accion: TipoAccionIntervencion): void {
     this.Ordenseleccionada = orden;
-    this.accionSeleccionada = accion;
-    this.mensajeIntervencionError = '';
-    this.intervencionForm.reset();
-    this.mostrarModalIntervencion = true;
+    this.mensajeEstadoError = '';
   }
 
-  cerrarModalIntervencion(): void {
-    this.mostrarModalIntervencion = false;
-    this.accionSeleccionada = null;
-    this.mensajeIntervencionError = '';
-    this.intervencionForm.reset();
+  cerrarDetalle(): void {
+    this.Ordenseleccionada = undefined;
+    this.mensajeEstadoError = '';
   }
 
-  confirmarIntervencion(): void {
-    if (this.intervencionForm.invalid || !this.Ordenseleccionada || !this.accionSeleccionada) {
-      this.intervencionForm.markAllAsTouched();
-      return;
-    }
-
-    const motivo = this.intervencionForm.controls.observaciones.value;
-    const ordenId = this.Ordenseleccionada.id;
-
-    try {
-      if (this.accionSeleccionada === 'CANCELAR') {
-        this.produccionService.cancelarProduccion(ordenId, motivo);
-      } else if (this.accionSeleccionada === 'FINALIZAR') {
-        this.produccionService.finalizarProduccion(ordenId);
-      }
-
-      this.recargarOrdenes();
-      this.cerrarModalIntervencion();
-    } catch (error) {
-      this.mensajeIntervencionError = error instanceof Error 
-        ? error.message 
-        : 'Ocurrió un error al procesar la acción.';
-    }
+  contarPorEstado(estado: EstadoOrdenProduccion): number {
+    return this.ordenes.filter(orden => orden.estado === estado).length;
   }
 
-  // Helpers y Acciones directas
   textoEstado(estado: EstadoOrdenProduccion): string {
     const textos: Record<EstadoOrdenProduccion, string> = {
       pendiente: 'Pendiente',
@@ -198,28 +188,46 @@ export class ProduccionComponent implements OnInit {
   cambiarEstado(orden: OrdenProduccion, nuevoEstado: string): void {
     this.mensajeEstadoError = '';
 
-    try {
-      if (nuevoEstado === 'en_produccion') {
-        this.produccionService.iniciarProduccion(orden.id);
-      } else if (nuevoEstado === 'finalizada') {
-        this.produccionService.finalizarProduccion(orden.id);
-      } else if (nuevoEstado === 'cancelada') {
-        const motivo = prompt('Ingrese el motivo de la cancelación:');
-        if (motivo) {
-          this.produccionService.cancelarProduccion(orden.id, motivo);
-        } else {
-          throw new Error('Debes indicar un motivo de cancelación.');
-        }
-      } else {
-        throw new Error('El estado seleccionado no es válido.');
+    let cambio$: Observable<void>;
+
+    if (nuevoEstado === 'en_produccion') {
+      cambio$ = this.produccionService.iniciarProduccion(orden.id);
+    } else if (nuevoEstado === 'finalizada') {
+      cambio$ = this.produccionService.finalizarProduccion(orden.id);
+    } else if (nuevoEstado === 'cancelada') {
+      if (orden.estado === 'finalizada' || orden.estado === 'cancelada') {
+        this.mensajeEstadoError = 'No se puede cancelar una orden finalizada o ya cancelada.';
+        return;
       }
-    } catch (error) {
-      this.mensajeEstadoError = error instanceof Error ? error.message : 'No se pudo cambiar el estado.';
+      const motivo = prompt('Ingrese el motivo de la cancelación:');
+      if (!motivo) {
+        this.mensajeEstadoError = 'Debes indicar un motivo de cancelación.';
+        return;
+      }
+      cambio$ = this.produccionService.cancelarProduccion(orden.id, motivo);
+    } else if (nuevoEstado === 'pendiente') {
+      this.mensajeEstadoError = 'No se puede regresar una orden al estado pendiente.';
+      return;
+    } else {
+      this.mensajeEstadoError = 'El estado seleccionado no es válido.';
       return;
     }
 
-    this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
-    this.recargarOrdenes();
+    cambio$.subscribe({
+      next: () => {
+        this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
+        this.recargarOrdenes();
+      },
+      error: (error) => {
+        this.mensajeEstadoError = error instanceof Error && !('status' in error)
+          ? error.message
+          : 'No se pudo cambiar el estado de la orden.';
+      }
+    });
+  }
+
+  private recargarOrdenes(): void {
+    this.ordenes = this.produccionService.obtenerOrdenes();
   }
 
   crearOrden(): void {
@@ -230,16 +238,22 @@ export class ProduccionComponent implements OnInit {
 
     const datos: NuevaOrdenProduccion = this.ordenForm.getRawValue();
 
-    try {
-      this.produccionService.crearOrden(datos);
-    } catch (error) {
-      this.mensajeError = error instanceof Error ? error.message : 'No se pudo crear la orden.';
-      return;
-    }
-
-    this.recargarOrdenes();
-    this.ordenForm.reset({ productoId: '', cantidad: 1, observaciones: '' });
-    this.cerrarFormulario();
+    this.produccionService.crearOrden(datos).subscribe({
+      next: () => {
+        this.ordenes = this.produccionService.obtenerOrdenes();
+        this.ordenForm.reset({
+          productoId: '',
+          cantidad: 1,
+          observaciones: ''
+        });
+        this.cerrarFormulario();
+      },
+      error: (error) => {
+        this.mensajeError = error instanceof Error && !('status' in error)
+          ? error.message
+          : 'No se pudo crear la orden de producción.';
+      }
+    });
   }
 
   private recargarOrdenes(): void {

@@ -1,344 +1,684 @@
+{
+  "usuarios": [
     {
-    "usuarios": [
-        {
-        "id_usuario": 1,
-        "nombre": "Admin",
-        "apellido": "Sistema",
-        "email": "admin@correo.com",
-        "contrasena": "123456",
-        "rol": "ADMIN",
-        "estado": true
-        },
-        {
-        "id_usuario": 2,
-        "nombre": "Rocío",
-        "apellido": "Altamirano",
-        "email": "rocio.altamirano@correo.com",
-        "contrasena": "123456",
-        "rol": "ADMIN",
-        "estado": true
-        },
-        {
-        "id_usuario": 3,
-        "nombre": "Genaro",
-        "apellido": "Cura",
-        "email": "genaro.cura@correo.com",
-        "contrasena": "123456",
-        "rol": "OPERARIO",
-        "estado": true
-        },
-        {
-        "id_usuario": 4,
-        "nombre": "Cesia",
-        "apellido": "Cáceres",
-        "email": "cesia.caceres@correo.com",
-        "contrasena": "123456",
-        "rol": "OPERARIO",
-        "estado": false
-        }
-    ],
-
-    "categorias": [
-        { "id": 1, "nombre": "Mesas" },
-        { "id": 2, "nombre": "Bibliotecas" },
-        { "id": 3, "nombre": "Escritorios" },
-        { "id": 4, "nombre": "Comodas" },
-        { "id": 5, "nombre": "Racks" },
-        { "id": 6, "nombre": "Banquetas" },
-        { "id": 7, "nombre": "Sillas" },
-        { "id": 8, "nombre": "Decks" }
-    ],
-
-    "materiasPrimas": [
-        {
-        "id_materia_prima": 1,
-        "nombre": "Madera de Roble",
-        "descripcion": "Madera dura de alta calidad para muebles estructurales.",
-        "unidad_medida": "unidad",
-        "stock_actual": 28,
-        "stock_minimo": 8
-        },
-        {
-        "id_materia_prima": 2,
-        "nombre": "Biblioteca Moderna",
-        "descripcion": "Pintura blanca mate para acabado de superficies.",
-        "unidad_medida": "L",
-        "stock_actual": 15,
-        "stock_minimo": 20
-        },
-        {
-        "id_materia_prima": 3,
-        "nombre": "Tornillos 3mm",
-        "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
-        "unidad_medida": "u",
-        "stock_actual": 1800,
-        "stock_minimo": 500
-        },
-        {
-        "id_materia_prima": 4,
-        "nombre": "Barniz Transparente",
-        "descripcion": "Barniz transparente brillante para protección de madera.",
-        "unidad_medida": "L",
-        "stock_actual": 3,
-        "stock_minimo": 10
-        },
-        {
-        "id_materia_prima": 5,
-        "nombre": "Contrachapado 18mm",
-        "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
-        "unidad_medida": "planchas",
-        "stock_actual": 45,
-        "stock_minimo": 15
-        }
-    ],
-
+      "id": 1,
+      "nombre": "Admin",
+      "apellido": "Sistema",
+      "email": "admin@correo.com",
+      "contrasena": 123456,
+      "rol": "ADMIN",
+      "estado": true
+    },
+    {
+      "id": 2,
+      "nombre": "Rocío",
+      "apellido": "Altamirano",
+      "email": "rocio.altamirano@correo.com",
+      "contrasena": 123456,
+      "rol": "ADMIN",
+      "estado": true
+    },
+    {
+      "id": 3,
+      "nombre": "Genaro",
+      "apellido": "Cura",
+      "email": "genaro.cura@correo.com",
+      "contrasena": "abcabc",
+      "rol": "OPERARIO",
+      "estado": true
+    },
+    {
+      "id": 4,
+      "nombre": "Cesia",
+      "apellido": "Cáceres",
+      "email": "cesia.caceres@correo.com",
+      "contrasena": "abcabc",
+      "rol": "OPERARIO",
+      "estado": false
+    }
+  ],
+  "categorias": [
+    {
+      "id": 1,
+      "nombre": "Mesas"
+    },
+    {
+      "id": 2,
+      "nombre": "Bibliotecas"
+    },
+    {
+      "id": 3,
+      "nombre": "Escritorios"
+    },
+    {
+      "id": 4,
+      "nombre": "Comodas"
+    },
+    {
+      "id": 5,
+      "nombre": "Racks"
+    },
+    {
+      "id": 6,
+      "nombre": "Banquetas"
+    },
+    {
+      "id": 7,
+      "nombre": "Sillas"
+    },
+    {
+      "id": 8,
+      "nombre": "Decks"
+    }
+  ],
+  "materiasPrimas": [
+    {
+      "id": 1,
+      "id_materia_prima": 1,
+      "nombre": "Madera de Roble",
+      "descripcion": "Madera dura de alta calidad para muebles estructurales.",
+      "unidad_medida": "unidad",
+      "stock_actual": 28,
+      "stock_minimo": 8
+    },
+    {
+      "id": 2,
+      "id_materia_prima": 2,
+      "nombre": "Biblioteca Moderna",
+      "descripcion": "Pintura blanca mate para acabado de superficies.",
+      "unidad_medida": "L",
+      "stock_actual": 15,
+      "stock_minimo": 20
+    },
+    {
+      "id": 3,
+      "id_materia_prima": 3,
+      "nombre": "Tornillos 3mm",
+      "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
+      "unidad_medida": "u",
+      "stock_actual": 1800,
+      "stock_minimo": 500
+    },
+    {
+      "id": 4,
+      "id_materia_prima": 4,
+      "nombre": "Barniz Transparente",
+      "descripcion": "Barniz transparente brillante para protección de madera.",
+      "unidad_medida": "L",
+      "stock_actual": 3,
+      "stock_minimo": 10
+    },
+    {
+      "id": 5,
+      "id_materia_prima": 5,
+      "nombre": "Contrachapado 18mm",
+      "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
+      "unidad_medida": "planchas",
+      "stock_actual": 45,
+      "stock_minimo": 15
+    }
+  ],
   "productos": [
     {
       "id": 1,
       "nombre": "Mesa Nórdica",
       "descripcion": "Mesa de comedor de roble macizo con patas cónicas, acabado natural.",
-      "precio": 150000.00,
+      "precio": 150000,
       "estado": true,
       "stock_actual": 28,
-      "id_categoria": 1
+      "id_categoria": 1,
+      "imagen": "assets/productos-terminados/mesa_nordica.jpg"
     },
     {
       "id": 2,
       "nombre": "Biblioteca Moderna",
       "descripcion": "Biblioteca de cinco estantes en melamina blanca con laterales de pino.",
-      "precio": 95000.00,
-      "estado": true,
+      "precio": 95000,
+      "estado": "en_produccion",
       "stock_actual": 4,
-      "id_categoria": 2
+      "stock_minimo": 5,
+      "id_categoria": 2,
+      "imagen": "assets/productos-terminados/biblioteca_moderna.webp"
     },
     {
       "id": 3,
       "nombre": "Escritorio Gamer",
       "descripcion": "Escritorio de 1.40 m con pasacables metálico y superficie laminada.",
-      "precio": 115000.00,
+      "precio": 115000,
       "estado": true,
       "stock_actual": 29,
-      "id_categoria": 3
+      "id_categoria": 3,
+      "imagen": "assets/productos-terminados/escritorio_gamer.jpg"
     },
     {
       "id": 4,
       "nombre": "Mesa Ratona",
       "descripcion": "Mesa ratona rectangular de pino con estante inferior.",
-      "precio": 45000.00,
-      "estado": false,
+      "precio": 45000,
+      "estado": "en_produccion",
       "stock_actual": 0,
-      "id_categoria": 1
+      "id_categoria": 1,
+      "imagen": "assets/productos-terminados/mesa_ratona.webp"
     },
     {
       "id": 5,
       "nombre": "Cómoda 6 cajones",
       "descripcion": "Cómoda de seis cajones con guías metálicas y tirador de hierro.",
-      "precio": 130000.00,
+      "precio": 130000,
       "estado": true,
       "stock_actual": 15,
-      "id_categoria": 4
+      "id_categoria": 4,
+      "imagen": "assets/productos-terminados/comoda_6_cajones.webp"
     },
     {
       "id": 6,
       "nombre": "Rack TV 1.80",
       "descripcion": "Rack de televisor de 1.80 m con dos puertas rebatibles.",
-      "precio": 85000.00,
+      "precio": 85000,
       "estado": true,
       "stock_actual": 23,
-      "id_categoria": 5
+      "id_categoria": 5,
+      "imagen": "assets/productos-terminados/rack_tv.jpg"
     },
     {
       "id": 7,
       "nombre": "Banqueta Alta",
       "descripcion": "Banqueta alta de desayunador con respaldo bajo, en caja de cuatro unidades.",
-      "precio": 35000.00,
+      "precio": 35000,
       "estado": true,
       "stock_actual": 7,
-      "id_categoria": 6
+      "id_categoria": 6,
+      "imagen": "assets/productos-terminados/banqueta_alta.jpg"
     },
     {
       "id": 8,
       "nombre": "Silla Nórdica",
       "descripcion": "Silla de comedor con asiento tapizado y patas de haya barnizadas.",
-      "precio": 40000.00,
-      "estado": true,
       "stock_actual": 40,
-      "id_categoria": 7
+      "stock_minimo": 1,
+      "stock_maximo": 80,
+      "id_categoria": 7,
+      "imagen": "assets/productos-terminados/banqueta_alta.jpg",
+      "estado": "en_produccion",
+      "codigo": "PT-008",
+      "formula": [
+        {
+          "id_materia_prima": 1,
+          "nombre_materia_prima": "Madera de Roble",
+          "cantidad": 3
+        },
+        {
+          "id_materia_prima": 4,
+          "nombre_materia_prima": "Barniz Transparente",
+          "cantidad": 0.5
+        },
+        {
+          "id_materia_prima": 3,
+          "nombre_materia_prima": "Tornillos 3mm",
+          "cantidad": 20
+        }
+      ]
     },
     {
       "id": 9,
       "nombre": "Mesa de Comedor Extensible",
       "descripcion": "Mesa extensible de 1.60 a 2.10 m con tablero de MDF enchapado.",
-      "precio": 180000.00,
+      "precio": 180000,
       "estado": true,
       "stock_actual": 9,
-      "id_categoria": 1
+      "id_categoria": 1,
+      "imagen": "assets/productos-terminados/mesa_nordica.jpg"
     },
     {
       "id": 10,
       "nombre": "Escritorio Minimalista",
       "descripcion": "Escritorio de 1.10 m sin cajones, estructura de hierro pintado.",
-      "precio": 75000.00,
+      "precio": 75000,
       "estado": true,
       "stock_actual": 15,
-      "id_categoria": 3
+      "id_categoria": 3,
+      "imagen": "assets/productos-terminados/escritorio_gamer.jpg"
     },
     {
       "id": 11,
       "nombre": "Deck Modular 1x1",
       "descripcion": "Módulo de deck de 1x1 m en madera de eucalipto tratada para exterior.",
-      "precio": 25000.00,
+      "precio": 25000,
       "estado": false,
       "stock_actual": 0,
-      "id_categoria": 8
+      "id_categoria": 8,
+      "imagen": "assets/productos-terminados/mesa_ratona.webp"
     },
     {
       "id": 12,
       "nombre": "Biblioteca Rincón",
       "descripcion": "Biblioteca esquinera de cuatro estantes con terminación laqueada.",
-      "precio": 65000.00,
+      "precio": 65000,
       "estado": true,
       "stock_actual": 12,
-      "id_categoria": 2
+      "id_categoria": 2,
+      "imagen": "assets/productos-terminados/biblioteca_moderna.webp"
     },
     {
       "id": 13,
       "nombre": "Cómoda Infantil",
       "descripcion": "Cómoda de tres cajones en tonos pastel, bordes redondeados.",
-      "precio": 90000.00,
+      "precio": 90000,
       "estado": true,
       "stock_actual": 6,
-      "id_categoria": 4
+      "id_categoria": 4,
+      "imagen": "assets/productos-terminados/comoda_6_cajones.webp"
     },
     {
       "id": 14,
       "nombre": "Rack TV Flotante",
       "descripcion": "Rack flotante de 1.20 m con soporte oculto y cajón central.",
-      "precio": 55000.00,
+      "precio": 55000,
       "estado": true,
       "stock_actual": 17,
-      "id_categoria": 5
+      "id_categoria": 5,
+      "imagen": "assets/productos-terminados/rack_tv.jpg"
     },
     {
       "id": 15,
       "nombre": "Silla Plegable de Pino",
       "descripcion": "Silla plegable de pino para eventos, en caja de seis unidades.",
-      "precio": 15000.00,
+      "precio": 15000,
       "estado": true,
       "stock_actual": 30,
-      "id_categoria": 7
+      "id_categoria": 7,
+      "imagen": "assets/productos-terminados/banqueta_alta.jpg"
     },
     {
       "id": 16,
       "nombre": "Banqueta Baja de Roble",
       "descripcion": "Banqueta baja de roble macizo, sin respaldo, apilable.",
-      "precio": 28000.00,
+      "precio": 28000,
       "estado": true,
       "stock_actual": 3,
-      "id_categoria": 6
+      "id_categoria": 6,
+      "imagen": "assets/productos-terminados/banqueta_alta.jpg"
+    },
+    {
+      "id": 17,
+      "nombre": "Escritorio Boho",
+      "descripcion": "",
+      "stock_actual": 5,
+      "stock_minimo": 3,
+      "stock_maximo": 10,
+      "id_categoria": 3,
+      "imagen": "assets/productos-terminados/escritorio_gamer.jpg",
+      "estado": "pendiente",
+      "codigo": "MS-200",
+      "formula": [
+        {
+          "id_materia_prima": 1,
+          "nombre_materia_prima": "Madera de Roble",
+          "cantidad": 4
+        },
+        {
+          "id_materia_prima": 2,
+          "nombre_materia_prima": "Pintura Blanca",
+          "cantidad": 2
+        },
+        {
+          "id_materia_prima": 3,
+          "nombre_materia_prima": "Tornillos 3mm",
+          "cantidad": 211
+        }
+      ]
     }
   ],
-        
-    "detalleFormula": [
-        {"id_detalle_formula": 1, "id_producto": 1, "id_materia_prima": 1, "cantidad_necesaria": 1 },
-        {"id_detalle_formula": 2, "id_producto": 1, "id_materia_prima": 3, "cantidad_necesaria": 15 },
-        {"id_detalle_formula": 3, "id_producto": 1, "id_materia_prima": 7, "cantidad_necesaria": 0.02 },
-
-        {"id_detalle_formula": 4, "id_producto": 2, "id_materia_prima": 1, "cantidad_necesaria": 0.5 },
-        {"id_detalle_formula": 5, "id_producto": 2, "id_materia_prima": 2, "cantidad_necesaria": 0.4 },
-        {"id_detalle_formula": 6, "id_producto": 2, "id_materia_prima": 5, "cantidad_necesaria": 4 },
-
-        { "id_detalle_formula": 7, "id_producto": 3, "id_materia_prima": 1, "cantidad_necesaria": 0.4 },
-        { "id_detalle_formula": 8, "id_producto": 3, "id_materia_prima": 6, "cantidad_necesaria": 0.15 },
-        { "id_detalle_formula": 9, "id_producto": 3, "id_materia_prima": 5, "cantidad_necesaria": 3 },
-
-        { "id_detalle_formula": 10, "id_producto": 4, "id_materia_prima": 1, "cantidad_necesaria": 1.2 },
-        { "id_detalle_formula": 11, "id_producto": 4, "id_materia_prima": 4, "cantidad_necesaria": 0.3 },
-        { "id_detalle_formula": 12, "id_producto": 4, "id_materia_prima": 3, "cantidad_necesaria": 10 },
-
-        { "id_detalle_formula": 13, "id_producto": 5, "id_materia_prima": 1, "cantidad_necesaria": 0.8 },
-        { "id_detalle_formula": 14, "id_producto": 5, "id_materia_prima": 8, "cantidad_necesaria": 0.1 },
-        { "id_detalle_formula": 15, "id_producto": 5, "id_materia_prima": 7, "cantidad_necesaria": 0.03 }
-    ],
-
-    "estados": [
-        { "id": 1, "nombre": "Pendiente" },
-        { "id": 2, "nombre": "En Produccion" },
-        { "id": 3, "nombre": "Finalizada" },
-        { "id": 4, "nombre": "Cancelada" }
-    ],
-
-    "ordenesProduccion": [
+  "detalleFormula": [
     {
-    "id": 1,
-    "id_orden": 1,
-    "fecha_creacion": "2026-09-01 09:00:00",
-    "fecha_inicio": "2026-09-01 09:15:00",
-    "id_estado": 3
+      "id_detalle_formula": 1,
+      "id_producto": 1,
+      "id_materia_prima": 1,
+      "cantidad_necesaria": 1
     },
     {
-    "id": 2,
-    "id_orden": 2,
-    "fecha_creacion": "2026-09-05 10:30:00",
-    "fecha_inicio": "2026-09-05 11:00:00",
-    "id_estado": 2
+      "id_detalle_formula": 2,
+      "id_producto": 1,
+      "id_materia_prima": 3,
+      "cantidad_necesaria": 15
     },
     {
-    "id": 3,
-    "id_orden": 3,
-    "fecha_creacion": "2026-09-08 08:45:00",
-    "fecha_inicio": "2026-09-08 08:45:00",
-    "id_estado": 1
+      "id_detalle_formula": 3,
+      "id_producto": 1,
+      "id_materia_prima": 7,
+      "cantidad_necesaria": 0.02
     },
     {
-    "id": 4,
-    "id_orden": 4,
-    "fecha_creacion": "2026-09-10 14:00:00",
-    "fecha_inicio": "2026-09-10 14:20:00",
-    "id_estado": 4
+      "id_detalle_formula": 4,
+      "id_producto": 2,
+      "id_materia_prima": 1,
+      "cantidad_necesaria": 0.5
     },
     {
-    "id": 5,
-    "id_orden": 5,
-    "fecha_creacion": "2026-09-12 09:00:00",
-    "fecha_inicio": "2026-09-12 09:10:00",
-    "id_estado": 3
+      "id_detalle_formula": 5,
+      "id_producto": 2,
+      "id_materia_prima": 2,
+      "cantidad_necesaria": 0.4
     },
     {
-    "id": 6,
-    "id_orden": 6,
-    "fecha_creacion": "2026-09-14 16:00:00",
-    "fecha_inicio": "2026-09-14 16:00:00",
-    "id_estado": 1
+      "id_detalle_formula": 6,
+      "id_producto": 2,
+      "id_materia_prima": 5,
+      "cantidad_necesaria": 4
+    },
+    {
+      "id_detalle_formula": 7,
+      "id_producto": 3,
+      "id_materia_prima": 1,
+      "cantidad_necesaria": 0.4
+    },
+    {
+      "id_detalle_formula": 8,
+      "id_producto": 3,
+      "id_materia_prima": 6,
+      "cantidad_necesaria": 0.15
+    },
+    {
+      "id_detalle_formula": 9,
+      "id_producto": 3,
+      "id_materia_prima": 5,
+      "cantidad_necesaria": 3
+    },
+    {
+      "id_detalle_formula": 10,
+      "id_producto": 4,
+      "id_materia_prima": 1,
+      "cantidad_necesaria": 1.2
+    },
+    {
+      "id_detalle_formula": 11,
+      "id_producto": 4,
+      "id_materia_prima": 4,
+      "cantidad_necesaria": 0.3
+    },
+    {
+      "id_detalle_formula": 12,
+      "id_producto": 4,
+      "id_materia_prima": 3,
+      "cantidad_necesaria": 10
+    },
+    {
+      "id_detalle_formula": 13,
+      "id_producto": 5,
+      "id_materia_prima": 1,
+      "cantidad_necesaria": 0.8
+    },
+    {
+      "id_detalle_formula": 14,
+      "id_producto": 5,
+      "id_materia_prima": 8,
+      "cantidad_necesaria": 0.1
+    },
+    {
+      "id_detalle_formula": 15,
+      "id_producto": 5,
+      "id_materia_prima": 7,
+      "cantidad_necesaria": 0.03
     }
-],
-
-    "detalleOrdenProduccion": [
-        {"id_detalle_produccion": 1, "id_orden": 1, "id_producto": 1, "cantidad_planificada": 20, "cantidad_producida": 20 },
-        {"id_detalle_produccion": 2, "id_orden": 2, "id_producto": 2, "cantidad_planificada": 15, "cantidad_producida": 6 },
-        {"id_detalle_produccion": 3, "id_orden": 3, "id_producto": 4, "cantidad_planificada": 10, "cantidad_producida": 0 },
-        {"id_detalle_produccion": 4, "id_orden": 4, "id_producto": 3, "cantidad_planificada": 8, "cantidad_producida": 0 },
-        {"id_detalle_produccion": 5, "id_orden": 5, "id_producto": 5, "cantidad_planificada": 30, "cantidad_producida": 30 },
-        {"id_detalle_produccion": 6, "id_orden": 6, "id_producto": 1, "cantidad_planificada": 25, "cantidad_producida": 0 }
-    ],
-
-    "movimientosStockMateriaPrima": [
-        {"id_movimiento": 1, "id_materia_prima": 1, "fecha": "2026-08-20T10:00:00", "tipo_movimiento": "ingreso", "cantidad": 50, "observacion": "Compra a proveedor habitual", "id_usuario": 1 },
-        {"id_movimiento": 2, "id_materia_prima": 1, "fecha": "2026-09-01T09:15:00", "tipo_movimiento": "consumo", "cantidad": 20, "observacion": "Orden de producción #1", "id_usuario": 3 },
-        {"id_movimiento": 3, "id_materia_prima": 2, "fecha": "2026-08-18T11:00:00", "tipo_movimiento": "ingreso", "cantidad": 20, "observacion": "Reposición mensual", "id_usuario": 1 },
-        {"id_movimiento": 4, "id_materia_prima": 2, "fecha": "2026-09-05T11:00:00", "tipo_movimiento": "consumo", "cantidad": 12, "observacion": "Orden de producción #2", "id_usuario": 3 },
-        {"id_movimiento": 5, "id_materia_prima": 6, "fecha": "2026-08-15T09:30:00", "tipo_movimiento": "ingreso", "cantidad": 5, "observacion": "Compra inicial", "id_usuario": 2 },
-        {"id_movimiento": 6, "id_materia_prima": 6, "fecha": "2026-09-04T15:00:00", "tipo_movimiento": "consumo", "cantidad": 2, "observacion": "Prueba de receta", "id_usuario": 4 },
-        {"id_movimiento": 7, "id_materia_prima": 5, "fecha": "2026-08-22T08:00:00", "tipo_movimiento": "ingreso", "cantidad": 60, "observacion": "Compra a granja local", "id_usuario": 1 },
-        {"id_movimiento": 8, "id_materia_prima": 5, "fecha": "2026-09-05T11:05:00", "tipo_movimiento": "consumo", "cantidad": 24, "observacion": "Orden de producción #2", "id_usuario": 3 }
-    ],
-
-    "movimientosInventarioProducto": [
-        {"id_movimiento_producto": 1, "fecha": "2026-09-01T12:00:00", "tipo_movimiento": "ingreso", "cantidad": 20, "id_producto": 1, "id_usuario": 3 },
-        {"id_movimiento_producto": 2, "fecha": "2026-09-02T09:00:00", "tipo_movimiento": "venta", "cantidad": 8, "id_producto": 1, "id_usuario": 2 },
-        {"id_movimiento_producto": 3, "fecha": "2026-09-12T10:00:00", "tipo_movimiento": "ingreso", "cantidad": 30, "id_producto": 5, "id_usuario": 3 },
-        {"id_movimiento_producto": 4, "fecha": "2026-09-13T13:00:00", "tipo_movimiento": "venta", "cantidad": 5, "id_producto": 5, "id_usuario": 2 },
-        {"id_movimiento_producto": 5, "fecha": "2026-09-07T16:30:00", "tipo_movimiento": "ajuste", "cantidad": -1, "id_producto": 3, "id_usuario": 1 },
-        {"id_movimiento_producto": 6, "fecha": "2026-09-09T17:00:00", "tipo_movimiento": "venta", "cantidad": 3, "id_producto": 4, "id_usuario": 2 }
-    ]
+  ],
+  "estados": [
+    {
+      "id": 1,
+      "nombre": "Pendiente"
+    },
+    {
+      "id": 2,
+      "nombre": "En Produccion"
+    },
+    {
+      "id": 3,
+      "nombre": "Finalizada"
+    },
+    {
+      "id": 4,
+      "nombre": "Cancelada"
     }
+  ],
+  "detalleOrdenProduccion": [
+    {
+      "id": 1,
+      "id_detalle_produccion": 1,
+      "id_orden": 1,
+      "id_producto": 1,
+      "cantidad_planificada": 20,
+      "cantidad_producida": 20
+    },
+    {
+      "id": 2,
+      "id_detalle_produccion": 2,
+      "id_orden": 2,
+      "id_producto": 2,
+      "cantidad_planificada": 15,
+      "cantidad_producida": 6
+    },
+    {
+      "id": 3,
+      "id_detalle_produccion": 3,
+      "id_orden": 3,
+      "id_producto": 4,
+      "cantidad_planificada": 10,
+      "cantidad_producida": 0
+    },
+    {
+      "id": 4,
+      "id_detalle_produccion": 4,
+      "id_orden": 4,
+      "id_producto": 3,
+      "cantidad_planificada": 8,
+      "cantidad_producida": 0
+    },
+    {
+      "id": 5,
+      "id_detalle_produccion": 5,
+      "id_orden": 5,
+      "id_producto": 5,
+      "cantidad_planificada": 30,
+      "cantidad_producida": 30
+    },
+    {
+      "id": 6,
+      "id_detalle_produccion": 6,
+      "id_orden": 6,
+      "id_producto": 1,
+      "cantidad_planificada": 25,
+      "cantidad_producida": 0
+    }
+  ],
+  "movimientosStockMateriaPrima": [
+    {
+      "id_movimiento": 1,
+      "id_materia_prima": 1,
+      "fecha": "2026-08-20T10:00:00",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 50,
+      "observacion": "Compra a proveedor habitual",
+      "id_usuario": 1
+    },
+    {
+      "id_movimiento": 2,
+      "id_materia_prima": 1,
+      "fecha": "2026-09-01T09:15:00",
+      "tipo_movimiento": "consumo",
+      "cantidad": 20,
+      "observacion": "Orden de producción #1",
+      "id_usuario": 3
+    },
+    {
+      "id_movimiento": 3,
+      "id_materia_prima": 2,
+      "fecha": "2026-08-18T11:00:00",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 20,
+      "observacion": "Reposición mensual",
+      "id_usuario": 1
+    },
+    {
+      "id_movimiento": 4,
+      "id_materia_prima": 2,
+      "fecha": "2026-09-05T11:00:00",
+      "tipo_movimiento": "consumo",
+      "cantidad": 12,
+      "observacion": "Orden de producción #2",
+      "id_usuario": 3
+    },
+    {
+      "id_movimiento": 5,
+      "id_materia_prima": 6,
+      "fecha": "2026-08-15T09:30:00",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 5,
+      "observacion": "Compra inicial",
+      "id_usuario": 2
+    },
+    {
+      "id_movimiento": 6,
+      "id_materia_prima": 6,
+      "fecha": "2026-09-04T15:00:00",
+      "tipo_movimiento": "consumo",
+      "cantidad": 2,
+      "observacion": "Prueba de receta",
+      "id_usuario": 4
+    },
+    {
+      "id_movimiento": 7,
+      "id_materia_prima": 5,
+      "fecha": "2026-08-22T08:00:00",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 60,
+      "observacion": "Compra a granja local",
+      "id_usuario": 1
+    },
+    {
+      "id_movimiento": 8,
+      "id_materia_prima": 5,
+      "fecha": "2026-09-05T11:05:00",
+      "tipo_movimiento": "consumo",
+      "cantidad": 24,
+      "observacion": "Orden de producción #2",
+      "id_usuario": 3
+    }
+  ],
+  "movimientosInventarioProducto": [
+    {
+      "id": 1,
+      "id_movimiento_producto": 1,
+      "fecha": "2026-09-01T12:00:00",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 20,
+      "id_producto": 1,
+      "id_usuario": 3
+    },
+    {
+      "id": 2,
+      "id_movimiento_producto": 2,
+      "fecha": "2026-09-02T09:00:00",
+      "tipo_movimiento": "venta",
+      "cantidad": 8,
+      "id_producto": 1,
+      "id_usuario": 2
+    },
+    {
+      "id": 3,
+      "id_movimiento_producto": 3,
+      "fecha": "2026-09-12T10:00:00",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 30,
+      "id_producto": 5,
+      "id_usuario": 3
+    },
+    {
+      "id": 4,
+      "id_movimiento_producto": 4,
+      "fecha": "2026-09-13T13:00:00",
+      "tipo_movimiento": "venta",
+      "cantidad": 5,
+      "id_producto": 5,
+      "id_usuario": 2
+    },
+    {
+      "id": 5,
+      "id_movimiento_producto": 5,
+      "fecha": "2026-09-07T16:30:00",
+      "tipo_movimiento": "ajuste",
+      "cantidad": -1,
+      "id_producto": 3,
+      "id_usuario": 1
+    },
+    {
+      "id": 6,
+      "id_movimiento_producto": 6,
+      "fecha": "2026-09-09T17:00:00",
+      "tipo_movimiento": "venta",
+      "cantidad": 3,
+      "id_producto": 4,
+      "id_usuario": 2
+    },
+    {
+      "fecha": "2026-09-18T00:26:50.264Z",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 5,
+      "id_producto": 19,
+      "id_usuario": 1,
+      "observacion": "Alta inicial de producto",
+      "id": 7
+    },
+    {
+      "fecha": "2026-09-18T17:26:16.805Z",
+      "tipo_movimiento": "ingreso",
+      "cantidad": 1,
+      "id_producto": 18,
+      "id_usuario": 1,
+      "observacion": "Alta inicial de producto",
+      "id": 8
+    }
+  ],
+  "ordenesProduccion": [
+    {
+      "id": 1,
+      "id_orden": 1,
+      "fecha_creacion": "2026-09-01 09:00:00",
+      "fecha_inicio": "2026-09-01 09:15:00",
+      "id_estado": 3
+    },
+    {
+      "id": 2,
+      "id_orden": 2,
+      "fecha_creacion": "2026-09-05 10:30:00",
+      "fecha_inicio": "2026-09-05 11:00:00",
+      "id_estado": 2
+    },
+    {
+      "id": 3,
+      "id_orden": 3,
+      "fecha_creacion": "2026-09-08 08:45:00",
+      "fecha_inicio": "2026-09-08 08:45:00",
+      "id_estado": 1
+    },
+    {
+      "id": 4,
+      "id_orden": 4,
+      "fecha_creacion": "2026-09-10 14:00:00",
+      "fecha_inicio": "2026-09-10 14:20:00",
+      "id_estado": 4
+    },
+    {
+      "id": 5,
+      "id_orden": 5,
+      "fecha_creacion": "2026-09-12 09:00:00",
+      "fecha_inicio": "2026-09-12 09:10:00",
+      "id_estado": 3
+    },
+    {
+      "id": 6,
+      "id_orden": 6,
+      "fecha_creacion": "2026-09-14 16:00:00",
+      "fecha_inicio": "2026-09-14 16:00:00",
+      "id_estado": 1
+    }
+  ]
+}

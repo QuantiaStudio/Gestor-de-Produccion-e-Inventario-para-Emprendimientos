@@ -74,6 +74,31 @@
   font-size: 13px;
 }
 
+.materiales-necesarios {
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.tabla-formula {
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.tabla-formula th {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+}
+
+.tabla-formula td {
+  border-top: 1px solid var(--gray-200);
+}
+
+.texto-vacio {
+  color: var(--gray-400);
+}
+
 .detalle-fila {
   display: flex;
   align-items: baseline;
@@ -117,6 +142,37 @@
   color: var(--gray-400);
   font-size: 11px;
   margin-top: 4px;
+}
+
+.detalle-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.confirmacion-eliminacion {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #dc2626;
+  border-radius: var(--radius-sm);
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.confirmacion-eliminacion p {
+  margin: 4px 0 12px;
+  font-size: 13px;
+}
+
+.confirmacion-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mensaje-eliminacion {
+  margin-top: 12px;
 }
 
 @media (max-width: 991.98px) {
