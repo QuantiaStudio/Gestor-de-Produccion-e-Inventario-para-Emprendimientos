@@ -59,6 +59,14 @@
 
 <div class="inventory-layout row g-4" id="inventario">
     <div class="col-lg-12 inventory-table-col">
+        <p class="results-info">
+            Mostrando {{ ordenes.length }} de {{ totalOrdenes }}
+            {{ totalOrdenes === 1 ? 'orden' : 'órdenes' }}
+            @if (hayFiltrosActivos) {
+            <span class="results-info__filtro">con los filtros aplicados</span>
+            }
+        </p>
+
         <div class="stock-table-wrapper">
 
             <table class="stock-table">
@@ -155,6 +163,17 @@
                             <button type="button" class="btn-ver-detalle" (click)="seleccionarOrden(orden)">
                                 Ver
                             </button>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            @if (hayFiltrosActivos) {
+                            No se encontraron órdenes coincidentes con los filtros
+                            seleccionados.
+                            } @else {
+                            Todavía no hay órdenes de producción registradas.
+                            }
                         </td>
                     </tr>
                     }

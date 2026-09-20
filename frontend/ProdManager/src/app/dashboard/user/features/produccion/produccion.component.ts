@@ -39,6 +39,7 @@ export class ProduccionComponent implements OnInit {
   Ordenseleccionada?: OrdenProduccion;
 
   productosDeOrdenes: ProductoOrdenProduccion[] = [];
+  totalOrdenes = 0;
   ordenamiento: OrdenamientoOrdenProduccion = {
     campo: 'fechaCreacion',
     direccion: 'desc'
@@ -65,6 +66,12 @@ export class ProduccionComponent implements OnInit {
   aplicarFiltros(filtros: FiltroOrdenProduccion): void {
     this.filtrosActuales = filtros;
     this.refrescar();
+  }
+
+  get hayFiltrosActivos(): boolean {
+    const { busqueda, estado, productoId } = this.filtrosActuales;
+
+    return Boolean(busqueda?.trim() || estado || productoId);
   }
 
   ordenarPor(campo: CampoOrdenOrdenProduccion): void {
@@ -106,6 +113,7 @@ export class ProduccionComponent implements OnInit {
       this.ordenamiento
     );
     this.productosDeOrdenes = this.produccionService.obtenerProductosDeOrdenes();
+    this.totalOrdenes = this.produccionService.obtenerOrdenes().length;
 
     const seleccionada = this.Ordenseleccionada;
 
