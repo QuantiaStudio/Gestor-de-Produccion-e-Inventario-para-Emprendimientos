@@ -643,7 +643,9 @@
       "id_orden": 1,
       "fecha_creacion": "2026-09-01 09:00:00",
       "fecha_inicio": "2026-09-01 09:15:00",
-      "id_estado": 3
+      "id_estado": 3,
+      "estado": "cancelada",
+      "motivoCancelacion": "Prueba desde terminal"
     },
     {
       "id": 2,

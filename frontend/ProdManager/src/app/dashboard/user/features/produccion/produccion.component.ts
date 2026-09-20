@@ -160,15 +160,41 @@ export class ProduccionComponent implements OnInit {
     this.mostrarFormulario = false;
   }
 
-  // Modal de Intervención (TSK-11.3)
+  // Modal de Intervención (TSK-11.1 / TSK-11.3)
   abrirModalIntervencion(orden: OrdenProduccion, accion: TipoAccionIntervencion): void {
     this.Ordenseleccionada = orden;
-    this.mensajeEstadoError = '';
+    this.accionSeleccionada = accion;
+    this.mensajeIntervencionError = '';
+    this.intervencionForm.reset();
+    this.mostrarModalIntervencion = true;
   }
 
-  cerrarDetalle(): void {
-    this.Ordenseleccionada = undefined;
-    this.mensajeEstadoError = '';
+  cerrarModalIntervencion(): void {
+    this.mostrarModalIntervencion = false;
+    this.accionSeleccionada = null;
+    this.mensajeIntervencionError = '';
+    this.intervencionForm.reset();
+  }
+
+  confirmarIntervencion(): void {
+    if (this.intervencionForm.invalid || !this.Ordenseleccionada || !this.accionSeleccionada) {
+      this.intervencionForm.markAllAsTouched();
+      return;
+    }
+
+    const motivo = this.intervencionForm.get('observaciones')?.value || '';
+    const nuevoEstado = this.accionSeleccionada === 'CANCELAR' ? 'cancelada' : 'finalizada';
+
+    this.produccionService.cancelarProduccion(this.Ordenseleccionada.id, motivo).subscribe({
+      next: () => {
+        this.recargarOrdenes();
+        this.cerrarModalIntervencion();
+      },
+      error: (err) => {
+        console.error('Error al intervenir la orden:', err);
+        this.mensajeIntervencionError = 'No se pudo procesar la solicitud.';
+      }
+    });
   }
 
   contarPorEstado(estado: EstadoOrdenProduccion): number {
@@ -226,10 +252,6 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-  private recargarOrdenes(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
-  }
-
   crearOrden(): void {
     if (this.ordenForm.invalid) {
       this.ordenForm.markAllAsTouched();
@@ -240,7 +262,7 @@ export class ProduccionComponent implements OnInit {
 
     this.produccionService.crearOrden(datos).subscribe({
       next: () => {
-        this.ordenes = this.produccionService.obtenerOrdenes();
+        this.recargarOrdenes();
         this.ordenForm.reset({
           productoId: '',
           cantidad: 1,
@@ -257,6 +279,11 @@ export class ProduccionComponent implements OnInit {
   }
 
   private recargarOrdenes(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
+    this.produccionService.cargarOrdenes().subscribe({
+      next: (ordenes) => {
+        this.ordenes = ordenes;
+      },
+      error: (err) => console.error('Error al recargar órdenes:', err)
+    });
   }
 }
