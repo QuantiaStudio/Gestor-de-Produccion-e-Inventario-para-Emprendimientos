@@ -5,7 +5,7 @@
         "nombre": "Admin",
         "apellido": "Sistema",
         "email": "admin@correo.com",
-        "contrasena": 123456,
+        "contrasena": "123456",
         "rol": "ADMIN",
         "estado": true
         },
@@ -14,7 +14,7 @@
         "nombre": "Rocío",
         "apellido": "Altamirano",
         "email": "rocio.altamirano@correo.com",
-        "contrasena": 123456,
+        "contrasena": "123456",
         "rol": "ADMIN",
         "estado": true
         },
