@@ -6,9 +6,14 @@ import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produ
 import { ProductoTerminado } from '../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../services/producto-terminado.service';
 import {
+  CampoOrdenOrdenProduccion,
   EstadoOrdenProduccion,
-  NuevaOrdenProduccion
+  FiltroOrdenProduccion,
+  NuevaOrdenProduccion,
+  OrdenamientoOrdenProduccion,
+  ProductoOrdenProduccion
 } from '../../../../models/orden-produccion/orden-produccion.model';
+import { ProduccionFiltrosComponent } from './produccion-filtros/produccion-filtros.component';
 import {
   FormBuilder,
   FormControl,
@@ -20,7 +25,7 @@ import {
 @Component({
   selector: 'app-produccion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ProduccionFiltrosComponent],
   templateUrl: './produccion.component.html',
   styleUrl: './produccion.component.css'
 })
@@ -37,6 +42,21 @@ export class ProduccionComponent implements OnInit {
 
   Ordenseleccionada?: OrdenProduccion;
 
+  productosDeOrdenes: ProductoOrdenProduccion[] = [];
+  totalOrdenes = 0;
+  ordenamiento: OrdenamientoOrdenProduccion = {
+    campo: 'fechaCreacion',
+    direccion: 'desc'
+  };
+  // Las tarjetas resumen el total, no el subconjunto filtrado.
+  conteoPorEstado: Record<EstadoOrdenProduccion, number> = {
+    pendiente: 0,
+    en_produccion: 0,
+    finalizada: 0,
+    cancelada: 0
+  };
+  private filtrosActuales: FiltroOrdenProduccion = {};
+
   constructor(
     private produccionService: ProduccionService, 
     private formBuilder: FormBuilder, 
@@ -51,8 +71,8 @@ export class ProduccionComponent implements OnInit {
 
   ngOnInit(): void {
     this.produccionService.cargarOrdenes().subscribe({
-      next: (ordenes) => {
-        this.ordenes = ordenes;
+      next: () => {
+        this.refrescar();
       },
       error: (error) => {
         console.error('Error al cargar órdenes de producción', error);
@@ -104,8 +124,37 @@ export class ProduccionComponent implements OnInit {
     this.mensajeEstadoError = '';
   }
 
-  contarPorEstado(estado: EstadoOrdenProduccion): number {
-    return this.ordenes.filter(orden => orden.estado === estado).length;
+  aplicarFiltros(filtros: FiltroOrdenProduccion): void {
+    this.filtrosActuales = filtros;
+    this.refrescar();
+  }
+
+  ordenarPor(campo: CampoOrdenOrdenProduccion): void {
+    const mismoCampo = this.ordenamiento.campo === campo;
+
+    this.ordenamiento = {
+      campo,
+      direccion:
+        mismoCampo && this.ordenamiento.direccion === 'asc' ? 'desc' : 'asc'
+    };
+
+    this.refrescar();
+  }
+
+  direccionDe(
+    campo: CampoOrdenOrdenProduccion
+  ): 'ascending' | 'descending' | 'none' {
+    if (this.ordenamiento.campo !== campo) {
+      return 'none';
+    }
+
+    return this.ordenamiento.direccion === 'asc' ? 'ascending' : 'descending';
+  }
+
+  get hayFiltrosActivos(): boolean {
+    const { busqueda, estado, productoId } = this.filtrosActuales;
+
+    return Boolean(busqueda?.trim() || estado || productoId);
   }
 
   textoEstado(estado: EstadoOrdenProduccion): string {
@@ -150,7 +199,7 @@ export class ProduccionComponent implements OnInit {
     cambio$.subscribe({
       next: () => {
         this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
-        this.recargarOrdenes();
+        this.refrescar();
       },
       error: (error) => {
         this.mensajeEstadoError = error instanceof Error && !('status' in error)
@@ -160,8 +209,37 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-  private recargarOrdenes(): void {
-    this.ordenes = this.produccionService.obtenerOrdenes();
+  private refrescar(): void {
+    const todas = this.produccionService.obtenerOrdenes();
+
+    this.ordenes = this.produccionService.ordenar(
+      this.produccionService.filtrar(this.filtrosActuales),
+      this.ordenamiento
+    );
+    this.productosDeOrdenes = this.produccionService.obtenerProductosDeOrdenes();
+    this.totalOrdenes = todas.length;
+    this.conteoPorEstado = {
+      pendiente: this.contar(todas, 'pendiente'),
+      en_produccion: this.contar(todas, 'en_produccion'),
+      finalizada: this.contar(todas, 'finalizada'),
+      cancelada: this.contar(todas, 'cancelada')
+    };
+
+    const seleccionada = this.Ordenseleccionada;
+
+    if (
+      seleccionada &&
+      !this.ordenes.some(orden => orden.id === seleccionada.id)
+    ) {
+      this.cerrarDetalle();
+    }
+  }
+
+  private contar(
+    ordenes: OrdenProduccion[],
+    estado: EstadoOrdenProduccion
+  ): number {
+    return ordenes.filter(orden => orden.estado === estado).length;
   }
 
   crearOrden(): void {
@@ -174,7 +252,7 @@ export class ProduccionComponent implements OnInit {
 
     this.produccionService.crearOrden(datos).subscribe({
       next: () => {
-        this.ordenes = this.produccionService.obtenerOrdenes();
+        this.refrescar();
         this.ordenForm.reset({
           productoId: '',
           cantidad: 1,

@@ -213,55 +213,6 @@
 	font: 700 1.75rem/1.2 var(--font-heading);
 }
 
-.inventory-filters {
-	margin-bottom: 1.5rem;
-	padding: 1rem;
-	border: 1px solid rgba(124, 58, 237, 0.08);
-	border-radius: var(--radius-md);
-	background: rgba(255, 255, 255, 0.84);
-	box-shadow: 0 0.75rem 2rem rgba(15, 23, 42, 0.06);
-}
-
-.filters-row {
-	display: grid;
-	grid-template-columns: minmax(12rem, 2fr) repeat(2, minmax(9rem, 1fr)) auto;
-	gap: 0.85rem;
-	align-items: center;
-}
-
-.search-box {
-	position: relative;
-	display: flex;
-	align-items: center;
-}
-
-.search-icon {
-	position: absolute;
-	left: 0.75rem;
-	display: flex;
-	pointer-events: none;
-}
-
-.search-icon img { width: 1rem; height: 1rem; }
-
-.search-box .input { padding-left: 2.25rem; }
-
-.filter-select { position: relative; }
-
-.filter-label {
-	position: absolute;
-	top: -0.4rem;
-	left: 0.6rem;
-	z-index: 1;
-	padding: 0 0.25rem;
-	background: #ffffff;
-	color: var(--gray-600);
-	font-size: 0.62rem;
-	font-weight: 800;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-}
-
 .input {
 	width: 100%;
 	min-height: 2.4rem;
@@ -278,23 +229,6 @@
 	border-color: var(--primary-color);
 	box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
 }
-
-.btn-limpiar {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.45rem;
-	min-height: 2.4rem;
-	padding: 0.55rem 0.9rem;
-	border: 1px solid var(--gray-200);
-	border-radius: var(--radius-sm);
-	background: #ffffff;
-	color: var(--gray-600);
-	font: 500 0.82rem var(--font-body);
-	cursor: pointer;
-}
-
-.btn-limpiar img { width: 1rem; height: 1rem; }
 
 .inventory-layout {
 	width: 100%;
@@ -334,15 +268,6 @@
 }
 
 .stock-table tbody tr:hover { background: rgba(124, 58, 237, 0.03); }
-
-.badge {
-	display: inline-flex;
-	align-items: center;
-	padding: 0.3rem 0.65rem;
-	border-radius: 999px;
-	font-size: 0.72rem;
-	font-weight: 700;
-}
 
 .btn-ver-detalle {
 	padding: 0.35rem 0.6rem;
@@ -545,7 +470,6 @@
 @media (max-width: 640px) {
 	.page-header { flex-direction: column; }
 	.btn-nueva-produccion { width: 100%; }
-	.filters-row { grid-template-columns: 1fr; }
 	.inventory-stats { grid-template-columns: 1fr; }
 
 	.modal-produccion form {
@@ -566,4 +490,46 @@
 	.detail-col {
 		position: static;
 	}
+}
+
+.stock-table th.th-sortable { padding: 0; }
+
+.th-sort {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+	text-align: left;
+	text-transform: inherit;
+	cursor: pointer;
+}
+
+.th-sort:hover { color: var(--primary-color); }
+
+.th-sort:focus-visible {
+	outline: 2px solid var(--primary-color);
+	outline-offset: -2px;
+}
+
+.th-sort__icono {
+	width: 0.7rem;
+	height: 0.7rem;
+	opacity: 0.75;
+}
+
+.results-info {
+	margin: 0 0 0.75rem;
+	color: var(--gray-600);
+	font-size: 0.8rem;
+}
+
+.results-info__filtro {
+	color: var(--primary-color);
+	font-weight: 600;
 }

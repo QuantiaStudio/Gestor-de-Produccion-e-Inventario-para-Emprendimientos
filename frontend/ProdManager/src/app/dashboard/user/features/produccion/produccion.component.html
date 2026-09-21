@@ -16,7 +16,7 @@
         </div>
         <div class="stat-card__content">
             <span class="stat-label">Pendientes</span>
-            <span class="stat-value">{{ contarPorEstado('pendiente') }}</span>
+            <span class="stat-value">{{ conteoPorEstado.pendiente }}</span>
             <span class="stat-desc">Órdenes Esperando Inicio</span>
         </div>
     </article>
@@ -26,7 +26,7 @@
         </div>
         <div class="stat-card__content">
             <span class="stat-label">En Proceso</span>
-            <span class="stat-value">{{ contarPorEstado('en_produccion') }}</span>
+            <span class="stat-value">{{ conteoPorEstado.en_produccion }}</span>
             <span class="stat-desc">Órdenes en Ejecución</span>
         </div>
     </article>
@@ -36,7 +36,7 @@
         </div>
         <div class="stat-card__content">
             <span class="stat-label">Finalizadas</span>
-            <span class="stat-value">{{ contarPorEstado('finalizada') }}</span>
+            <span class="stat-value">{{ conteoPorEstado.finalizada }}</span>
             <span class="stat-desc">Órdenes Completadas</span>
         </div>
     </article>
@@ -46,45 +46,30 @@
         </div>
         <div class="stat-card__content">
             <span class="stat-label">Canceladas</span>
-            <span class="stat-value">{{ contarPorEstado('cancelada') }}</span>
+            <span class="stat-value">{{ conteoPorEstado.cancelada }}</span>
             <span class="stat-desc">Órdenes canceladas</span>
         </div>
     </article>
 </section>
 
 <!-- Filtros -->
-<section class="inventory-filters mb-4">
-    <div class="filters-row">
-        <div class="search-box">
-            <span class="search-icon">
-                <img src="../../../../../assets/search.svg" class="icon-gray" alt="">
-            </span>
-            <input type="text" placeholder="Buscar orden..." class="input">
-        </div>
-        <div class="filter-select">
-            <span class="filter-label">Estado</span>
-            <select class="input form-select">
-                <option>Todos</option>
-            </select>
-        </div>
-        <div class="filter-select">
-            <span class="filter-label">Producto</span>
-            <select class="input form-select">
-                <option>Todos</option>
-            </select>
-        </div>
-        <button type="button" class="btn-limpiar">
-            <img src="../../../../../assets/filter.svg" class="icon-gray" alt="">
-            Limpiar filtros
-        </button>
-    </div>
-</section>
+<app-produccion-filtros
+    [productos]="productosDeOrdenes"
+    (filtrosCambiaron)="aplicarFiltros($event)" />
 
 <div class="inventory-layout row g-4" id="inventario">
     <div
         class="inventory-table-col"
         [class.col-lg-8]="Ordenseleccionada"
         [class.col-lg-12]="!Ordenseleccionada">
+        <p class="results-info">
+            Mostrando {{ ordenes.length }} de {{ totalOrdenes }}
+            {{ totalOrdenes === 1 ? 'orden' : 'órdenes' }}
+            @if (hayFiltrosActivos) {
+            <span class="results-info__filtro">con los filtros aplicados</span>
+            }
+        </p>
+
         <div class="stock-table-wrapper">
 
             <table class="stock-table">
@@ -92,11 +77,71 @@
                 <thead>
 
                     <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('id')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('id')">
+                                ID
+                                @if (ordenamiento.campo === 'id') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('producto')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('producto')">
+                                Producto
+                                @if (ordenamiento.campo === 'producto') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('cantidad')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('cantidad')">
+                                Cantidad
+                                @if (ordenamiento.campo === 'cantidad') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('estado')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('estado')">
+                                Estado
+                                @if (ordenamiento.campo === 'estado') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
+                        <th class="th-sortable" [attr.aria-sort]="direccionDe('fechaCreacion')">
+                            <button type="button" class="th-sort"
+                                (click)="ordenarPor('fechaCreacion')">
+                                Fecha
+                                @if (ordenamiento.campo === 'fechaCreacion') {
+                                <img class="th-sort__icono"
+                                    [src]="ordenamiento.direccion === 'asc'
+                                        ? 'assets/arrow-up.svg'
+                                        : 'assets/arrow-down.svg'"
+                                    alt="">
+                                }
+                            </button>
+                        </th>
                         <th>Acciones</th>
                     </tr>
 
@@ -125,6 +170,17 @@
                             <button type="button" class="btn-ver-detalle" (click)="seleccionarOrden(orden)">
                                 Ver
                             </button>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            @if (hayFiltrosActivos) {
+                            No se encontraron órdenes coincidentes con los filtros
+                            seleccionados.
+                            } @else {
+                            Todavía no hay órdenes de producción registradas.
+                            }
                         </td>
                     </tr>
                     }
