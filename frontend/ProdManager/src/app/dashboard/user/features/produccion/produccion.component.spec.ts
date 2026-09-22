@@ -9,7 +9,8 @@ import { ProduccionComponent } from './produccion.component';
 
 const API = 'http://localhost:3000';
 
-// Tres ordenes: dos del mismo producto con acento distinto, una cancelada.
+// Tres órdenes: dos del mismo producto escrito con y sin tilde, para
+// comprobar que la búsqueda no distingue acentos, y una cancelada.
 const ORDENES = [
   { id: 1, id_orden: 1, fecha_creacion: '2026-09-01 09:00:00', id_estado: 1 },
   { id: 2, id_orden: 2, fecha_creacion: '2026-09-10 09:00:00', id_estado: 3 },
@@ -32,38 +33,42 @@ const PRODUCTOS = [
   { id: 3, nombre: 'Banqueta Alta', id_categoria: 1, unidad_medida: 'u', stock_actual: 7, stock_minimo: 2, id_estado: 1 }
 ];
 
-function responder(http: HttpTestingController): void {
-  const contestar = (url: string, cuerpo: object[]) =>
-    http.match(url).forEach(peticion => peticion.flush(cuerpo));
+const COLECCIONES: Record<string, object[]> = {
+  ordenesProduccion: ORDENES,
+  detalleOrdenProduccion: DETALLES,
+  estados: ESTADOS,
+  detalleFormula: [],
+  productos: PRODUCTOS,
+  movimientosInventarioProducto: [],
+  categorias: [{ id: 1, nombre: 'Mesas' }],
+  materiasPrimas: [],
+  movimientosStockMateriaPrima: []
+};
 
-  contestar(`${API}/ordenesProduccion`, ORDENES);
-  contestar(`${API}/detalleOrdenProduccion`, DETALLES);
-  contestar(`${API}/estados`, ESTADOS);
-  contestar(`${API}/detalleFormula`, []);
-  contestar(`${API}/productos`, PRODUCTOS);
-  contestar(`${API}/movimientosInventarioProducto`, []);
-  contestar(`${API}/categorias`, [{ id: 1, nombre: 'Mesas' }]);
-  contestar(`${API}/materiasPrimas`, []);
-  contestar(`${API}/movimientosStockMateriaPrima`, []);
-}
-
-function filas(fixture: ComponentFixture<ProduccionComponent>): string[] {
-  return Array.from(
-    fixture.nativeElement.querySelectorAll('.stock-table tbody tr')
-  ).map(fila => (fila as HTMLElement).textContent?.replace(/\s+/g, ' ').trim() ?? '');
-}
-
-function encabezado(
-  fixture: ComponentFixture<ProduccionComponent>,
-  indice: number
-): HTMLTableCellElement {
-  return fixture.nativeElement.querySelectorAll('.stock-table thead th')[indice];
+function texto(elemento: Element | null): string {
+  return elemento?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
 }
 
 describe('ProduccionComponent', () => {
   let fixture: ComponentFixture<ProduccionComponent>;
   let component: ProduccionComponent;
   let http: HttpTestingController;
+
+  function responder(colecciones: Record<string, object[]> = COLECCIONES): void {
+    Object.entries(colecciones).forEach(([nombre, filas]) =>
+      http.match(`${API}/${nombre}`).forEach(peticion => peticion.flush(filas))
+    );
+  }
+
+  function idsVisibles(): string[] {
+    return Array.from(
+      fixture.nativeElement.querySelectorAll('.orders-table tbody tr td:first-child')
+    ).map(celda => texto(celda as Element));
+  }
+
+  function encabezado(indice: number): HTMLTableCellElement {
+    return fixture.nativeElement.querySelectorAll('.orders-table thead th')[indice];
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -76,7 +81,7 @@ describe('ProduccionComponent', () => {
     http = TestBed.inject(HttpTestingController);
 
     fixture.detectChanges();
-    responder(http);
+    responder();
     fixture.detectChanges();
   });
 
@@ -86,146 +91,94 @@ describe('ProduccionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('carga el listado completo desde la API', () => {
-    expect(filas(fixture).length).toBe(3);
+  it('muestra el listado completo al entrar', () => {
+    expect(idsVisibles().length).toBe(3);
+    expect(texto(fixture.nativeElement.querySelector('.results-info')))
+      .toBe('Mostrando 3 de 3 órdenes');
   });
 
   it('ordena por fecha descendente al entrar', () => {
-    expect(component.ordenes.map(orden => orden.id)).toEqual([
-      'OP-002',
-      'OP-003',
-      'OP-001'
-    ]);
-  });
-
-  it('la barra de filtros está conectada y ofrece los productos con órdenes', () => {
-    const selectProducto: HTMLSelectElement = fixture.nativeElement.querySelector(
-      'app-produccion-filtros select[formControlName="productoId"]'
-    );
-
-    expect(selectProducto).toBeTruthy();
-    expect(selectProducto.options.length).toBe(4);
+    expect(idsVisibles()).toEqual(['#OP-002', '#OP-003', '#OP-001']);
   });
 
   it('busca sin distinguir acentos', () => {
-    component.aplicarFiltros({ busqueda: 'nord' });
+    component.filtroTexto.setValue('nord');
     fixture.detectChanges();
 
-    expect(filas(fixture).length).toBe(2);
+    expect(idsVisibles()).toEqual(['#OP-002', '#OP-001']);
   });
 
   it('filtra por estado', () => {
-    component.aplicarFiltros({ estado: 'cancelada' });
+    component.filtroEstado.setValue('cancelada');
     fixture.detectChanges();
 
-    const texto = filas(fixture);
-    expect(texto.length).toBe(1);
-    expect(texto[0]).toContain('OP-003');
+    expect(idsVisibles()).toEqual(['#OP-003']);
   });
 
-  it('avisa cuando ningún registro cumple el criterio', () => {
-    component.aplicarFiltros({ busqueda: 'inexistente' });
+  it('filtra al pulsar una tarjeta de resumen', () => {
+    component.filtrarPorEstado('finalizada');
     fixture.detectChanges();
 
-    expect(
-      fixture.nativeElement
-        .querySelector('.stock-table tbody .text-muted')
-        .textContent.replace(/\s+/g, ' ')
-        .trim()
-    ).toBe('No se encontraron órdenes coincidentes con los filtros seleccionados.');
+    expect(idsVisibles()).toEqual(['#OP-002']);
   });
 
-  it('el contador refleja el filtro', () => {
-    component.aplicarFiltros({ busqueda: 'nord' });
+  it('las tarjetas cuentan el total aunque haya un filtro activo', () => {
+    component.filtroEstado.setValue('cancelada');
     fixture.detectChanges();
 
-    expect(
-      fixture.nativeElement
-        .querySelector('.results-info')
-        .textContent.replace(/\s+/g, ' ')
-        .trim()
-    ).toBe('Mostrando 2 de 3 órdenes con los filtros aplicados');
+    expect(idsVisibles().length).toBe(1);
+    expect(component.totalPendientes).toBe(1);
+    expect(component.totalFinalizadas).toBe(1);
+    expect(component.totalCanceladas).toBe(1);
+  });
+
+  it('limpiar filtros devuelve el listado completo', () => {
+    component.filtroTexto.setValue('nord');
+    component.filtroEstado.setValue('finalizada');
+    fixture.detectChanges();
+    expect(idsVisibles().length).toBe(1);
+
+    component.limpiarFiltros();
+    fixture.detectChanges();
+
+    expect(idsVisibles().length).toBe(3);
+    expect(texto(fixture.nativeElement.querySelector('.results-info')))
+      .toBe('Mostrando 3 de 3 órdenes');
   });
 
   it('ordena por cantidad al pulsar el encabezado, y lo invierte al repetir', () => {
-    const cantidad = 2;
-
-    encabezado(fixture, cantidad).querySelector('button')!.click();
+    encabezado(2).querySelector('button')!.click();
     fixture.detectChanges();
-    expect(component.ordenes.map(orden => orden.cantidad)).toEqual([5, 15, 40]);
+    expect(component.ordenesFiltradas.map(o => o.cantidad)).toEqual([5, 15, 40]);
 
-    encabezado(fixture, cantidad).querySelector('button')!.click();
+    encabezado(2).querySelector('button')!.click();
     fixture.detectChanges();
-    expect(component.ordenes.map(orden => orden.cantidad)).toEqual([40, 15, 5]);
-    expect(encabezado(fixture, cantidad).getAttribute('aria-sort')).toBe('descending');
+    expect(component.ordenesFiltradas.map(o => o.cantidad)).toEqual([40, 15, 5]);
+    expect(encabezado(2).getAttribute('aria-sort')).toBe('descending');
   });
 
   it('ordena por estado siguiendo el flujo de producción', () => {
-    encabezado(fixture, 3).querySelector('button')!.click();
+    encabezado(3).querySelector('button')!.click();
     fixture.detectChanges();
 
-    expect(component.ordenes.map(orden => orden.estado)).toEqual([
+    expect(component.ordenesFiltradas.map(o => o.estado)).toEqual([
       'pendiente',
       'finalizada',
       'cancelada'
     ]);
   });
 
-  it('las tarjetas cuentan el total aunque haya un filtro activo', () => {
-    component.aplicarFiltros({ estado: 'cancelada' });
+  it('conserva el orden elegido al aplicar un filtro', () => {
+    encabezado(2).querySelector('button')!.click();
+    encabezado(2).querySelector('button')!.click();
+    component.filtroTexto.setValue('nord');
     fixture.detectChanges();
 
-    expect(filas(fixture).length).toBe(1);
-    expect(component.conteoPorEstado).toEqual({
-      pendiente: 1,
-      en_produccion: 0,
-      finalizada: 1,
-      cancelada: 1
-    });
-
-    const valores = Array.from(
-      fixture.nativeElement.querySelectorAll('.stat-value')
-    ).map(nodo => (nodo as HTMLElement).textContent?.trim());
-    expect(valores).toEqual(['1', '0', '1', '1']);
-  });
-
-  it('cierra el detalle si la orden seleccionada queda fuera del filtro', () => {
-    component.seleccionarOrden(component.ordenes[0]);
-    expect(component.Ordenseleccionada).toBeDefined();
-
-    component.aplicarFiltros({ busqueda: 'inexistente' });
-    fixture.detectChanges();
-
-    expect(component.Ordenseleccionada).toBeUndefined();
-  });
-
-  it('muestra el estado con su badge de color', () => {
-    const badge: HTMLElement = fixture.nativeElement.querySelector(
-      '.stock-table tbody .badge'
-    );
-
-    expect(badge.textContent?.trim()).toBe('Finalizada');
-    expect(badge.classList.contains('badge-finalizada')).toBeTrue();
-  });
-
-  it('informa el total sin mencionar filtros cuando no hay ninguno', () => {
-    expect(
-      fixture.nativeElement
-        .querySelector('.results-info')
-        .textContent.replace(/\s+/g, ' ')
-        .trim()
-    ).toBe('Mostrando 3 de 3 órdenes');
-  });
-
-  it('la columna Acciones no es ordenable', () => {
-    const acciones = encabezado(fixture, 5);
-
-    expect(acciones.querySelector('button')).toBeNull();
-    expect(acciones.getAttribute('aria-sort')).toBeNull();
+    expect(idsVisibles()).toEqual(['#OP-001', '#OP-002']);
   });
 
   it('muestra la flecha solo en la columna activa', () => {
-    encabezado(fixture, 2).querySelector('button')!.click();
+    encabezado(2).querySelector('button')!.click();
     fixture.detectChanges();
 
     const flechas = fixture.nativeElement.querySelectorAll('.th-sort__icono');
@@ -233,26 +186,50 @@ describe('ProduccionComponent', () => {
     expect(flechas[0].getAttribute('src')).toBe('assets/arrow-up.svg');
   });
 
-  it('avisa que no hay órdenes registradas cuando la API no devuelve ninguna', () => {
+  it('la columna de acciones no es ordenable', () => {
+    expect(encabezado(5).querySelector('button')).toBeNull();
+    expect(encabezado(5).getAttribute('aria-sort')).toBeNull();
+  });
+
+  it('avisa cuando ningún registro cumple el criterio', () => {
+    component.filtroTexto.setValue('inexistente');
+    fixture.detectChanges();
+
+    expect(texto(fixture.nativeElement.querySelector('.sin-resultados')))
+      .toBe('No se encontraron órdenes coincidentes con los filtros seleccionados.');
+    expect(texto(fixture.nativeElement.querySelector('.results-info')))
+      .toBe('Mostrando 0 de 3 órdenes con los filtros aplicados');
+  });
+
+  it('distingue no haber órdenes de no haber coincidencias', () => {
     const vacio = TestBed.createComponent(ProduccionComponent);
     vacio.detectChanges();
-
-    http.match(`${API}/ordenesProduccion`).forEach(p => p.flush([]));
-    http.match(`${API}/detalleOrdenProduccion`).forEach(p => p.flush([]));
-    http.match(`${API}/estados`).forEach(p => p.flush(ESTADOS));
-    http.match(`${API}/detalleFormula`).forEach(p => p.flush([]));
-    http.match(`${API}/productos`).forEach(p => p.flush([]));
-    http.match(`${API}/movimientosInventarioProducto`).forEach(p => p.flush([]));
-    http.match(`${API}/categorias`).forEach(p => p.flush([]));
-    http.match(`${API}/materiasPrimas`).forEach(p => p.flush([]));
-    http.match(`${API}/movimientosStockMateriaPrima`).forEach(p => p.flush([]));
+    Object.entries({ ...COLECCIONES, ordenesProduccion: [], productos: [] })
+      .forEach(([nombre, filas]) =>
+        http.match(`${API}/${nombre}`).forEach(peticion => peticion.flush(filas))
+      );
     vacio.detectChanges();
 
-    expect(
-      vacio.nativeElement
-        .querySelector('.stock-table tbody .text-muted')
-        .textContent.replace(/\s+/g, ' ')
-        .trim()
-    ).toBe('Todavía no hay órdenes de producción registradas.');
+    expect(texto(vacio.nativeElement.querySelector('.sin-resultados')))
+      .toBe('Todavía no hay órdenes de producción registradas.');
+  });
+
+  it('muestra el estado con su badge de color', () => {
+    const badge: HTMLElement = fixture.nativeElement.querySelector(
+      '.orders-table tbody .badge'
+    );
+
+    expect(texto(badge)).toBe('Finalizada');
+    expect(badge.classList.contains('badge-finalizada')).toBeTrue();
+  });
+
+  it('cierra el detalle si la orden seleccionada queda fuera del filtro', () => {
+    component.verDetalle(component.ordenesFiltradas[0]);
+    expect(component.Ordenseleccionada).toBeDefined();
+
+    component.filtroTexto.setValue('inexistente');
+    fixture.detectChanges();
+
+    expect(component.Ordenseleccionada).toBeUndefined();
   });
 });

@@ -1,19 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription, merge } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
-import { OrdenProduccion } from '../../../../models/orden-produccion/orden-produccion.model';
-import { ProductoTerminado } from '../../../../models/producto/producto-terminado.model';
-import { ProductoTerminadoService } from '../../../../services/producto-terminado.service';
-import {
+import { 
+  OrdenProduccion, 
   CampoOrdenOrdenProduccion,
-  EstadoOrdenProduccion,
+  EstadoOrdenProduccion, 
   FiltroOrdenProduccion,
   NuevaOrdenProduccion,
-  OrdenamientoOrdenProduccion,
-  ProductoOrdenProduccion
+  OrdenamientoOrdenProduccion
 } from '../../../../models/orden-produccion/orden-produccion.model';
-import { ProduccionFiltrosComponent } from './produccion-filtros/produccion-filtros.component';
+import { ProductoTerminado } from '../../../../models/producto/producto-terminado.model';
+import { ProductoTerminadoService } from '../../../../services/producto-terminado.service';
 import {
   FormBuilder,
   FormControl,
@@ -22,40 +20,52 @@ import {
   Validators
 } from '@angular/forms';
 
+export type TipoAccionIntervencion = 'CANCELAR' | 'FINALIZAR';
+
 @Component({
   selector: 'app-produccion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ProduccionFiltrosComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './produccion.component.html',
   styleUrl: './produccion.component.css'
 })
-export class ProduccionComponent implements OnInit {
+export class ProduccionComponent implements OnInit, OnDestroy {
   ordenes: OrdenProduccion[] = [];
   productos: ProductoTerminado[] = [];
   mensajeError = '';
   mensajeEstadoError = '';
+
+  // Controles de Filtros
+  filtroTexto = new FormControl('', { nonNullable: true });
+  filtroEstado = new FormControl('todos', { nonNullable: true });
+  filtroProducto = new FormControl('todos', { nonNullable: true });
+
+  // Formulario para Nueva Orden
   ordenForm!: FormGroup<{
     productoId: FormControl<string>;
     cantidad: FormControl<number>;
     observaciones: FormControl<string>;
   }>;
 
-  Ordenseleccionada?: OrdenProduccion;
+  // Formulario reactivo para el modal de intervención (TSK-11.1 / 11.3)
+  intervencionForm!: FormGroup<{
+    observaciones: FormControl<string>;
+  }>;
+  mensajeIntervencionError = '';
 
-  productosDeOrdenes: ProductoOrdenProduccion[] = [];
-  totalOrdenes = 0;
+  Ordenseleccionada?: OrdenProduccion;
+  mostrarFormulario = false;
+
+  accionSeleccionada: TipoAccionIntervencion | null = null;
+  mostrarModalIntervencion = false;
+
+  // Listado que ve el operador: filtrado y ordenado por el servicio.
+  ordenesFiltradas: OrdenProduccion[] = [];
   ordenamiento: OrdenamientoOrdenProduccion = {
     campo: 'fechaCreacion',
     direccion: 'desc'
   };
-  // Las tarjetas resumen el total, no el subconjunto filtrado.
-  conteoPorEstado: Record<EstadoOrdenProduccion, number> = {
-    pendiente: 0,
-    en_produccion: 0,
-    finalizada: 0,
-    cancelada: 0
-  };
-  private filtrosActuales: FiltroOrdenProduccion = {};
+  private cambiosDeFiltro?: Subscription;
 
   constructor(
     private produccionService: ProduccionService, 
@@ -67,16 +77,28 @@ export class ProduccionComponent implements OnInit {
       cantidad: [1, [Validators.required, Validators.min(1)]],
       observaciones: ['']
     });
+
+    this.intervencionForm = this.formBuilder.nonNullable.group({
+      observaciones: ['', [Validators.required, Validators.minLength(5)]]
+    });
   }
 
   ngOnInit(): void {
+    this.cambiosDeFiltro = merge(
+      this.filtroTexto.valueChanges,
+      this.filtroEstado.valueChanges,
+      this.filtroProducto.valueChanges
+    ).subscribe(() => this.refrescar());
+
     this.produccionService.cargarOrdenes().subscribe({
-      next: () => {
+      next: (ordenes) => {
+        this.ordenes = ordenes;
         this.refrescar();
       },
       error: (error) => {
         console.error('Error al cargar órdenes de producción', error);
         this.ordenes = [];
+        this.refrescar();
       }
     });
     this.productoTerminadoService.cargarProductosTerminados().subscribe({
@@ -90,43 +112,62 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-  get productoId(): FormControl<string> {
-    return this.ordenForm.controls.productoId;
+  // Getters para KPIS
+  get totalPendientes(): number {
+    return this.ordenes.filter(o => o.estado === 'pendiente').length;
   }
 
-  get cantidad(): FormControl<number> {
-    return this.ordenForm.controls.cantidad;
+  get totalEnProceso(): number {
+    return this.ordenes.filter(o => o.estado === 'en_produccion').length;
   }
 
-  get observaciones(): FormControl<string> {
-    return this.ordenForm.controls.observaciones;
+  get totalFinalizadas(): number {
+    return this.ordenes.filter(o => o.estado === 'finalizada').length;
   }
 
-  mostrarFormulario = false;
-
-  abrirFormulario(): void {
-    this.mensajeError = '';
-    this.mostrarFormulario = true;
+  get totalCanceladas(): number {
+    return this.ordenes.filter(o => o.estado === 'cancelada').length;
   }
 
-  cerrarFormulario(): void {
-    this.mensajeError = '';
-    this.mostrarFormulario = false;
+  // El servicio resuelve el filtrado, con busqueda insensible a acentos,
+  // y el ordenamiento, que respeta el flujo natural de los estados.
+  private refrescar(): void {
+    this.ordenesFiltradas = this.produccionService.ordenar(
+      this.produccionService.filtrar(this.filtrosActuales),
+      this.ordenamiento
+    );
+
+    const seleccionada = this.Ordenseleccionada;
+
+    if (
+      seleccionada &&
+      !this.ordenesFiltradas.some(orden => orden.id === seleccionada.id)
+    ) {
+      this.cerrarDetalle();
+    }
   }
 
-  seleccionarOrden(orden: OrdenProduccion): void {
-    this.Ordenseleccionada = orden;
-    this.mensajeEstadoError = '';
+  private get filtrosActuales(): FiltroOrdenProduccion {
+    const estado = this.filtroEstado.value;
+    const productoId = this.filtroProducto.value;
+
+    return {
+      busqueda: this.filtroTexto.value,
+      estado: estado === 'todos' ? undefined : (estado as EstadoOrdenProduccion),
+      productoId: productoId === 'todos' ? undefined : productoId
+    };
   }
 
-  cerrarDetalle(): void {
-    this.Ordenseleccionada = undefined;
-    this.mensajeEstadoError = '';
+  get totalOrdenes(): number {
+    return this.ordenes.length;
   }
 
-  aplicarFiltros(filtros: FiltroOrdenProduccion): void {
-    this.filtrosActuales = filtros;
-    this.refrescar();
+  get hayFiltrosActivos(): boolean {
+    return Boolean(
+      this.filtroTexto.value.trim() ||
+      this.filtroEstado.value !== 'todos' ||
+      this.filtroProducto.value !== 'todos'
+    );
   }
 
   ordenarPor(campo: CampoOrdenOrdenProduccion): void {
@@ -151,10 +192,81 @@ export class ProduccionComponent implements OnInit {
     return this.ordenamiento.direccion === 'asc' ? 'ascending' : 'descending';
   }
 
-  get hayFiltrosActivos(): boolean {
-    const { busqueda, estado, productoId } = this.filtrosActuales;
+  ngOnDestroy(): void {
+    this.cambiosDeFiltro?.unsubscribe();
+  }
 
-    return Boolean(busqueda?.trim() || estado || productoId);
+  // Métodos de Filtro
+  filtrarPorEstado(estado: string): void {
+    this.filtroEstado.setValue(estado);
+  }
+
+  limpiarFiltros(): void {
+    this.filtroTexto.setValue('');
+    this.filtroEstado.setValue('todos');
+    this.filtroProducto.setValue('todos');
+  }
+
+  // Métodos de Navegación / Detalle
+  verDetalle(orden: OrdenProduccion): void {
+    this.Ordenseleccionada = orden;
+    this.mensajeEstadoError = '';
+  }
+
+  cerrarDetalle(): void {
+    this.Ordenseleccionada = undefined;
+    this.mensajeEstadoError = '';
+  }
+
+  abrirFormulario(): void {
+    this.mensajeError = '';
+    this.mostrarFormulario = true;
+  }
+
+  cerrarFormulario(): void {
+    this.mensajeError = '';
+    this.mostrarFormulario = false;
+  }
+
+  // Modal de Intervención (TSK-11.1 / TSK-11.3)
+  abrirModalIntervencion(orden: OrdenProduccion, accion: TipoAccionIntervencion): void {
+    this.Ordenseleccionada = orden;
+    this.accionSeleccionada = accion;
+    this.mensajeIntervencionError = '';
+    this.intervencionForm.reset();
+    this.mostrarModalIntervencion = true;
+  }
+
+  cerrarModalIntervencion(): void {
+    this.mostrarModalIntervencion = false;
+    this.accionSeleccionada = null;
+    this.mensajeIntervencionError = '';
+    this.intervencionForm.reset();
+  }
+
+  confirmarIntervencion(): void {
+    if (this.intervencionForm.invalid || !this.Ordenseleccionada || !this.accionSeleccionada) {
+      this.intervencionForm.markAllAsTouched();
+      return;
+    }
+
+    const motivo = this.intervencionForm.get('observaciones')?.value || '';
+    const nuevoEstado = this.accionSeleccionada === 'CANCELAR' ? 'cancelada' : 'finalizada';
+
+    this.produccionService.cancelarProduccion(this.Ordenseleccionada.id, motivo).subscribe({
+      next: () => {
+        this.recargarOrdenes();
+        this.cerrarModalIntervencion();
+      },
+      error: (err) => {
+        console.error('Error al intervenir la orden:', err);
+        this.mensajeIntervencionError = 'No se pudo procesar la solicitud.';
+      }
+    });
+  }
+
+  contarPorEstado(estado: EstadoOrdenProduccion): number {
+    return this.ordenes.filter(orden => orden.estado === estado).length;
   }
 
   textoEstado(estado: EstadoOrdenProduccion): string {
@@ -164,8 +276,7 @@ export class ProduccionComponent implements OnInit {
       finalizada: 'Finalizada',
       cancelada: 'Cancelada'
     };
-
-    return textos[estado];
+    return textos[estado] || estado;
   }
 
   cambiarEstado(orden: OrdenProduccion, nuevoEstado: string): void {
@@ -199,7 +310,7 @@ export class ProduccionComponent implements OnInit {
     cambio$.subscribe({
       next: () => {
         this.Ordenseleccionada = this.produccionService.obtenerPorId(orden.id);
-        this.refrescar();
+        this.recargarOrdenes();
       },
       error: (error) => {
         this.mensajeEstadoError = error instanceof Error && !('status' in error)
@@ -207,39 +318,6 @@ export class ProduccionComponent implements OnInit {
           : 'No se pudo cambiar el estado de la orden.';
       }
     });
-  }
-
-  private refrescar(): void {
-    const todas = this.produccionService.obtenerOrdenes();
-
-    this.ordenes = this.produccionService.ordenar(
-      this.produccionService.filtrar(this.filtrosActuales),
-      this.ordenamiento
-    );
-    this.productosDeOrdenes = this.produccionService.obtenerProductosDeOrdenes();
-    this.totalOrdenes = todas.length;
-    this.conteoPorEstado = {
-      pendiente: this.contar(todas, 'pendiente'),
-      en_produccion: this.contar(todas, 'en_produccion'),
-      finalizada: this.contar(todas, 'finalizada'),
-      cancelada: this.contar(todas, 'cancelada')
-    };
-
-    const seleccionada = this.Ordenseleccionada;
-
-    if (
-      seleccionada &&
-      !this.ordenes.some(orden => orden.id === seleccionada.id)
-    ) {
-      this.cerrarDetalle();
-    }
-  }
-
-  private contar(
-    ordenes: OrdenProduccion[],
-    estado: EstadoOrdenProduccion
-  ): number {
-    return ordenes.filter(orden => orden.estado === estado).length;
   }
 
   crearOrden(): void {
@@ -252,7 +330,7 @@ export class ProduccionComponent implements OnInit {
 
     this.produccionService.crearOrden(datos).subscribe({
       next: () => {
-        this.refrescar();
+        this.recargarOrdenes();
         this.ordenForm.reset({
           productoId: '',
           cantidad: 1,
@@ -268,6 +346,13 @@ export class ProduccionComponent implements OnInit {
     });
   }
 
-
-
+  private recargarOrdenes(): void {
+    this.produccionService.cargarOrdenes().subscribe({
+      next: (ordenes) => {
+        this.ordenes = ordenes;
+        this.refrescar();
+      },
+      error: (err) => console.error('Error al recargar órdenes:', err)
+    });
+  }
 }

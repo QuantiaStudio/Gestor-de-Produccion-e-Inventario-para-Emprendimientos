@@ -132,14 +132,13 @@ export class AuthService {
     this.usuarioSubject.next(null);
   }
   obtenerRutaPorRol(rol: string): string {
-  switch (rol) {
-    case 'ADMIN':
-      return '/dashboard';
-    case 'OPERARIO':
-      //Este se debe cambiar en un futuro al dashboard del usuario que no esta finalizado actualmente.
-      return '/dashboard/materias-primas';
-    default:
-      return '/login';
+    switch (rol) {
+      case 'ADMIN':
+        return '/dashboard';
+      case 'OPERARIO':
+        return '/user-panel/produccion';
+      default:
+        return '/login';
+    }
   }
-}
 }

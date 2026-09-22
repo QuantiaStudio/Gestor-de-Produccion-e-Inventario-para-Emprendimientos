@@ -1,123 +1,102 @@
-{
-  "usuarios": [
     {
-      "id": 1,
-      "nombre": "Admin",
-      "apellido": "Sistema",
-      "email": "admin@correo.com",
-      "contrasena": 123456,
-      "rol": "ADMIN",
-      "estado": true
-    },
-    {
-      "id": 2,
-      "nombre": "Rocío",
-      "apellido": "Altamirano",
-      "email": "rocio.altamirano@correo.com",
-      "contrasena": 123456,
-      "rol": "ADMIN",
-      "estado": true
-    },
-    {
-      "id": 3,
-      "nombre": "Genaro",
-      "apellido": "Cura",
-      "email": "genaro.cura@correo.com",
-      "contrasena": "abcabc",
-      "rol": "OPERARIO",
-      "estado": true
-    },
-    {
-      "id": 4,
-      "nombre": "Cesia",
-      "apellido": "Cáceres",
-      "email": "cesia.caceres@correo.com",
-      "contrasena": "abcabc",
-      "rol": "OPERARIO",
-      "estado": false
-    }
-  ],
-  "categorias": [
-    {
-      "id": 1,
-      "nombre": "Mesas"
-    },
-    {
-      "id": 2,
-      "nombre": "Bibliotecas"
-    },
-    {
-      "id": 3,
-      "nombre": "Escritorios"
-    },
-    {
-      "id": 4,
-      "nombre": "Comodas"
-    },
-    {
-      "id": 5,
-      "nombre": "Racks"
-    },
-    {
-      "id": 6,
-      "nombre": "Banquetas"
-    },
-    {
-      "id": 7,
-      "nombre": "Sillas"
-    },
-    {
-      "id": 8,
-      "nombre": "Decks"
-    }
-  ],
-  "materiasPrimas": [
-    {
-      "id": 1,
-      "id_materia_prima": 1,
-      "nombre": "Madera de Roble",
-      "descripcion": "Madera dura de alta calidad para muebles estructurales.",
-      "unidad_medida": "unidad",
-      "stock_actual": 28,
-      "stock_minimo": 8
-    },
-    {
-      "id": 2,
-      "id_materia_prima": 2,
-      "nombre": "Biblioteca Moderna",
-      "descripcion": "Pintura blanca mate para acabado de superficies.",
-      "unidad_medida": "L",
-      "stock_actual": 15,
-      "stock_minimo": 20
-    },
-    {
-      "id": 3,
-      "id_materia_prima": 3,
-      "nombre": "Tornillos 3mm",
-      "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
-      "unidad_medida": "u",
-      "stock_actual": 1800,
-      "stock_minimo": 500
-    },
-    {
-      "id": 4,
-      "id_materia_prima": 4,
-      "nombre": "Barniz Transparente",
-      "descripcion": "Barniz transparente brillante para protección de madera.",
-      "unidad_medida": "L",
-      "stock_actual": 3,
-      "stock_minimo": 10
-    },
-    {
-      "id": 5,
-      "id_materia_prima": 5,
-      "nombre": "Contrachapado 18mm",
-      "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
-      "unidad_medida": "planchas",
-      "stock_actual": 45,
-      "stock_minimo": 15
-    }
-  ],
+    "usuarios": [
+        {
+        "id": 1,
+        "nombre": "Admin",
+        "apellido": "Sistema",
+        "email": "admin@correo.com",
+        "contrasena": "123456",
+        "rol": "ADMIN",
+        "estado": true
+        },
+        {
+        "id": 2,
+        "nombre": "Rocío",
+        "apellido": "Altamirano",
+        "email": "rocio.altamirano@correo.com",
+        "contrasena": "123456",
+        "rol": "ADMIN",
+        "estado": true
+        },
+        {
+        "id": 3,
+        "nombre": "Genaro",
+        "apellido": "Cura",
+        "email": "genaro.cura@correo.com",
+        "contrasena": "abcabc",
+        "rol": "OPERARIO",
+        "estado": true
+        },
+        {
+        "id": 4,
+        "nombre": "Cesia",
+        "apellido": "Cáceres",
+        "email": "cesia.caceres@correo.com",
+        "contrasena": "abcabc",
+        "rol": "OPERARIO",
+        "estado": false
+        }
+    ],
+
+    "categorias": [
+        { "id": 1, "nombre": "Mesas" },
+        { "id": 2, "nombre": "Bibliotecas" },
+        { "id": 3, "nombre": "Escritorios" },
+        { "id": 4, "nombre": "Comodas" },
+        { "id": 5, "nombre": "Racks" },
+        { "id": 6, "nombre": "Banquetas" },
+        { "id": 7, "nombre": "Sillas" },
+        { "id": 8, "nombre": "Decks" }
+    ],
+
+    "materiasPrimas": [
+        {
+        "id": 1,
+        "id_materia_prima": 1,
+        "nombre": "Madera de Roble",
+        "descripcion": "Madera dura de alta calidad para muebles estructurales.",
+        "unidad_medida": "unidad",
+        "stock_actual": 28,
+        "stock_minimo": 8
+        },
+        {
+        "id": 2,
+        "id_materia_prima": 2,
+        "nombre": "Biblioteca Moderna",
+        "descripcion": "Pintura blanca mate para acabado de superficies.",
+        "unidad_medida": "L",
+        "stock_actual": 15,
+        "stock_minimo": 20
+        },
+        {
+        "id": 3,
+        "id_materia_prima": 3,
+        "nombre": "Tornillos 3mm",
+        "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
+        "unidad_medida": "u",
+        "stock_actual": 1800,
+        "stock_minimo": 500
+        },
+        {
+        "id": 4,
+        "id_materia_prima": 4,
+        "nombre": "Barniz Transparente",
+        "descripcion": "Barniz transparente brillante para protección de madera.",
+        "unidad_medida": "L",
+        "stock_actual": 3,
+        "stock_minimo": 10
+        },
+        {
+        "id": 5,
+        "id_materia_prima": 5,
+        "nombre": "Contrachapado 18mm",
+        "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
+        "unidad_medida": "planchas",
+        "stock_actual": 45,
+        "stock_minimo": 15
+        }
+    ],
+
   "productos": [
     {
       "id": 1,
@@ -643,7 +622,9 @@
       "id_orden": 1,
       "fecha_creacion": "2026-09-01 09:00:00",
       "fecha_inicio": "2026-09-01 09:15:00",
-      "id_estado": 3
+      "id_estado": 3,
+      "estado": "cancelada",
+      "motivoCancelacion": "Prueba desde terminal"
     },
     {
       "id": 2,
