@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { EstadoProductoTerminado, FiltroProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
+import { EstadoInventarioProducto, EstadoProductoTerminado, FiltroProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
 
 type FormularioFiltros = {
   busqueda: FormControl<string>;
   categoria: FormControl<string>;
-  estado: FormControl<EstadoProductoTerminado | ''>;
+  estado: FormControl<EstadoProductoTerminado | EstadoInventarioProducto | ''>;
 };
 
 @Component({
@@ -27,7 +27,7 @@ export class ProductoTerminadoFiltrosComponent implements OnInit, OnDestroy {
     this.formulario = this.fb.nonNullable.group({
       busqueda: '',
       categoria: '',
-      estado: '' as EstadoProductoTerminado | ''
+      estado: '' as EstadoProductoTerminado | EstadoInventarioProducto | ''
     });
   }
 

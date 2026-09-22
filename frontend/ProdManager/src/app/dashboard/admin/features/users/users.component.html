@@ -1,7 +1,7 @@
 <div class="row body">
   <div class="col-12 user-management-col">
     <div class="user-content">
-
+      
       @if (toastMessage) {
         <div class="custom-toast" [ngClass]="toastType === 'success' ? 'toast-success' : 'toast-danger'">
           <div class="toast-indicator"></div>
@@ -18,7 +18,6 @@
           </div>
         </div>
       } @else {
-
         <section class="page-header">
           <div class="page-header__content">
             <h1>Gestión de Usuarios</h1>
@@ -38,7 +37,7 @@
           <article class="stat-card">
             <div class="stat-card__icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4 1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
               </svg>
             </div>
             <div class="stat-card__content">
@@ -50,7 +49,9 @@
           <article class="stat-card">
             <div class="stat-card__icon stat-card__icon--admin">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 0a1 1 0 0 1 .47.118l6 3.5A1 1 0 0 1 15 4.5v5.74a7.5 7.5 0 0 1-4.22 6.784l-2.5 1.25a1 1 0 0 1-.56 0l-2.5-1.25A7.5 7.5 0 0 1 1 10.24V4.5a1 1 0 0 1 .53-.882l6-3.5A1 1 0 0 1 8 0"/>
+                <path d="M5.072 11.293a.5.5 0 0 0 .708-.707 3 3 0 0 1 4.24 0 .5.5 0 1 0 .708.707 4 4 0 0 0-5.656 0z"/>
+                <path d="M8 0c-.69 0-1.382.04-2.073.115C4.227.29 3 1.417 3 2.839V5.5a2.5 2.5 0 0 0 1.938 2.43 5.99 5.99 0 0 0 8.124 0A2.5 2.5 0 0 0 15 5.5V2.839c0-1.422-1.227-2.548-2.927-2.724A42.14 42.14 0 0 0 8 0zM4 2.839c0-.853.743-1.536 1.815-1.647C6.837 1.096 7.919 1.05 9 1.05c1.08 0 2.163.046 3.185.142C13.257 1.303 14 1.986 14 2.84v2.66a1.5 1.5 0 0 1-1.157 1.46 5.002 5.002 0 0 1-9.686 0A1.5 1.5 0 0 1 4 5.5V2.839z"/>
+                <path d="M8 13c-2.33 0-4.318 1.139-5.222 2.723A1 1 0 0 0 3.655 17h8.69a1 1 0 0 0 .877-1.277C12.318 14.139 10.33 13 8 13z"/>
               </svg>
             </div>
             <div class="stat-card__content">
@@ -75,7 +76,7 @@
           <article class="stat-card">
             <div class="stat-card__icon stat-card__icon--active">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.021l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
               </svg>
             </div>
             <div class="stat-card__content">
@@ -196,7 +197,7 @@
                           title="Eliminar usuario"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3.5.5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                           </svg>
                         </button>
@@ -214,24 +215,25 @@
             </table>
           </div>
         </section>
-
       }
 
     </div>
   </div>
 </div>
 
+<!-- Modal Crear / Editar -->
 @if (isModalOpen) {
   <div class="modal-backdrop-custom" (click)="closeModal()">
     <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
       <div class="modal-header-custom">
-        <h5 class="modal-title-custom">{{ isEditMode ? 'Editar Usuario' : 'Registrar Nuevo Usuario' }}</h5>
+        <h5 class="modal-title-custom">
+          {{ isEditMode ? 'Editar Usuario' : 'Registrar Nuevo Usuario' }}
+        </h5>
         <button type="button" class="btn-close-modal" (click)="closeModal()">&times;</button>
       </div>
 
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
         <div class="modal-body-custom">
-          
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label-custom">Nombre *</label>
@@ -312,7 +314,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="modal-footer-custom">
@@ -326,6 +327,7 @@
   </div>
 }
 
+<!-- Modal Confirmar Eliminación -->
 @if (isDeleteModalOpen) {
   <div class="modal-backdrop-custom" (click)="closeDeleteModal()">
     <div class="modal-dialog-custom modal-dialog-sm" (click)="$event.stopPropagation()">
@@ -333,13 +335,17 @@
         <h5 class="modal-title-custom">Confirmar Eliminación</h5>
         <button type="button" class="btn-close-modal" (click)="closeDeleteModal()">&times;</button>
       </div>
+
       <div class="modal-body-custom pt-2">
-        <p class="mb-1">¿Está seguro de que desea eliminar la cuenta de <strong>{{ userToDelete?.firstName }} {{ userToDelete?.lastName }}</strong>?</p>
+        <p class="mb-1">
+          ¿Está seguro de que desea eliminar la cuenta de <strong>{{ userToDelete?.firstName }} {{ userToDelete?.lastName }}</strong>?
+        </p>
         <p class="small text-muted mb-0">Esta acción no se puede deshacer.</p>
       </div>
+
       <div class="modal-footer-custom border-0 pt-0">
         <button type="button" class="btn btn-outline-secondary" (click)="closeDeleteModal()">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="confirmDelete()">Eliminar Usuario</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Eliminar Usuario</button>
       </div>
     </div>
   </div>

@@ -1,7 +1,8 @@
+
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background: var(--background-color);
+  background: var(--background-color, #f4f6f9);
 }
 
 .dashboard-layout__main {
@@ -12,6 +13,119 @@
 }
 
 .dashboard-layout__content {
+  flex: 1;
   padding: 24px;
   min-width: 0;
+}
+
+.sidebar {
+  width: 260px;
+  background-color: var(--sidebar-bg, #1e293b);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Navegación y Enlaces */
+.sidebar-nav {
+  padding: 16px 0;
+  list-style: none;
+  margin: 0;
+}
+
+.sidebar-item {
+  margin-bottom: 4px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Corrección de Íconos de la Barra Lateral (Panel, Usuarios, etc.) */
+
+/* 1. Forzar color blanco en etiquetas <i>, <span> y pseudoelementos (FontAwesome / Bootstrap Icons) */
+.sidebar i,
+.sidebar i::before,
+.sidebar span[class*="icon"],
+.sidebar-link i,
+.sidebar-link i::before,
+.nav-link i,
+.nav-link i::before {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 0.9;
+}
+
+/* 2. Forzar trazo, relleno y color en caso de que sean vectores SVG */
+.sidebar svg,
+.sidebar-link svg,
+.nav-link svg,
+.sidebar a svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+/* 3. Estado Hover y Activo */
+.sidebar-link:hover i,
+.sidebar-link.active i,
+.sidebar-link:hover i::before,
+.sidebar-link.active i::before,
+.sidebar-link:hover svg,
+.sidebar-link.active svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Barra Superior (Topbar / Header) */
+.dashboard-layout__header {
+  height: 64px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
 }

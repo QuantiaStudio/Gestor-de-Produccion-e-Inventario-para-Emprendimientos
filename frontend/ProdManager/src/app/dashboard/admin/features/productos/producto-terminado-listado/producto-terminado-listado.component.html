@@ -12,9 +12,9 @@
 <app-producto-terminado-filtros
   [categorias]="categorias"
   (filtrosCambiaron)="aplicarFiltros($event)"
-/>
+></app-producto-terminado-filtros>
 
-<app-producto-terminado-alertas [resumen]="resumen" />
+<app-producto-terminado-alertas [resumen]="resumen"></app-producto-terminado-alertas>
 
 <div class="row g-4">
   <div class="col-12" [class.col-lg-8]="productoSeleccionado">
@@ -22,11 +22,11 @@
       <table>
         <thead>
           <tr>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th class="numeric">Stock</th>
-            <th>Estado</th>
-            <th></th>
+            <th scope="col">Producto</th>
+            <th scope="col">Categoría</th>
+            <th scope="col" class="numeric">Stock</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -48,11 +48,20 @@
               <td>{{ pt.categoria }}</td>
               <td class="numeric">{{ pt.stockActual }} {{ pt.unidadMedida }}</td>
               <td>
-                @switch (pt.estado) {
-                  @case ('optimo') { <span class="estado-badge badge--success">Óptimo</span> }
-                  @case ('bajo_minimo') { <span class="estado-badge badge--warning">Bajo Mínimo</span> }
-                  @case ('sin_stock') { <span class="estado-badge badge--error">Sin Stock</span> }
-                }
+                <div class="estados-producto">
+                  @if (estaEnProduccion(pt)) {
+                    <span class="estado-badge badge--info">En producción</span>
+                  }
+                  @if (estaBajoStock(pt)) {
+                    <span class="estado-badge badge--warning">Bajo stock</span>
+                  }
+                  @if (estaSinStock(pt)) {
+                    <span class="estado-badge badge--error">Sin stock</span>
+                  }
+                  @if (!estaEnProduccion(pt) && !estaBajoStock(pt) && !estaSinStock(pt)) {
+                    <span class="estado-badge badge--success">Stock disponible</span>
+                  }
+                </div>
               </td>
               <td class="actions">
                 <img src="assets/chevron-right.svg" alt="" class="icono-detalle" />
@@ -73,20 +82,33 @@
       <app-producto-terminado-detalle
         [producto]="productoSeleccionado"
         (cerrar)="cerrarDetalle()"
-      />
+        (eliminado)="productoEliminado()"
+        (editar)="editarProducto()"
+      ></app-producto-terminado-detalle>
     </div>
   }
 </div>
+
+@if (mensajeExito) {
+  <div class="alert alert-success d-flex justify-content-between align-items-center" role="status">
+    <span>{{ mensajeExito }}</span>
+    <button type="button" class="btn-close" aria-label="Cerrar confirmación" (click)="mensajeExito = ''"></button>
+  </div>
+}
 
 <app-producto-terminado-actualizar-stock
   #modalStock
   [productos]="catalogo"
   (actualizar)="actualizarStock($event)"
-/>
+></app-producto-terminado-actualizar-stock>
 
 @if (mostrarFormularioNuevoProducto) {
   <app-new-product-form
+    [categorias]="categorias"
+    [estados]="estados"
+    [productoEditar]="productoEnEdicion"
     (cerrar)="cerrarFormularioNuevoProducto()"
     (productoCreado)="productoCreado()"
-  />
+    (productoActualizado)="productoActualizado()"
+  ></app-new-product-form>
 }

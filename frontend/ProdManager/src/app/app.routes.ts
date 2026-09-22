@@ -4,12 +4,15 @@ import { AboutUsComponent } from './public/about-us/about-us.component';
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
 import { DashboardComponent } from './dashboard/admin/dashboard/dashboard.component'; 
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
-import { MateriasPrimasComponent } from './materia-prima/materias-primas/materias-primas.component';
+import { MateriasPrimasComponent } from './dashboard/admin/features/materia-prima/materias-primas/materias-primas.component';
 import { ProductoTerminadoListadoComponent } from './dashboard/admin/features/productos/producto-terminado-listado/producto-terminado-listado.component';
 import { UsersComponent } from './dashboard/admin/features/users/users.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';
-import { MateriaPrimaListadoComponent } from './materia-prima/materia-prima-listado/materia-prima-listado.component';
+import { MateriaPrimaListadoComponent } from './dashboard/user/features/materia-prima/materia-prima-listado/materia-prima-listado.component';
 import { LoginComponent } from './auth/components/login/login.component';
+import { UserPanelComponent } from './dashboard/user/user-panel/user-panel.component';
+import { ProduccionComponent } from './dashboard/user/features/produccion/produccion.component';
+import { guestGuard, roleGuard } from './auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -18,18 +21,36 @@ export const routes: Routes = [
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'about-us', component: AboutUsComponent },
-      { path: 'login', component: LoginComponent },
+      { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
     ],
   },
   {
     path: 'dashboard',
     component: DashboardLayoutComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['ADMIN'] },
     children: [
       { path: '', component: DashboardComponent, pathMatch: 'full' },
       { path: 'materias-primas', component: MateriasPrimasComponent },
       { path: 'users', component: UsersComponent },
       { path: 'productos-terminados', component: ProductoTerminadoListadoComponent },
     ],
+  },
+
+  {
+    path: 'user-panel',
+    component: DashboardLayoutComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['OPERARIO'] },
+    children: [
+      { path: '', redirectTo: 'produccion', pathMatch: 'full' },
+      { path: 'produccion', component: ProduccionComponent },
+      { path: 'materia-prima', component: MateriaPrimaListadoComponent },
+    ]
+  },
+  {
+    path: 'not-found',
+    component: NotFoundComponent,
   },
   {
     path: '**',
