@@ -49,20 +49,24 @@ git --version
 
 ## Instalación
 
-### 1. Clonar el repositorio
+La instalación del proyecto y sus dependencias se realizará en dos partes. Una para el frontend y otra para el backend.
+
+## 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/QuantiaStudio/Gestor-de-Produccion-e-Inventario-para-Emprendimientos.git
 cd Gestor-de-Produccion-e-Inventario-para-Emprendimientos
 ```
 
-### 2. Ingresar al proyecto Angular
+## Dependencias del Frontend
+
+### 1. Ingresar al proyecto Angular
 
 ```bash
 cd frontend/ProdManager
 ```
 
-### 3. Instalar dependencias
+### 2. Instalar dependencias
 
 ```bash
 npm install
@@ -74,6 +78,56 @@ Si querés instalar exactamente las versiones registradas en `package-lock.json`
 
 ```bash
 npm ci
+```
+
+## Dependencias del Backend
+
+El backend está desarrollado con Django y usa MySQL como única base de datos. Para la base de datos podés elegir entre levantarla con Docker (recomendado, no requiere instalar MySQL en tu máquina) o usar un servidor MySQL instalado localmente.
+
+Necesitás tener instalado Python 3.10 o superior, y si vas a usar la opción de Docker, también Docker y Docker Compose.
+
+### 1. Ingresar a la carpeta del backend
+
+```bash
+cd backend
+```
+
+### 2. Crear y activar un entorno virtual
+
+```bash
+python -m venv .venv
+source .venv\Scripts\activate
+# source .venv/bin/activate (En Linux)
+```
+
+### 3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configurar las variables de entorno
+
+Crear el archivo `.env` clonándolo desde `.env.example` y rellenando con las variables de entorno.
+
+### 5. Levantar la base de datos
+
+Elegí una de las dos opciones:
+
+**Opción A: MySQL con Docker (solo la base de datos)**
+
+```bash
+docker compose up -d
+```
+
+**Opción B: MySQL instalado localmente**
+
+Si preferís usar un servidor MySQL propio, creá manualmente la base de datos y el usuario indicados en `.env` (o editá `.env` para que coincida con tu instalación existente) y asegurate de que el servicio esté corriendo.
+
+### 6. Aplicar las migraciones
+
+```bash
+python manage.py migrate
 ```
 
 ## Ejecución en desarrollo
