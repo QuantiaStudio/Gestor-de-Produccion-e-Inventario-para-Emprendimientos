@@ -1,3 +1,5 @@
 Django==5.2.18
 mysqlclient==2.3.0
 python-dotenv==1.2.4
+djangorestframework
+django-cors-headers==4.7.0
