@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
@@ -14,7 +14,10 @@ export class SidebarComponent implements OnInit {
   nombreUsuario = 'Usuario';
   rolUsuario = 'Operador';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     const usuario = this.authService.getUsuarioActual();
@@ -23,5 +26,10 @@ export class SidebarComponent implements OnInit {
       this.nombreUsuario = `${usuario.nombre} ${usuario.apellido}`;
       this.rolUsuario = usuario.rol === 'ADMIN' ? 'Administrador' : 'Operador';
     }
+  }
+
+  cerrarSesion(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
