@@ -7,7 +7,12 @@ from .serializers import OrdenProduccionSerializer
 
 
 class OrdenProduccionListCreateView(APIView):
-    """TK-13-01: crear órdenes de producción."""
+    """TK-13-01: crear órdenes de producción. TK-13-02: consultarlas."""
+
+    def get(self, request):
+        ordenes = OrdenProduccion.objects.all().order_by('-fecha_creacion')
+        serializer = OrdenProduccionSerializer(ordenes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = OrdenProduccionSerializer(data=request.data)
