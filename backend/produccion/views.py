@@ -125,13 +125,13 @@ class IniciarOrdenAPIView(APIView):
                 activa=True
             ).aggregate(total=Sum('cantidad_reservada'))['total'] or 0
 
-            disponible = stock_fisico - reservas_activas
+            disponibles = stock_fisico - reservas_activas
 
-            if disponible < cantidad_requerida:
+            if disponibles < cantidad_requerida:
                 return Response(
                     {
                         "error": f"Insumo insuficiente: {materia_prima.nombre}. "
-                                 f"Requerido: {cantidad_requerida}, Disponible: {disponible} "
+                                 f"Requerido: {cantidad_requerida}, Disponible: {disponibles} "
                                  f"(Stock Físico: {stock_fisico}, Reservado: {reservas_activas})."
                     },
                     status=status.HTTP_400_BAD_REQUEST
@@ -168,10 +168,17 @@ class IniciarOrdenAPIView(APIView):
 
 
 class FinalizarOrdenAPIView(APIView):
+<<<<<<< HEAD
     """Finalización transaccional e inventario"""
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
 
+=======
+    def post(self, request, pk):
+        orden = get_object_or_404(OrdenProduccion, pk=pk)
+
+        # Validar estado
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
         if orden.estado != EstadoOrden.EN_PRODUCCION:
             return Response(
                 {"error": f"No se puede finalizar una orden en estado '{orden.estado}'. Debe estar 'En Producción'."},
@@ -180,26 +187,56 @@ class FinalizarOrdenAPIView(APIView):
 
         reservas = ReservaMateriaPrima.objects.filter(orden=orden, activa=True)
 
+<<<<<<< HEAD
         try:
             with transaction.atomic():
                 for reserva in reservas:
                     materia_prima = reserva.materia_prima
+=======
+        if not reservas.exists():
+            return Response(
+                {"error": "La orden no tiene reservas activas para procesar la finalización."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            with transaction.atomic():
+                # 1. Descontar stock físico y desactivar reservas
+                for reserva in reservas:
+                    materia_prima = reserva.materia_prima
+                    
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
                     if hasattr(materia_prima, 'stock_actual'):
                         materia_prima.stock_actual -= reserva.cantidad_reservada
                     else:
                         materia_prima.stock -= reserva.cantidad_reservada
+<<<<<<< HEAD
+=======
+                        
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
                     materia_prima.save()
 
                     reserva.activa = False
                     reserva.save()
 
+<<<<<<< HEAD
+=======
+                # 2. Incrementar stock del producto final (mueble)
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
                 producto = orden.producto
                 if hasattr(producto, 'stock_actual'):
                     producto.stock_actual += orden.cantidad
                 elif hasattr(producto, 'stock'):
                     producto.stock += orden.cantidad
+<<<<<<< HEAD
                 producto.save()
 
+=======
+                
+                producto.save()
+
+                # 3. Marcar la orden como finalizada
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
                 orden.estado = EstadoOrden.FINALIZADA
                 orden.save()
 
@@ -212,6 +249,7 @@ class FinalizarOrdenAPIView(APIView):
             return Response(
                 {"error": f"Error al finalizar la orden de producción: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+<<<<<<< HEAD
             )
 
 
@@ -245,4 +283,6 @@ class CancelarOrdenAPIView(APIView):
             return Response(
                 {"error": f"Error al cancelar la orden de producción: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+=======
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
             )

@@ -29,4 +29,9 @@ from .views import IniciarOrdenAPIView
 
 urlpatterns = [
     path('ordenes/<int:pk>/iniciar/', IniciarOrdenAPIView.as_view(), name='iniciar-orden'),
+<<<<<<< HEAD
 ]
+=======
+    path('ordenes/<int:pk>/finalizar/', FinalizarOrdenAPIView.as_view(), name='finalizar-orden'),
+]
+>>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
