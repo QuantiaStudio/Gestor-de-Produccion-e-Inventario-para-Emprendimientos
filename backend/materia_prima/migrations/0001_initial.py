@@ -8,15 +8,14 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='MateriaPrima',
             fields=[
                 ('id_materia_prima', models.AutoField(primary_key=True, serialize=False)),
-                ('nombre', models.CharField(max_length=100)),
+                ('nombre', models.CharField(max_length=100, unique=True)),
                 ('descripcion', models.TextField(blank=True)),
                 ('unidad_medida', models.CharField(max_length=50)),
                 ('stock_actual', models.DecimalField(decimal_places=3, default=0, max_digits=12)),
@@ -33,10 +32,18 @@ class Migration(migrations.Migration):
             fields=[
                 ('id_movimiento', models.AutoField(primary_key=True, serialize=False)),
                 ('fecha', models.DateTimeField(auto_now_add=True)),
-                ('tipo_movimiento', models.CharField(choices=[('ingreso', 'Ingreso'), ('consumo', 'Consumo'), ('ajuste', 'Ajuste')], max_length=20)),
+                ('tipo_movimiento', models.CharField(
+                    choices=[('ingreso', 'Ingreso'), ('consumo', 'Consumo'), ('ajuste', 'Ajuste')],
+                    max_length=20,
+                )),
                 ('cantidad', models.DecimalField(decimal_places=3, max_digits=12)),
                 ('observacion', models.TextField(blank=True)),
-                ('materia_prima', models.ForeignKey(db_column='id_materia_prima', on_delete=django.db.models.deletion.PROTECT, related_name='movimientos', to='materia_prima.materiaprima')),
+                ('materia_prima', models.ForeignKey(
+                    db_column='id_materia_prima',
+                    on_delete=django.db.models.deletion.PROTECT,
+                    related_name='movimientos',
+                    to='materia_prima.materiaprima',
+                )),
             ],
             options={
                 'verbose_name': 'Movimiento de stock de materia prima',

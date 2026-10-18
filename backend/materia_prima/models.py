@@ -4,7 +4,7 @@ from django.db import models
 
 class MateriaPrima(models.Model):
     id_materia_prima = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True)
     unidad_medida = models.CharField(max_length=50)
     stock_actual = models.DecimalField(max_digits=12, decimal_places=3, default=0)
