@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from .models import Estado, OrdenProduccion
+from productos.models import Producto
+
+from .models import DetalleOrdenProduccion, Estado, OrdenProduccion
 
 
 class EstadoSerializer(serializers.ModelSerializer):
@@ -26,3 +28,16 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.setdefault('estado', Estado.objects.get(pk=1))
         return super().create(validated_data)
+
+
+class DetalleOrdenProduccionSerializer(serializers.ModelSerializer):
+    """API.md §8.3."""
+
+    id_orden = serializers.PrimaryKeyRelatedField(source='orden', queryset=OrdenProduccion.objects.all())
+    id_producto = serializers.PrimaryKeyRelatedField(source='producto', queryset=Producto.objects.all())
+
+    class Meta:
+        model = DetalleOrdenProduccion
+        fields = ['id_detalle_produccion', 'id_orden', 'id_producto', 'cantidad_planificada', 'cantidad_producida']
+        read_only_fields = ['id_detalle_produccion']
+        extra_kwargs = {'cantidad_producida': {'required': False}}

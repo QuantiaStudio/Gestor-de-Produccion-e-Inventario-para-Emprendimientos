@@ -59,3 +59,38 @@ class DetalleOrdenProduccion(models.Model):
 
     def __str__(self):
         return f'{self.producto} x {self.cantidad_planificada} (orden #{self.orden_id})'
+
+
+class ReservaMateriaPrima(models.Model):
+    """Reserva de stock de una materia prima para una orden (TK-13-03/04).
+
+    Se crea al iniciar una orden (TK-13-04) por cada insumo de la fórmula y se
+    descuenta del stock físico al finalizar la orden o se libera (activa=False)
+    al cancelarla. La disponibilidad de una materia prima se calcula como su
+    stock físico menos la suma de sus reservas activas.
+    """
+
+    id_reserva = models.AutoField(primary_key=True)
+    orden = models.ForeignKey(
+        OrdenProduccion,
+        on_delete=models.CASCADE,
+        db_column='id_orden',
+        related_name='reservas',
+    )
+    materia_prima = models.ForeignKey(
+        'materia_prima.MateriaPrima',
+        on_delete=models.PROTECT,
+        db_column='id_materia_prima',
+        related_name='reservas',
+    )
+    cantidad_reservada = models.DecimalField(max_digits=12, decimal_places=3)
+    activa = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'reserva_materia_prima'
+        verbose_name = 'Reserva de materia prima'
+        verbose_name_plural = 'Reservas de materia prima'
+
+    def __str__(self):
+        return f'Reserva de {self.cantidad_reservada} {self.materia_prima} (orden #{self.orden_id})'
