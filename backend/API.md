@@ -80,7 +80,7 @@ Ejemplos:
   "code": "invalid",
   "errors": {
     "nombre": ["Este campo es requerido."],
-    "precio": ["Asegúrese de que este valor sea mayor o igual a 0."]
+    "precio": ["Asegúrese de que este valor es mayor o igual a 0."]
   }
 }
 
@@ -343,20 +343,19 @@ Reglas que valida el backend (todas responden `400`):
 Forma de los errores de `formula` dentro de `errors`:
 
 - Si el problema es de la lista completa (falta, está vacía o repite una materia prima), viene un array de mensajes: `"formula": ["La fórmula debe tener al menos una materia prima."]`.
-- Si el problema está en líneas puntuales, viene un objeto por línea, en el mismo orden en que se enviaron. Las líneas correctas vienen como `{}`.
+- Si el problema está en líneas puntuales, viene un objeto cuyas claves son la posición de cada línea con errores dentro del array enviado (como string, empezando en `"0"`). Las líneas correctas no aparecen.
 
 ```json
-// 400
+// 400 (la línea 0 era correcta; fallaron la 1 y la 2)
 {
   "detail": "Datos inválidos.",
   "code": "invalid",
   "errors": {
     "codigo": ["Ya existe un producto con este código."],
-    "formula": [
-      {},
-      { "id_materia_prima": ["No existe la materia prima con id 99."] },
-      { "cantidad_necesaria": ["La cantidad necesaria debe ser mayor a 0."] }
-    ]
+    "formula": {
+      "1": { "id_materia_prima": ["No existe la materia prima con id 99."] },
+      "2": { "cantidad_necesaria": ["La cantidad necesaria debe ser mayor a 0."] }
+    }
   }
 }
 ```
