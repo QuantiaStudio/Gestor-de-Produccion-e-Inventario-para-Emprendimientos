@@ -11,6 +11,14 @@ from materia_prima.models import MateriaPrima
 from .models import Categoria, DetalleFormula, Producto
 
 
+class CategoriaSerializer(serializers.ModelSerializer):
+    """Categoría de productos (API.md §7.1)."""
+
+    class Meta:
+        model = Categoria
+        fields = ['id_categoria', 'nombre']
+
+
 class DetalleFormulaEnProductoSerializer(serializers.ModelSerializer):
     """Una línea de la fórmula tal como viaja dentro de un producto (API.md §7.2)."""
 

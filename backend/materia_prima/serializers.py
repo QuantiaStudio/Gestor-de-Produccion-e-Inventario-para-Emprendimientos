@@ -16,3 +16,4 @@ class MateriaPrimaSerializer(serializers.ModelSerializer):
             'stock_actual',
             'stock_minimo',
         ]
+        read_only_fields = ['stock_actual']

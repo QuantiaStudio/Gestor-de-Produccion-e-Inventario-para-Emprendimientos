@@ -6,14 +6,16 @@ from rest_framework.response import Response
 
 from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
 
-from .models import EstadoProducto, Producto
-from .serializers import ProductoSerializer
+from .models import Categoria, EstadoProducto, Producto
+from .serializers import CategoriaSerializer, ProductoSerializer
 
 ESTADOS_ORDEN_ACTIVA = ['Pendiente', 'En Produccion']
 
 
 class CategoriaListView(ColeccionNoImplementada):
-    pass
+    def get(self, request):
+        categorias = Categoria.objects.order_by('nombre')
+        return Response(CategoriaSerializer(categorias, many=True).data)
 
 
 class CategoriaDetailView(ElementoNoImplementado):

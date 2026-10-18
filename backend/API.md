@@ -183,7 +183,7 @@ CRUD estándar.
 | `stock_actual` | decimal | — | **Solo lectura**. Cambia únicamente al registrar movimientos (§6.2) |
 | `stock_minimo` | decimal ≥ 0 | No | Por defecto `0` |
 
-Filtros: `?bajo_stock=true` (solo las que tienen `stock_actual < stock_minimo`), `?nombre=<texto>` (contiene, sin distinguir mayúsculas).
+Filtros: `?bajo_stock=true` (solo las que tienen `stock_actual < stock_minimo`), `?nombre=<texto>` (contiene, sin distinguir mayúsculas). Orden: alfabético por `nombre`.
 `DELETE`: `409` (`en_uso`) si está en alguna fórmula o tiene movimientos.
 
 ```json
@@ -230,7 +230,16 @@ CRUD estándar.
 | `id_categoria` | int | — | Solo lectura |
 | `nombre` | string (≤100) | Sí | Único (`400` si ya existe) |
 
+Orden: alfabético por `nombre`.
 `DELETE`: `409` (`en_uso`) si tiene productos.
+
+```json
+// GET /categorias/ → 200
+[
+  { "id_categoria": 6, "nombre": "Banquetas" },
+  { "id_categoria": 2, "nombre": "Bibliotecas" }
+]
+```
 
 ### 7.2 `/productos/`
 
@@ -474,9 +483,9 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 | `/auth/logout/` | `POST` | `POST` |
 | `/auth/me/` | `GET` | `GET` |
 | `/usuarios/`, `/usuarios/{id}/` | CRUD | `GET /usuarios/`, `POST /usuarios/` (solo admin) |
-| `/materias-primas/`, `/materias-primas/{id}/` | CRUD | — |
+| `/materias-primas/`, `/materias-primas/{id}/` | CRUD | `GET /materias-primas/` (todavía sin filtros) |
 | `/movimientos-materia-prima/`, `/movimientos-materia-prima/{id}/` | `GET`, `POST` | — |
-| `/categorias/`, `/categorias/{id}/` | CRUD | — |
+| `/categorias/`, `/categorias/{id}/` | CRUD | `GET /categorias/` |
 | `/productos/`, `/productos/{id}/` | CRUD | `POST /productos/`, `DELETE /productos/{id}/` |
 | `/detalles-formula/`, `/detalles-formula/{id}/` | CRUD | — |
 | `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` | — |
