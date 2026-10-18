@@ -94,11 +94,17 @@ class DetalleOrdenProduccionDetailView(ElementoNoImplementado):
 
 # Vistas del flujo transaccional 
 
+
 class IniciarOrdenAPIView(APIView):
+<<<<<<< HEAD
     """Iniciar orden, reservar insumos y validar disponibilidad"""
+=======
+    """Iniciar orden, reservar insumos y validar disponibilidad/transiciones"""
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
 
+        # Validar que el estado sea Pendiente
         if orden.estado != EstadoOrden.PENDIENTE:
             return Response(
                 {"error": f"No se puede iniciar una orden en estado '{orden.estado}'. Debe estar 'Pendiente'."},
@@ -127,6 +133,7 @@ class IniciarOrdenAPIView(APIView):
 
             disponibles = stock_fisico - reservas_activas
 
+            # Rechazar inicio si no hay disponibilidad suficiente
             if disponibles < cantidad_requerida:
                 return Response(
                     {
@@ -169,6 +176,7 @@ class IniciarOrdenAPIView(APIView):
 
 class FinalizarOrdenAPIView(APIView):
 <<<<<<< HEAD
+<<<<<<< HEAD
     """Finalización transaccional e inventario"""
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
@@ -179,6 +187,13 @@ class FinalizarOrdenAPIView(APIView):
 
         # Validar estado
 >>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
+=======
+    """Finalización transaccional, impacto en inventario y prevención de duplicados"""
+    def post(self, request, pk):
+        orden = get_object_or_404(OrdenProduccion, pk=pk)
+
+        # Prevenir finalizar si no está En Producción (evita doble finalización)
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
         if orden.estado != EstadoOrden.EN_PRODUCCION:
             return Response(
                 {"error": f"No se puede finalizar una orden en estado '{orden.estado}'. Debe estar 'En Producción'."},
@@ -187,6 +202,7 @@ class FinalizarOrdenAPIView(APIView):
 
         reservas = ReservaMateriaPrima.objects.filter(orden=orden, activa=True)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         try:
             with transaction.atomic():
@@ -199,6 +215,8 @@ class FinalizarOrdenAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+=======
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
         try:
             with transaction.atomic():
                 # 1. Descontar stock físico y desactivar reservas
@@ -250,14 +268,25 @@ class FinalizarOrdenAPIView(APIView):
                 {"error": f"Error al finalizar la orden de producción: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
             )
 
 
 class CancelarOrdenAPIView(APIView):
+<<<<<<< HEAD
     """Cancelación y liberación de reservas"""
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
 
+=======
+    """ Cancelación, liberación de reservas y prevención de transiciones inválidas"""
+    def post(self, request, pk):
+        orden = get_object_or_404(OrdenProduccion, pk=pk)
+
+        # Validar que no esté ya cerrada o finalizada
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
         if orden.estado not in [EstadoOrden.PENDIENTE, EstadoOrden.EN_PRODUCCION]:
             return Response(
                 {"error": f"No se puede cancelar una orden en estado '{orden.estado}'. Solo se pueden cancelar órdenes 'Pendientes' o 'En Producción'."},
@@ -266,6 +295,10 @@ class CancelarOrdenAPIView(APIView):
 
         try:
             with transaction.atomic():
+<<<<<<< HEAD
+=======
+                # Liberar reservas sin tocar el stock físico
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
                 reservas = ReservaMateriaPrima.objects.filter(orden=orden, activa=True)
                 for reserva in reservas:
                     reserva.activa = False
@@ -283,6 +316,9 @@ class CancelarOrdenAPIView(APIView):
             return Response(
                 {"error": f"Error al cancelar la orden de producción: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+<<<<<<< HEAD
 =======
 >>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
+=======
+>>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
             )
