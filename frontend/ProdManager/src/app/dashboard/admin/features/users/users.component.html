@@ -11,7 +11,7 @@
   } @else {
     <section class="users-card">
       <h2>Registrar operario</h2>
-      <p>La cuenta se guardará en MySQL con el rol Operario.</p>
+      <p>Completá los datos para agregar una cuenta al equipo.</p>
 
       <form [formGroup]="userForm" (ngSubmit)="registrarOperario()" novalidate>
         <div class="form-grid">
@@ -58,7 +58,7 @@
       <div class="list-heading">
         <div>
           <h2>Cuentas registradas</h2>
-          <p>{{ users.length }} cuenta(s) en MySQL</p>
+          <p>{{ users.length }} cuenta(s) registradas</p>
         </div>
         <input
           type="search"
