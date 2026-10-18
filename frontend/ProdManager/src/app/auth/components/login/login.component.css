@@ -71,3 +71,9 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.register-link {
+    margin: 1.25rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+}

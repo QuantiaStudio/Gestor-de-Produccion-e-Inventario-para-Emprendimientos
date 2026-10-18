@@ -1,231 +1,98 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { AuthService } from '../../../../auth/services/auth.service';
+import { User } from '../../../../models/user/user.model';
 import { UserService } from '../../../../services/user.service';
-import { User, UserRole, CreateUserDTO, UpdateUserDTO } from '../../../../models/user/user.model';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './users.component.html',
-  styleUrl: './users.component.css'
+  styleUrl: './users.component.css',
 })
-export class UsersComponent implements OnInit, OnDestroy {
+export class UsersComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
-  currentUser: User | null = null;
-  private usersSubscription?: Subscription;
-
-  searchTerm: string = '';
-  roleFilter: string = 'ALL';
-  statusFilter: string = 'ALL';
-
-  isModalOpen: boolean = false;
-  isEditMode: boolean = false;
-  editingUserId: number | null = null;
+  searchTerm = '';
+  isCurrentAdmin = false;
+  isLoading = false;
+  isSaving = false;
+  mensajeError = '';
+  mensajeExito = '';
   userForm: FormGroup;
 
-  isDeleteModalOpen: boolean = false;
-  userToDelete: User | null = null;
-
-  toastMessage: string | null = null;
-  toastType: 'success' | 'danger' = 'success';
-
   constructor(
-    private userService: UserService,
-    private fb: FormBuilder
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    formBuilder: FormBuilder,
   ) {
-    this.userForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['Operator', [Validators.required]],
-      isActive: [true, [Validators.required]]
+    this.userForm = formBuilder.group({
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
   ngOnInit(): void {
-    this.currentUser = this.userService.getCurrentUser();
-    this.usersSubscription = this.userService.users$.subscribe(users => {
-      this.users = users;
-      this.applyFilters();
+    this.isCurrentAdmin = this.authService.getUsuarioActual()?.rol === 'ADMIN';
+    if (!this.isCurrentAdmin) return;
+
+    this.isLoading = true;
+    this.userService.getUsers().subscribe({
+      next: users => {
+        this.users = users;
+        this.applyFilters();
+        this.isLoading = false;
+      },
+      error: error => {
+        this.mensajeError = this.mensajeErrorApi(error, 'No se pudo cargar la lista de usuarios.');
+        this.isLoading = false;
+      },
     });
-  }
-
-  ngOnDestroy(): void {
-    this.usersSubscription?.unsubscribe();
-  }
-
-  get totalUsersCount(): number {
-    return this.users.length;
-  }
-
-  get adminCount(): number {
-    return this.users.filter(u => u.role === 'Administrator').length;
-  }
-
-  get operatorCount(): number {
-    return this.users.filter(u => u.role === 'Operator').length;
-  }
-
-  get activeUsersCount(): number {
-    return this.users.filter(u => u.isActive).length;
-  }
-
-  get isCurrentAdmin(): boolean {
-    return this.currentUser?.role === 'Administrator';
   }
 
   applyFilters(): void {
-    let result = [...this.users];
-
-    if (this.searchTerm.trim()) {
-      const term = this.searchTerm.toLowerCase().trim();
-      result = result.filter(user =>
-        user.firstName.toLowerCase().includes(term) ||
-        user.lastName.toLowerCase().includes(term) ||
-        user.email.toLowerCase().includes(term)
-      );
-    }
-
-    if (this.roleFilter !== 'ALL') {
-      result = result.filter(user => user.role === this.roleFilter);
-    }
-
-    if (this.statusFilter !== 'ALL') {
-      const isActive = this.statusFilter === 'ACTIVE';
-      result = result.filter(user => user.isActive === isActive);
-    }
-
-    this.filteredUsers = result;
+    const term = this.searchTerm.trim().toLowerCase();
+    this.filteredUsers = this.users.filter(user =>
+      `${user.firstName} ${user.lastName} ${user.email}`.toLowerCase().includes(term),
+    );
   }
 
-  resetFilters(): void {
-    this.searchTerm = '';
-    this.roleFilter = 'ALL';
-    this.statusFilter = 'ALL';
-    this.applyFilters();
-  }
-
-  openCreateModal(): void {
-    this.isEditMode = false;
-    this.editingUserId = null;
-    this.userForm.reset({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      role: 'Operator',
-      isActive: true
-    });
-    this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
-    this.userForm.get('password')?.updateValueAndValidity();
-    this.isModalOpen = true;
-  }
-
-  openEditModal(user: User): void {
-    this.isEditMode = true;
-    this.editingUserId = user.id;
-    this.userForm.reset({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: '',
-      role: user.role,
-      isActive: user.isActive
-    });
-    this.userForm.get('password')?.setValidators([Validators.minLength(6)]);
-    this.userForm.get('password')?.updateValueAndValidity();
-    this.isModalOpen = true;
-  }
-
-  closeModal(): void {
-    this.isModalOpen = false;
-    this.isEditMode = false;
-    this.editingUserId = null;
-    this.userForm.reset();
-  }
-
-  saveUser(): void {
+  registrarOperario(): void {
+    this.mensajeError = '';
+    this.mensajeExito = '';
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
       return;
     }
 
-    const formVal = this.userForm.value;
-
-    if (this.isEditMode && this.editingUserId !== null) {
-      const updateDto: UpdateUserDTO = {
-        id: this.editingUserId,
-        firstName: formVal.firstName,
-        lastName: formVal.lastName,
-        email: formVal.email,
-        role: formVal.role as UserRole,
-        isActive: formVal.isActive
-      };
-
-      if (formVal.password && formVal.password.trim()) {
-        updateDto.password = formVal.password;
-      }
-
-      const updated = this.userService.updateUser(this.editingUserId, updateDto);
-      if (updated) {
-        this.showToast('Usuario actualizado exitosamente', 'success');
-      }
-    } else {
-      const createDto: CreateUserDTO = {
-        firstName: formVal.firstName,
-        lastName: formVal.lastName,
-        email: formVal.email,
-        password: formVal.password,
-        role: formVal.role as UserRole,
-        isActive: formVal.isActive
-      };
-
-      this.userService.createUser(createDto);
-      this.showToast('Usuario registrado exitosamente', 'success');
-    }
-
-    this.closeModal();
+    this.isSaving = true;
+    this.userService.createOperator(this.userForm.getRawValue()).subscribe({
+      next: user => {
+        this.users = [user, ...this.users];
+        this.applyFilters();
+        this.userForm.reset();
+        this.mensajeExito = `Se creó la cuenta de operario para ${user.firstName} ${user.lastName}.`;
+        this.isSaving = false;
+      },
+      error: error => {
+        this.mensajeError = this.mensajeErrorApi(error, 'No se pudo crear el usuario.');
+        this.isSaving = false;
+      },
+    });
   }
 
-  openDeleteModal(user: User): void {
-    this.userToDelete = user;
-    this.isDeleteModalOpen = true;
-  }
-
-  closeDeleteModal(): void {
-    this.isDeleteModalOpen = false;
-    this.userToDelete = null;
-  }
-
-  confirmDelete(): void {
-    if (this.userToDelete) {
-      if (this.userToDelete.id === this.currentUser?.id) {
-        this.showToast('No es posible eliminar el usuario en sesión actual', 'danger');
-        this.closeDeleteModal();
-        return;
-      }
-      this.userService.deleteUser(this.userToDelete.id);
-      this.showToast('Usuario eliminado correctamente', 'success');
-    }
-    this.closeDeleteModal();
-  }
-
-  toggleStatus(user: User): void {
-    this.userService.toggleUserStatus(user.id);
-    const stateText = !user.isActive ? 'activado' : 'desactivado';
-    this.showToast(`Usuario ${user.firstName} ${user.lastName} ${stateText}`, 'success');
-  }
-
-  private showToast(message: string, type: 'success' | 'danger'): void {
-    this.toastMessage = message;
-    this.toastType = type;
-    setTimeout(() => {
-      this.toastMessage = null;
-    }, 3500);
+  private mensajeErrorApi(error: HttpErrorResponse, fallback: string): string {
+    const errores = error.error?.errors;
+    const primerError = errores ? Object.values(errores).flat()[0] : null;
+    if (primerError) return String(primerError);
+    if (error.status === 401 || error.status === 403) return 'Tu sesión no tiene permisos para gestionar usuarios.';
+    if (error.status === 0) return 'No se pudo conectar con Django. Comprobá que el backend esté iniciado.';
+    return error.error?.detail || fallback;
   }
 }
