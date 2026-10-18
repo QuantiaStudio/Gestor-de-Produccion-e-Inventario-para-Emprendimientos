@@ -7,7 +7,7 @@
 
     @if (registroExitoso) {
       <div class="alert alert-success" role="status">
-        Cuenta creada correctamente. Ya podés <a routerLink="/login">iniciar sesión</a>.
+        Cuenta creada. Ya podés <a routerLink="/login">iniciar sesión</a>.
       </div>
     } @else {
       <form [formGroup]="registroForm" (ngSubmit)="registrar()" novalidate>

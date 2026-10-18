@@ -75,7 +75,7 @@ export class AuthService {
       return error.error?.detail || 'El usuario se encuentra inactivo. Contacta a un administrador.';
     }
     if (error.status === 401 || code === 'authentication_failed') {
-      return 'Credenciales inválidas. Verifica tu correo y contraseña.';
+      return 'El correo o la contraseña no son correctos.';
     }
     if (error.status === 400) {
       return 'Ingresá un correo y una contraseña válidos.';

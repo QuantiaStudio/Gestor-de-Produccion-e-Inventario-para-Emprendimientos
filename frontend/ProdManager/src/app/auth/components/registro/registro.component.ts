@@ -71,8 +71,25 @@ export class RegistroComponent {
   private mensajeErrorApi(error: HttpErrorResponse): string {
     const errores = error.error?.errors;
     const primerError = errores ? Object.values(errores).flat()[0] : null;
-    if (primerError) return String(primerError);
+    if (primerError) return this.traducirErrorContrasena(String(primerError));
     if (error.status === 0) return 'No se pudo conectar con el servidor. Intentalo nuevamente.';
     return error.error?.detail || 'No se pudo crear la cuenta. Revisá los datos e intentá nuevamente.';
+  }
+
+  private traducirErrorContrasena(mensaje: string): string {
+    const mensajeNormalizado = mensaje.toLowerCase();
+    if (mensajeNormalizado.includes('too short')) {
+      return 'La contraseña debe tener al menos 8 caracteres.';
+    }
+    if (mensajeNormalizado.includes('too common')) {
+      return 'La contraseña es demasiado común. Elegí otra.';
+    }
+    if (mensajeNormalizado.includes('entirely numeric')) {
+      return 'La contraseña no puede estar formada solo por números.';
+    }
+    if (mensajeNormalizado.includes('too similar')) {
+      return 'La contraseña no puede ser tan parecida a tus datos personales.';
+    }
+    return mensaje;
   }
 }
