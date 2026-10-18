@@ -82,6 +82,9 @@ export class ProductoTerminadoListadoComponent {
       this.mensajeExito = 'El producto se creó correctamente.';
     });
   }
+  productoCambiado() {
+    this.cargarProductosDesdeApi();
+  }
 
   seleccionar(producto: ProductoTerminado) {
     this.productoSeleccionado = producto;
@@ -105,7 +108,9 @@ export class ProductoTerminadoListadoComponent {
 
   productoEliminado() {
     this.productoSeleccionado = null;
-    this.cargarProductosDesdeApi();
+    this.cargarProductosDesdeApi(() => {
+      this.mensajeExito = 'El producto se eliminó correctamente.';
+    });
   }
 
   private cargarProductosDesdeApi(alCargar?: () => void) {

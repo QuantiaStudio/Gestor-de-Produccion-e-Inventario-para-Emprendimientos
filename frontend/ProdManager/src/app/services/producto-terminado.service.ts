@@ -17,6 +17,7 @@ export class ProductoTerminadoService {
   private readonly movimientosInventarioUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
   private readonly categoriasUrl = `${environment.apiUrl}/categorias`;
   private readonly estadosUrl = `${environment.apiUrl}/estados`;
+  private readonly backendProductosUrl = `${environment.djangoApiUrl}/productos/`;
   private categorias = new Map<number, string>();
   private estados = new Map<number, EstadoProductoTerminado>();
   private productosTerminados: ProductoTerminado[] = [];
@@ -125,7 +126,7 @@ export class ProductoTerminadoService {
   }
 
   eliminarProducto(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.productosUrl}/${id}`);
+    return this.http.delete<void>(`${this.backendProductosUrl}${id}/`);
   }
 
   actualizarProducto(

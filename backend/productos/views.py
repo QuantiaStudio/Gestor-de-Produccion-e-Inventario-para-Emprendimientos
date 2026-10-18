@@ -27,7 +27,7 @@ class ProductoDetailView(ElementoNoImplementado):
         if producto is None:
             raise NotFound('El producto no existe.')
 
-        # RN-10 / HU09: no se elimina si tiene órdenes pendientes o en producción
+        #no se elimina si tiene órdenes pendientes o en producción
         tiene_ordenes_activas = producto.detalles_produccion.filter(
             orden__estado__nombre__in=ESTADOS_ORDEN_ACTIVA
         ).exists()
@@ -43,9 +43,9 @@ class ProductoDetailView(ElementoNoImplementado):
 
         try:
             with transaction.atomic():
-                producto.delete()  # la fórmula se borra sola (CASCADE)
+                producto.delete()  
         except ProtectedError:
-            # RN-28: tiene historial (órdenes cerradas o movimientos), se da de baja lógica
+            #tiene historial (órdenes cerradas o movimientos), se da de baja lógica
             producto.estado = EstadoProducto.INACTIVO
             producto.save(update_fields=['estado'])
             return Response(
