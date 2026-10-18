@@ -7,7 +7,7 @@ class MateriaPrimaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MateriaPrima
         fields = [
-            'id',
+            'id_materia_prima',
             'nombre',
             'descripcion',
             'unidad_medida',
