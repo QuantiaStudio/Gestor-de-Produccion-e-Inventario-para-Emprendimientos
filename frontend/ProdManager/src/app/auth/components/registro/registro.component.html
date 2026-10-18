@@ -2,12 +2,12 @@
   <section class="login-card card">
     <header class="login-header">
       <h1>Crear cuenta</h1>
-      <p>Registrate para acceder como administrador.</p>
+      <p>Registrate para crear tu cuenta.</p>
     </header>
 
     @if (registroExitoso) {
       <div class="alert alert-success" role="status">
-        Cuenta de administrador creada. Ya podés <a routerLink="/login">iniciar sesión</a>.
+        Cuenta creada correctamente. Ya podés <a routerLink="/login">iniciar sesión</a>.
       </div>
     } @else {
       <form [formGroup]="registroForm" (ngSubmit)="registrar()" novalidate>
@@ -56,7 +56,7 @@
         }
 
         <button class="btn btn-primary btn-login" type="submit" [disabled]="enviando">
-          {{ enviando ? 'Creando cuenta...' : 'Registrarme como administrador' }}
+          {{ enviando ? 'Creando cuenta...' : 'Registrarme' }}
         </button>
       </form>
 
