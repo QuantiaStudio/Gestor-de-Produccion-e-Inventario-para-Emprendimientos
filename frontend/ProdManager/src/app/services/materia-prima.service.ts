@@ -36,7 +36,7 @@ export class MateriaPrimaService {
     const stockMinimo = Number(mp.stock_minimo);
 
     return {
-      id: String(mp.id_materia_prima),
+      id: String(mp.id),
       nombre: mp.nombre,
       descripcion: mp.descripcion,
       unidadMedida: mp.unidad_medida,

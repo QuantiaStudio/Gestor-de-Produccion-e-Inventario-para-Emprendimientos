@@ -6,7 +6,7 @@ export type EstadoMateriaPrima = 'optimo' | 'bajo_minimo' | 'sin_stock';
  * ultimaActualizacion se completa en el service cuando exista un endpoint de movimientos.
  */
 export interface MateriaPrimaApi {
-  id_materia_prima: number;
+  id: number;
   nombre: string;
   descripcion: string;
   unidad_medida: string;
