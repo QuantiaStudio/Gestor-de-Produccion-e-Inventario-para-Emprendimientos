@@ -10,7 +10,7 @@ import { User, CreateUserDTO, UpdateUserDTO } from '../models/user/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly usersUrl = `${environment.backendApiUrl}/usuarios/`;
+  private readonly usersUrl = `${environment.djangoApiUrl}/usuarios/`;
 
   private users: User[] = [];
 

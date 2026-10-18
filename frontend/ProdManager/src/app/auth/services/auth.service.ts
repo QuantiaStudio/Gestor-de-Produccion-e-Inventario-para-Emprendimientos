@@ -12,7 +12,7 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
-  private readonly authApiUrl = `${environment.backendApiUrl}/auth`;
+  private readonly authApiUrl = `${environment.djangoApiUrl}/auth`;
 
   private usuarioSubject = new BehaviorSubject<UsuarioAutenticado | null>(
     this.obtenerUsuarioDeStorage()

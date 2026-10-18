@@ -6,7 +6,7 @@ import { AuthService } from '../services/auth.service';
 
 export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
   const token = inject(AuthService).getToken();
-  const isBackendRequest = request.url.startsWith(environment.backendApiUrl);
+  const isBackendRequest = request.url.startsWith(environment.djangoApiUrl);
 
   if (!token || !isBackendRequest) {
     return next(request);
