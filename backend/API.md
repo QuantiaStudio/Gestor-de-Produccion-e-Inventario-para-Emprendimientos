@@ -1,6 +1,6 @@
 # Contrato de la API — Gestor de Producción e Inventario
 
-Versión del contrato: **v1** · Estado: **definido, sin implementar** (todos los endpoints responden `501`).
+Versión del contrato: **v1** · La autenticación y la consulta/alta de usuarios están implementadas; los endpoints de negocio todavía responden `501`.
 
 Este documento es la referencia común entre frontend y backend. Si un endpoint se implementa distinto a lo que dice acá, se actualiza este documento en el mismo PR.
 
@@ -18,7 +18,7 @@ Este documento es la referencia común entre frontend y backend. Si un endpoint 
 | Decimales | Cantidades, stocks y precios viajan como **string** con punto decimal (`"12.500"`), para no perder precisión. Al enviar se aceptan número o string |
 | Fechas | ISO 8601 en UTC (`"2026-10-14T13:45:00Z"`) |
 | Listados | Devuelven un **array** sin paginación (por ahora). Aceptan filtros por query string, indicados en cada recurso |
-| Autenticación | Header `Authorization: Token <token>` obtenido en `POST /auth/login/`. Todos los endpoints la requieren salvo `login` (ver §10, pendiente de confirmar) |
+| Autenticación | Header `Authorization: Token <token>` obtenido en `POST /auth/login/`. Todos los endpoints la requieren salvo `login` y `registro` |
 
 ### Operaciones CRUD estándar
 
@@ -94,7 +94,7 @@ Ejemplos:
 { "detail": "El endpoint GET /api/v1/productos/ todavía no está implementado.", "code": "not_implemented" }
 ```
 
-Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
+Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed`, `inactive_user`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
 
 ---
 
@@ -103,8 +103,17 @@ Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed
 | Método | Ruta | Descripción | Éxito |
 |---|---|---|---|
 | `POST` | `/auth/login/` | Inicia sesión | `200` |
+| `POST` | `/auth/registro/` | Registra una cuenta con rol `ADMIN` | `201` |
 | `POST` | `/auth/logout/` | Invalida el token actual | `204` |
 | `GET` | `/auth/me/` | Devuelve el usuario autenticado | `200` + Usuario |
+
+**`POST /auth/registro/`** es público. Requiere `nombre`, `apellido`, `email` y `contrasena`; el servidor asigna `ADMIN` y estado activo. La contraseña debe cumplir los validadores configurados en Django y se guarda hasheada. No inicia sesión automáticamente: la persona debe usar el formulario de login.
+
+```json
+{ "nombre": "Ana", "apellido": "Pérez", "email": "ana@correo.com", "contrasena": "UnaClaveSegura2026" }
+```
+
+La respuesta `201` contiene los datos públicos del usuario, sin contraseña ni token. Un correo ya registrado o datos inválidos producen `400`.
 
 **`POST /auth/login/`**
 
@@ -119,13 +128,30 @@ Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed
 }
 ```
 
-Errores: `400` si faltan campos; `401` (`authentication_failed`) si las credenciales son incorrectas; `403` si el usuario está inactivo (`estado: false`).
+Errores: `400` si faltan campos; `401` (`authentication_failed`) si las credenciales son incorrectas; `403` (`inactive_user`) si el usuario está inactivo (`estado: false`).
+
+La contraseña se valida contra el hash almacenado por Django. Al iniciar sesión, se crea o reutiliza un token de DRF asociado al usuario. Las rutas protegidas reciben el token en `Authorization: Token <token>`. La gestión de usuarios requiere el rol `ADMIN`.
+
+`POST /auth/logout/` requiere el token actual, lo invalida y responde `204 No Content`. `GET /auth/me/` requiere el token actual y devuelve los datos públicos del usuario autenticado, sin incluir su contraseña.
 
 ---
 
 ## 5. Usuarios — `/usuarios/`
 
-CRUD estándar. Pensado para administradores.
+Por ahora se implementaron el listado y el alta de operarios. Ambos requieren un token de administrador. El `POST` siempre crea una cuenta activa con rol `OPERARIO`; se ignoran los campos `rol` y `estado` si el cliente los envía. Los demás métodos continúan sin implementar.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/usuarios/` | Lista las cuentas con datos públicos (`200` + array) |
+| `POST` | `/usuarios/` | Crea un operario (`201` + usuario creado) |
+
+Ejemplo de alta:
+
+```json
+{ "nombre": "Luis", "apellido": "Gómez", "email": "luis@correo.com", "contrasena": "UnaClaveSegura2026" }
+```
+
+Un correo duplicado o datos inválidos producen `400`; sin token responde `401` y con token de operario responde `403`.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
@@ -133,17 +159,11 @@ CRUD estándar. Pensado para administradores.
 | `nombre` | string (≤100) | Sí | |
 | `apellido` | string (≤100) | Sí | |
 | `email` | string (email) | Sí | Único (`400` si ya existe) |
-| `contrasena` | string | Sí en `POST` | **Solo escritura**. Se guarda hasheada. En `PUT`/`PATCH` es opcional: si se envía, se cambia |
-| `rol` | `"ADMIN"` \| `"OPERARIO"` | No | Por defecto `"OPERARIO"` |
-| `estado` | boolean | No | Por defecto `true`. `false` = no puede iniciar sesión |
+| `contrasena` | string | Sí en `POST` | **Solo escritura**. Se guarda hasheada y debe pasar los validadores de Django |
+| `rol` | `"ADMIN"` \| `"OPERARIO"` | — | Asignado por el servidor: el registro público crea `ADMIN` y este `POST` crea `OPERARIO` |
+| `estado` | boolean | — | Las altas se crean activas (`true`) |
 
-Filtros: `?rol=OPERARIO`, `?estado=true`.
-`DELETE`: `409` (`en_uso`) si el usuario tiene movimientos registrados; en ese caso se lo desactiva con `PATCH {"estado": false}`.
-
-```json
-// GET /usuarios/3/ → 200
-{ "id_usuario": 3, "nombre": "Genaro", "apellido": "Cura", "email": "genaro.cura@correo.com", "rol": "OPERARIO", "estado": true }
-```
+La edición y baja de cuentas todavía no están implementadas. `/usuarios/{id}/` sigue respondiendo `501`.
 
 ---
 
@@ -342,10 +362,11 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 
 | Ruta | Métodos |
 |---|---|
-| `/auth/login/` | `POST` |
+| `/auth/login/`, `/auth/registro/` | `POST` |
 | `/auth/logout/` | `POST` |
 | `/auth/me/` | `GET` |
-| `/usuarios/`, `/usuarios/{id}/` | CRUD |
+| `/usuarios/` | `GET`, `POST` (solo admin) |
+| `/usuarios/{id}/` | Pendiente de implementación |
 | `/materias-primas/`, `/materias-primas/{id}/` | CRUD |
 | `/movimientos-materia-prima/`, `/movimientos-materia-prima/{id}/` | `GET`, `POST` |
 | `/categorias/`, `/categorias/{id}/` | CRUD |
@@ -356,4 +377,4 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 | `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD |
 | `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD |
 
-Todas con el prefijo `/api/v1/`. Hoy todas responden `501 Not Implemented` (o `405` si el método no está permitido).
+Todas con el prefijo `/api/v1/`. Las rutas de autenticación implementadas responden según su contrato; los endpoints de negocio aún no implementados responden `501 Not Implemented` (o `405` si el método no está permitido).

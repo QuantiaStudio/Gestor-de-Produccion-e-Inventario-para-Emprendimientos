@@ -10,6 +10,7 @@ import { UsersComponent } from './dashboard/admin/features/users/users.component
 import { NotFoundComponent } from './public/not-found/not-found.component';
 import { MateriaPrimaListadoComponent } from './dashboard/user/features/materia-prima/materia-prima-listado/materia-prima-listado.component';
 import { LoginComponent } from './auth/components/login/login.component';
+import { RegistroComponent } from './auth/components/registro/registro.component';
 import { UserPanelComponent } from './dashboard/user/user-panel/user-panel.component';
 import { ProduccionComponent } from './dashboard/user/features/produccion/produccion.component';
 import { guestGuard, roleGuard } from './auth/guards/auth.guard';
@@ -22,6 +23,7 @@ export const routes: Routes = [
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'about-us', component: AboutUsComponent },
       { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+      { path: 'registro', component: RegistroComponent, canActivate: [guestGuard] },
     ],
   },
   {

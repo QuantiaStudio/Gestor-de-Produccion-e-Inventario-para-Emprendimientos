@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, from, of,} from 'rxjs';
-import { map } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import { CredencialesLogin, RespuestaAutenticacion, UsuarioAutenticado, UsuarioBD} from '../models/usuario-autenticado';
+import { environment } from '../../../environments/environment';
+import { CredencialesLogin, DatosUsuarioApi, RespuestaAutenticacion, RespuestaLoginApi, UsuarioAutenticado } from '../models/usuario-autenticado';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
-  private apiUrl = 'http://localhost:3000/usuarios'
+  private readonly authApiUrl = `${environment.djangoApiUrl}/auth`;
 
   private usuarioSubject = new BehaviorSubject<UsuarioAutenticado | null>(
     this.obtenerUsuarioDeStorage()
@@ -20,49 +20,68 @@ export class AuthService {
 
   public usuario$ = this.usuarioSubject.asObservable();
 
-  constructor(private http: HttpClient){}
+  registrarAdministrador(datos: {
+    nombre: string;
+    apellido: string;
+    email: string;
+    contrasena: string;
+  }): Observable<DatosUsuarioApi> {
+    return this.http.post<DatosUsuarioApi>(`${this.authApiUrl}/registro/`, {
+      ...datos,
+      email: datos.email.trim(),
+    });
+  }
+
+  constructor(private http: HttpClient) {
+    if (localStorage.getItem(this.TOKEN_KEY) === 'token-simulado-json-server-123') {
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.USER_KEY);
+      this.usuarioSubject.next(null);
+    }
+  }
 
   login(credenciales: CredencialesLogin): Observable<RespuestaAutenticacion> {
-    const url = `${this.apiUrl}?email=${credenciales.email}&contrasena=${credenciales.password}`;
-    console.log('URL enviada:', url);
-    return this.http.get<any[]>(url).pipe(
-    map(usuarios => {
-      console.log('Usuarios recibidos:', usuarios);
-      if (usuarios && usuarios.length > 0) {
-        const usuarioDb = usuarios[0]
-        
-        if (usuarioDb.estado === false){
-          return {
-            exito:false,
-            mensaje: 'El usuario se encuentra inactivo. Contacta a un administrador.'
-          }
-        }
-
-        const usuarioAutenticado: UsuarioAutenticado = {
-          id: usuarioDb.id || usuarioDb.id_usuario,
-          nombre: usuarioDb.nombre,
-          apellido:usuarioDb.apellido,
-          email: usuarioDb.email,
-          rol: usuarioDb.rol,
-          token: 'token-simulado-json-server-123'
-          }
-        const respuestaExito: RespuestaAutenticacion = {
-          exito: true,
-          mensaje: 'Inicio de sesion exitoso',
-          usuario:usuarioAutenticado,
-          token:usuarioAutenticado.token
+    return this.http.post<RespuestaLoginApi>(`${this.authApiUrl}/login/`, {
+      email: credenciales.email.trim(),
+      contrasena: credenciales.password,
+    }).pipe(
+      map(respuesta => {
+        const usuario: UsuarioAutenticado = {
+          id: respuesta.usuario.id_usuario,
+          nombre: respuesta.usuario.nombre,
+          apellido: respuesta.usuario.apellido,
+          email: respuesta.usuario.email,
+          rol: respuesta.usuario.rol,
+          token: respuesta.token,
         };
+        this.guardarSesion(respuesta.token, usuario);
+        return {
+          exito: true,
+          mensaje: 'Inicio de sesión exitoso.',
+          usuario,
+          token: respuesta.token,
+        };
+      }),
+      catchError((error: HttpErrorResponse) => of({
+        exito: false,
+        mensaje: this.mensajeErrorLogin(error),
+      }))
+    );
+  }
 
-        this.guardarSesion(respuestaExito.token!, respuestaExito.usuario!);
-        return respuestaExito;
-      }
-      return {
-        exito:false,
-        mensaje: 'Credenciales invalidas. Verifica tu correo y contraseña.'
-      };
-    })
-  );
-}
+  private mensajeErrorLogin(error: HttpErrorResponse): string {
+    const code = error.error?.code;
+    if (code === 'inactive_user') {
+      return error.error?.detail || 'El usuario se encuentra inactivo. Contacta a un administrador.';
+    }
+    if (error.status === 401 || code === 'authentication_failed') {
+      return 'El correo o la contraseña no son correctos.';
+    }
+    if (error.status === 400) {
+      return 'Ingresá un correo y una contraseña válidos.';
+    }
+    return 'No fue posible conectar con el servidor de autenticación.';
+  }
 
   /**
    * Guarda la información necesaria para mantener
@@ -125,7 +144,13 @@ export class AuthService {
    * Cierra la sesión actual.
    */
   logout(): void {
-
+    const token = this.getToken();
+    if (token) {
+      const headers = new HttpHeaders({ Authorization: `Token ${token}` });
+      this.http.post<void>(`${this.authApiUrl}/logout/`, {}, { headers }).subscribe({
+        error: () => undefined,
+      });
+    }
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
 

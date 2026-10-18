@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Component } from '@angular/core';
 import {
   FormBuilder,
@@ -13,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -67,8 +68,6 @@ export class LoginComponent {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     };
-
-    console.log('credenciales enviadas:', credenciales)
 
     this.authService.login(credenciales).subscribe({
       next: (respuesta) => {

@@ -10,9 +10,21 @@ Este repositorio contiene:
 
 - `frontend/ProdManager`: aplicación principal desarrollada con Angular 17.
 - `maqueta`: prototipo HTML/CSS inicial utilizado como base visual del proyecto.
-- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. Por ahora tiene definidos los modelos, las migraciones y las rutas; los endpoints todavía responden `501 Not Implemented`. El contrato de la API está en [`backend/API.md`](backend/API.md).
+- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. El registro, el login y la gestión básica de cuentas están conectados; los endpoints de los módulos de negocio siguen pendientes. El contrato está en [`backend/API.md`](backend/API.md).
 
-Por el momento, la aplicación Angular consume una API de prueba simulada con [json-server](https://github.com/typicode/json-server), que expone como servicio REST los datos del archivo `frontend/ProdManager/db.json` (usuarios, materias primas, productos, órdenes de producción y movimientos de stock). Para que la aplicación funcione hay que levantar **dos procesos**: la API de prueba y el servidor de desarrollo de Angular. Los cambios que se hacen desde la aplicación (altas, movimientos de stock, cambios de estado) se guardan en `db.json`.
+## Estado de integración
+
+El objetivo del proyecto es que Angular use Django REST Framework y que los datos de la aplicación queden en MySQL. **Ese trabajo todavía no está completo.**
+
+| Parte | Estado actual |
+|---|---|
+| Registro público de administradores, login y tokens | Conectado a Django/MySQL |
+| Listado y alta de operarios desde el panel administrador | Conectado a Django/MySQL |
+| Materias primas y movimientos de stock | Angular todavía usa json-server y `db.json`; el endpoint Django responde `501` |
+| Productos, fórmulas e inventario | Angular todavía usa json-server y `db.json`; los endpoints Django responden `501` |
+| Órdenes y detalles de producción | Angular todavía usa json-server y `db.json`; los endpoints Django responden `501` |
+
+`json-server` queda como soporte temporal para las pantallas pendientes de migración. No es la base de datos final ni significa que esos módulos ya estén conectados. Para completar la integración hay que implementar sus endpoints en Django y cambiar los servicios Angular para consumirlos; después se podrá retirar `json-server` y `db.json`.
 
 ## Funcionalidades principales
 
@@ -84,7 +96,7 @@ cd frontend/ProdManager
 npm install
 ```
 
-Este comando instala también `json-server`, la API de prueba que se usa en la ejecución (no hace falta instalarla aparte).
+Este comando instala también `json-server`, que se mantiene temporalmente para las pantallas todavía no migradas a Django.
 
 Si querés instalar exactamente las versiones registradas en `package-lock.json`, podés usar:
 
@@ -232,7 +244,7 @@ Si todo salió bien, vas a ver una lista de líneas terminadas en `OK`. Este pas
 
 ### 7. Crear un usuario administrador (opcional)
 
-Para tener un usuario cargado en la base:
+Podés crear la cuenta desde el formulario público de la aplicación, que asigna el rol `ADMIN`, o crearla desde Django:
 
 ```bash
 python manage.py createsuperuser
@@ -242,17 +254,17 @@ El comando pide email, nombre, apellido y contraseña. El usuario se crea con ro
 
 ## Ejecución en desarrollo (frontend)
 
-La aplicación necesita **dos terminales abiertas al mismo tiempo**, ambas ubicadas en la carpeta `frontend/ProdManager`.
+La aplicación puede necesitar **tres procesos abiertos al mismo tiempo**: json-server para las pantallas aún no migradas, Django con MySQL para registro/autenticación/cuentas, y Angular. Para trabajar solo con registro/login y cuentas, no hace falta iniciar json-server. Para usar las pantallas pendientes de migración, sí.
 
-### Terminal 1: API de prueba (json-server)
+### Terminal opcional: módulos todavía conectados a json-server
 
 ```bash
 npm run json-server
 ```
 
-Levanta la API en `http://localhost:3000/` a partir del archivo `db.json`. Se puede comprobar abriendo `http://localhost:3000/materiasPrimas` en el navegador. Esta terminal tiene que quedar abierta mientras se usa la aplicación.
+Levanta la API provisional en `http://localhost:3000/` a partir de `db.json`. Solo hace falta para probar materias primas, productos, fórmulas, movimientos y producción mientras esos módulos no se migren al backend. No es necesario para registro, login ni gestión de cuentas.
 
-> Si el puerto 3000 está ocupado por otro programa, la API no va a levantar y la aplicación va a mostrar las tablas vacías o un error al iniciar sesión. Cerrá el programa que lo usa (o cambiá el puerto en el script `json-server` de `package.json` y en la URL de `src/environments/environment.ts` y `src/app/auth/services/auth.service.ts`).
+> Si el puerto 3000 está ocupado, fallarán las pantallas que todavía dependen de json-server. El registro, login y la gestión de cuentas usan Django en el puerto 8000.
 
 ### Terminal 2: aplicación Angular
 
@@ -268,19 +280,22 @@ http://localhost:4200/
 
 La aplicación se recarga automáticamente cuando se modifican archivos del frontend.
 
-### Usuarios de prueba
+### Backend Django y MySQL
 
-Los usuarios están definidos en la tabla `usuarios` de `db.json`:
+Seguí los pasos de instalación del backend anteriores, levantá MySQL, aplicá las migraciones y ejecutá `python manage.py runserver` desde `backend`. Actualmente, registro/login y gestión de cuentas se comunican con `http://localhost:8000/api/v1/`. Los endpoints de los otros módulos siguen pendientes.
 
-| Rol | Correo | Contraseña | Acceso |
-| --- | --- | --- | --- |
-| Administrador | `admin@correo.com` | `123456` | `/dashboard` |
-| Administrador | `rocio.altamirano@correo.com` | `123456` | `/dashboard` |
-| Operador | `genaro.cura@correo.com` | `abcabc` | `/user-panel` |
+### Probar registro, login y alta de operarios
 
-El usuario `cesia.caceres@correo.com` está inactivo y no puede iniciar sesión. Al iniciar sesión, cada rol es redirigido a su panel.
+El login y las cuentas usan MySQL, no los usuarios hardcodeados de `db.json`. Con Django/MySQL y Angular iniciados:
 
-### Restaurar los datos de prueba
+1. Abrí `http://localhost:4200/registro` y creá una cuenta con un email único. El registro público asigna siempre `ADMIN`.
+2. Iniciá sesión en `http://localhost:4200/login`; el administrador llega al dashboard.
+3. Desde **Gestión de usuarios**, creá un operario con nombre, apellido, email único y contraseña inicial.
+4. Cerrá sesión e iniciá con el operario para comprobar que llega al panel de producción.
+
+Las contraseñas deben cumplir los validadores de Django (mínimo 8 caracteres). Las cuentas se almacenan en MySQL. Los demás módulos aún guardan datos temporales en `db.json`; su conexión real a Django/MySQL es trabajo pendiente.
+
+### Restablecer los datos temporales de json-server
 
 Como la API guarda los cambios en `db.json`, después de probar la aplicación se pueden descartar con:
 
@@ -316,7 +331,7 @@ Todos los endpoints están bajo la URL base:
 http://localhost:8000/api/v1/
 ```
 
-Abrí en el navegador `http://localhost:8000/api/v1/productos/` (o ejecutá `curl http://localhost:8000/api/v1/productos/`). Por ahora los endpoints no están implementados, así que la respuesta esperada es un `501` con este cuerpo:
+Abrí en el navegador `http://localhost:8000/api/v1/productos/` (o ejecutá `curl http://localhost:8000/api/v1/productos/`). Actualmente responde `501` porque el endpoint todavía no está implementado; esto confirma que Django responde, pero no que el módulo de productos esté integrado:
 
 ```json
 { "detail": "El endpoint GET /api/v1/productos/ todavía no está implementado.", "code": "not_implemented" }
@@ -361,6 +376,7 @@ Rutas públicas:
 - `/`: página de inicio.
 - `/about-us`: información del equipo.
 - `/login`: inicio de sesión.
+- `/registro`: registro público de una cuenta `ADMIN`.
 
 Rutas del administrador (requieren rol `ADMIN`):
 

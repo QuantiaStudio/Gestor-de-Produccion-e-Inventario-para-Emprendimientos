@@ -1,86 +1,61 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+
+import { environment } from '../../environments/environment';
+import { DatosUsuarioApi } from '../auth/models/usuario-autenticado';
 import { User, CreateUserDTO, UpdateUserDTO } from '../models/user/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private users: User[] = [
-    {
-      id: 1,
-      firstName: 'Genaro',
-      lastName: 'Cura',
-      email: 'genaro.cura@quantia.com',
-      role: 'Administrator',
-      isActive: true
-    },
-    {
-      id: 2,
-      firstName: 'Rocío',
-      lastName: 'Altamirano',
-      email: 'rocio.altamirano@quantia.com',
-      role: 'Operator',
-      isActive: true
-    },
-    {
-      id: 3,
-      firstName: 'Mauro',
-      lastName: 'Mendieta',
-      email: 'mauro.mendieta@quantia.com',
-      role: 'Operator',
-      isActive: true
-    },
-    {
-      id: 4,
-      firstName: 'Cesia',
-      lastName: 'Cáceres',
-      email: 'cesia.caceres@quantia.com',
-      role: 'Administrator',
-      isActive: true
-    },
-    {
-      id: 5,
-      firstName: 'Lautaro',
-      lastName: 'Villafañe',
-      email: 'lautaro.villafane@quantia.com',
-      role: 'Operator',
-      isActive: false
-    }
-  ];
+  private readonly usersUrl = `${environment.djangoApiUrl}/usuarios/`;
 
-  private usersSubject = new BehaviorSubject<User[]>([...this.users]);
+  private users: User[] = [];
+
+  private usersSubject = new BehaviorSubject<User[]>([]);
   public users$: Observable<User[]> = this.usersSubject.asObservable();
 
-  private currentUser: User = this.users[0];
+  constructor(private readonly http: HttpClient) {}
 
-  getUsers(): User[] {
-    return [...this.users];
+  getUsers(): Observable<User[]> {
+    return this.http.get<DatosUsuarioApi[]>(this.usersUrl).pipe(
+      map(usuarios => usuarios.map(usuario => this.mapUsuario(usuario))),
+      tap(usuarios => {
+        this.users = usuarios;
+        this.usersSubject.next([...usuarios]);
+      })
+    );
   }
 
   getUserById(id: number): User | undefined {
     return this.users.find(user => user.id === id);
   }
 
-  getCurrentUser(): User {
-    return this.currentUser;
+  createOperator(dto: CreateUserDTO): Observable<User> {
+    return this.http.post<DatosUsuarioApi>(this.usersUrl, {
+      nombre: dto.firstName.trim(),
+      apellido: dto.lastName.trim(),
+      email: dto.email.trim(),
+      contrasena: dto.password,
+    }).pipe(map(usuario => this.mapUsuario(usuario)));
   }
 
-  createUser(dto: CreateUserDTO): User {
-    const nextId = this.users.length > 0 ? Math.max(...this.users.map(u => u.id)) + 1 : 1;
-    const newUser: User = {
-      id: nextId,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      email: dto.email,
-      password: dto.password,
-      role: dto.role,
-      isActive: dto.isActive
-    };
-
-    this.users.push(newUser);
+  addCreatedUser(user: User): void {
+    this.users = [user, ...this.users.filter(existing => existing.id !== user.id)];
     this.usersSubject.next([...this.users]);
-    return newUser;
+  }
+
+  private mapUsuario(usuario: DatosUsuarioApi): User {
+    return {
+      id: usuario.id_usuario,
+      firstName: usuario.nombre,
+      lastName: usuario.apellido,
+      email: usuario.email,
+      role: usuario.rol === 'ADMIN' ? 'Administrator' : 'Operator',
+      isActive: usuario.estado,
+    };
   }
 
   updateUser(id: number, dto: UpdateUserDTO): User | null {
