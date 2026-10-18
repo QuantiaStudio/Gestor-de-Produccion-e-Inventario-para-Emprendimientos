@@ -72,6 +72,8 @@ class DetalleFormula(models.Model):
         db_table = 'detalle_formula'
         verbose_name = 'Detalle de fórmula'
         verbose_name_plural = 'Detalles de fórmula'
+        # Las líneas se devuelven en el orden en que se cargaron.
+        ordering = ['id_detalle_formula']
         # Una materia prima aparece una sola vez en la fórmula de cada producto.
         constraints = [
             models.UniqueConstraint(fields=['producto', 'materia_prima'], name='unique_materia_prima_por_producto'),

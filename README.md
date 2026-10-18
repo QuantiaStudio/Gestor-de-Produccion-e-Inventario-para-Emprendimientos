@@ -449,11 +449,44 @@ frontend/ProdManager/dist/prod-manager
 
 ## Pruebas
 
-Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine:
+### Frontend
+
+Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine (desde `frontend/ProdManager`):
 
 ```bash
 npm test
 ```
+
+Para correrlas una sola vez sin abrir una ventana del navegador, o para correr un solo archivo de pruebas:
+
+```bash
+npx ng test --watch=false --browsers=ChromeHeadless
+npx ng test --watch=false --browsers=ChromeHeadless --include=src/app/dashboard/admin/features/productos/new-product-form/new-product-form.component.spec.ts
+```
+
+### Backend
+
+Las pruebas del backend (desde `backend`, con el entorno virtual activo) no usan tu base de datos: Django crea una base aparte llamada `test_` + tu `DB_NAME` (por ejemplo `test_ProdManager`), la llena con las migraciones y los datos iniciales, y la borra al terminar.
+
+El usuario de MySQL necesita permiso para crear esa base. Se da **una sola vez**, como `root` (reemplazá `ProdManager` por tu `DB_NAME` si es otro):
+
+```bash
+# Con Docker (pide la contraseña de DB_ROOT_PASSWORD de tu .env)
+docker compose exec db mysql -u root -p -e "GRANT ALL PRIVILEGES ON \`test_ProdManager\`.* TO 'quantiauser'@'%';"
+```
+
+```sql
+-- Con MySQL instalado localmente
+GRANT ALL PRIVILEGES ON `test_ProdManager`.* TO 'quantiauser'@'localhost';
+```
+
+Después, para correr todas las pruebas:
+
+```bash
+python manage.py test
+```
+
+Si todo está bien, termina con `OK`. Si falla con `Access denied ... to database 'test_...'`, falta el permiso anterior. Para correr las de una sola app: `python manage.py test productos`.
 
 ## Estructura del frontend
 

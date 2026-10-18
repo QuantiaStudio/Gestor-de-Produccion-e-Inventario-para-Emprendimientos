@@ -260,7 +260,7 @@ CRUD estándar. La fórmula del producto viaja **anidada** en el campo `formula`
 | `id_categoria` | int | Sí | `400` si no existe |
 | `formula` | array | Sí en `POST` | Líneas de la receta (tabla siguiente). Al menos una |
 
-Cada línea de `formula` indica cuánta materia prima hace falta para **una unidad** del producto:
+Cada línea de `formula` indica cuánta materia prima hace falta para **una unidad** del producto. En las respuestas, las líneas vienen en el orden en que se enviaron:
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
