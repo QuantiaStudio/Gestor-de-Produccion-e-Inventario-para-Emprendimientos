@@ -1,11 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, MovimientoStockApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
+import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
-import { Observable, forkJoin, map, shareReplay, tap } from 'rxjs';
+import { Observable, map, shareReplay, tap } from 'rxjs';
 
+// La consulta (listado y detalle) ya se conecta al backend real de Django (TK-02-08).
+const DJANGO_LIST_URL = `${environment.djangoApiUrl}/materias-primas/`;
+
+// El alta, la edición y la eliminación de materias primas están postergadas para este
+// sprint (ver alcance de HU01), así que siguen apoyadas en la API de prueba hasta que
+// el backend las incorpore.
 const API_URL = `${environment.apiUrl}/materiasPrimas`;
-const MOVIMIENTOS_URL = `${environment.apiUrl}/movimientosStockMateriaPrima`;
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +20,8 @@ export class MateriaPrimaService {
   readonly materiasPrimas$: Observable<MateriaPrima[]>;
 
   constructor(private http: HttpClient) {
-    this.materiasPrimas$ = forkJoin({
-      materias: this.http.get<MateriaPrimaApi[]>(API_URL),
-      movimientos: this.http.get<MovimientoStockApi[]>(MOVIMIENTOS_URL),
-    }).pipe(
-      map(({ materias, movimientos }) => materias.map(mp => this.mapearDesdeApi(mp, movimientos))),
+    this.materiasPrimas$ = this.http.get<MateriaPrimaApi[]>(DJANGO_LIST_URL).pipe(
+      map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
       tap(materias => {
         this.materiasPrimas = materias;
       }),
@@ -27,26 +29,24 @@ export class MateriaPrimaService {
     );
   }
 
-  private mapearDesdeApi(mp: MateriaPrimaApi, movimientos: MovimientoStockApi[]): MateriaPrima {
+  private mapearDesdeApi(mp: MateriaPrimaApi): MateriaPrima {
+    // Django (DRF) serializa los campos Decimal como string (ej. "120.00") para no
+    // perder precisión; hay que convertirlos a number antes de compararlos.
+    const stockActual = Number(mp.stock_actual);
+    const stockMinimo = Number(mp.stock_minimo);
+
     return {
-      id: String(mp.id_materia_prima),
+      id: String(mp.id),
       nombre: mp.nombre,
       descripcion: mp.descripcion,
       unidadMedida: mp.unidad_medida,
-      stockTotal: mp.stock_actual,
-      stockDisponible: mp.stock_actual,
-      stockMinimo: mp.stock_minimo,
-      estado: this.calcularEstado(mp.stock_actual, mp.stock_minimo),
-      ultimaActualizacion: this.ultimaFechaDeMovimiento(mp.id_materia_prima, movimientos),
+      stockTotal: stockActual,
+      stockDisponible: stockActual,
+      stockMinimo: stockMinimo,
+      estado: this.calcularEstado(stockActual, stockMinimo),
+      // El backend todavía no expone un endpoint de movimientos de materia prima.
+      ultimaActualizacion: '',
     };
-  }
-
-  private ultimaFechaDeMovimiento(idMateriaPrima: number, movimientos: MovimientoStockApi[]): string {
-    const fechas = movimientos
-      .filter(m => m.id_materia_prima === idMateriaPrima)
-      .map(m => new Date(m.fecha).getTime());
-    if (fechas.length === 0) return '';
-    return new Date(Math.max(...fechas)).toLocaleDateString('es-AR');
   }
 
   obtenerMateriasPrimas(): MateriaPrima[] {

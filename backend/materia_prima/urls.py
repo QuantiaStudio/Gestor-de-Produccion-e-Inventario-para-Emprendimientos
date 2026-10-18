@@ -8,8 +8,8 @@ from .views import (
 )
 
 urlpatterns = [
-    path('materias-primas/', MateriaPrimaListView.as_view(), name='materia-prima-list'),
-    path('materias-primas/<int:pk>/', MateriaPrimaDetailView.as_view(), name='materia-prima-detail'),
+    path('', MateriaPrimaListView.as_view(), name='materia-prima-list'),
+    path('<int:pk>/', MateriaPrimaDetailView.as_view(), name='materia-prima-detail'),
     path(
         'movimientos-materia-prima/',
         MovimientoStockMateriaPrimaListView.as_view(),
