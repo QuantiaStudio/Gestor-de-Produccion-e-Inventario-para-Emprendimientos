@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import URLValidator
+from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -89,3 +90,11 @@ class ProductoSerializer(serializers.ModelSerializer):
                 {'stock_maximo': 'El stock máximo no puede ser menor que el stock mínimo.'}
             )
         return datos
+
+    @transaction.atomic
+    def create(self, datos):
+        # El producto y su fórmula se guardan juntos: si falla alguna línea no queda nada guardado.
+        lineas = datos.pop('formula')
+        producto = Producto.objects.create(**datos)
+        DetalleFormula.objects.bulk_create(DetalleFormula(producto=producto, **linea) for linea in lineas)
+        return producto

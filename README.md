@@ -10,7 +10,7 @@ Este repositorio contiene:
 
 - `frontend/ProdManager`: aplicación principal desarrollada con Angular 17.
 - `maqueta`: prototipo HTML/CSS inicial utilizado como base visual del proyecto.
-- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. El registro, el login y la gestión básica de cuentas están conectados; los endpoints de los módulos de negocio siguen pendientes. El contrato está en [`backend/API.md`](backend/API.md).
+- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. Tiene definidos los modelos, las migraciones y las rutas; los endpoints se van implementando de a poco y los que todavía no están responden `501 Not Implemented`. El registro, el login y la gestión básica de cuentas ya están conectados. El contrato de la API está en [`backend/API.md`](backend/API.md), y la columna *Implementado* de su resumen de rutas indica cuáles ya funcionan.
 
 ## Estado de integración
 

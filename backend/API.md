@@ -69,7 +69,8 @@ Todas las respuestas de error tienen la misma forma:
 ```
 
 - `detail` y `code` están **siempre**.
-- `errors` aparece **solo en `400`**, con los mensajes por campo. Los errores que no son de un campo van en `non_field_errors`.
+- `errors` aparece **solo en los `400` por datos inválidos** (`"code": "invalid"`), con los mensajes por campo. Los errores que no son de un campo van en `non_field_errors`.
+- Un `400` por JSON mal formado no trae `errors`: `{ "detail": "JSON parse error - ...", "code": "parse_error" }`.
 
 Ejemplos:
 
@@ -94,7 +95,7 @@ Ejemplos:
 { "detail": "El endpoint GET /api/v1/productos/ todavía no está implementado.", "code": "not_implemented" }
 ```
 
-Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed`, `inactive_user`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
+Valores de `code` usados: `invalid`, `parse_error`, `not_authenticated`, `authentication_failed`, `inactive_user`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
 
 ---
 
@@ -476,7 +477,7 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 | `/materias-primas/`, `/materias-primas/{id}/` | CRUD | — |
 | `/movimientos-materia-prima/`, `/movimientos-materia-prima/{id}/` | `GET`, `POST` | — |
 | `/categorias/`, `/categorias/{id}/` | CRUD | — |
-| `/productos/`, `/productos/{id}/` | CRUD | `DELETE /productos/{id}/` |
+| `/productos/`, `/productos/{id}/` | CRUD | `POST /productos/`, `DELETE /productos/{id}/` |
 | `/detalles-formula/`, `/detalles-formula/{id}/` | CRUD | — |
 | `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` | — |
 | `/estados/`, `/estados/{id}/` | CRUD | — |
