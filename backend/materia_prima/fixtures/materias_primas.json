@@ -1,0 +1,57 @@
+[
+  {
+    "model": "materia_prima.materiaprima",
+    "pk": 1,
+    "fields": {
+      "nombre": "Madera de Roble",
+      "descripcion": "Madera dura de alta calidad para muebles estructurales.",
+      "unidad_medida": "unidad",
+      "stock_actual": "28.000",
+      "stock_minimo": "8.000"
+    }
+  },
+  {
+    "model": "materia_prima.materiaprima",
+    "pk": 2,
+    "fields": {
+      "nombre": "Pintura Blanca",
+      "descripcion": "Pintura blanca mate para acabado de superficies.",
+      "unidad_medida": "L",
+      "stock_actual": "15.000",
+      "stock_minimo": "20.000"
+    }
+  },
+  {
+    "model": "materia_prima.materiaprima",
+    "pk": 3,
+    "fields": {
+      "nombre": "Tornillos 3mm",
+      "descripcion": "Tornillos de acero de 3mm para ensamblaje general.",
+      "unidad_medida": "u",
+      "stock_actual": "1800.000",
+      "stock_minimo": "500.000"
+    }
+  },
+  {
+    "model": "materia_prima.materiaprima",
+    "pk": 4,
+    "fields": {
+      "nombre": "Barniz Transparente",
+      "descripcion": "Barniz transparente brillante para protección de madera.",
+      "unidad_medida": "L",
+      "stock_actual": "3.000",
+      "stock_minimo": "10.000"
+    }
+  },
+  {
+    "model": "materia_prima.materiaprima",
+    "pk": 5,
+    "fields": {
+      "nombre": "Contrachapado 18mm",
+      "descripcion": "Planchas de contrachapado de 18mm para estructuras.",
+      "unidad_medida": "planchas",
+      "stock_actual": "45.000",
+      "stock_minimo": "15.000"
+    }
+  }
+]
