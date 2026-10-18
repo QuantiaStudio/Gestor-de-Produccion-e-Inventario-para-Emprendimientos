@@ -32,3 +32,11 @@
 .error-message { margin-top: 0.35rem; color: var(--color-error); font-size: 0.8rem; }
 .btn-login { width: 100%; margin-top: 0.5rem; }
 .register-link { margin: 1.25rem 0 0; text-align: center; font-size: 0.9rem; }
+.register-link a {
+  color: var(--color-brand);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.register-link a:hover { color: var(--primary-color); text-decoration: underline; }
+.register-link a:focus-visible { border-radius: 2px; outline: 2px solid var(--color-brand); outline-offset: 3px; }
