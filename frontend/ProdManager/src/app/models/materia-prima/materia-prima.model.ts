@@ -15,6 +15,16 @@ export interface MateriaPrimaApi {
   stock_minimo: string;
 }
 
+/** Materia prima tal como la devuelve el backend Django (backend/API.md §6.1). Los decimales vienen como string. */
+export interface MateriaPrimaBackendDTO {
+  id_materia_prima: number;
+  nombre: string;
+  descripcion: string;
+  unidad_medida: string;
+  stock_actual: string;
+  stock_minimo: string;
+}
+
 export interface MateriaPrima {
   id: string;
   nombre: string;

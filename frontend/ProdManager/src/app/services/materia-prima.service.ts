@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
+import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, MateriaPrimaBackendDTO, MovimientoStockApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
 import { Observable, map, shareReplay, tap } from 'rxjs';
 
@@ -11,6 +11,8 @@ const DJANGO_LIST_URL = `${environment.djangoApiUrl}/materias-primas/`;
 // sprint (ver alcance de HU01), así que siguen apoyadas en la API de prueba hasta que
 // el backend las incorpore.
 const API_URL = `${environment.apiUrl}/materiasPrimas`;
+const MOVIMIENTOS_URL = `${environment.apiUrl}/movimientosStockMateriaPrima`;
+const BACKEND_MATERIAS_PRIMAS_URL = `${environment.djangoApiUrl}/materias-primas/`;
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +58,14 @@ export class MateriaPrimaService {
   obtenerMateriasPrimas$(): Observable<MateriaPrima[]> {
     return this.materiasPrimas$;
   }
+
+  /** Materias primas del inventario del backend Django, para armar la fórmula de un producto nuevo. */
+  obtenerMateriasPrimasDelBackend$(): Observable<MateriaPrima[]> {
+    return this.http.get<MateriaPrimaApi[]>(DJANGO_LIST_URL).pipe(
+      map(materias => materias.map(mp => this.mapearDesdeApi(mp)))
+    );
+  }
+
 
   obtenerPorId(id: string): MateriaPrima | undefined {
     return this.materiasPrimas.find(mp => mp.id === id);

@@ -20,8 +20,8 @@ El objetivo del proyecto es que Angular use Django REST Framework y que los dato
 |---|---|
 | Registro público de administradores, login y tokens | Conectado a Django/MySQL |
 | Listado y alta de operarios desde el panel administrador | Conectado a Django/MySQL |
-| Materias primas y movimientos de stock | Angular todavía usa json-server y `db.json`; el endpoint Django responde `501` |
-| Productos, fórmulas e inventario | Angular todavía usa json-server y `db.json`; los endpoints Django responden `501` |
+| Materias primas y movimientos de stock | El listado se consulta en Django/MySQL; los movimientos de stock y la edición todavía usan json-server y `db.json` |
+| Productos, fórmulas e inventario | El alta de productos con su fórmula (con las categorías y materias primas de MySQL) y la eliminación usan Django/MySQL; el listado, la edición y el inventario todavía usan json-server y `db.json` |
 | Órdenes y detalles de producción | Angular todavía usa json-server y `db.json`; los endpoints Django responden `501` |
 
 `json-server` queda como soporte temporal para las pantallas pendientes de migración. No es la base de datos final ni significa que esos módulos ya estén conectados. Para completar la integración hay que implementar sus endpoints en Django y cambiar los servicios Angular para consumirlos; después se podrá retirar `json-server` y `db.json`.
@@ -283,7 +283,7 @@ El comando pide email, nombre, apellido y contraseña. El usuario se crea con ro
 
 ## Ejecución en desarrollo (frontend)
 
-La aplicación puede necesitar **tres procesos abiertos al mismo tiempo**: json-server para las pantallas aún no migradas, Django con MySQL para registro/autenticación/cuentas, y Angular. Para trabajar solo con registro/login y cuentas, no hace falta iniciar json-server. Para usar las pantallas pendientes de migración, sí.
+La aplicación puede necesitar **tres procesos abiertos al mismo tiempo**: json-server para las pantallas aún no migradas, Django con MySQL para registro/autenticación/cuentas y el alta de productos, y Angular. Para trabajar solo con registro/login y cuentas, no hace falta iniciar json-server. Para usar las pantallas pendientes de migración, sí.
 
 ### Terminal opcional: módulos todavía conectados a json-server
 
@@ -311,7 +311,15 @@ La aplicación se recarga automáticamente cuando se modifican archivos del fron
 
 ### Backend Django y MySQL
 
-Seguí los pasos de instalación del backend anteriores, levantá MySQL, aplicá las migraciones y ejecutá `python manage.py runserver` desde `backend`. Actualmente, registro/login y gestión de cuentas se comunican con `http://localhost:8000/api/v1/`. Los endpoints de los otros módulos siguen pendientes.
+Seguí los pasos de instalación del backend anteriores, levantá MySQL, aplicá las migraciones y ejecutá `python manage.py runserver` desde `backend` (ver [Ejecución del backend](#ejecución-del-backend)). Actualmente, registro/login, gestión de cuentas y el alta de productos se comunican con `http://localhost:8000/api/v1/` (configurado como `djangoApiUrl` en `src/environments/environment.ts`). Los endpoints de los otros módulos siguen pendientes.
+
+Para que el navegador pueda llamar al backend, `backend/.env` tiene que incluir la variable `CORS_ALLOWED_ORIGINS` con el origen de Angular (ya viene en `.env.example`; si tu `.env` es anterior, agregala y reiniciá el backend):
+
+```text
+CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
+```
+
+> Los productos creados se guardan en MySQL. Hasta que se migre el listado, no aparecen en la tabla de productos terminados, que todavía lee `db.json`.
 
 ### Probar registro, login y alta de operarios
 
@@ -396,7 +404,9 @@ Si ves esa respuesta, el backend está funcionando correctamente. La lista compl
 | `Can't connect to MySQL server on '127.0.0.1'` | MySQL no está corriendo. Abrí Docker y ejecutá `docker compose up -d`, o iniciá tu servicio local. Si recién lo levantaste, esperá unos segundos. |
 | `docker compose up` falla porque el puerto `3306` está ocupado | Ya tenés otro MySQL corriendo en ese puerto. Detenelo, o cambiá `DB_PORT` en `.env` (por ejemplo a `3307`) y volvé a ejecutar `docker compose up -d`. |
 | `Access denied for user 'quantiauser'` | Los datos de `.env` no coinciden con los de la base. Con Docker, esto pasa si cambiaste `.env` después de crear el contenedor: la base se crea una sola vez. Ejecutá `docker compose down -v` (**borra todos los datos de la base**), luego `docker compose up -d` y `python manage.py migrate`. |
-| `Error: That port is already in use` al ejecutar `runserver` | Otro programa usa el puerto 8000. Cerralo o usá otro puerto: `python manage.py runserver 8001`. |
+| `Error: That port is already in use` al ejecutar `runserver` | Otro programa usa el puerto 8000. Cerralo o usá otro puerto: `python manage.py runserver 8001` (y cambiá `djangoApiUrl` en `frontend/ProdManager/src/environments/environment.ts`). |
+| Al crear un producto aparece "No se pudo conectar con el servidor" | El backend no está corriendo, o el navegador bloqueó el pedido por CORS (en la consola del navegador aparece un error que menciona `CORS`). Levantá el backend y revisá que `backend/.env` tenga `CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200`; después de cambiar `.env`, reiniciá `runserver`. |
+| El formulario de alta muestra las listas de categorías y materiales vacías | Faltan los datos iniciales en MySQL. Cargalos con el [paso 7](#7-cargar-los-datos-iniciales). |
 | `loaddata` falla con `Table ... doesn't exist` o `Unknown column` | Faltan migraciones por aplicar. Ejecutá `python manage.py migrate` y repetí el [paso 7](#7-cargar-los-datos-iniciales). |
 | `loaddata` dice `No fixture named 'categorias'` | El comando no se ejecutó dentro de la carpeta `backend`, o falta hacer `git pull`. |
 
