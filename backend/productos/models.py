@@ -24,11 +24,17 @@ class EstadoProducto(models.TextChoices):
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
+    codigo = models.CharField(max_length=20, unique=True)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField(blank=True)
     precio = models.DecimalField(max_digits=12, decimal_places=2)
     estado = models.CharField(max_length=20, choices=EstadoProducto.choices, default=EstadoProducto.ACTIVO)
     stock_actual = models.DecimalField(max_digits=12, decimal_places=3, default=0)
+    stock_minimo = models.DecimalField(max_digits=12, decimal_places=3, default=0)
+    # null = sin tope de stock.
+    stock_maximo = models.DecimalField(max_digits=12, decimal_places=3, null=True, blank=True)
+    # Referencia a la imagen (ruta de assets del frontend o URL), no el archivo.
+    imagen = models.CharField(max_length=255, blank=True)
     categoria = models.ForeignKey(
         Categoria,
         on_delete=models.PROTECT,
@@ -66,6 +72,10 @@ class DetalleFormula(models.Model):
         db_table = 'detalle_formula'
         verbose_name = 'Detalle de fórmula'
         verbose_name_plural = 'Detalles de fórmula'
+        # Una materia prima aparece una sola vez en la fórmula de cada producto.
+        constraints = [
+            models.UniqueConstraint(fields=['producto', 'materia_prima'], name='unique_materia_prima_por_producto'),
+        ]
 
     def __str__(self):
         return f'{self.producto}: {self.cantidad_necesaria} de {self.materia_prima}'
