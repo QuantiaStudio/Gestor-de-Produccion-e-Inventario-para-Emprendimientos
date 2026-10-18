@@ -233,7 +233,7 @@ def cargar_materias_primas(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("materia_prima", "0001_initial"),
+        ("materia_prima", "0002_initial"),
     ]
 
     operations = [
