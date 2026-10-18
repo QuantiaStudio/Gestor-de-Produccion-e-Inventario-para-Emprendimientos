@@ -1,5 +1,12 @@
 from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
+from django.db import transaction
+from django.db.models import ProtectedError
+from rest_framework import status
+from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
+from .models import EstadoProducto, Producto
 
+ESTADOS_ORDEN_ACTIVA = ['Pendiente', 'En Produccion']
 
 class CategoriaListView(ColeccionNoImplementada):
     pass
@@ -14,7 +21,42 @@ class ProductoListView(ColeccionNoImplementada):
 
 
 class ProductoDetailView(ElementoNoImplementado):
-    pass
+
+    def delete(self, request, pk):
+        producto = Producto.objects.filter(pk=pk).first()
+        if producto is None:
+            raise NotFound('El producto no existe.')
+
+        # RN-10 / HU09: no se elimina si tiene órdenes pendientes o en producción
+        tiene_ordenes_activas = producto.detalles_produccion.filter(
+            orden__estado__nombre__in=ESTADOS_ORDEN_ACTIVA
+        ).exists()
+
+        if tiene_ordenes_activas:
+            return Response(
+                {
+                    'detail': 'No se puede eliminar: el producto tiene órdenes de producción pendientes o en proceso.',
+                    'code': 'en_uso',
+                },
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        try:
+            with transaction.atomic():
+                producto.delete()  # la fórmula se borra sola (CASCADE)
+        except ProtectedError:
+            # RN-28: tiene historial (órdenes cerradas o movimientos), se da de baja lógica
+            producto.estado = EstadoProducto.INACTIVO
+            producto.save(update_fields=['estado'])
+            return Response(
+                {
+                    'detail': 'El producto tiene historial registrado, por lo que se desactivó en lugar de eliminarse.',
+                    'code': 'en_uso',
+                },
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class DetalleFormulaListView(ColeccionNoImplementada):
