@@ -7,9 +7,9 @@ import type { MateriaPrimaBackendDTO } from '../../../../../models/materia-prima
 import type { CategoriaBackendDTO, ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
 import { NewProductFormComponent } from './new-product-form.component';
 
-const URL_MATERIAS_PRIMAS = `${environment.backendUrl}/materias-primas/`;
-const URL_CATEGORIAS = `${environment.backendUrl}/categorias/`;
-const URL_PRODUCTOS = `${environment.backendUrl}/productos/`;
+const URL_MATERIAS_PRIMAS = `${environment.djangoApiUrl}/materias-primas/`;
+const URL_CATEGORIAS = `${environment.djangoApiUrl}/categorias/`;
+const URL_PRODUCTOS = `${environment.djangoApiUrl}/productos/`;
 
 const MATERIAS_PRIMAS: MateriaPrimaBackendDTO[] = [
   { id_materia_prima: 1, nombre: 'Madera de Roble', descripcion: '', unidad_medida: 'unidad', stock_actual: '28.000', stock_minimo: '8.000' },
