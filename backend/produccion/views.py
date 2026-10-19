@@ -11,7 +11,7 @@ from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
 
 from .models import DetalleOrdenProduccion, Estado, OrdenProduccion, ReservaMateriaPrima
 from .serializers import DetalleOrdenProduccionSerializer, OrdenProduccionSerializer
-from .servicios import calcular_disponibilidad
+from .servicios import calcular_disponibilidad, validar_disponibilidad_formula
 
 
 class EstadoOrden:
