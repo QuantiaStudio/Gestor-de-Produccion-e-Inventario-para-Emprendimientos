@@ -4,7 +4,7 @@ export interface CredencialesLogin {
 }
 
 export interface UsuarioAutenticado {
-  id: string;
+  id: number;
   nombre: string;
   apellido: string;
   email: string;
@@ -19,12 +19,23 @@ export interface RespuestaAutenticacion {
   token?: string
 };
 
-export interface UsuarioBD {
+export interface RespuestaLoginApi {
+  token: string;
+  usuario: {
+    id_usuario: number;
+    nombre: string;
+    apellido: string;
+    email: string;
+    rol: string;
+    estado: boolean;
+  };
+}
+
+export interface DatosUsuarioApi {
   id_usuario: number;
   nombre: string;
   apellido: string;
   email: string;
-  contrasena: string;
   rol: string;
   estado: boolean;
 }

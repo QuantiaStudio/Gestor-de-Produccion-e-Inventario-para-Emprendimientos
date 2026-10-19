@@ -1,7 +1,7 @@
 <div class="row body">
   <div class="col-12 user-management-col">
     <div class="user-content">
-      
+
       @if (toastMessage) {
         <div class="custom-toast" [ngClass]="toastType === 'success' ? 'toast-success' : 'toast-danger'">
           <div class="toast-indicator"></div>
@@ -152,7 +152,6 @@
                         </div>
                         <div class="user-cell-details">
                           <span class="user-full-name">{{ user.firstName }} {{ user.lastName }}</span>
-                          <small class="text-muted">ID: #{{ user.id }}</small>
                         </div>
                       </div>
                     </td>
@@ -285,11 +284,11 @@
                 type="password"
                 class="form-control-custom"
                 formControlName="password"
-                placeholder="Mínimo 6 caracteres"
+                [placeholder]="isEditMode ? 'Dejar en blanco para mantener' : 'Mínimo 8 caracteres'"
                 [class.is-invalid]="userForm.get('password')?.invalid && userForm.get('password')?.touched"
               />
               @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
-                <div class="form-error-msg">La contraseña debe tener al menos 6 caracteres.</div>
+                <div class="form-error-msg">{{ isEditMode ? 'La contraseña debe tener al menos 6 caracteres.' : 'La contraseña debe tener al menos 8 caracteres.' }}</div>
               }
             </div>
 
@@ -318,8 +317,8 @@
 
         <div class="modal-footer-custom">
           <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancelar</button>
-          <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
-            {{ isEditMode ? 'Guardar Cambios' : 'Registrar Cuenta' }}
+          <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid || isSaving">
+            {{ isSaving ? 'Guardando...' : (isEditMode ? 'Guardar Cambios' : 'Registrar Cuenta') }}
           </button>
         </div>
       </form>

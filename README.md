@@ -47,55 +47,361 @@ Backend:
 - Django REST Framework
 - MySQL 8.0 (con Docker o instalado localmente)
 
-## Instalar e iniciar la aplicación
+## Requisitos previos
 
-Estos pasos son para Windows y se ejecutan desde PowerShell. Instalá previamente **Git**, **Node.js 18 o superior**, **Python 3.10 o superior** y **Docker Desktop**; abrí Docker Desktop y esperá a que esté iniciado.
+Antes de instalar el proyecto, asegurate de tener instalado:
 
-### Primera vez
+- Node.js 18 o superior compatible con Angular 17.
+- npm.
+- Git, si vas a clonar el repositorio desde GitHub.
+- Python 3.10 o superior (para el backend).
+- Docker Desktop (Windows/macOS) o Docker Engine con el plugin Docker Compose (Linux), si vas a levantar MySQL con Docker. Si no, un servidor MySQL 8 instalado localmente.
 
-Cloná el proyecto y prepará el frontend:
+Para comprobar las versiones instaladas:
 
-```powershell
+```bash
+node -v
+npm -v
+git --version
+python --version     # en Linux/macOS puede ser: python3 --version
+docker --version
+docker compose version
+```
+
+## Instalación
+
+La instalación del proyecto y sus dependencias se realizará en dos partes. Una para el frontend y otra para el backend.
+
+## 1. Clonar el repositorio
+
+```bash
 git clone https://github.com/QuantiaStudio/Gestor-de-Produccion-e-Inventario-para-Emprendimientos.git
 cd Gestor-de-Produccion-e-Inventario-para-Emprendimientos
-cd frontend\ProdManager
+```
+
+## Dependencias del Frontend
+
+### 1. Ingresar al proyecto Angular
+
+```bash
+cd frontend/ProdManager
+```
+
+### 2. Instalar dependencias
+
+```bash
 npm install
 ```
 
-Prepará el backend y la base de datos:
+Este comando instala también `json-server`, que se mantiene temporalmente para las pantallas todavía no migradas a Django.
 
-```powershell
-cd ..\..\backend
+Si querés instalar exactamente las versiones registradas en `package-lock.json`, podés usar:
+
+```bash
+npm ci
+```
+
+## Dependencias del Backend
+
+El backend está desarrollado con Django y usa MySQL como única base de datos. Para la base de datos podés elegir entre levantarla con Docker (recomendado, no requiere instalar MySQL en tu máquina) o usar un servidor MySQL instalado localmente.
+
+Necesitás tener instalado Python 3.10 o superior, y si vas a usar la opción de Docker, también Docker y Docker Compose.
+
+### 1. Ingresar a la carpeta del backend
+
+Desde la raíz del repositorio:
+
+```bash
+cd backend
+```
+- Todos los comandos de esta sección se ejecutan **dentro de la carpeta `backend`**, salvo que se indique otra cosa.
+- Si venís de instalar el frontend y seguís en `frontend/ProdManager`, primero volvé a la raíz con `cd ../..`.
+
+### 2. Crear y activar un entorno virtual
+
+El entorno virtual (`.venv`) es una carpeta donde se instalan las librerías de Python del proyecto, separadas del resto del sistema. Se crea **una sola vez**:
+
+```bash
+# Windows
 python -m venv .venv
+
+# Linux / macOS
+python3 -m venv .venv
+```
+
+Después hay que **activarlo**. Esto se hace **cada vez que abrís una terminal nueva** para trabajar con el backend:
+
+```bash
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+
+# Windows (CMD)
+.venv\Scripts\activate.bat
+
+# Linux / macOS
+source .venv/bin/activate
+```
+
+Cuando el entorno está activo, la terminal muestra `(.venv)` al principio de la línea. A partir de acá, con el entorno activo, `python` y `pip` usan el Python del entorno (también en Linux/macOS).
+
+> En PowerShell, si aparece un error que dice que la ejecución de scripts está deshabilitada, ejecutá una vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` y volvé a intentar.
+
+### 3. Instalar dependencias
+
+Con el entorno virtual activo:
+
+```bash
+pip install -r requirements.txt
+```
+
+> **Linux:** el paquete `mysqlclient` se compila durante la instalación y necesita algunas librerías del sistema. Si `pip install` falla con un error relacionado a `mysqlclient` o `pkg-config`, instalalas y repetí el comando:
+>
+> ```bash
+> # Ubuntu / Debian
+> sudo apt install python3-dev default-libmysqlclient-dev build-essential pkg-config
+> ```
+>
+> En macOS: `brew install mysql-client pkg-config`. En Windows normalmente no hace falta nada extra.
+
+### 4. Configurar las variables de entorno
+
+El backend lee su configuración (datos de conexión a la base, modo debug, etc.) desde un archivo `.env`. Este archivo **no se sube a Git**, así que cada integrante tiene que crear el suyo copiando la plantilla `.env.example`:
+
+```bash
+# Windows (PowerShell)
 Copy-Item .env.example .env
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-docker compose up -d
+
+# Windows (CMD)
+copy .env.example .env
+
+# Linux / macOS
+cp .env.example .env
 ```
 
-Esperá unos segundos a que MySQL termine de iniciar y creá las tablas:
+Si vas a usar Docker (opción A del paso siguiente), los valores de la plantilla ya funcionan y no hace falta cambiar nada. Qué significa cada variable:
 
-```powershell
-.\.venv\Scripts\python.exe manage.py migrate
+| Variable | Para qué sirve |
+| --- | --- |
+| `DEBUG` | `True` en desarrollo: muestra errores detallados. |
+| `SECRET_KEY` | Clave interna de Django. En desarrollo puede quedar la de ejemplo. |
+| `ALLOWED_HOSTS` | Hosts desde los que se acepta el servidor (`localhost,127.0.0.1`). |
+| `CORS_ALLOWED_ORIGINS` | Orígenes del navegador que pueden consumir la API (el frontend Angular en el puerto 4200). |
+| `DB_NAME` | Nombre de la base de datos. |
+| `DB_USER` / `DB_PASSWORD` | Usuario y contraseña con los que Django se conecta a MySQL. |
+| `DB_ROOT_PASSWORD` | Contraseña del usuario `root` de MySQL. Solo la usa Docker al crear la base. |
+| `DB_HOST` / `DB_PORT` | Dirección y puerto de MySQL (`127.0.0.1` y `3306`). |
+
+### 5. Levantar la base de datos
+
+Elegí una de las dos opciones:
+
+**Opción A: MySQL con Docker (recomendada)**
+
+1. Abrí Docker Desktop y esperá a que diga que está corriendo (en Linux, el servicio de Docker tiene que estar activo).
+2. Desde la carpeta `backend` (donde están `docker-compose.yml` y `.env`):
+
+   ```bash
+   docker compose up -d
+   ```
+
+   La primera vez descarga la imagen de MySQL y crea la base de datos y el usuario con los datos del `.env`. `-d` hace que quede corriendo en segundo plano.
+
+3. Comprobá que el contenedor `mysql_django` esté en estado `running` (o `Up`):
+
+   ```bash
+   docker compose ps
+   ```
+
+   La primera vez MySQL tarda unos 20 a 30 segundos en estar listo para recibir conexiones. Si el paso 6 falla con un error de conexión justo después de levantarlo, esperá un poco y volvé a intentar.
+
+> Si tenés una versión vieja de Docker, el comando puede ser `docker-compose` (con guion) en lugar de `docker compose`.
+
+**Opción B: MySQL instalado localmente**
+
+Asegurate de que el servicio de MySQL esté corriendo. Después entrá a MySQL como `root` (por ejemplo con `mysql -u root -p`, o desde MySQL Workbench) y creá la base de datos y el usuario con los mismos valores de `DB_NAME`, `DB_USER` y `DB_PASSWORD` de tu `.env`:
+
+```sql
+CREATE DATABASE ProdManager CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'quantiauser'@'localhost' IDENTIFIED BY 'djangopassword';
+GRANT ALL PRIVILEGES ON ProdManager.* TO 'quantiauser'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
-### Cada vez que quieras usar la aplicación
+Si preferís usar una base o un usuario que ya tenés, editá `.env` para que coincida con tu instalación. En esta opción `DB_ROOT_PASSWORD` no se usa.
 
-Dejá abiertas dos ventanas de PowerShell. En la primera, iniciá el servidor y la base de datos:
+### 6. Aplicar las migraciones
 
-```powershell
-cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\backend
-docker compose up -d
-.\.venv\Scripts\python.exe manage.py runserver
+Las migraciones crean en MySQL todas las tablas del proyecto (usuarios, materias primas, productos, órdenes, etc.) y cargan los estados de producción iniciales (Pendiente, En Produccion, Finalizada, Cancelada) y las 30 materias primas iniciales (ver `backend/README.md`):
+
+```bash
+python manage.py migrate
 ```
 
-En la segunda, iniciá la aplicación web:
+Si todo salió bien, vas a ver una lista de líneas terminadas en `OK`. Este paso se repite cada vez que alguien del equipo agregue migraciones nuevas (después de hacer `git pull`).
 
-```powershell
-cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\frontend\ProdManager
+### 7. Cargar los datos iniciales
+
+Después de las migraciones la base todavía no tiene categorías, y sin ellas no se puede crear un producto con su fórmula. El repositorio incluye las categorías tomadas de `frontend/ProdManager/db.json` en `productos/fixtures/categorias.json` (8 categorías: Mesas, Bibliotecas, Escritorios, …). Las materias primas no hace falta cargarlas: las agrega la migración `materia_prima/migrations/0002_cargar_materias_primas.py` en el paso 6.
+
+Con el entorno virtual activo y las migraciones aplicadas (paso 6):
+
+```bash
+python manage.py loaddata categorias
+```
+
+Si salió bien, vas a ver `Installed 8 object(s) from 1 fixture(s)`. Para comprobar qué quedó cargado:
+
+```bash
+python manage.py shell -c "from productos.models import Categoria; from materia_prima.models import MateriaPrima; print(Categoria.objects.count(), 'categorias,', MateriaPrima.objects.count(), 'materias primas')"
+```
+
+En una base nueva, la última línea tiene que decir `8 categorias, 30 materias primas`.
+
+A tener en cuenta:
+
+- Las categorías se cargan con **los mismos ids que en `db.json`**, para que coincidan con lo que muestra la aplicación mientras convivan json-server y el backend.
+- Se puede **volver a ejecutar sin duplicar nada**: cada categoría se identifica por su id. Si modificaste alguna, vuelve a los valores del archivo; lo demás (productos, fórmulas, otras filas) no se toca.
+- El stock de las materias primas se carga directamente como punto de partida. De ahí en adelante solo cambia registrando movimientos (ver `API.md`, §6.2).
+
+### 8. Crear un usuario administrador (opcional)
+
+Podés crear la cuenta desde el formulario público de la aplicación, que asigna el rol `ADMIN`, o crearla desde Django:
+
+```bash
+python manage.py createsuperuser
+```
+
+El comando pide email, nombre, apellido y contraseña. El usuario se crea con rol `ADMIN`.
+
+## Ejecución en desarrollo (frontend)
+
+La aplicación puede necesitar **tres procesos abiertos al mismo tiempo**: json-server para las pantallas aún no migradas, Django con MySQL para registro/autenticación/cuentas y el alta de productos, y Angular. Para trabajar solo con registro/login y cuentas, no hace falta iniciar json-server. Para usar las pantallas pendientes de migración, sí.
+
+### Terminal opcional: módulos todavía conectados a json-server
+
+```bash
+npm run json-server
+```
+
+Levanta la API provisional en `http://localhost:3000/` a partir de `db.json`. Solo hace falta para probar materias primas, productos, fórmulas, movimientos y producción mientras esos módulos no se migren al backend. No es necesario para registro, login ni gestión de cuentas.
+
+> Si el puerto 3000 está ocupado, fallarán las pantallas que todavía dependen de json-server. El registro, login y la gestión de cuentas usan Django en el puerto 8000.
+
+### Terminal 2: aplicación Angular
+
+```bash
 npm start
 ```
 
-Cuando la terminal indique que Angular está listo, abrí **http://localhost:4200** en el navegador. Dejá las tres ventanas abiertas mientras usás la aplicación. Para detenerla, presioná `Ctrl + C` en cada ventana.
+Este comando ejecuta `ng serve` y levanta la aplicación en:
+
+```text
+http://localhost:4200/
+```
+
+La aplicación se recarga automáticamente cuando se modifican archivos del frontend.
+
+### Backend Django y MySQL
+
+Seguí los pasos de instalación del backend anteriores, levantá MySQL, aplicá las migraciones y ejecutá `python manage.py runserver` desde `backend` (ver [Ejecución del backend](#ejecución-del-backend)). Actualmente, registro/login, gestión de cuentas y el alta de productos se comunican con `http://localhost:8000/api/v1/` (configurado como `djangoApiUrl` en `src/environments/environment.ts`). Los endpoints de los otros módulos siguen pendientes.
+
+Para que el navegador pueda llamar al backend, `backend/.env` tiene que incluir la variable `CORS_ALLOWED_ORIGINS` con el origen de Angular (ya viene en `.env.example`; si tu `.env` es anterior, agregala y reiniciá el backend):
+
+```text
+CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
+```
+
+> Los productos creados se guardan en MySQL. Hasta que se migre el listado, no aparecen en la tabla de productos terminados, que todavía lee `db.json`.
+
+### Probar registro, login y alta de operarios
+
+El login y las cuentas usan MySQL, no los usuarios hardcodeados de `db.json`. Con Django/MySQL y Angular iniciados:
+
+1. Abrí `http://localhost:4200/registro` y creá una cuenta con un email único. El registro público asigna siempre `ADMIN`.
+2. Iniciá sesión en `http://localhost:4200/login`; el administrador llega al dashboard.
+3. Desde **Gestión de usuarios**, creá un operario con nombre, apellido, email único y contraseña inicial.
+4. Cerrá sesión e iniciá con el operario para comprobar que llega al panel de producción.
+
+Las contraseñas deben cumplir los validadores de Django (mínimo 8 caracteres). Las cuentas se almacenan en MySQL. Los demás módulos aún guardan datos temporales en `db.json`; su conexión real a Django/MySQL es trabajo pendiente.
+
+### Restablecer los datos temporales de json-server
+
+Como la API guarda los cambios en `db.json`, después de probar la aplicación se pueden descartar con:
+
+```bash
+git checkout -- frontend/ProdManager/db.json
+```
+
+## Ejecución del backend
+
+Una vez completada la instalación del backend, cada vez que quieras levantar el servidor:
+
+1. Abrí una terminal en la carpeta `backend`.
+2. Activá el entorno virtual (ver [paso 2](#2-crear-y-activar-un-entorno-virtual)).
+3. Asegurate de que la base de datos esté corriendo. Con Docker:
+
+   ```bash
+   docker compose up -d
+   ```
+
+4. Iniciá el servidor de desarrollo de Django:
+
+   ```bash
+   python manage.py runserver
+   ```
+
+   Si arranca bien, vas a ver un mensaje como `Starting development server at http://127.0.0.1:8000/`. Esta terminal tiene que quedar abierta mientras uses la API, y el servidor se reinicia solo cuando se modifican archivos del backend.
+
+### Comprobar que la API responde
+
+Todos los endpoints están bajo la URL base:
+
+```text
+http://localhost:8000/api/v1/
+```
+
+Abrí en el navegador `http://localhost:8000/api/v1/productos/` (o ejecutá `curl http://localhost:8000/api/v1/productos/`). Actualmente responde `501` porque el endpoint todavía no está implementado; esto confirma que Django responde, pero no que el módulo de productos esté integrado:
+
+```json
+{ "detail": "El endpoint GET /api/v1/productos/ todavía no está implementado.", "code": "not_implemented" }
+```
+
+Si ves esa respuesta, el backend está funcionando correctamente. La lista completa de rutas, métodos, campos y códigos de respuesta está en [`backend/API.md`](backend/API.md).
+
+### Hacer peticiones con Postman
+
+1. Creá un *Environment* con la variable `base_url` = `http://localhost:8000/api/v1`.
+2. Creá una *Collection* y usá `{{base_url}}` en las URLs, por ejemplo `GET {{base_url}}/materias-primas/`.
+3. Para `POST`, `PUT` y `PATCH`, elegí *Body* → *raw* → *JSON* y enviá los datos con los nombres de campo de `API.md`. Por ejemplo, para `POST {{base_url}}/auth/login/`:
+
+   ```json
+   { "email": "admin@correo.com", "contrasena": "123456" }
+   ```
+
+> **Importante:** todas las rutas terminan en `/`. Un `GET` sin la barra final se redirige solo, pero un `POST`, `PUT` o `PATCH` sin la barra final devuelve un error `500`.
+
+### Detener el backend
+
+- Para frenar el servidor de Django: `Ctrl + C` en su terminal.
+- Para frenar MySQL en Docker (los datos se conservan): `docker compose stop`.
+- Para salir del entorno virtual: `deactivate`.
+
+### Problemas frecuentes
+
+| Problema | Solución |
+| --- | --- |
+| `python` no se reconoce como comando | En Linux/macOS usá `python3`. En Windows, reinstalá Python marcando la opción *Add Python to PATH*. |
+| `ModuleNotFoundError: No module named 'django'` | El entorno virtual no está activado. Activalo (paso 2) y volvé a intentar. |
+| `pip install` falla al instalar `mysqlclient` | Faltan las librerías del sistema. Ver la nota del [paso 3](#3-instalar-dependencias). |
+| `Can't connect to MySQL server on '127.0.0.1'` | MySQL no está corriendo. Abrí Docker y ejecutá `docker compose up -d`, o iniciá tu servicio local. Si recién lo levantaste, esperá unos segundos. |
+| `docker compose up` falla porque el puerto `3306` está ocupado | Ya tenés otro MySQL corriendo en ese puerto. Detenelo, o cambiá `DB_PORT` en `.env` (por ejemplo a `3307`) y volvé a ejecutar `docker compose up -d`. |
+| `Access denied for user 'quantiauser'` | Los datos de `.env` no coinciden con los de la base. Con Docker, esto pasa si cambiaste `.env` después de crear el contenedor: la base se crea una sola vez. Ejecutá `docker compose down -v` (**borra todos los datos de la base**), luego `docker compose up -d` y `python manage.py migrate`. |
+| `Error: That port is already in use` al ejecutar `runserver` | Otro programa usa el puerto 8000. Cerralo o usá otro puerto: `python manage.py runserver 8001` (y cambiá `djangoApiUrl` en `frontend/ProdManager/src/environments/environment.ts`). |
+| Al crear un producto aparece "No se pudo conectar con el servidor" | El backend no está corriendo, o el navegador bloqueó el pedido por CORS (en la consola del navegador aparece un error que menciona `CORS`). Levantá el backend y revisá que `backend/.env` tenga `CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200`; después de cambiar `.env`, reiniciá `runserver`. |
+| El formulario de alta muestra las listas de categorías o materiales vacías | Faltan los datos iniciales en MySQL. Si faltan las categorías, cargalas con el [paso 7](#7-cargar-los-datos-iniciales); si faltan las materias primas, aplicá las migraciones con el [paso 6](#6-aplicar-las-migraciones). |
+| `loaddata` falla con `Table ... doesn't exist` o `Unknown column` | Faltan migraciones por aplicar. Ejecutá `python manage.py migrate` y repetí el [paso 7](#7-cargar-los-datos-iniciales). |
+| `loaddata` dice `No fixture named 'categorias'` | El comando no se ejecutó dentro de la carpeta `backend`, o falta hacer `git pull`. |
+
 ## Rutas disponibles
 
 Rutas públicas:
@@ -132,6 +438,47 @@ Los archivos generados quedan dentro de:
 ```text
 frontend/ProdManager/dist/prod-manager
 ```
+
+## Pruebas
+
+### Frontend
+
+Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine (desde `frontend/ProdManager`):
+
+```bash
+npm test
+```
+
+Para correrlas una sola vez sin abrir una ventana del navegador, o para correr un solo archivo de pruebas:
+
+```bash
+npx ng test --watch=false --browsers=ChromeHeadless
+npx ng test --watch=false --browsers=ChromeHeadless --include=src/app/dashboard/admin/features/productos/new-product-form/new-product-form.component.spec.ts
+```
+
+### Backend
+
+Las pruebas del backend (desde `backend`, con el entorno virtual activo) no usan tu base de datos: Django crea una base aparte llamada `test_` + tu `DB_NAME` (por ejemplo `test_ProdManager`), la llena con las migraciones y los datos iniciales, y la borra al terminar.
+
+El usuario de MySQL necesita permiso para crear esa base. Se da **una sola vez**, como `root` (reemplazá `ProdManager` por tu `DB_NAME` si es otro):
+
+```bash
+# Con Docker (pide la contraseña de DB_ROOT_PASSWORD de tu .env)
+docker compose exec db mysql -u root -p -e "GRANT ALL PRIVILEGES ON \`test_ProdManager\`.* TO 'quantiauser'@'%';"
+```
+
+```sql
+-- Con MySQL instalado localmente
+GRANT ALL PRIVILEGES ON `test_ProdManager`.* TO 'quantiauser'@'localhost';
+```
+
+Después, para correr todas las pruebas:
+
+```bash
+python manage.py test
+```
+
+Si todo está bien, termina con `OK`. Si falla con `Access denied ... to database 'test_...'`, falta el permiso anterior. Para correr las de una sola app: `python manage.py test productos`.
 
 ## Estructura del frontend
 
@@ -175,7 +522,7 @@ backend/
 `-- requirements.txt
 ```
 
-Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`.
+Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`. `productos` tiene además `fixtures/`, con las categorías iniciales que se cargan con `loaddata` (ver [paso 7](#7-cargar-los-datos-iniciales)); las materias primas iniciales se cargan con una migración de `materia_prima`.
 
 ## Equipo de desarrollo
 

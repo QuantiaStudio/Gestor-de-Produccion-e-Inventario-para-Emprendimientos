@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, switchMap, tap, throwError } from 'rxjs';
+import { Observable, forkJoin, map, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/services/auth.service';
-import { ProductoTerminado, EstadoApiDTO } from '../models/producto/producto-terminado.model';
+import { ProductoTerminado } from '../models/producto/producto-terminado.model';
 import {
     CampoOrdenOrdenProduccion,
-    DetalleFormulaTablaApiDTO,
     DetalleOrdenProduccionApiDTO,
+    EstadoOrdenApiDTO,
     EstadoOrdenProduccion,
     FiltroOrdenProduccion,
     MaterialRequeridoOrden,
@@ -18,7 +18,6 @@ import {
     ProductoOrdenProduccion
 } from '../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminadoService } from './producto-terminado.service';
-import { MovimientoStockService } from './movimiento-stock.service';
 import { MateriaPrimaService } from './materia-prima.service';
 
 interface ItemFormula {
@@ -31,12 +30,9 @@ interface ItemFormula {
     providedIn: 'root'
 })
 export class ProduccionService {
-    private readonly ordenesUrl = `${environment.apiUrl}/ordenesProduccion`;
-    private readonly detallesUrl = `${environment.apiUrl}/detalleOrdenProduccion`;
-    private readonly estadosUrl = `${environment.apiUrl}/estados`;
-    private readonly formulasUrl = `${environment.apiUrl}/detalleFormula`;
-    private readonly productosUrl = `${environment.apiUrl}/productos`;
-    private readonly movimientosProductoUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
+    private readonly ordenesUrl = `${environment.djangoApiUrl}/ordenes-produccion/`;
+    private readonly detallesUrl = `${environment.djangoApiUrl}/detalles-orden-produccion/`;
+    private readonly estadosUrl = `${environment.djangoApiUrl}/estados/`;
 
     private ordenesProduccion: OrdenProduccion[] = [];
     private readonly flujoEstados: EstadoOrdenProduccion[] = [
@@ -46,29 +42,25 @@ export class ProduccionService {
         'cancelada'
     ];
     private estados = new Map<number, EstadoOrdenProduccion>();
-    private formulas: DetalleFormulaTablaApiDTO[] = [];
     private productos: ProductoTerminado[] = [];
 
     constructor(
         private http: HttpClient,
         private authService: AuthService,
         private materiaPrimaService: MateriaPrimaService,
-        private productoTerminadoService: ProductoTerminadoService,
-        private movimientoStockService: MovimientoStockService
+        private productoTerminadoService: ProductoTerminadoService
     ) { }
 
     cargarOrdenes(): Observable<OrdenProduccion[]> {
         return forkJoin({
             ordenes: this.http.get<OrdenProduccionApiDTO[]>(this.ordenesUrl),
             detalles: this.http.get<DetalleOrdenProduccionApiDTO[]>(this.detallesUrl),
-            estados: this.http.get<EstadoApiDTO[]>(this.estadosUrl),
-            formulas: this.http.get<DetalleFormulaTablaApiDTO[]>(this.formulasUrl),
+            estados: this.http.get<EstadoOrdenApiDTO[]>(this.estadosUrl),
             productos: this.productoTerminadoService.cargarProductosTerminados(),
             materias: this.materiaPrimaService.obtenerMateriasPrimas$()
         }).pipe(
-            map(({ ordenes, detalles, estados, formulas, productos }) => {
-                this.estados = new Map(estados.map(e => [e.id, this.normalizarEstado(e.nombre)]));
-                this.formulas = formulas;
+            map(({ ordenes, detalles, estados, productos }) => {
+                this.estados = new Map(estados.map(e => [e.id_estado, this.normalizarEstado(e.nombre)]));
                 this.productos = productos;
                 return ordenes.map(orden => this.mapearOrden(
                     orden,
@@ -166,76 +158,42 @@ export class ProduccionService {
             return throwError(() => new Error('El producto no existe.'));
         }
 
-        const fechaActual = new Date().toISOString();
-        const idOrden = this.proximoIdOrden();
-        const idDetalle = this.proximoIdDetalle();
-        const materialesRequeridos = this.calcularMaterialesRequeridos(producto, datos.cantidad);
-
-        const ordenApi: OrdenProduccionApiDTO = {
-            id: idOrden,
-            id_orden: idOrden,
-            fecha_creacion: fechaActual,
-            id_estado: this.idEstado('pendiente')
-        };
-        const detalleApi: DetalleOrdenProduccionApiDTO = {
-            id: idDetalle,
-            id_detalle_produccion: idDetalle,
-            id_orden: idOrden,
-            id_producto: producto.apiId,
-            cantidad_planificada: datos.cantidad,
-            cantidad_producida: 0
+        const payload = {
+            observaciones: datos.observaciones ?? '',
+            detalle: {
+                id_producto: producto.apiId,
+                cantidad_planificada: datos.cantidad
+            }
         };
 
-        return this.http.post<OrdenProduccionApiDTO>(this.ordenesUrl, ordenApi).pipe(
-            switchMap(() => this.http.post<DetalleOrdenProduccionApiDTO>(this.detallesUrl, detalleApi)),
-            map(() => {
-                const nuevaOrden: OrdenProduccion = {
-                    id: this.formatearIdOrden(idOrden),
-                    apiId: idOrden,
-                    detalleApiId: idDetalle,
-                    producto: {
-                        id: producto.id,
-                        nombre: producto.nombre,
-                        unidadMedida: producto.unidadMedida || 'unidad'
-                    },
-                    materialesRequeridos,
-                    disponibilidadMateriales: materialesRequeridos.every(m => m.disponible)
-                        ? 'disponible'
-                        : 'insuficiente',
-                    cantidad: datos.cantidad,
-                    cantidadProducida: 0,
-                    estado: 'pendiente',
-                    fechaCreacion: fechaActual,
-                    operadorId: String(operador.id),
-                    operadorNombre: `${operador.nombre} ${operador.apellido}`,
-                    observaciones: datos.observaciones,
-                    historialEstados: [{ estado: 'pendiente', fecha: fechaActual }]
+        return this.http.post<OrdenProduccionApiDTO>(this.ordenesUrl, payload).pipe(
+            map(orden => {
+                const detalle: DetalleOrdenProduccionApiDTO = {
+                    id_detalle_produccion: 0,
+                    id_orden: orden.id_orden,
+                    id_producto: producto.apiId!,
+                    cantidad_planificada: datos.cantidad,
+                    cantidad_producida: 0
                 };
-                this.ordenesProduccion.push(nuevaOrden);
-                return nuevaOrden;
-            })
+                return this.mapearOrden(orden, detalle);
+            }),
+            tap(nuevaOrden => this.ordenesProduccion.unshift(nuevaOrden))
         );
     }
 
+    // Conexión con Endpoint de Inicio y Reserva Atómica en Django
     iniciarProduccion(id: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
             return throwError(() => new Error('La orden no existe.'));
         }
-        if (orden.estado !== 'pendiente') {
-            return throwError(() => new Error('Solo se pueden iniciar órdenes pendientes.'));
-        }
-        if (!this.verificarDisponibilidad(id)) {
-            return throwError(() => new Error('No hay materiales suficientes para iniciar la producción.'));
-        }
 
-        const fechaActual = new Date().toISOString();
+        const pk = orden.apiId;
+        const url = `${environment.djangoApiUrl}/ordenes/${pk}/iniciar/`;
 
-        return this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
-            id_estado: this.idEstado('en_produccion'),
-            fecha_inicio: fechaActual
-        }).pipe(
+        return this.http.post<any>(url, {}).pipe(
             tap(() => {
+                const fechaActual = new Date().toISOString();
                 orden.estado = 'en_produccion';
                 orden.fechaInicio = fechaActual;
                 orden.historialEstados.push({ estado: 'en_produccion', fecha: fechaActual });
@@ -244,101 +202,44 @@ export class ProduccionService {
         );
     }
 
+    // Conexión con Endpoint de Finalización Transaccional en Django
     finalizarProduccion(id: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
             return throwError(() => new Error('La orden no existe.'));
         }
-        if (orden.estado !== 'en_produccion') {
-            return throwError(() => new Error('Solo se pueden finalizar órdenes en producción.'));
-        }
-        if (!this.verificarDisponibilidad(id)) {
-            return throwError(() => new Error('No hay materiales suficientes para finalizar la producción.'));
-        }
 
-        const producto = this.buscarProducto(orden.producto.id);
-        if (!producto || producto.apiId === undefined) {
-            return throwError(() => new Error('El producto no existe.'));
-        }
+        const pk = orden.apiId;
+        const url = `${environment.djangoApiUrl}/ordenes/${pk}/finalizar/`;
 
-        const observacion = `Orden de producción ${orden.id}`;
-        const fechaActual = new Date().toISOString();
-        const nuevoStockProducto = producto.stockActual + orden.cantidad;
-
-        // Al finalizar se descuenta la materia prima (con su movimiento) y se suma el producto terminado.
-        orden.materialesRequeridos.forEach(material => {
-            const stockResultante = this.materiaPrimaService.registrarMovimiento(
-                material.materiaPrima.id,
-                'consumo',
-                material.cantidadRequerida
-            );
-            if (stockResultante !== undefined) {
-                this.movimientoStockService.registrarMovimiento(
-                    material.materiaPrima.id,
-                    'consumo',
-                    material.cantidadRequerida,
-                    stockResultante,
-                    observacion
-                );
-            }
-        });
-
-        const peticiones: Observable<unknown>[] = [
-            this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
-                id_estado: this.idEstado('finalizada')
-            }),
-            this.http.patch(`${this.productosUrl}/${producto.apiId}`, {
-                stock_actual: nuevoStockProducto
-            }),
-            this.http.post(this.movimientosProductoUrl, {
-                fecha: fechaActual,
-                tipo_movimiento: 'ingreso',
-                cantidad: orden.cantidad,
-                id_producto: producto.apiId,
-                id_usuario: this.obtenerIdUsuario(),
-                observacion
-            })
-        ];
-        if (orden.detalleApiId !== undefined) {
-            peticiones.push(this.http.patch(`${this.detallesUrl}/${orden.detalleApiId}`, {
-                cantidad_producida: orden.cantidad
-            }));
-        }
-
-        return forkJoin(peticiones).pipe(
+        return this.http.post<any>(url, {}).pipe(
             tap(() => {
+                const fechaActual = new Date().toISOString();
                 orden.cantidadProducida = orden.cantidad;
                 orden.estado = 'finalizada';
                 orden.fechaFinalizacion = fechaActual;
                 orden.historialEstados.push({ estado: 'finalizada', fecha: fechaActual });
-                this.productoTerminadoService.agregarProduccion(
-                    orden.producto.id,
-                    orden.cantidadProducida,
-                    observacion
-                );
             }),
             map(() => undefined)
         );
     }
 
+    // Conexión con Endpoint de Cancelación y Liberación de Reservas en Django
     cancelarProduccion(id: string, motivo: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
             return throwError(() => new Error('La orden no existe.'));
         }
-        if (orden.estado === 'finalizada' || orden.estado === 'cancelada') {
-            return throwError(() => new Error('No se puede cancelar una orden finalizada o ya cancelada.'));
-        }
         if (!motivo.trim()) {
             return throwError(() => new Error('Debes indicar un motivo de cancelación.'));
         }
 
-        const fechaActual = new Date().toISOString();
+        const pk = orden.apiId;
+        const url = `${environment.djangoApiUrl}/ordenes/${pk}/cancelar/`;
 
-        return this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
-            id_estado: this.idEstado('cancelada')
-        }).pipe(
+        return this.http.post<any>(url, { motivo: motivo.trim() }).pipe(
             tap(() => {
+                const fechaActual = new Date().toISOString();
                 orden.estado = 'cancelada';
                 orden.fechaCancelacion = fechaActual;
                 orden.historialEstados.push({
@@ -357,7 +258,7 @@ export class ProduccionService {
     ): OrdenProduccion {
         const producto = detalle ? this.productos.find(p => p.apiId === detalle.id_producto) : undefined;
         const estado = this.estados.get(orden.id_estado) ?? 'pendiente';
-        const cantidad = detalle?.cantidad_planificada ?? 0;
+        const cantidad = Number(detalle?.cantidad_planificada ?? 0);
         const materialesRequeridos = this.calcularMaterialesRequeridos(producto, cantidad);
 
         const fechaCreacion = this.aIso(orden.fecha_creacion);
@@ -387,7 +288,7 @@ export class ProduccionService {
                 unidadMedida: producto?.unidadMedida || 'unidad'
             },
             cantidad,
-            cantidadProducida: detalle?.cantidad_producida ?? 0,
+            cantidadProducida: Number(detalle?.cantidad_producida ?? 0),
             estado,
             disponibilidadMateriales: materialesRequeridos.every(m => m.disponible)
                 ? 'disponible'
@@ -395,7 +296,10 @@ export class ProduccionService {
             materialesRequeridos,
             fechaCreacion,
             fechaInicio,
-            historialEstados
+            historialEstados,
+            operadorId: orden.id_usuario ? String(orden.id_usuario) : undefined,
+            operadorNombre: this.nombreOperador(orden.id_usuario),
+            observaciones: orden.observaciones
         };
     }
 
@@ -421,7 +325,6 @@ export class ProduccionService {
         });
     }
 
-    // Usa la fórmula del producto y, si no tiene, la tabla detalleFormula de la API.
     private obtenerFormula(producto: ProductoTerminado | undefined): ItemFormula[] {
         if (!producto) {
             return [];
@@ -433,42 +336,12 @@ export class ProduccionService {
                 cantidad: f.cantidad
             }));
         }
-        return this.formulas
-            .filter(f => f.id_producto === producto.apiId)
-            .map(f => ({
-                materiaPrimaId: String(f.id_materia_prima),
-                nombre: `Materia prima #${f.id_materia_prima}`,
-                cantidad: f.cantidad_necesaria
-            }));
+        return [];
     }
 
     private buscarProducto(idProducto: string): ProductoTerminado | undefined {
         return this.productos.find(p => p.id === idProducto)
             ?? this.productoTerminadoService.obtenerPorId(idProducto);
-    }
-
-    private obtenerIdUsuario(): number {
-        const idUsuario = Number(this.authService.getUsuarioActual()?.id);
-        if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
-            throw new Error('No hay un usuario autenticado válido.');
-        }
-        return idUsuario;
-    }
-
-    private idEstado(estado: EstadoOrdenProduccion): number {
-        const entrada = [...this.estados.entries()].find(([, nombre]) => nombre === estado);
-        if (!entrada) {
-            throw new Error(`No existe el estado "${estado}" en la base de datos.`);
-        }
-        return entrada[0];
-    }
-
-    private proximoIdOrden(): number {
-        return this.ordenesProduccion.reduce((max, o) => Math.max(max, o.apiId ?? 0), 0) + 1;
-    }
-
-    private proximoIdDetalle(): number {
-        return this.ordenesProduccion.reduce((max, o) => Math.max(max, o.detalleApiId ?? 0), 0) + 1;
     }
 
     private formatearIdOrden(idOrden: number): string {
@@ -502,8 +375,6 @@ export class ProduccionService {
         }
     }
 
-    // Las fechas llegan en ISO desde la API, pero pueden venir vacias
-    // (historial sin fecha registrada), asi que se tolera el caso invalido.
     private parsearFecha(fecha: string): number {
         const tiempo = new Date(fecha).getTime();
         return Number.isNaN(tiempo) ? 0 : tiempo;
@@ -523,6 +394,12 @@ export class ProduccionService {
             .replace(/\p{Diacritic}/gu, '')
             .toLowerCase()
             .replace(/\s+/g, '_') as EstadoOrdenProduccion;
+    }
+
+    private nombreOperador(idUsuario: number | null): string | undefined {
+        const usuario = this.authService.getUsuarioActual();
+        if (!usuario || !idUsuario || Number(usuario.id) !== idUsuario) return undefined;
+        return `${usuario.nombre} ${usuario.apellido}`.trim();
     }
 
     private aIso(fecha: string): string {

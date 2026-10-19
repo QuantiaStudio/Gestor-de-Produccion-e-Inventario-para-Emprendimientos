@@ -4,7 +4,9 @@ export type EstadoProductoTerminado =
   | 'pendiente'
   | 'en_produccion'
   | 'finalizado'
-  | 'cancelado';
+  | 'cancelado'
+  | 'activo'
+  | 'inactivo';
 
 export type EstadoInventarioProducto = 'optimo' | 'bajo_minimo' | 'sin_stock';
 
@@ -29,7 +31,6 @@ export interface ProductoTerminado {
   unidadMedida: string;
   stockActual: number;
   stockMinimo: number;
-  stockMaximo: number;
   estado: EstadoProductoTerminado;
   ultimaActualizacion: string;
   lote?: string;
@@ -72,7 +73,6 @@ export interface NuevoProductoFormValue {
   estado: EstadoProductoTerminado | null;
   stockInicial: number | null;
   stockMinimo: number | null;
-  stockMaximo: number | null;
   descripcion: string | null;
   imagen?: string | null;
 }
@@ -99,9 +99,8 @@ export interface ProductoApiDTO {
   descripcion: string;
   stock_actual: number;
   stock_minimo?: number;
-  stock_maximo?: number;
   id_categoria: number;
-  estado: boolean | EstadoProductoTerminado;
+  estado: boolean | EstadoProductoTerminado | EstadoProductoBackend;
   formula?: DetalleFormulaApiDTO[];
   imagen?: string;
 }
@@ -120,8 +119,44 @@ export interface MovimientoInventarioApiDTO {
   id_movimiento_producto?: number;
   fecha: string;
   tipo_movimiento: string;
-  cantidad: number;
+  cantidad: number | string;
   id_producto: number;
   id_usuario?: number;
   observacion?: string;
+}
+
+/** Estados de un producto en el backend Django (backend/API.md §7.2). */
+export type EstadoProductoBackend = 'activo' | 'inactivo' | 'en_produccion' | 'pendiente';
+
+/** Categoría tal como la devuelve el backend Django (backend/API.md §7.1). */
+export interface CategoriaBackendDTO {
+  id_categoria: number;
+  nombre: string;
+}
+
+/** Línea de la fórmula de un producto en el backend Django (backend/API.md §7.2). */
+export interface LineaFormulaBackendDTO {
+  id_detalle_formula?: number;
+  id_materia_prima: number;
+  nombre_materia_prima?: string;
+  cantidad_necesaria: number | string;
+}
+
+/**
+ * Producto con su fórmula en el backend Django (backend/API.md §7.2).
+ * Al crear se envían los campos editables; la respuesta agrega id_producto, stock_actual
+ * y el id de cada línea. Los decimales se envían como número y vuelven como string.
+ */
+export interface ProductoBackendDTO {
+  id_producto?: number;
+  codigo: string;
+  nombre: string;
+  descripcion: string;
+  precio: number | string;
+  estado: EstadoProductoBackend;
+  stock_actual?: number | string;
+  stock_minimo: number | string;
+  imagen: string;
+  id_categoria: number;
+  formula: LineaFormulaBackendDTO[];
 }

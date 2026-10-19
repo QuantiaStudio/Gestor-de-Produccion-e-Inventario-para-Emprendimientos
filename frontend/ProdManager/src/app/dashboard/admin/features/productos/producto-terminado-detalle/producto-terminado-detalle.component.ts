@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductoTerminado } from '../../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
@@ -16,6 +17,7 @@ export class ProductoTerminadoDetalleComponent {
   @Output() cerrar = new EventEmitter<void>();
   @Output() eliminado = new EventEmitter<void>();
   @Output() editar = new EventEmitter<void>();
+  @Output() cambiado = new EventEmitter<void>();
 
   tabActiva: TabDetalle = 'informacion';
   confirmarEliminacion = false;
@@ -26,6 +28,14 @@ export class ProductoTerminadoDetalleComponent {
 
   seleccionarTab(tab: TabDetalle) {
     this.tabActiva = tab;
+  }
+
+  usarImagenAlternativa(event: Event) {
+    const imagen = event.currentTarget as HTMLImageElement;
+    if (imagen.dataset['fallback'] === 'true') return;
+
+    imagen.dataset['fallback'] = 'true';
+    imagen.src = '/assets/box.svg';
   }
 
   solicitarEliminacion() {
@@ -41,15 +51,25 @@ export class ProductoTerminadoDetalleComponent {
     if (!this.producto.apiId || this.eliminando) return;
 
     this.eliminando = true;
+    this.errorEliminacion = '';
+
     this.productoTerminadoService.eliminarProducto(this.producto.apiId).subscribe({
       next: () => {
         this.eliminando = false;
         this.confirmarEliminacion = false;
         this.eliminado.emit();
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.eliminando = false;
-        this.errorEliminacion = 'No se pudo eliminar el producto. Intenta nuevamente.';
+        this.confirmarEliminacion = false;
+
+        if (err.status === 409 || err.status === 404) {
+          // Órdenes activas, desactivado por historial o producto inexistente
+          this.errorEliminacion = err.error?.detail ?? 'No se pudo eliminar el producto.';
+          this.cambiado.emit();
+        } else {
+          this.errorEliminacion = 'No se pudo eliminar el producto. Intenta nuevamente.';
+        }
       }
     });
   }

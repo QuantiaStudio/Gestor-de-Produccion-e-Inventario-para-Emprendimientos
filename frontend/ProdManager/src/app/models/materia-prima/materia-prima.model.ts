@@ -1,17 +1,18 @@
 export type EstadoMateriaPrima = 'optimo' | 'bajo_minimo' | 'sin_stock';
 
 /**
- * Forma real de la tabla "materiasPrimas" en db.json (json-server).
+ * Materia prima tal como la devuelve el backend Django en /api/v1/materias-primas/ (backend/API.md §6.1).
  * No incluye categoría ni proveedor: no forman parte del modelo de datos del equipo.
- * ultimaActualizacion se calcula en el service a partir de los movimientos de stock.
+ * ultimaActualizacion se completa en el service cuando exista un endpoint de movimientos.
  */
-export interface MateriaPrimaApi {
+export interface MateriaPrimaBackendDTO {
   id_materia_prima: number;
   nombre: string;
   descripcion: string;
   unidad_medida: string;
-  stock_actual: number;
-  stock_minimo: number;
+  // DRF serializa los DecimalField como string para no perder precisión.
+  stock_actual: string;
+  stock_minimo: string;
 }
 
 export interface MateriaPrima {

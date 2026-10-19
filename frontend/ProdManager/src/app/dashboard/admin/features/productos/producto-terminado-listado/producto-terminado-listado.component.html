@@ -16,6 +16,13 @@
 
 <app-producto-terminado-alertas [resumen]="resumen"></app-producto-terminado-alertas>
 
+ @if (mensajeExito) {
+  <div class="alert alert-success d-flex justify-content-between align-items-center" role="status">
+    <span>{{ mensajeExito }}</span>
+    <button type="button" class="btn-close" aria-label="Cerrar confirmación" (click)="mensajeExito = ''"></button>
+  </div>
+}
+
 <div class="row g-4">
   <div class="col-12" [class.col-lg-8]="productoSeleccionado">
     <div class="card table-wrapper">
@@ -38,7 +45,7 @@
             >
               <td>
                 <div class="producto-celda">
-                  <img [src]="pt.imagen" [alt]="pt.nombre" class="producto-thumb" />
+                  <img [src]="pt.imagen" [alt]="pt.nombre" class="producto-thumb" (error)="usarImagenAlternativa($event)" />
                   <div class="producto-info">
                     <span class="producto-nombre">{{ pt.nombre }}</span>
                     <small class="mono">{{ pt.id }}</small>
@@ -83,18 +90,14 @@
         [producto]="productoSeleccionado"
         (cerrar)="cerrarDetalle()"
         (eliminado)="productoEliminado()"
+        (cambiado)="productoCambiado()"
         (editar)="editarProducto()"
       ></app-producto-terminado-detalle>
     </div>
   }
 </div>
 
-@if (mensajeExito) {
-  <div class="alert alert-success d-flex justify-content-between align-items-center" role="status">
-    <span>{{ mensajeExito }}</span>
-    <button type="button" class="btn-close" aria-label="Cerrar confirmación" (click)="mensajeExito = ''"></button>
-  </div>
-}
+
 
 <app-producto-terminado-actualizar-stock
   #modalStock
