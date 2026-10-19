@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaApi, MateriaPrimaBackendDTO, MovimientoStockApi, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
+import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaBackendDTO, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
 import { Observable, map, shareReplay, tap } from 'rxjs';
 
@@ -12,7 +12,6 @@ const DJANGO_LIST_URL = `${environment.djangoApiUrl}/materias-primas/`;
 // el backend las incorpore.
 const API_URL = `${environment.apiUrl}/materiasPrimas`;
 const MOVIMIENTOS_URL = `${environment.apiUrl}/movimientosStockMateriaPrima`;
-const BACKEND_MATERIAS_PRIMAS_URL = `${environment.djangoApiUrl}/materias-primas/`;
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,7 @@ export class MateriaPrimaService {
   readonly materiasPrimas$: Observable<MateriaPrima[]>;
 
   constructor(private http: HttpClient) {
-    this.materiasPrimas$ = this.http.get<MateriaPrimaApi[]>(DJANGO_LIST_URL).pipe(
+    this.materiasPrimas$ = this.http.get<MateriaPrimaBackendDTO[]>(DJANGO_LIST_URL).pipe(
       map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
       tap(materias => {
         this.materiasPrimas = materias;
@@ -31,14 +30,14 @@ export class MateriaPrimaService {
     );
   }
 
-  private mapearDesdeApi(mp: MateriaPrimaApi): MateriaPrima {
+  private mapearDesdeApi(mp: MateriaPrimaBackendDTO): MateriaPrima {
     // Django (DRF) serializa los campos Decimal como string (ej. "120.00") para no
     // perder precisión; hay que convertirlos a number antes de compararlos.
     const stockActual = Number(mp.stock_actual);
     const stockMinimo = Number(mp.stock_minimo);
 
     return {
-      id: String(mp.id),
+      id: String(mp.id_materia_prima),
       nombre: mp.nombre,
       descripcion: mp.descripcion,
       unidadMedida: mp.unidad_medida,
@@ -61,7 +60,7 @@ export class MateriaPrimaService {
 
   /** Materias primas del inventario del backend Django, para armar la fórmula de un producto nuevo. */
   obtenerMateriasPrimasDelBackend$(): Observable<MateriaPrima[]> {
-    return this.http.get<MateriaPrimaApi[]>(DJANGO_LIST_URL).pipe(
+    return this.http.get<MateriaPrimaBackendDTO[]>(DJANGO_LIST_URL).pipe(
       map(materias => materias.map(mp => this.mapearDesdeApi(mp)))
     );
   }

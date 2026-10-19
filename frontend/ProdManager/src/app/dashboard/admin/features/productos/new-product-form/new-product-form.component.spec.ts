@@ -228,13 +228,12 @@ describe('NewProductFormComponent', () => {
       movimientos: []
     };
 
-    it('sigue usando json-server y no llama al backend', () => {
+    it('carga el producto sin pedir las categorías del backend', () => {
       fixture.componentRef.setInput('productoEditar', producto);
       fixture.detectChanges();
 
-      http.expectOne(`${environment.apiUrl}/materiasPrimas`).flush([]);
-      http.expectOne(`${environment.apiUrl}/movimientosStockMateriaPrima`).flush([]);
-      http.expectNone(URL_MATERIAS_PRIMAS);
+      // El listado de materias primas ya sale de Django en todas las pantallas (TK-02-08).
+      http.expectOne(URL_MATERIAS_PRIMAS).flush(MATERIAS_PRIMAS);
       http.expectNone(URL_CATEGORIAS);
       expect(component.precio.disabled).toBeTrue();
       expect(component.codigo.value).toBe('PT-001');

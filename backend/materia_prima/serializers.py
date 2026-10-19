@@ -4,16 +4,17 @@ from .models import MateriaPrima
 
 
 class MateriaPrimaSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='id_materia_prima', read_only=True)
+    """Materia prima del inventario (API.md §6.1)."""
 
     class Meta:
         model = MateriaPrima
         fields = [
-            'id',
+            'id_materia_prima',
             'nombre',
             'descripcion',
             'unidad_medida',
             'stock_actual',
             'stock_minimo',
         ]
+        # El stock solo cambia registrando movimientos (§6.2).
         read_only_fields = ['stock_actual']
