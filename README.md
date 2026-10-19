@@ -234,7 +234,7 @@ Si preferís usar una base o un usuario que ya tenés, editá `.env` para que co
 
 ### 6. Aplicar las migraciones
 
-Las migraciones crean en MySQL todas las tablas del proyecto (usuarios, materias primas, productos, órdenes, etc.) y cargan los estados de producción iniciales (Pendiente, En Produccion, Finalizada, Cancelada):
+Las migraciones crean en MySQL todas las tablas del proyecto (usuarios, materias primas, productos, órdenes, etc.) y cargan los estados de producción iniciales (Pendiente, En Produccion, Finalizada, Cancelada) y las 30 materias primas iniciales (ver `backend/README.md`):
 
 ```bash
 python manage.py migrate
@@ -244,31 +244,26 @@ Si todo salió bien, vas a ver una lista de líneas terminadas en `OK`. Este pas
 
 ### 7. Cargar los datos iniciales
 
-Después de las migraciones la base queda vacía: no tiene categorías ni materias primas, y sin ellas no se puede crear un producto con su fórmula. El repositorio incluye datos iniciales tomados de `frontend/ProdManager/db.json`:
-
-| Archivo | Qué carga |
-| --- | --- |
-| `productos/fixtures/categorias.json` | 8 categorías (Mesas, Bibliotecas, Escritorios, …) |
-| `materia_prima/fixtures/materias_primas.json` | 5 materias primas con su stock (Madera de Roble, Pintura Blanca, Tornillos 3mm, …) |
+Después de las migraciones la base todavía no tiene categorías, y sin ellas no se puede crear un producto con su fórmula. El repositorio incluye las categorías tomadas de `frontend/ProdManager/db.json` en `productos/fixtures/categorias.json` (8 categorías: Mesas, Bibliotecas, Escritorios, …). Las materias primas no hace falta cargarlas: las agrega la migración `materia_prima/migrations/0002_cargar_materias_primas.py` en el paso 6.
 
 Con el entorno virtual activo y las migraciones aplicadas (paso 6):
 
 ```bash
-python manage.py loaddata categorias materias_primas
+python manage.py loaddata categorias
 ```
 
-Si salió bien, vas a ver `Installed 13 object(s) from 2 fixture(s)`. Para comprobar qué quedó cargado:
+Si salió bien, vas a ver `Installed 8 object(s) from 1 fixture(s)`. Para comprobar qué quedó cargado:
 
 ```bash
 python manage.py shell -c "from productos.models import Categoria; from materia_prima.models import MateriaPrima; print(Categoria.objects.count(), 'categorias,', MateriaPrima.objects.count(), 'materias primas')"
 ```
 
-La última línea tiene que decir `8 categorias, 5 materias primas`.
+En una base nueva, la última línea tiene que decir `8 categorias, 30 materias primas`.
 
 A tener en cuenta:
 
-- Los datos se cargan con **los mismos ids que en `db.json`**, para que coincidan con lo que muestra la aplicación mientras convivan json-server y el backend.
-- Se puede **volver a ejecutar sin duplicar nada**: cada fila se identifica por su id. Si modificaste alguna de esas categorías o materias primas, vuelve a los valores del archivo; lo demás (productos, fórmulas, otras filas) no se toca.
+- Las categorías se cargan con **los mismos ids que en `db.json`**, para que coincidan con lo que muestra la aplicación mientras convivan json-server y el backend.
+- Se puede **volver a ejecutar sin duplicar nada**: cada categoría se identifica por su id. Si modificaste alguna, vuelve a los valores del archivo; lo demás (productos, fórmulas, otras filas) no se toca.
 - El stock de las materias primas se carga directamente como punto de partida. De ahí en adelante solo cambia registrando movimientos (ver `API.md`, §6.2).
 
 ### 8. Crear un usuario administrador (opcional)
@@ -406,7 +401,7 @@ Si ves esa respuesta, el backend está funcionando correctamente. La lista compl
 | `Access denied for user 'quantiauser'` | Los datos de `.env` no coinciden con los de la base. Con Docker, esto pasa si cambiaste `.env` después de crear el contenedor: la base se crea una sola vez. Ejecutá `docker compose down -v` (**borra todos los datos de la base**), luego `docker compose up -d` y `python manage.py migrate`. |
 | `Error: That port is already in use` al ejecutar `runserver` | Otro programa usa el puerto 8000. Cerralo o usá otro puerto: `python manage.py runserver 8001` (y cambiá `djangoApiUrl` en `frontend/ProdManager/src/environments/environment.ts`). |
 | Al crear un producto aparece "No se pudo conectar con el servidor" | El backend no está corriendo, o el navegador bloqueó el pedido por CORS (en la consola del navegador aparece un error que menciona `CORS`). Levantá el backend y revisá que `backend/.env` tenga `CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200`; después de cambiar `.env`, reiniciá `runserver`. |
-| El formulario de alta muestra las listas de categorías y materiales vacías | Faltan los datos iniciales en MySQL. Cargalos con el [paso 7](#7-cargar-los-datos-iniciales). |
+| El formulario de alta muestra las listas de categorías o materiales vacías | Faltan los datos iniciales en MySQL. Si faltan las categorías, cargalas con el [paso 7](#7-cargar-los-datos-iniciales); si faltan las materias primas, aplicá las migraciones con el [paso 6](#6-aplicar-las-migraciones). |
 | `loaddata` falla con `Table ... doesn't exist` o `Unknown column` | Faltan migraciones por aplicar. Ejecutá `python manage.py migrate` y repetí el [paso 7](#7-cargar-los-datos-iniciales). |
 | `loaddata` dice `No fixture named 'categorias'` | El comando no se ejecutó dentro de la carpeta `backend`, o falta hacer `git pull`. |
 
@@ -530,7 +525,7 @@ backend/
 `-- requirements.txt
 ```
 
-Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`. `productos` y `materia_prima` tienen además `fixtures/`, con los datos iniciales que se cargan con `loaddata` (ver [paso 7](#7-cargar-los-datos-iniciales)).
+Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`. `productos` tiene además `fixtures/`, con las categorías iniciales que se cargan con `loaddata` (ver [paso 7](#7-cargar-los-datos-iniciales)); las materias primas iniciales se cargan con una migración de `materia_prima`.
 
 ## Equipo de desarrollo
 

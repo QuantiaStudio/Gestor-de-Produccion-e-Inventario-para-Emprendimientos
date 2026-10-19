@@ -16,7 +16,11 @@ def linea(id_materia_prima, cantidad):
 
 
 def producto_valido(**cambios):
-    """Producto del ejemplo de API.md §7.2, armado con los datos iniciales de categorías y materias primas."""
+    """Producto del ejemplo de API.md §7.2, armado con los datos iniciales de categorías y materias primas.
+
+    Las materias primas son las que carga la migración 0002_cargar_materias_primas, con ids
+    1 a 30 en la base de pruebas (1 = Pino macizo, 3 = Roble macizo, 4 = Paraíso macizo).
+    """
     datos = {
         'codigo': 'PT-002',
         'nombre': 'Mesa Ratona Roble',
@@ -37,7 +41,7 @@ def producto_valido(**cambios):
 class CrearProductoTests(APITestCaseAutenticado):
     """POST /api/v1/productos/ (API.md §7.2)."""
 
-    fixtures = ['categorias', 'materias_primas']
+    fixtures = ['categorias']
 
     def crear(self, datos):
         return self.client.post(URL_PRODUCTOS, datos, format='json')

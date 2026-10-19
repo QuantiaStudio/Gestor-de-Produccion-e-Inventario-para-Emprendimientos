@@ -3,13 +3,16 @@ from rest_framework import status
 
 from config.testing import APITestCaseAutenticado
 
+from .models import MateriaPrima
+
 URL_MATERIAS_PRIMAS = reverse('materia-prima-list')
 
 
 class ListarMateriasPrimasTests(APITestCaseAutenticado):
-    """GET /api/v1/materias-primas/ (API.md §6.1)."""
+    """GET /api/v1/materias-primas/ (API.md §6.1).
 
-    fixtures = ['materias_primas']
+    Usa las materias primas que carga la migración 0002_cargar_materias_primas.
+    """
 
     def test_sin_token_responde_401(self):
         self.client.credentials()
@@ -22,20 +25,21 @@ class ListarMateriasPrimasTests(APITestCaseAutenticado):
         respuesta = self.client.get(URL_MATERIAS_PRIMAS)
 
         self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            [materia['nombre'] for materia in respuesta.json()],
-            ['Barniz Transparente', 'Contrachapado 18mm', 'Madera de Roble', 'Pintura Blanca', 'Tornillos 3mm'],
-        )
+        nombres = [materia['nombre'] for materia in respuesta.json()]
+        self.assertEqual(len(nombres), 30)
+        self.assertEqual(nombres[0], 'Adhesivo de contacto')
+        # MySQL compara sin distinguir mayúsculas: "Madera ..." va antes que "MDF ...".
+        self.assertEqual(nombres, sorted(nombres, key=str.casefold))
 
     def test_devuelve_los_campos_del_contrato(self):
         materias = self.client.get(URL_MATERIAS_PRIMAS).json()
-        madera = next(materia for materia in materias if materia['id_materia_prima'] == 1)
+        barniz = next(materia for materia in materias if materia['nombre'] == 'Barniz transparente')
 
-        self.assertEqual(madera, {
-            'id_materia_prima': 1,
-            'nombre': 'Madera de Roble',
-            'descripcion': 'Madera dura de alta calidad para muebles estructurales.',
-            'unidad_medida': 'unidad',
-            'stock_actual': '28.000',
-            'stock_minimo': '8.000',
+        self.assertEqual(barniz, {
+            'id_materia_prima': MateriaPrima.objects.get(nombre='Barniz transparente').pk,
+            'nombre': 'Barniz transparente',
+            'descripcion': 'Recubrimiento protector transparente para superficies de madera.',
+            'unidad_medida': 'L',
+            'stock_actual': '10.000',
+            'stock_minimo': '2.000',
         })
