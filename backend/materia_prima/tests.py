@@ -1,14 +1,22 @@
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+
+from config.testing import APITestCaseAutenticado
 
 URL_MATERIAS_PRIMAS = reverse('materia-prima-list')
 
 
-class ListarMateriasPrimasTests(APITestCase):
+class ListarMateriasPrimasTests(APITestCaseAutenticado):
     """GET /api/v1/materias-primas/ (API.md §6.1)."""
 
     fixtures = ['materias_primas']
+
+    def test_sin_token_responde_401(self):
+        self.client.credentials()
+
+        respuesta = self.client.get(URL_MATERIAS_PRIMAS)
+
+        self.assertEqual(respuesta.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_lista_las_materias_primas_ordenadas_por_nombre(self):
         respuesta = self.client.get(URL_MATERIAS_PRIMAS)

@@ -2,7 +2,8 @@ from unittest import mock
 
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+
+from config.testing import APITestCaseAutenticado
 
 from .models import DetalleFormula, Producto
 
@@ -33,7 +34,7 @@ def producto_valido(**cambios):
     return datos
 
 
-class CrearProductoTests(APITestCase):
+class CrearProductoTests(APITestCaseAutenticado):
     """POST /api/v1/productos/ (API.md §7.2)."""
 
     fixtures = ['categorias', 'materias_primas']
@@ -46,6 +47,14 @@ class CrearProductoTests(APITestCase):
         self.assertEqual(respuesta.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(respuesta.json(), {'detail': 'Datos inválidos.', 'code': 'invalid', 'errors': errores})
         self.assertEqual(Producto.objects.count(), productos_existentes)
+
+    def test_sin_token_responde_401_y_no_guarda_nada(self):
+        self.client.credentials()
+
+        respuesta = self.crear(producto_valido())
+
+        self.assertEqual(respuesta.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertFalse(Producto.objects.exists())
 
     def test_crea_el_producto_con_su_formula(self):
         respuesta = self.crear(producto_valido())
@@ -191,10 +200,17 @@ class CrearProductoTests(APITestCase):
         self.assertFalse(DetalleFormula.objects.exists())
 
 
-class ListarCategoriasTests(APITestCase):
+class ListarCategoriasTests(APITestCaseAutenticado):
     """GET /api/v1/categorias/ (API.md §7.1)."""
 
     fixtures = ['categorias']
+
+    def test_sin_token_responde_401(self):
+        self.client.credentials()
+
+        respuesta = self.client.get(URL_CATEGORIAS)
+
+        self.assertEqual(respuesta.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_lista_las_categorias_ordenadas_por_nombre(self):
         respuesta = self.client.get(URL_CATEGORIAS)
