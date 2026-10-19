@@ -1,15 +1,21 @@
-from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
 from django.db import transaction
 from django.db.models import ProtectedError
 from rest_framework import status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
-from .models import EstadoProducto, Producto
+
+from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
+
+from .models import Categoria, EstadoProducto, Producto
+from .serializers import CategoriaSerializer, ProductoSerializer
 
 ESTADOS_ORDEN_ACTIVA = ['Pendiente', 'En Produccion']
 
+
 class CategoriaListView(ColeccionNoImplementada):
-    pass
+    def get(self, request):
+        categorias = Categoria.objects.order_by('nombre')
+        return Response(CategoriaSerializer(categorias, many=True).data)
 
 
 class CategoriaDetailView(ElementoNoImplementado):
@@ -17,7 +23,11 @@ class CategoriaDetailView(ElementoNoImplementado):
 
 
 class ProductoListView(ColeccionNoImplementada):
-    pass
+    def post(self, request):
+        serializer = ProductoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProductoDetailView(ElementoNoImplementado):

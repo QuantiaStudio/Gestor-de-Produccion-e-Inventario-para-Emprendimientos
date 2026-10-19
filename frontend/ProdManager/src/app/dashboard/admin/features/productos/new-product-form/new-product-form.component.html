@@ -20,7 +20,7 @@
 
                     <!-- Código -->
                     <div class="mb-3">
-                        <!-- En el futuro este campo debe generarse automáticamente y no ser editable por el usuario, 
+                        <!-- En el futuro este campo debe generarse automáticamente y no ser editable por el usuario,
                         pero por ahora se deja así para poder probar la funcionalidad de registro de productos desde front-->
                         <label for="regCodigo" class="form-label mb-1">
                             Código
@@ -28,18 +28,32 @@
 
                         <input type="text" class="input" id="regCodigo" placeholder="Ej: PT-002"
                             formControlName="codigo">
+                        @if (codigo.errors && codigo.touched) {
+                            @if (codigo.hasError('required')) {
+                                <p class="error">El código es obligatorio</p>
+                            }
+                            @if (codigo.hasError('maxlength')) {
+                                <p class="error">El código puede tener hasta 20 caracteres</p>
+                            }
+                        }
+                        @for (mensaje of mensajesDelBackend('codigo'); track mensaje) {
+                            <p class="error">{{ mensaje }}</p>
+                        }
                     </div>
 
                     <div class="mb-3">
                         <label for="regEstado" class="form-label mb-1">Estado</label>
                         <select class="input form-select" id="regEstado" formControlName="estado">
                             <option value="">Seleccionar...</option>
-                            @for (estado of estados; track estado) {
-                                <option [value]="estado">{{ estado }}</option>
+                            @for (opcion of opcionesEstado; track opcion.valor) {
+                                <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
                             }
                         </select>
                         @if (estado.errors && estado.touched && estado.hasError('required')) {
                             <p class="error">El estado es obligatorio</p>
+                        }
+                        @for (mensaje of mensajesDelBackend('estado'); track mensaje) {
+                            <p class="error">{{ mensaje }}</p>
                         }
                     </div>
 
@@ -57,6 +71,12 @@
                         @if (nombre.hasError('required')){
                             <p class="error">El campo nombre es obligatorio</p>
                         }
+                        @if (nombre.hasError('maxlength')){
+                            <p class="error">El nombre puede tener hasta 100 caracteres</p>
+                        }
+                    }
+                    @for (mensaje of mensajesDelBackend('nombre'); track mensaje) {
+                        <p class="error">{{ mensaje }}</p>
                     }
 
                     <!-- Categoría -->
@@ -71,8 +91,8 @@
                             <select class="input form-select" id="regCategoria" formControlName="categoria">
 
                                 <option value="">Seleccionar...</option>
-                                @for (categoria of categorias; track categoria) {
-                                    <option [value]="categoria">{{ categoria }}</option>
+                                @for (opcion of opcionesCategoria; track opcion.valor) {
+                                    <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
                                 }
 
                             </select>
@@ -90,7 +110,37 @@
                                     <p class="error">El campo categoría es obligatorio</p>
                                 }
                             }
+                            @for (mensaje of mensajesDelBackend('categoria'); track mensaje) {
+                                <p class="error">{{ mensaje }}</p>
+                            }
                         </div>
+
+                        <!-- Precio (solo en el alta) -->
+                        @if (!modoEdicion) {
+                            <div class="col-md-6">
+
+                                <label for="regPrecio" class="form-label mb-1">
+                                    Precio
+                                </label>
+
+                                <input type="number" class="input" id="regPrecio" min="0" step="0.01" placeholder="0.00"
+                                    formControlName="precio">
+                                @if (precio.errors && precio.touched) {
+                                    @if (precio.hasError('required')) {
+                                        <p class="error">El precio es obligatorio</p>
+                                    }
+                                    @if (precio.hasError('min')) {
+                                        <p class="error">El precio no puede ser negativo</p>
+                                    }
+                                    @if (precio.hasError('maximoDecimales')) {
+                                        <p class="error">El precio puede tener hasta 2 decimales</p>
+                                    }
+                                }
+                                @for (mensaje of mensajesDelBackend('precio'); track mensaje) {
+                                    <p class="error">{{ mensaje }}</p>
+                                }
+                            </div>
+                        }
 
                     </div>
 
@@ -110,29 +160,31 @@
 
                     </div>
 
-                    <!-- Stock -->
-                    <div class="row g-3 mb-3">
+                    <!-- Stock (solo en la edición: un producto nuevo nace con stock 0) -->
+                    @if (modoEdicion) {
+                        <div class="row g-3 mb-3">
 
-                        <div class="col-md-6">
+                            <div class="col-md-6">
 
-                            <label for="regStock" class="form-label mb-1">
-                                Stock Inicial
-                            </label>
+                                <label for="regStock" class="form-label mb-1">
+                                    Stock Inicial
+                                </label>
 
-                            <input type="number" class="input" id="regStock" min="0" placeholder="0"
-                                formControlName="stockInicial">
+                                <input type="number" class="input" id="regStock" min="0" placeholder="0"
+                                    formControlName="stockInicial">
+
+                            </div>
+                            @if (stockInicial.errors && stockInicial.touched){
+                                @if (stockInicial.hasError('required')){
+                                    <p class="error">El campo stock inicial es obligatorio</p>
+                                }
+                                @if (stockInicial.hasError('min')){
+                                    <p class="error">El stock inicial no puede ser negativo ni nulo</p>
+                                }
+                            }
 
                         </div>
-                        @if (stockInicial.errors && stockInicial.touched){
-                            @if (stockInicial.hasError('required')){
-                                <p class="error">El campo stock inicial es obligatorio</p>
-                            }
-                            @if (stockInicial.hasError('min')){
-                                <p class="error">El stock inicial no puede ser negativo ni nulo</p>
-                            }
-                        }
-
-                    </div>
+                    }
 
                     <!-- Configuración de stock -->
                     <div class="row g-3 mb-4">
@@ -148,6 +200,9 @@
                                     <p class="error">El stock mínimo debe ser mayor o igual a 0</p>
                                 }
                             }
+                            @for (mensaje of mensajesDelBackend('stockMinimo'); track mensaje) {
+                                <p class="error">{{ mensaje }}</p>
+                            }
                         </div>
 
                         <div class="col-md-6">
@@ -160,6 +215,9 @@
                                 @if (stockMaximo.hasError('required') || stockMaximo.hasError('min')) {
                                     <p class="error">El stock máximo debe ser mayor o igual a 0</p>
                                 }
+                            }
+                            @for (mensaje of mensajesDelBackend('stockMaximo'); track mensaje) {
+                                <p class="error">{{ mensaje }}</p>
                             }
                         </div>
 
@@ -178,13 +236,29 @@
 
                         <textarea class="input" id="regDescripcion" rows="3"
                             placeholder="Breve descripción del producto..." formControlName="descripcion"></textarea>
+                        @for (mensaje of mensajesDelBackend('descripcion'); track mensaje) {
+                            <p class="error">{{ mensaje }}</p>
+                        }
 
                     </div>
 
                     <div class="mb-4">
                         <label for="regImagen" class="form-label mb-1">Imagen del producto (opcional)</label>
-                        <input type="file" class="input" id="regImagen" accept="image/*"
-                            (change)="seleccionarImagen($event)">
+                        @if (modoEdicion) {
+                            <input type="file" class="input" id="regImagen" accept="image/*"
+                                (change)="seleccionarImagen($event)">
+                        } @else {
+                            <!-- Por ahora solo se puede elegir una de las imágenes que ya están en assets -->
+                            <select class="input form-select" id="regImagen" formControlName="imagen">
+                                <option value="">Sin imagen</option>
+                                @for (opcion of imagenesDisponibles; track opcion.valor) {
+                                    <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+                                }
+                            </select>
+                            @for (mensaje of mensajesDelBackend('imagen'); track mensaje) {
+                                <p class="error">{{ mensaje }}</p>
+                            }
+                        }
                     </div>
 
                     <!-- Materiales Requeridos -->
@@ -224,7 +298,7 @@
                                     Cantidad
                                 </label>
 
-                                <input type="number" min="1" class="input" id="materialCantidad" placeholder="0"
+                                <input type="number" min="0.001" step="0.001" class="input" id="materialCantidad" placeholder="0"
                                     formControlName="cantidadMaterial" [class.input-error]="materialesInvalidos">
 
                             </div>
@@ -289,6 +363,17 @@
 
                                     </tr>
 
+                                    <!-- Errores que devolvió el backend para esta línea -->
+                                    @if (erroresLineas[i]) {
+                                    <tr>
+                                        <td colspan="4">
+                                            @for (mensaje of erroresLineas[i]; track mensaje) {
+                                                <p class="error mb-0">{{ mensaje }}</p>
+                                            }
+                                        </td>
+                                    </tr>
+                                    }
+
                                     }
 
                                 </tbody>
@@ -297,14 +382,24 @@
                             @if (materialesInvalidos) {
                                 <p class="error">Debe agregar al menos una materia prima</p>
                             }
+                            @for (mensaje of mensajesDelBackend('materiales'); track mensaje) {
+                                <p class="error">{{ mensaje }}</p>
+                            }
+                            @if (errorMaterial) {
+                                <p class="error">{{ errorMaterial }}</p>
+                            }
                             @if (cantidadMaterial.errors && cantidadMaterial.touched) {
-                                @if (cantidadMaterial.hasError('min')) {
-                                    <p class="error">La cantidad de material debe ser mayor a 0</p>
+                                @if (cantidadMaterial.hasError('min') || cantidadMaterial.hasError('maximoDecimales')) {
+                                    <p class="error">La cantidad debe ser mayor a 0 y tener hasta 3 decimales</p>
                                 }
                             }
                         </div>
 
                     </div>
+
+                    @if (errorGeneral) {
+                        <p class="error mb-0" role="alert">{{ errorGeneral }}</p>
+                    }
 
                     <!-- Botones -->
                     <div class="d-flex justify-content-end gap-2 mt-4">
@@ -315,9 +410,9 @@
 
                         </button>
 
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" [disabled]="guardando">
 
-                            {{ productoEditar ? 'Guardar cambios' : 'Guardar' }}
+                            {{ guardando ? 'Guardando...' : (productoEditar ? 'Guardar cambios' : 'Guardar') }}
 
                         </button>
 

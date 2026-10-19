@@ -10,7 +10,7 @@ Este repositorio contiene:
 
 - `frontend/ProdManager`: aplicación principal desarrollada con Angular 17.
 - `maqueta`: prototipo HTML/CSS inicial utilizado como base visual del proyecto.
-- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. El registro, el login y la gestión básica de cuentas están conectados; los endpoints de los módulos de negocio siguen pendientes. El contrato está en [`backend/API.md`](backend/API.md).
+- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. Tiene definidos los modelos, las migraciones y las rutas; los endpoints se van implementando de a poco y los que todavía no están responden `501 Not Implemented`. El registro, el login y la gestión básica de cuentas ya están conectados. El contrato de la API está en [`backend/API.md`](backend/API.md), y la columna *Implementado* de su resumen de rutas indica cuáles ya funcionan.
 
 ## Estado de integración
 
@@ -20,8 +20,8 @@ El objetivo del proyecto es que Angular use Django REST Framework y que los dato
 |---|---|
 | Registro público de administradores, login y tokens | Conectado a Django/MySQL |
 | Listado y alta de operarios desde el panel administrador | Conectado a Django/MySQL |
-| Materias primas y movimientos de stock | Angular todavía usa json-server y `db.json`; el endpoint Django responde `501` |
-| Productos, fórmulas e inventario | Angular todavía usa json-server y `db.json`; los endpoints Django responden `501` |
+| Materias primas y movimientos de stock | El listado se consulta en Django/MySQL; los movimientos de stock y la edición todavía usan json-server y `db.json` |
+| Productos, fórmulas e inventario | El alta de productos con su fórmula (con las categorías y materias primas de MySQL) y la eliminación usan Django/MySQL; el listado, la edición y el inventario todavía usan json-server y `db.json` |
 | Órdenes y detalles de producción | Angular todavía usa json-server y `db.json`; los endpoints Django responden `501` |
 
 `json-server` queda como soporte temporal para las pantallas pendientes de migración. No es la base de datos final ni significa que esos módulos ya estén conectados. Para completar la integración hay que implementar sus endpoints en Django y cambiar los servicios Angular para consumirlos; después se podrá retirar `json-server` y `db.json`.
@@ -234,7 +234,7 @@ Si preferís usar una base o un usuario que ya tenés, editá `.env` para que co
 
 ### 6. Aplicar las migraciones
 
-Las migraciones crean en MySQL todas las tablas del proyecto (usuarios, materias primas, productos, órdenes, etc.) y cargan los estados de producción iniciales (Pendiente, En Produccion, Finalizada, Cancelada):
+Las migraciones crean en MySQL todas las tablas del proyecto (usuarios, materias primas, productos, órdenes, etc.) y cargan los estados de producción iniciales (Pendiente, En Produccion, Finalizada, Cancelada) y las 30 materias primas iniciales (ver `backend/README.md`):
 
 ```bash
 python manage.py migrate
@@ -242,7 +242,31 @@ python manage.py migrate
 
 Si todo salió bien, vas a ver una lista de líneas terminadas en `OK`. Este paso se repite cada vez que alguien del equipo agregue migraciones nuevas (después de hacer `git pull`).
 
-### 7. Crear un usuario administrador (opcional)
+### 7. Cargar los datos iniciales
+
+Después de las migraciones la base todavía no tiene categorías, y sin ellas no se puede crear un producto con su fórmula. El repositorio incluye las categorías tomadas de `frontend/ProdManager/db.json` en `productos/fixtures/categorias.json` (8 categorías: Mesas, Bibliotecas, Escritorios, …). Las materias primas no hace falta cargarlas: las agrega la migración `materia_prima/migrations/0002_cargar_materias_primas.py` en el paso 6.
+
+Con el entorno virtual activo y las migraciones aplicadas (paso 6):
+
+```bash
+python manage.py loaddata categorias
+```
+
+Si salió bien, vas a ver `Installed 8 object(s) from 1 fixture(s)`. Para comprobar qué quedó cargado:
+
+```bash
+python manage.py shell -c "from productos.models import Categoria; from materia_prima.models import MateriaPrima; print(Categoria.objects.count(), 'categorias,', MateriaPrima.objects.count(), 'materias primas')"
+```
+
+En una base nueva, la última línea tiene que decir `8 categorias, 30 materias primas`.
+
+A tener en cuenta:
+
+- Las categorías se cargan con **los mismos ids que en `db.json`**, para que coincidan con lo que muestra la aplicación mientras convivan json-server y el backend.
+- Se puede **volver a ejecutar sin duplicar nada**: cada categoría se identifica por su id. Si modificaste alguna, vuelve a los valores del archivo; lo demás (productos, fórmulas, otras filas) no se toca.
+- El stock de las materias primas se carga directamente como punto de partida. De ahí en adelante solo cambia registrando movimientos (ver `API.md`, §6.2).
+
+### 8. Crear un usuario administrador (opcional)
 
 Podés crear la cuenta desde el formulario público de la aplicación, que asigna el rol `ADMIN`, o crearla desde Django:
 
@@ -254,7 +278,7 @@ El comando pide email, nombre, apellido y contraseña. El usuario se crea con ro
 
 ## Ejecución en desarrollo (frontend)
 
-La aplicación puede necesitar **tres procesos abiertos al mismo tiempo**: json-server para las pantallas aún no migradas, Django con MySQL para registro/autenticación/cuentas, y Angular. Para trabajar solo con registro/login y cuentas, no hace falta iniciar json-server. Para usar las pantallas pendientes de migración, sí.
+La aplicación puede necesitar **tres procesos abiertos al mismo tiempo**: json-server para las pantallas aún no migradas, Django con MySQL para registro/autenticación/cuentas y el alta de productos, y Angular. Para trabajar solo con registro/login y cuentas, no hace falta iniciar json-server. Para usar las pantallas pendientes de migración, sí.
 
 ### Terminal opcional: módulos todavía conectados a json-server
 
@@ -282,7 +306,15 @@ La aplicación se recarga automáticamente cuando se modifican archivos del fron
 
 ### Backend Django y MySQL
 
-Seguí los pasos de instalación del backend anteriores, levantá MySQL, aplicá las migraciones y ejecutá `python manage.py runserver` desde `backend`. Actualmente, registro/login y gestión de cuentas se comunican con `http://localhost:8000/api/v1/`. Los endpoints de los otros módulos siguen pendientes.
+Seguí los pasos de instalación del backend anteriores, levantá MySQL, aplicá las migraciones y ejecutá `python manage.py runserver` desde `backend` (ver [Ejecución del backend](#ejecución-del-backend)). Actualmente, registro/login, gestión de cuentas y el alta de productos se comunican con `http://localhost:8000/api/v1/` (configurado como `djangoApiUrl` en `src/environments/environment.ts`). Los endpoints de los otros módulos siguen pendientes.
+
+Para que el navegador pueda llamar al backend, `backend/.env` tiene que incluir la variable `CORS_ALLOWED_ORIGINS` con el origen de Angular (ya viene en `.env.example`; si tu `.env` es anterior, agregala y reiniciá el backend):
+
+```text
+CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
+```
+
+> Los productos creados se guardan en MySQL. Hasta que se migre el listado, no aparecen en la tabla de productos terminados, que todavía lee `db.json`.
 
 ### Probar registro, login y alta de operarios
 
@@ -367,7 +399,11 @@ Si ves esa respuesta, el backend está funcionando correctamente. La lista compl
 | `Can't connect to MySQL server on '127.0.0.1'` | MySQL no está corriendo. Abrí Docker y ejecutá `docker compose up -d`, o iniciá tu servicio local. Si recién lo levantaste, esperá unos segundos. |
 | `docker compose up` falla porque el puerto `3306` está ocupado | Ya tenés otro MySQL corriendo en ese puerto. Detenelo, o cambiá `DB_PORT` en `.env` (por ejemplo a `3307`) y volvé a ejecutar `docker compose up -d`. |
 | `Access denied for user 'quantiauser'` | Los datos de `.env` no coinciden con los de la base. Con Docker, esto pasa si cambiaste `.env` después de crear el contenedor: la base se crea una sola vez. Ejecutá `docker compose down -v` (**borra todos los datos de la base**), luego `docker compose up -d` y `python manage.py migrate`. |
-| `Error: That port is already in use` al ejecutar `runserver` | Otro programa usa el puerto 8000. Cerralo o usá otro puerto: `python manage.py runserver 8001`. |
+| `Error: That port is already in use` al ejecutar `runserver` | Otro programa usa el puerto 8000. Cerralo o usá otro puerto: `python manage.py runserver 8001` (y cambiá `djangoApiUrl` en `frontend/ProdManager/src/environments/environment.ts`). |
+| Al crear un producto aparece "No se pudo conectar con el servidor" | El backend no está corriendo, o el navegador bloqueó el pedido por CORS (en la consola del navegador aparece un error que menciona `CORS`). Levantá el backend y revisá que `backend/.env` tenga `CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200`; después de cambiar `.env`, reiniciá `runserver`. |
+| El formulario de alta muestra las listas de categorías o materiales vacías | Faltan los datos iniciales en MySQL. Si faltan las categorías, cargalas con el [paso 7](#7-cargar-los-datos-iniciales); si faltan las materias primas, aplicá las migraciones con el [paso 6](#6-aplicar-las-migraciones). |
+| `loaddata` falla con `Table ... doesn't exist` o `Unknown column` | Faltan migraciones por aplicar. Ejecutá `python manage.py migrate` y repetí el [paso 7](#7-cargar-los-datos-iniciales). |
+| `loaddata` dice `No fixture named 'categorias'` | El comando no se ejecutó dentro de la carpeta `backend`, o falta hacer `git pull`. |
 
 ## Rutas disponibles
 
@@ -408,11 +444,44 @@ frontend/ProdManager/dist/prod-manager
 
 ## Pruebas
 
-Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine:
+### Frontend
+
+Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine (desde `frontend/ProdManager`):
 
 ```bash
 npm test
 ```
+
+Para correrlas una sola vez sin abrir una ventana del navegador, o para correr un solo archivo de pruebas:
+
+```bash
+npx ng test --watch=false --browsers=ChromeHeadless
+npx ng test --watch=false --browsers=ChromeHeadless --include=src/app/dashboard/admin/features/productos/new-product-form/new-product-form.component.spec.ts
+```
+
+### Backend
+
+Las pruebas del backend (desde `backend`, con el entorno virtual activo) no usan tu base de datos: Django crea una base aparte llamada `test_` + tu `DB_NAME` (por ejemplo `test_ProdManager`), la llena con las migraciones y los datos iniciales, y la borra al terminar.
+
+El usuario de MySQL necesita permiso para crear esa base. Se da **una sola vez**, como `root` (reemplazá `ProdManager` por tu `DB_NAME` si es otro):
+
+```bash
+# Con Docker (pide la contraseña de DB_ROOT_PASSWORD de tu .env)
+docker compose exec db mysql -u root -p -e "GRANT ALL PRIVILEGES ON \`test_ProdManager\`.* TO 'quantiauser'@'%';"
+```
+
+```sql
+-- Con MySQL instalado localmente
+GRANT ALL PRIVILEGES ON `test_ProdManager`.* TO 'quantiauser'@'localhost';
+```
+
+Después, para correr todas las pruebas:
+
+```bash
+python manage.py test
+```
+
+Si todo está bien, termina con `OK`. Si falla con `Access denied ... to database 'test_...'`, falta el permiso anterior. Para correr las de una sola app: `python manage.py test productos`.
 
 ## Estructura del frontend
 
@@ -456,7 +525,7 @@ backend/
 `-- requirements.txt
 ```
 
-Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`.
+Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`. `productos` tiene además `fixtures/`, con las categorías iniciales que se cargan con `loaddata` (ver [paso 7](#7-cargar-los-datos-iniciales)); las materias primas iniciales se cargan con una migración de `materia_prima`.
 
 ## Equipo de desarrollo
 
