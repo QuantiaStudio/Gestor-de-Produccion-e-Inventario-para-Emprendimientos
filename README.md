@@ -80,7 +80,7 @@ Esperá unos segundos a que MySQL termine de iniciar y creá las tablas:
 
 ### Cada vez que quieras usar la aplicación
 
-Dejá abiertas tres ventanas de PowerShell. En la primera, iniciá el servidor y la base de datos:
+Dejá abiertas dos ventanas de PowerShell. En la primera, iniciá el servidor y la base de datos:
 
 ```powershell
 cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\backend
@@ -88,14 +88,7 @@ docker compose up -d
 .\.venv\Scripts\python.exe manage.py runserver
 ```
 
-En la segunda, iniciá el servicio de datos de la aplicación:
-
-```powershell
-cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\frontend\ProdManager
-npm run json-server
-```
-
-En la tercera, iniciá la aplicación web:
+En la segunda, iniciá la aplicación web:
 
 ```powershell
 cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\frontend\ProdManager
