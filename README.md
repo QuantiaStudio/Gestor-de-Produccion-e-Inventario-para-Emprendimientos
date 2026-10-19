@@ -1,3 +1,4 @@
+
 # Gestor de Producción e Inventario para Emprendimientos
 
 Aplicación web desarrollada con Angular para gestionar producción, materias primas, productos terminados, usuarios y paneles de control orientados a microemprendimientos y pequeños talleres productivos.
@@ -10,9 +11,17 @@ Este repositorio contiene:
 
 - `frontend/ProdManager`: aplicación principal desarrollada con Angular 17.
 - `maqueta`: prototipo HTML/CSS inicial utilizado como base visual del proyecto.
-- `backend`: carpeta reservada para el futuro desarrollo del backend.
+- `backend`: API REST desarrollada con Django y Django REST Framework sobre MySQL. El proyecto integra el flujo de producción y los inventarios; el módulo de materias primas tiene algunas tareas pendientes. El contrato está en [`backend/API.md`](backend/API.md).
 
-La aplicación Angular consume una API de prueba simulada con [json-server](https://github.com/typicode/json-server), que expone como servicio REST los datos del archivo `frontend/ProdManager/db.json` (usuarios, materias primas, productos, órdenes de producción y movimientos de stock). Para que la aplicación funcione hay que levantar **dos procesos**: la API de prueba y el servidor de desarrollo de Angular. Los cambios que se hacen desde la aplicación (altas, movimientos de stock, cambios de estado) se guardan en `db.json`.
+## Estado del proyecto
+
+🟡 **Desarrollo en curso.**
+
+ProdManager es una aplicación web para gestionar la producción y los inventarios de microemprendimientos. Integra un frontend desarrollado con Angular, un backend implementado con Django REST Framework y una base de datos MySQL.
+
+El sistema contempla el flujo principal de producción: crear productos terminados y sus fórmulas, administrar órdenes de producción y actualizar los inventarios. Al iniciar una orden se reservan las materias primas necesarias; al finalizarla se descuentan los materiales utilizados y aumenta el stock del producto terminado. Al cancelar una orden, se liberan las reservas sin descontar físicamente las materias primas.
+
+La entrega prioriza el proceso de producción y la consistencia de los inventarios. El módulo de producción se entrega completo; el módulo de materias primas está implementado, con algunas tareas pendientes. La carga y edición completa de materias primas y otras funciones secundarias quedan fuera de las prioridades principales de esta etapa. La arquitectura permite incorporar mejoras en futuras etapas.
 
 ## Funcionalidades principales
 
@@ -31,99 +40,69 @@ La aplicación Angular consume una API de prueba simulada con [json-server](http
 - RxJS
 - Karma y Jasmine para pruebas unitarias
 
-## Requisitos previos
+Backend:
 
-Antes de instalar el proyecto, asegurate de tener instalado:
+- Python 3.10+
+- Django 5.2
+- Django REST Framework
+- MySQL 8.0 (con Docker o instalado localmente)
 
-- Node.js 18 o superior compatible con Angular 17.
-- npm.
-- Git, si vas a clonar el repositorio desde GitHub.
+## Instalar e iniciar la aplicación
 
-Para comprobar las versiones instaladas:
+Estos pasos son para Windows y se ejecutan desde PowerShell. Instalá previamente **Git**, **Node.js 18 o superior**, **Python 3.10 o superior** y **Docker Desktop**; abrí Docker Desktop y esperá a que esté iniciado.
 
-```bash
-node -v
-npm -v
-git --version
-```
+### Primera vez
 
-## Instalación
+Cloná el proyecto y prepará el frontend:
 
-### 1. Clonar el repositorio
-
-```bash
+```powershell
 git clone https://github.com/QuantiaStudio/Gestor-de-Produccion-e-Inventario-para-Emprendimientos.git
 cd Gestor-de-Produccion-e-Inventario-para-Emprendimientos
-```
-
-### 2. Ingresar al proyecto Angular
-
-```bash
-cd frontend/ProdManager
-```
-
-### 3. Instalar dependencias
-
-```bash
+cd frontend\ProdManager
 npm install
 ```
 
-Este comando instala también `json-server`, la API de prueba que se usa en la ejecución (no hace falta instalarla aparte).
+Prepará el backend y la base de datos:
 
-Si querés instalar exactamente las versiones registradas en `package-lock.json`, podés usar:
-
-```bash
-npm ci
+```powershell
+cd ..\..\backend
+python -m venv .venv
+Copy-Item .env.example .env
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+docker compose up -d
 ```
 
-## Ejecución en desarrollo
+Esperá unos segundos a que MySQL termine de iniciar y creá las tablas:
 
-La aplicación necesita **dos terminales abiertas al mismo tiempo**, ambas ubicadas en la carpeta `frontend/ProdManager`.
+```powershell
+.\.venv\Scripts\python.exe manage.py migrate
+```
 
-### Terminal 1: API de prueba (json-server)
+### Cada vez que quieras usar la aplicación
 
-```bash
+Dejá abiertas tres ventanas de PowerShell. En la primera, iniciá el servidor y la base de datos:
+
+```powershell
+cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\backend
+docker compose up -d
+.\.venv\Scripts\python.exe manage.py runserver
+```
+
+En la segunda, iniciá el servicio de datos de la aplicación:
+
+```powershell
+cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\frontend\ProdManager
 npm run json-server
 ```
 
-Levanta la API en `http://localhost:3000/` a partir del archivo `db.json`. Se puede comprobar abriendo `http://localhost:3000/materiasPrimas` en el navegador. Esta terminal tiene que quedar abierta mientras se usa la aplicación.
+En la tercera, iniciá la aplicación web:
 
-> Si el puerto 3000 está ocupado por otro programa, la API no va a levantar y la aplicación va a mostrar las tablas vacías o un error al iniciar sesión. Cerrá el programa que lo usa (o cambiá el puerto en el script `json-server` de `package.json` y en la URL de `src/environments/environment.ts` y `src/app/auth/services/auth.service.ts`).
-
-### Terminal 2: aplicación Angular
-
-```bash
+```powershell
+cd ruta\a\Gestor-de-Produccion-e-Inventario-para-Emprendimientos\frontend\ProdManager
 npm start
 ```
 
-Este comando ejecuta `ng serve` y levanta la aplicación en:
-
-```text
-http://localhost:4200/
-```
-
-La aplicación se recarga automáticamente cuando se modifican archivos del frontend.
-
-### Usuarios de prueba
-
-Los usuarios están definidos en la tabla `usuarios` de `db.json`:
-
-| Rol | Correo | Contraseña | Acceso |
-| --- | --- | --- | --- |
-| Administrador | `admin@correo.com` | `123456` | `/dashboard` |
-| Administrador | `rocio.altamirano@correo.com` | `123456` | `/dashboard` |
-| Operador | `genaro.cura@correo.com` | `abcabc` | `/user-panel` |
-
-El usuario `cesia.caceres@correo.com` está inactivo y no puede iniciar sesión. Al iniciar sesión, cada rol es redirigido a su panel.
-
-### Restaurar los datos de prueba
-
-Como la API guarda los cambios en `db.json`, después de probar la aplicación se pueden descartar con:
-
-```bash
-git checkout -- frontend/ProdManager/db.json
-```
-
+Cuando la terminal indique que Angular está listo, abrí **http://localhost:4200** en el navegador. Dejá las tres ventanas abiertas mientras usás la aplicación. Para detenerla, presioná `Ctrl + C` en cada ventana.
 ## Rutas disponibles
 
 Rutas públicas:
@@ -131,6 +110,7 @@ Rutas públicas:
 - `/`: página de inicio.
 - `/about-us`: información del equipo.
 - `/login`: inicio de sesión.
+- `/registro`: registro público de una cuenta `ADMIN`.
 
 Rutas del administrador (requieren rol `ADMIN`):
 
@@ -160,14 +140,6 @@ Los archivos generados quedan dentro de:
 frontend/ProdManager/dist/prod-manager
 ```
 
-## Pruebas
-
-Para ejecutar las pruebas unitarias configuradas con Karma y Jasmine:
-
-```bash
-npm test
-```
-
 ## Estructura del frontend
 
 ```text
@@ -193,6 +165,24 @@ frontend/ProdManager/
 |-- package.json
 `-- package-lock.json
 ```
+
+## Estructura del backend
+
+```text
+backend/
+|-- config/                    # Proyecto Django: settings, URLs raíz, manejo de errores
+|-- usuarios/                  # Usuarios y autenticación (/auth/, /usuarios/)
+|-- materia_prima/             # Materias primas y sus movimientos de stock
+|-- productos/                 # Categorías, productos, fórmulas y movimientos de inventario
+|-- produccion/                # Estados, órdenes de producción y sus detalles
+|-- API.md                     # Contrato de la API (rutas, campos, respuestas)
+|-- docker-compose.yml         # MySQL 8 para desarrollo
+|-- .env.example               # Plantilla de variables de entorno
+|-- manage.py
+`-- requirements.txt
+```
+
+Cada app tiene sus `models.py` (tablas), `views.py` (endpoints), `urls.py` (rutas) y `migrations/`.
 
 ## Equipo de desarrollo
 
