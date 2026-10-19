@@ -139,12 +139,13 @@ La contraseña se valida contra el hash almacenado por Django. Al iniciar sesió
 
 ## 5. Usuarios — `/usuarios/`
 
-Por ahora se implementaron el listado y el alta de operarios. Ambos requieren un token de administrador. El `POST` siempre crea una cuenta activa con rol `OPERARIO`; se ignoran los campos `rol` y `estado` si el cliente los envía. Los demás métodos continúan sin implementar.
+Por ahora se implementaron el listado, el alta de operarios y la actualización parcial. Requieren un token de administrador. El `POST` siempre crea una cuenta activa con rol `OPERARIO`; se ignoran los campos `rol` y `estado` si el cliente los envía. La edición permite actualizar los campos editables; `GET`, `PUT` y `DELETE` sobre un usuario continúan sin implementar.
 
 | Método | Ruta | Descripción |
 |---|---|---|
 | `GET` | `/usuarios/` | Lista las cuentas con datos públicos (`200` + array) |
 | `POST` | `/usuarios/` | Crea un operario (`201` + usuario creado) |
+| `PATCH` | `/usuarios/{id}/` | Actualiza parcialmente una cuenta (`200` + usuario actualizado) |
 
 Ejemplo de alta:
 
@@ -164,7 +165,7 @@ Un correo duplicado o datos inválidos producen `400`; sin token responde `401` 
 | `rol` | `"ADMIN"` \| `"OPERARIO"` | — | Asignado por el servidor: el registro público crea `ADMIN` y este `POST` crea `OPERARIO` |
 | `estado` | boolean | — | Las altas se crean activas (`true`) |
 
-La edición y baja de cuentas todavía no están implementadas. `/usuarios/{id}/` sigue respondiendo `501`.
+`PATCH /usuarios/{id}/` acepta uno o más de estos campos: `nombre`, `apellido`, `email`, `contrasena`, `rol` (`ADMIN` o `OPERARIO`) y `estado` (booleano). La contraseña se valida y se guarda hasheada; no se devuelve en la respuesta. Un correo duplicado, un campo inválido o una contraseña débil producen `400`; un id inexistente produce `404`. `/usuarios/{id}/` continúa respondiendo `501` para `GET`, `PUT` y `DELETE`.
 
 ---
 
