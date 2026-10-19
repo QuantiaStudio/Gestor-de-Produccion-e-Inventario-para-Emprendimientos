@@ -1,15 +1,28 @@
+from decimal import Decimal
+
 from django.db import transaction
-from django.db.models import Sum
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
 
-from .models import DetalleOrdenProduccion, EstadoOrden, OrdenProduccion, ReservaMateriaPrima
+from .models import DetalleOrdenProduccion, Estado, OrdenProduccion, ReservaMateriaPrima
 from .serializers import DetalleOrdenProduccionSerializer, OrdenProduccionSerializer
-from .servicios import validar_disponibilidad_formula
+from .servicios import calcular_disponibilidad
+
+
+class EstadoOrden:
+    PENDIENTE = 'Pendiente'
+    EN_PRODUCCION = 'En Produccion'
+    FINALIZADA = 'Finalizada'
+    CANCELADA = 'Cancelada'
+
+
+def obtener_estado(nombre):
+    return get_object_or_404(Estado, nombre=nombre)
 
 
 class EstadoListView(ColeccionNoImplementada):
@@ -96,74 +109,69 @@ class DetalleOrdenProduccionDetailView(ElementoNoImplementado):
 
 
 class IniciarOrdenAPIView(APIView):
-<<<<<<< HEAD
-    """Iniciar orden, reservar insumos y validar disponibilidad"""
-=======
     """Iniciar orden, reservar insumos y validar disponibilidad/transiciones"""
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
 
-        # Validar que el estado sea Pendiente
-        if orden.estado != EstadoOrden.PENDIENTE:
+        if orden.estado.nombre != EstadoOrden.PENDIENTE:
             return Response(
-                {"error": f"No se puede iniciar una orden en estado '{orden.estado}'. Debe estar 'Pendiente'."},
+                {"error": f"No se puede iniciar una orden en estado '{orden.estado.nombre}'. Debe estar 'Pendiente'."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        detalles_formula = getattr(orden.producto, 'detalles_formula', None) or orden.producto.formula.all()
-
-        if not detalles_formula.exists():
+        detalles = list(
+            orden.detalles.select_related('producto').prefetch_related('producto__formula__materia_prima')
+        )
+        if not detalles:
             return Response(
-                {"error": "El producto de esta orden no tiene una fórmula/receta configurada."},
+                {"error": "La orden no tiene productos para iniciar."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        insumos_a_reservar = []
-        for detalle in detalles_formula.all():
-            materia_prima = detalle.materia_prima
-            cantidad_requerida = detalle.cantidad * orden.cantidad
+        requerimientos = {}
+        for detalle in detalles:
+            formulas = list(detalle.producto.formula.select_related('materia_prima'))
+            if not formulas:
+                return Response(
+                    {"error": f"El producto '{detalle.producto.nombre}' no tiene una fórmula configurada."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            stock_fisico = materia_prima.stock_actual if hasattr(materia_prima, 'stock_actual') else materia_prima.stock
+            for formula in formulas:
+                materia_prima = formula.materia_prima
+                cantidad = formula.cantidad_necesaria * detalle.cantidad_planificada
+                requerimientos[materia_prima.pk] = (
+                    materia_prima,
+                    requerimientos.get(materia_prima.pk, (materia_prima, Decimal('0')))[1] + cantidad,
+                )
 
-            reservas_activas = ReservaMateriaPrima.objects.filter(
-                materia_prima=materia_prima,
-                activa=True
-            ).aggregate(total=Sum('cantidad_reservada'))['total'] or 0
-
-            disponibles = stock_fisico - reservas_activas
-
-            # Rechazar inicio si no hay disponibilidad suficiente
-            if disponibles < cantidad_requerida:
+        for materia_prima, cantidad_requerida in requerimientos.values():
+            disponible = calcular_disponibilidad(materia_prima)
+            if disponible < cantidad_requerida:
                 return Response(
                     {
                         "error": f"Insumo insuficiente: {materia_prima.nombre}. "
-                                 f"Requerido: {cantidad_requerida}, Disponible: {disponibles} "
-                                 f"(Stock Físico: {stock_fisico}, Reservado: {reservas_activas})."
+                                 f"Requerido: {cantidad_requerida}, Disponible: {disponible}."
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            insumos_a_reservar.append({
-                'materia_prima': materia_prima,
-                'cantidad': cantidad_requerida
-            })
-
         try:
             with transaction.atomic():
-                orden.estado = EstadoOrden.EN_PRODUCCION
-                orden.save()
+                orden.estado = obtener_estado(EstadoOrden.EN_PRODUCCION)
+                orden.fecha_inicio = timezone.now()
+                orden.save(update_fields=['estado', 'fecha_inicio'])
 
-                for item in insumos_a_reservar:
+                for materia_prima, cantidad in requerimientos.values():
                     ReservaMateriaPrima.objects.create(
                         orden=orden,
-                        materia_prima=item['materia_prima'],
-                        cantidad_reservada=item['cantidad'],
+                        materia_prima=materia_prima,
+                        cantidad_reservada=cantidad,
                         activa=True
                     )
 
             return Response(
-                {"mensaje": f"Orden #{orden.id} iniciada correctamente con estado 'En Producción' y reservas activadas."},
+                {"mensaje": f"Orden #{orden.pk} iniciada correctamente con estado 'En Produccion' y reservas activadas."},
                 status=status.HTTP_200_OK
             )
 
@@ -175,91 +183,50 @@ class IniciarOrdenAPIView(APIView):
 
 
 class FinalizarOrdenAPIView(APIView):
-<<<<<<< HEAD
-<<<<<<< HEAD
-    """Finalización transaccional e inventario"""
-    def post(self, request, pk):
-        orden = get_object_or_404(OrdenProduccion, pk=pk)
-
-=======
-    def post(self, request, pk):
-        orden = get_object_or_404(OrdenProduccion, pk=pk)
-
-        # Validar estado
->>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
-=======
     """Finalización transaccional, impacto en inventario y prevención de duplicados"""
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
 
-        # Prevenir finalizar si no está En Producción (evita doble finalización)
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
-        if orden.estado != EstadoOrden.EN_PRODUCCION:
+        if orden.estado.nombre != EstadoOrden.EN_PRODUCCION:
             return Response(
-                {"error": f"No se puede finalizar una orden en estado '{orden.estado}'. Debe estar 'En Producción'."},
+                {"error": f"No se puede finalizar una orden en estado '{orden.estado.nombre}'. Debe estar 'En Produccion'."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         reservas = ReservaMateriaPrima.objects.filter(orden=orden, activa=True)
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-        try:
-            with transaction.atomic():
-                for reserva in reservas:
-                    materia_prima = reserva.materia_prima
-=======
         if not reservas.exists():
             return Response(
                 {"error": "La orden no tiene reservas activas para procesar la finalización."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-=======
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
+        detalles = list(orden.detalles.select_related('producto'))
+        if not detalles:
+            return Response(
+                {"error": "La orden no tiene productos para finalizar."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         try:
             with transaction.atomic():
-                # 1. Descontar stock físico y desactivar reservas
                 for reserva in reservas:
                     materia_prima = reserva.materia_prima
-                    
->>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
-                    if hasattr(materia_prima, 'stock_actual'):
-                        materia_prima.stock_actual -= reserva.cantidad_reservada
-                    else:
-                        materia_prima.stock -= reserva.cantidad_reservada
-<<<<<<< HEAD
-=======
-                        
->>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
+                    materia_prima.stock_actual -= reserva.cantidad_reservada
                     materia_prima.save()
 
                     reserva.activa = False
                     reserva.save()
 
-<<<<<<< HEAD
-=======
-                # 2. Incrementar stock del producto final (mueble)
->>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
-                producto = orden.producto
-                if hasattr(producto, 'stock_actual'):
-                    producto.stock_actual += orden.cantidad
-                elif hasattr(producto, 'stock'):
-                    producto.stock += orden.cantidad
-<<<<<<< HEAD
-                producto.save()
+                for detalle in detalles:
+                    cantidad_producida = detalle.cantidad_producida or detalle.cantidad_planificada
+                    detalle.producto.stock_actual += cantidad_producida
+                    detalle.producto.save(update_fields=['stock_actual'])
 
-=======
-                
-                producto.save()
-
-                # 3. Marcar la orden como finalizada
->>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
-                orden.estado = EstadoOrden.FINALIZADA
-                orden.save()
+                orden.estado = obtener_estado(EstadoOrden.FINALIZADA)
+                orden.save(update_fields=['estado'])
 
             return Response(
-                {"mensaje": f"Orden #{orden.id} finalizada correctamente. Inventario actualizado y reservas liberadas."},
+                {"mensaje": f"Orden #{orden.pk} finalizada correctamente. Inventario actualizado y reservas liberadas."},
                 status=status.HTTP_200_OK
             )
 
@@ -267,48 +234,32 @@ class FinalizarOrdenAPIView(APIView):
             return Response(
                 {"error": f"Error al finalizar la orden de producción: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
             )
 
 
 class CancelarOrdenAPIView(APIView):
-<<<<<<< HEAD
-    """Cancelación y liberación de reservas"""
+    """Cancela órdenes abiertas y libera sus reservas activas."""
     def post(self, request, pk):
         orden = get_object_or_404(OrdenProduccion, pk=pk)
 
-=======
-    """ Cancelación, liberación de reservas y prevención de transiciones inválidas"""
-    def post(self, request, pk):
-        orden = get_object_or_404(OrdenProduccion, pk=pk)
-
-        # Validar que no esté ya cerrada o finalizada
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
-        if orden.estado not in [EstadoOrden.PENDIENTE, EstadoOrden.EN_PRODUCCION]:
+        if orden.estado.nombre not in [EstadoOrden.PENDIENTE, EstadoOrden.EN_PRODUCCION]:
             return Response(
-                {"error": f"No se puede cancelar una orden en estado '{orden.estado}'. Solo se pueden cancelar órdenes 'Pendientes' o 'En Producción'."},
+                {"error": f"No se puede cancelar una orden en estado '{orden.estado.nombre}'. Solo se pueden cancelar órdenes 'Pendiente' o 'En Produccion'."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
             with transaction.atomic():
-<<<<<<< HEAD
-=======
-                # Liberar reservas sin tocar el stock físico
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
                 reservas = ReservaMateriaPrima.objects.filter(orden=orden, activa=True)
                 for reserva in reservas:
                     reserva.activa = False
                     reserva.save()
 
-                orden.estado = EstadoOrden.CANCELADA
-                orden.save()
+                orden.estado = obtener_estado(EstadoOrden.CANCELADA)
+                orden.save(update_fields=['estado'])
 
             return Response(
-                {"mensaje": f"Orden #{orden.id} cancelada correctamente y reservas liberadas."},
+                {"mensaje": f"Orden #{orden.pk} cancelada correctamente y reservas liberadas."},
                 status=status.HTTP_200_OK
             )
 
@@ -316,9 +267,4 @@ class CancelarOrdenAPIView(APIView):
             return Response(
                 {"error": f"Error al cancelar la orden de producción: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
-<<<<<<< HEAD
-=======
->>>>>>> c1ad498 (feat(produccion): implementar vistas y rutas para iniciar y finalizar orden)
-=======
->>>>>>> aeee2b1 (feat(produccion): implementar inicio, finalizacion, cancelacion y validaciones de orden)
             )
