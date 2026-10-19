@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
 
 from .models import DetalleOrdenProduccion, Estado, OrdenProduccion, ReservaMateriaPrima
-from .serializers import DetalleOrdenProduccionSerializer, OrdenProduccionSerializer
+from .serializers import DetalleOrdenProduccionSerializer, EstadoSerializer, OrdenProduccionSerializer
 from .servicios import calcular_disponibilidad, validar_disponibilidad_formula
 
 
@@ -26,7 +26,9 @@ def obtener_estado(nombre):
 
 
 class EstadoListView(ColeccionNoImplementada):
-    pass
+    def get(self, request):
+        estados = Estado.objects.order_by('id_estado')
+        return Response(EstadoSerializer(estados, many=True).data, status=status.HTTP_200_OK)
 
 
 class EstadoDetailView(ElementoNoImplementado):
@@ -55,9 +57,20 @@ class OrdenProduccionListView(ColeccionNoImplementada):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = OrdenProduccionSerializer(data=request.data)
+        serializer = OrdenProduccionSerializer(data=request.data, context={'request': request})
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        detalle = serializer.validated_data['detalle']
+        error_disponibilidad = validar_disponibilidad_formula(
+            detalle['producto'], detalle['cantidad_planificada']
+        )
+        if error_disponibilidad is not None:
+            return Response(
+                {'detail': error_disponibilidad, 'code': 'stock_insuficiente'},
+                status=status.HTTP_409_CONFLICT,
+            )
+
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

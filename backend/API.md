@@ -445,7 +445,7 @@ CRUD estándar. Catálogo precargado por migración:
 
 ### 8.2 `/ordenes-produccion/`
 
-CRUD estándar.
+Consulta de órdenes y alta transaccional de una orden con su primer detalle.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
@@ -453,16 +453,19 @@ CRUD estándar.
 | `fecha_creacion` | datetime | — | Solo lectura. La asigna el servidor |
 | `fecha_inicio` | datetime \| null | No | Por defecto `null` |
 | `id_estado` | int | No | Por defecto `1` (Pendiente). `400` si no existe |
+| `detalle` | objeto | Sí en `POST` | Producto y cantidad planificada; se guarda atómicamente con la orden. `409` si no hay materia prima suficiente |
+| `observaciones` | string | No | Nota de la orden; por defecto `""` |
+| `id_usuario` | int \| null | — | Solo lectura. Se asigna desde el usuario autenticado |
 
 Filtros: `?id_estado=2`, `?desde=`, `?hasta=` (sobre `fecha_creacion`). Orden: más reciente primero.
 `DELETE`: borra también sus detalles. `409` si la orden no está en estado Pendiente.
 
 ```json
 // POST /ordenes-produccion/
-{ "fecha_inicio": null }
+{ "detalle": { "id_producto": 2, "cantidad_planificada": "5" }, "observaciones": "Priorizar este lote" }
 
 // 201
-{ "id_orden": 7, "fecha_creacion": "2026-10-14T13:45:00Z", "fecha_inicio": null, "id_estado": 1 }
+{ "id_orden": 7, "fecha_creacion": "2026-10-14T13:45:00Z", "fecha_inicio": null, "id_estado": 1, "id_usuario": 3, "observaciones": "Priorizar este lote" }
 ```
 
 ### 8.3 `/detalles-orden-produccion/`
@@ -502,8 +505,8 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 | `/productos/`, `/productos/{id}/` | CRUD | `GET /productos/`, `POST /productos/`, `DELETE /productos/{id}/` |
 | `/detalles-formula/`, `/detalles-formula/{id}/` | CRUD | — |
 | `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` | `GET /movimientos-producto/` |
-| `/estados/`, `/estados/{id}/` | CRUD | — |
-| `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD | — |
-| `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD | — |
+| `/estados/`, `/estados/{id}/` | CRUD | `GET /estados/` |
+| `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD | `GET /ordenes-produccion/`, `POST /ordenes-produccion/` |
+| `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD | `GET /detalles-orden-produccion/`, `POST /detalles-orden-produccion/` |
 
 Todas con el prefijo `/api/v1/`. Los métodos que todavía no figuran en la columna **Implementado** responden `501 Not Implemented` (o `405` si el método no está permitido en esa ruta).

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, switchMap, tap, throwError } from 'rxjs';
+import { Observable, forkJoin, map, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/services/auth.service';
-import { ProductoTerminado, EstadoApiDTO } from '../models/producto/producto-terminado.model';
+import { ProductoTerminado } from '../models/producto/producto-terminado.model';
 import {
     CampoOrdenOrdenProduccion,
-    DetalleFormulaTablaApiDTO,
     DetalleOrdenProduccionApiDTO,
+    EstadoOrdenApiDTO,
     EstadoOrdenProduccion,
     FiltroOrdenProduccion,
     MaterialRequeridoOrden,
@@ -18,7 +18,6 @@ import {
     ProductoOrdenProduccion
 } from '../models/orden-produccion/orden-produccion.model';
 import { ProductoTerminadoService } from './producto-terminado.service';
-import { MovimientoStockService } from './movimiento-stock.service';
 import { MateriaPrimaService } from './materia-prima.service';
 
 interface ItemFormula {
@@ -31,12 +30,9 @@ interface ItemFormula {
     providedIn: 'root'
 })
 export class ProduccionService {
-    private readonly ordenesUrl = `${environment.apiUrl}/ordenesProduccion`;
-    private readonly detallesUrl = `${environment.apiUrl}/detalleOrdenProduccion`;
-    private readonly estadosUrl = `${environment.apiUrl}/estados`;
-    private readonly formulasUrl = `${environment.apiUrl}/detalleFormula`;
-    private readonly productosUrl = `${environment.apiUrl}/productos`;
-    private readonly movimientosProductoUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
+    private readonly ordenesUrl = `${environment.djangoApiUrl}/ordenes-produccion/`;
+    private readonly detallesUrl = `${environment.djangoApiUrl}/detalles-orden-produccion/`;
+    private readonly estadosUrl = `${environment.djangoApiUrl}/estados/`;
 
     private ordenesProduccion: OrdenProduccion[] = [];
     private readonly flujoEstados: EstadoOrdenProduccion[] = [
@@ -46,29 +42,25 @@ export class ProduccionService {
         'cancelada'
     ];
     private estados = new Map<number, EstadoOrdenProduccion>();
-    private formulas: DetalleFormulaTablaApiDTO[] = [];
     private productos: ProductoTerminado[] = [];
 
     constructor(
         private http: HttpClient,
         private authService: AuthService,
         private materiaPrimaService: MateriaPrimaService,
-        private productoTerminadoService: ProductoTerminadoService,
-        private movimientoStockService: MovimientoStockService
+        private productoTerminadoService: ProductoTerminadoService
     ) { }
 
     cargarOrdenes(): Observable<OrdenProduccion[]> {
         return forkJoin({
             ordenes: this.http.get<OrdenProduccionApiDTO[]>(this.ordenesUrl),
             detalles: this.http.get<DetalleOrdenProduccionApiDTO[]>(this.detallesUrl),
-            estados: this.http.get<EstadoApiDTO[]>(this.estadosUrl),
-            formulas: this.http.get<DetalleFormulaTablaApiDTO[]>(this.formulasUrl),
+            estados: this.http.get<EstadoOrdenApiDTO[]>(this.estadosUrl),
             productos: this.productoTerminadoService.cargarProductosTerminados(),
             materias: this.materiaPrimaService.obtenerMateriasPrimas$()
         }).pipe(
-            map(({ ordenes, detalles, estados, formulas, productos }) => {
-                this.estados = new Map(estados.map(e => [e.id, this.normalizarEstado(e.nombre)]));
-                this.formulas = formulas;
+            map(({ ordenes, detalles, estados, productos }) => {
+                this.estados = new Map(estados.map(e => [e.id_estado, this.normalizarEstado(e.nombre)]));
                 this.productos = productos;
                 return ordenes.map(orden => this.mapearOrden(
                     orden,
@@ -166,54 +158,26 @@ export class ProduccionService {
             return throwError(() => new Error('El producto no existe.'));
         }
 
-        const fechaActual = new Date().toISOString();
-        const idOrden = this.proximoIdOrden();
-        const idDetalle = this.proximoIdDetalle();
-        const materialesRequeridos = this.calcularMaterialesRequeridos(producto, datos.cantidad);
-
-        const ordenApi: OrdenProduccionApiDTO = {
-            id: idOrden,
-            id_orden: idOrden,
-            fecha_creacion: fechaActual,
-            id_estado: this.idEstado('pendiente')
-        };
-        const detalleApi: DetalleOrdenProduccionApiDTO = {
-            id: idDetalle,
-            id_detalle_produccion: idDetalle,
-            id_orden: idOrden,
-            id_producto: producto.apiId,
-            cantidad_planificada: datos.cantidad,
-            cantidad_producida: 0
+        const payload = {
+            observaciones: datos.observaciones ?? '',
+            detalle: {
+                id_producto: producto.apiId,
+                cantidad_planificada: datos.cantidad
+            }
         };
 
-        return this.http.post<OrdenProduccionApiDTO>(this.ordenesUrl, ordenApi).pipe(
-            switchMap(() => this.http.post<DetalleOrdenProduccionApiDTO>(this.detallesUrl, detalleApi)),
-            map(() => {
-                const nuevaOrden: OrdenProduccion = {
-                    id: this.formatearIdOrden(idOrden),
-                    apiId: idOrden,
-                    detalleApiId: idDetalle,
-                    producto: {
-                        id: producto.id,
-                        nombre: producto.nombre,
-                        unidadMedida: producto.unidadMedida || 'unidad'
-                    },
-                    materialesRequeridos,
-                    disponibilidadMateriales: materialesRequeridos.every(m => m.disponible)
-                        ? 'disponible'
-                        : 'insuficiente',
-                    cantidad: datos.cantidad,
-                    cantidadProducida: 0,
-                    estado: 'pendiente',
-                    fechaCreacion: fechaActual,
-                    operadorId: String(operador.id),
-                    operadorNombre: `${operador.nombre} ${operador.apellido}`,
-                    observaciones: datos.observaciones,
-                    historialEstados: [{ estado: 'pendiente', fecha: fechaActual }]
+        return this.http.post<OrdenProduccionApiDTO>(this.ordenesUrl, payload).pipe(
+            map(orden => {
+                const detalle: DetalleOrdenProduccionApiDTO = {
+                    id_detalle_produccion: 0,
+                    id_orden: orden.id_orden,
+                    id_producto: producto.apiId!,
+                    cantidad_planificada: datos.cantidad,
+                    cantidad_producida: 0
                 };
-                this.ordenesProduccion.push(nuevaOrden);
-                return nuevaOrden;
-            })
+                return this.mapearOrden(orden, detalle);
+            }),
+            tap(nuevaOrden => this.ordenesProduccion.unshift(nuevaOrden))
         );
     }
 
@@ -225,7 +189,7 @@ export class ProduccionService {
         }
 
         const pk = orden.apiId;
-        const url = `${environment.apiUrl}/produccion/ordenes/${pk}/iniciar/`;
+        const url = `${environment.djangoApiUrl}/ordenes/${pk}/iniciar/`;
 
         return this.http.post<any>(url, {}).pipe(
             tap(() => {
@@ -246,7 +210,7 @@ export class ProduccionService {
         }
 
         const pk = orden.apiId;
-        const url = `${environment.apiUrl}/produccion/ordenes/${pk}/finalizar/`;
+        const url = `${environment.djangoApiUrl}/ordenes/${pk}/finalizar/`;
 
         return this.http.post<any>(url, {}).pipe(
             tap(() => {
@@ -271,7 +235,7 @@ export class ProduccionService {
         }
 
         const pk = orden.apiId;
-        const url = `${environment.apiUrl}/produccion/ordenes/${pk}/cancelar/`;
+        const url = `${environment.djangoApiUrl}/ordenes/${pk}/cancelar/`;
 
         return this.http.post<any>(url, { motivo: motivo.trim() }).pipe(
             tap(() => {
@@ -294,7 +258,7 @@ export class ProduccionService {
     ): OrdenProduccion {
         const producto = detalle ? this.productos.find(p => p.apiId === detalle.id_producto) : undefined;
         const estado = this.estados.get(orden.id_estado) ?? 'pendiente';
-        const cantidad = detalle?.cantidad_planificada ?? 0;
+        const cantidad = Number(detalle?.cantidad_planificada ?? 0);
         const materialesRequeridos = this.calcularMaterialesRequeridos(producto, cantidad);
 
         const fechaCreacion = this.aIso(orden.fecha_creacion);
@@ -324,7 +288,7 @@ export class ProduccionService {
                 unidadMedida: producto?.unidadMedida || 'unidad'
             },
             cantidad,
-            cantidadProducida: detalle?.cantidad_producida ?? 0,
+            cantidadProducida: Number(detalle?.cantidad_producida ?? 0),
             estado,
             disponibilidadMateriales: materialesRequeridos.every(m => m.disponible)
                 ? 'disponible'
@@ -332,7 +296,10 @@ export class ProduccionService {
             materialesRequeridos,
             fechaCreacion,
             fechaInicio,
-            historialEstados
+            historialEstados,
+            operadorId: orden.id_usuario ? String(orden.id_usuario) : undefined,
+            operadorNombre: this.nombreOperador(orden.id_usuario),
+            observaciones: orden.observaciones
         };
     }
 
@@ -369,42 +336,12 @@ export class ProduccionService {
                 cantidad: f.cantidad
             }));
         }
-        return this.formulas
-            .filter(f => f.id_producto === producto.apiId)
-            .map(f => ({
-                materiaPrimaId: String(f.id_materia_prima),
-                nombre: `Materia prima #${f.id_materia_prima}`,
-                cantidad: f.cantidad_necesaria
-            }));
+        return [];
     }
 
     private buscarProducto(idProducto: string): ProductoTerminado | undefined {
         return this.productos.find(p => p.id === idProducto)
             ?? this.productoTerminadoService.obtenerPorId(idProducto);
-    }
-
-    private obtenerIdUsuario(): number {
-        const idUsuario = Number(this.authService.getUsuarioActual()?.id);
-        if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
-            throw new Error('No hay un usuario autenticado válido.');
-        }
-        return idUsuario;
-    }
-
-    private idEstado(estado: EstadoOrdenProduccion): number {
-        const entrada = [...this.estados.entries()].find(([, nombre]) => nombre === estado);
-        if (!entrada) {
-            throw new Error(`No existe el estado "${estado}" en la base de datos.`);
-        }
-        return entrada[0];
-    }
-
-    private proximoIdOrden(): number {
-        return this.ordenesProduccion.reduce((max, o) => Math.max(max, o.apiId ?? 0), 0) + 1;
-    }
-
-    private proximoIdDetalle(): number {
-        return this.ordenesProduccion.reduce((max, o) => Math.max(max, o.detalleApiId ?? 0), 0) + 1;
     }
 
     private formatearIdOrden(idOrden: number): string {
@@ -457,6 +394,12 @@ export class ProduccionService {
             .replace(/\p{Diacritic}/gu, '')
             .toLowerCase()
             .replace(/\s+/g, '_') as EstadoOrdenProduccion;
+    }
+
+    private nombreOperador(idUsuario: number | null): string | undefined {
+        const usuario = this.authService.getUsuarioActual();
+        if (!usuario || !idUsuario || Number(usuario.id) !== idUsuario) return undefined;
+        return `${usuario.nombre} ${usuario.apellido}`.trim();
     }
 
     private aIso(fecha: string): string {
