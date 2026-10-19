@@ -30,6 +30,14 @@ export class ProductoTerminadoDetalleComponent {
     this.tabActiva = tab;
   }
 
+  usarImagenAlternativa(event: Event) {
+    const imagen = event.currentTarget as HTMLImageElement;
+    if (imagen.dataset['fallback'] === 'true') return;
+
+    imagen.dataset['fallback'] = 'true';
+    imagen.src = '/assets/box.svg';
+  }
+
   solicitarEliminacion() {
     this.errorEliminacion = '';
     this.confirmarEliminacion = true;

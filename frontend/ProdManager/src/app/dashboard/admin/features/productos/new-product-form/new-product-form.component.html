@@ -160,31 +160,30 @@
 
                     </div>
 
-                    <!-- Stock (solo en la edición: un producto nuevo nace con stock 0) -->
-                    @if (modoEdicion) {
-                        <div class="row g-3 mb-3">
+                    <div class="row g-3 mb-3">
 
-                            <div class="col-md-6">
+                        <div class="col-md-6">
 
-                                <label for="regStock" class="form-label mb-1">
-                                    Stock Inicial
-                                </label>
+                            <label for="regStock" class="form-label mb-1">
+                                Stock inicial
+                            </label>
 
-                                <input type="number" class="input" id="regStock" min="0" placeholder="0"
-                                    formControlName="stockInicial">
-
-                            </div>
-                            @if (stockInicial.errors && stockInicial.touched){
-                                @if (stockInicial.hasError('required')){
-                                    <p class="error">El campo stock inicial es obligatorio</p>
-                                }
-                                @if (stockInicial.hasError('min')){
-                                    <p class="error">El stock inicial no puede ser negativo ni nulo</p>
-                                }
-                            }
+                            <input type="number" class="input" id="regStock" min="0" step="0.001" placeholder="0"
+                                formControlName="stockInicial">
 
                         </div>
-                    }
+                        @if (stockInicial.errors && stockInicial.touched){
+                            @if (stockInicial.hasError('required')){
+                                <p class="error">El campo stock inicial es obligatorio</p>
+                            }
+                            @if (stockInicial.hasError('min')){
+                                <p class="error">El stock inicial no puede ser negativo</p>
+                            }
+                            @if (stockInicial.hasError('maximoDecimales')){
+                                <p class="error">El stock inicial puede tener hasta 3 decimales</p>
+                            }
+                        }
+                    </div>
 
                     <!-- Configuración de stock -->
                     <div class="row g-3 mb-4">
@@ -204,26 +203,6 @@
                                 <p class="error">{{ mensaje }}</p>
                             }
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="regStockMaximo" class="form-label mb-1">
-                                Stock máximo
-                            </label>
-                            <input type="number" class="input" id="regStockMaximo" min="0"
-                                placeholder="Cantidad máxima" formControlName="stockMaximo">
-                            @if (stockMaximo.errors && stockMaximo.touched) {
-                                @if (stockMaximo.hasError('required') || stockMaximo.hasError('min')) {
-                                    <p class="error">El stock máximo debe ser mayor o igual a 0</p>
-                                }
-                            }
-                            @for (mensaje of mensajesDelBackend('stockMaximo'); track mensaje) {
-                                <p class="error">{{ mensaje }}</p>
-                            }
-                        </div>
-
-                        @if (stockRangoInvalido) {
-                            <p class="error">El stock mínimo no puede superar al stock máximo</p>
-                        }
 
                     </div>
 
