@@ -26,12 +26,6 @@
   font-size: 14px;
 }
 
-.summary-error {
-  margin: 0;
-  color: var(--color-error);
-  font-size: 14px;
-}
-
 .eyebrow {
   margin: 0 0 4px;
   color: var(--gray-600);
