@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+from django.db import transaction
 from rest_framework import serializers
 
 from productos.models import Producto
@@ -11,23 +14,44 @@ class EstadoSerializer(serializers.ModelSerializer):
         fields = ['id_estado', 'nombre']
 
 
+class DetalleInicialOrdenSerializer(serializers.Serializer):
+    id_producto = serializers.PrimaryKeyRelatedField(source='producto', queryset=Producto.objects.all())
+    cantidad_planificada = serializers.DecimalField(
+        max_digits=12,
+        decimal_places=3,
+        min_value=Decimal('0.001'),
+    )
+
+
 class OrdenProduccionSerializer(serializers.ModelSerializer):
-    """API.md §8.2: id_estado por defecto es 1 (Pendiente) si no se envía."""
+    """La orden inicial y su primer detalle se guardan en una sola transacción."""
 
     id_estado = serializers.PrimaryKeyRelatedField(
         source='estado',
         queryset=Estado.objects.all(),
         required=False,
     )
+    detalle = DetalleInicialOrdenSerializer(write_only=True)
+    id_usuario = serializers.IntegerField(source='operador_id', read_only=True, allow_null=True)
 
     class Meta:
         model = OrdenProduccion
-        fields = ['id_orden', 'fecha_creacion', 'fecha_inicio', 'id_estado']
+        fields = [
+            'id_orden', 'fecha_creacion', 'fecha_inicio', 'id_estado',
+            'id_usuario', 'observaciones', 'detalle',
+        ]
         read_only_fields = ['id_orden', 'fecha_creacion']
 
+    @transaction.atomic
     def create(self, validated_data):
+        detalle = validated_data.pop('detalle')
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            validated_data['operador'] = request.user
         validated_data.setdefault('estado', Estado.objects.get(pk=1))
-        return super().create(validated_data)
+        orden = super().create(validated_data)
+        DetalleOrdenProduccion.objects.create(orden=orden, **detalle)
+        return orden
 
 
 class DetalleOrdenProduccionSerializer(serializers.ModelSerializer):
