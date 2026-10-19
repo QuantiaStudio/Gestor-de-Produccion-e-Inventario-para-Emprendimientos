@@ -20,12 +20,12 @@
         </span>
         <span class="card-summary-text">
           <span class="alert-type">Usuarios Activos</span>
-          <span class="alert-num">50</span>
+          <span class="alert-num" aria-live="polite">{{ resumen ? resumen.usuariosActivos : '—' }}</span>
         </span>
       </div>
 
       <div class="card-detail">
-        <span class="alert-description">Equipo disponible en el taller</span>
+        <span class="alert-description">Cuentas habilitadas</span>
       </div>
     </div>
 
@@ -36,15 +36,12 @@
         </span>
         <span class="card-summary-text">
           <span class="alert-type">Productos en Producción</span>
-          <span class="alert-num">80</span>
+          <span class="alert-num" aria-live="polite">{{ resumen ? (resumen.productosEnProduccion | number:'1.0-3') : '—' }}</span>
         </span>
       </div>
 
       <div class="card-detail">
-        <!-- <span class="alert-insight">
-          <img src="assets/arrow-up.svg" alt="" aria-hidden="true" />
-          <span>15% más que el mes anterior</span>
-        </span> -->
+        <span class="alert-description">Unidades en órdenes en producción</span>
       </div>
     </div>
 
@@ -55,18 +52,18 @@
         </span>
         <span class="card-summary-text">
           <span class="alert-type">Diseños en Catálogo</span>
-          <span class="alert-num">30</span>
+          <span class="alert-num" aria-live="polite">{{ resumen ? resumen.disenosCatalogo : '—' }}</span>
         </span>
       </div>
 
       <div class="card-detail">
-<!--         <span class="alert-insight negative">
-          <img src="assets/arrow-down.svg" alt="" aria-hidden="true" />
-          <span>10% menos que el mes anterior</span>
-        </span> -->
+        <span class="alert-description">Productos registrados en el catálogo</span>
       </div>
     </div>
     </div>
+    @if (errorResumen) {
+      <p class="summary-error" role="alert">No se pudo cargar el resumen. Intenta recargar el panel.</p>
+    }
   </section>
 
   <section class="dashboard-section feature-section" aria-labelledby="featuresTitle">
