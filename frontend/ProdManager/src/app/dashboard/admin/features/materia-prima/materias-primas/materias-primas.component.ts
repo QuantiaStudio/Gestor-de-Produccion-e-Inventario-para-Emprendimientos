@@ -15,7 +15,6 @@ import { MateriaPrimaDetalleComponent } from '../materia-prima-detalle/materia-p
 export class MateriasPrimasComponent implements OnInit {
   materiasPrimas: MateriaPrima[] = [];
   materiaPrimaSeleccionada: MateriaPrima | null = null;
-  materiaPrimaAEliminar: MateriaPrima | null = null;
 
    unidadesDisponibles = ['kg', 'unidades', 'litros', 'metros'];
   
@@ -44,6 +43,26 @@ export class MateriasPrimasComponent implements OnInit {
     });
   }
 
+  get totalMateriasPrimas(): number {
+    return this.materiasPrimas.length;
+  }
+
+  get stockTotal(): number {
+    return this.materiasPrimas.reduce((total, materiaPrima) => total + materiaPrima.stockTotal, 0);
+  }
+
+  get materiasBajoMinimo(): number {
+    return this.materiasPrimas.filter(materiaPrima => materiaPrima.estado === 'bajo_minimo').length;
+  }
+
+  get materiasSinStock(): number {
+    return this.materiasPrimas.filter(materiaPrima => materiaPrima.estado === 'sin_stock').length;
+  }
+
+  formatearNumero(valor: number): string {
+    return new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 }).format(valor);
+  }
+
   seleccionar(materiaPrima: MateriaPrima) {
     this.materiaPrimaSeleccionada = materiaPrima;
   }
@@ -68,20 +87,6 @@ export class MateriasPrimasComponent implements OnInit {
 
     this.materiaPrimaService.actualizarStock(valoresForm.id, valoresForm.stockTotal!, valoresForm.stockMinimo!);
     this.formActualizar.reset({ id: '', stockTotal: 0, stockMinimo: 0 });
-  }
-
-  pedirConfirmacionEliminar(materiaPrima: MateriaPrima) {
-    this.materiaPrimaAEliminar = materiaPrima;
-  }
-
-  cancelarEliminar() {
-    this.materiaPrimaAEliminar = null;
-  }
-
-  confirmarEliminar() {
-    if (!this.materiaPrimaAEliminar) return;
-    this.materiaPrimaService.eliminar(this.materiaPrimaAEliminar.id);
-    this.materiaPrimaAEliminar = null;
   }
 
   guardarMateriaPrima() {
