@@ -6,7 +6,13 @@
     </div>
   </div>
 
-  <div class="alerts-container">
+  <section class="dashboard-section" aria-labelledby="summaryTitle">
+    <div class="section-heading">
+      <h2 id="summaryTitle">Resumen</h2>
+      <p>Estado general del panel</p>
+    </div>
+
+    <div class="alerts-container">
     <div class="metric-card card">
       <div class="card-summary">
         <span class="card-icon">
@@ -35,10 +41,10 @@
       </div>
 
       <div class="card-detail">
-        <span class="alert-insight">
+        <!-- <span class="alert-insight">
           <img src="assets/arrow-up.svg" alt="" aria-hidden="true" />
           <span>15% más que el mes anterior</span>
-        </span>
+        </span> -->
       </div>
     </div>
 
@@ -54,34 +60,58 @@
       </div>
 
       <div class="card-detail">
-        <span class="alert-insight negative">
+<!--         <span class="alert-insight negative">
           <img src="assets/arrow-down.svg" alt="" aria-hidden="true" />
           <span>10% menos que el mes anterior</span>
-        </span>
+        </span> -->
       </div>
     </div>
-
-    <div class="metric-card card">
-      <div class="card-summary">
-        <span class="card-icon">
-          <img src="assets/bricks.svg" alt="" aria-hidden="true" />
-        </span>
-        <span class="card-summary-text">
-          <span class="alert-type">Madera en Stock</span>
-          <span class="alert-num">100</span>
-        </span>
-      </div>
-
-      <div class="card-detail">
-        <span class="alert-insight">
-          <img src="assets/arrow-up.svg" alt="" aria-hidden="true" />
-          <span>10% más que el mes anterior</span>
-        </span>
-      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="graphics-container">
+  <section class="dashboard-section feature-section" aria-labelledby="featuresTitle">
+    <div class="section-heading">
+      <h2 id="featuresTitle">Accesos rápidos</h2>
+      <p>Ir directamente a una sección de gestión</p>
+    </div>
+
+    <div class="feature-links">
+      <a class="feature-card" routerLink="/dashboard/materias-primas">
+        <span class="feature-icon" aria-hidden="true">
+          <img src="assets/gear.svg" alt="" />
+        </span>
+        <span class="feature-card-copy">
+          <span class="feature-card-title">Gestión de Materia Prima</span>
+          <span class="feature-card-description">Consultar y administrar los insumos del taller.</span>
+        </span>
+        <span class="feature-card-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="feature-card" routerLink="/dashboard/productos-terminados">
+        <span class="feature-icon" aria-hidden="true">
+          <img src="assets/box.svg" alt="" />
+        </span>
+        <span class="feature-card-copy">
+          <span class="feature-card-title">Productos Terminados</span>
+          <span class="feature-card-description">Ver el catálogo de productos disponibles.</span>
+        </span>
+        <span class="feature-card-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="feature-card" routerLink="/dashboard/users">
+        <span class="feature-icon" aria-hidden="true">
+          <img src="assets/people.svg" alt="" />
+        </span>
+        <span class="feature-card-copy">
+          <span class="feature-card-title">Usuarios</span>
+          <span class="feature-card-description">Administrar las cuentas y el equipo de trabajo.</span>
+        </span>
+        <span class="feature-card-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- <div class="graphics-container">
     <div class="graphic-panel">
       <img
         src="assets/histo-prod.png"
@@ -268,5 +298,5 @@
         </table>
       </div>
     </section>
-  </div>
+  </div> -->
 </section>
