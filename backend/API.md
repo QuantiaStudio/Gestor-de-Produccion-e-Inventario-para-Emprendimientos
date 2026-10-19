@@ -1,6 +1,6 @@
 # Contrato de la API — Gestor de Producción e Inventario
 
-Versión del contrato: **v1** · Estado: **en implementación**. La columna *Implementado* del resumen de rutas (§9) indica qué endpoints ya funcionan; el resto responde `501`.
+Versión del contrato: **v1** · La autenticación, la consulta/alta de usuarios y el resumen del dashboard están implementados; algunos endpoints de negocio todavía responden `501`.
 
 Este documento es la referencia común entre frontend y backend. Si un endpoint se implementa distinto a lo que dice acá, se actualiza este documento en el mismo PR.
 
@@ -136,6 +136,20 @@ La contraseña se valida contra el hash almacenado por Django. Al iniciar sesió
 `POST /auth/logout/` requiere el token actual, lo invalida y responde `204 No Content`. `GET /auth/me/` requiere el token actual y devuelve los datos públicos del usuario autenticado, sin incluir su contraseña.
 
 ---
+
+## Resumen del dashboard — `/dashboard/resumen/`
+
+`GET /dashboard/resumen/` requiere un token de administrador y devuelve los valores agregados para las tarjetas del panel:
+
+```json
+{
+  "usuarios_activos": 4,
+  "productos_en_produccion": 12,
+  "disenos_catalogo": 28
+}
+```
+
+`usuarios_activos` cuenta usuarios habilitados, `productos_en_produccion` suma las unidades planificadas en órdenes con estado `En Produccion`, y `disenos_catalogo` cuenta todos los registros de productos.
 
 ## 5. Usuarios — `/usuarios/`
 
