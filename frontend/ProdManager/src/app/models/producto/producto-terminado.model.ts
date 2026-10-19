@@ -125,3 +125,39 @@ export interface MovimientoInventarioApiDTO {
   id_usuario?: number;
   observacion?: string;
 }
+
+/** Estados de un producto en el backend Django (backend/API.md §7.2). */
+export type EstadoProductoBackend = 'activo' | 'inactivo' | 'en_produccion' | 'pendiente';
+
+/** Categoría tal como la devuelve el backend Django (backend/API.md §7.1). */
+export interface CategoriaBackendDTO {
+  id_categoria: number;
+  nombre: string;
+}
+
+/** Línea de la fórmula de un producto en el backend Django (backend/API.md §7.2). */
+export interface LineaFormulaBackendDTO {
+  id_detalle_formula?: number;
+  id_materia_prima: number;
+  cantidad_necesaria: number | string;
+}
+
+/**
+ * Producto con su fórmula en el backend Django (backend/API.md §7.2).
+ * Al crear se envían los campos editables; la respuesta agrega id_producto, stock_actual
+ * y el id de cada línea. Los decimales se envían como número y vuelven como string.
+ */
+export interface ProductoBackendDTO {
+  id_producto?: number;
+  codigo: string;
+  nombre: string;
+  descripcion: string;
+  precio: number | string;
+  estado: EstadoProductoBackend;
+  stock_actual?: string;
+  stock_minimo: number | string;
+  stock_maximo: number | string | null;
+  imagen: string;
+  id_categoria: number;
+  formula: LineaFormulaBackendDTO[];
+}

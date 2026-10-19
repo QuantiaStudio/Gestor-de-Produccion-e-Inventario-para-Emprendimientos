@@ -5,8 +5,11 @@ from .views import (
     DetalleOrdenProduccionListView,
     EstadoDetailView,
     EstadoListView,
+    FinalizarOrdenAPIView,
+    IniciarOrdenAPIView,
     OrdenProduccionDetailView,
     OrdenProduccionListView,
+    CancelarOrdenAPIView,
 )
 
 urlpatterns = [
@@ -24,4 +27,7 @@ urlpatterns = [
         DetalleOrdenProduccionDetailView.as_view(),
         name='detalle-orden-produccion-detail',
     ),
+    path('ordenes/<int:pk>/iniciar/', IniciarOrdenAPIView.as_view(), name='iniciar-orden'),
+    path('ordenes/<int:pk>/finalizar/', FinalizarOrdenAPIView.as_view(), name='finalizar-orden'),
+    path('ordenes/<int:pk>/cancelar/', CancelarOrdenAPIView.as_view(), name='cancelar-orden'),
 ]

@@ -1,0 +1,10 @@
+[
+  { "model": "productos.categoria", "pk": 1, "fields": { "nombre": "Mesas" } },
+  { "model": "productos.categoria", "pk": 2, "fields": { "nombre": "Bibliotecas" } },
+  { "model": "productos.categoria", "pk": 3, "fields": { "nombre": "Escritorios" } },
+  { "model": "productos.categoria", "pk": 4, "fields": { "nombre": "Comodas" } },
+  { "model": "productos.categoria", "pk": 5, "fields": { "nombre": "Racks" } },
+  { "model": "productos.categoria", "pk": 6, "fields": { "nombre": "Banquetas" } },
+  { "model": "productos.categoria", "pk": 7, "fields": { "nombre": "Sillas" } },
+  { "model": "productos.categoria", "pk": 8, "fields": { "nombre": "Decks" } }
+]

@@ -1,6 +1,6 @@
 # Contrato de la API — Gestor de Producción e Inventario
 
-Versión del contrato: **v1** · Estado: **definido, sin implementar** (todos los endpoints responden `501`).
+Versión del contrato: **v1** · Estado: **en implementación**. La columna *Implementado* del resumen de rutas (§9) indica qué endpoints ya funcionan; el resto responde `501`.
 
 Este documento es la referencia común entre frontend y backend. Si un endpoint se implementa distinto a lo que dice acá, se actualiza este documento en el mismo PR.
 
@@ -18,7 +18,7 @@ Este documento es la referencia común entre frontend y backend. Si un endpoint 
 | Decimales | Cantidades, stocks y precios viajan como **string** con punto decimal (`"12.500"`), para no perder precisión. Al enviar se aceptan número o string |
 | Fechas | ISO 8601 en UTC (`"2026-10-14T13:45:00Z"`) |
 | Listados | Devuelven un **array** sin paginación (por ahora). Aceptan filtros por query string, indicados en cada recurso |
-| Autenticación | Header `Authorization: Token <token>` obtenido en `POST /auth/login/`. Todos los endpoints la requieren salvo `login` (ver §10, pendiente de confirmar) |
+| Autenticación | Header `Authorization: Token <token>` obtenido en `POST /auth/login/`. Todos los endpoints la requieren salvo `login` y `registro` |
 
 ### Operaciones CRUD estándar
 
@@ -69,7 +69,8 @@ Todas las respuestas de error tienen la misma forma:
 ```
 
 - `detail` y `code` están **siempre**.
-- `errors` aparece **solo en `400`**, con los mensajes por campo. Los errores que no son de un campo van en `non_field_errors`.
+- `errors` aparece **solo en los `400` por datos inválidos** (`"code": "invalid"`), con los mensajes por campo. Los errores que no son de un campo van en `non_field_errors`.
+- Un `400` por JSON mal formado no trae `errors`: `{ "detail": "JSON parse error - ...", "code": "parse_error" }`.
 
 Ejemplos:
 
@@ -80,7 +81,7 @@ Ejemplos:
   "code": "invalid",
   "errors": {
     "nombre": ["Este campo es requerido."],
-    "precio": ["Asegúrese de que este valor sea mayor o igual a 0."]
+    "precio": ["Asegúrese de que este valor es mayor o igual a 0."]
   }
 }
 
@@ -94,7 +95,7 @@ Ejemplos:
 { "detail": "El endpoint GET /api/v1/productos/ todavía no está implementado.", "code": "not_implemented" }
 ```
 
-Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
+Valores de `code` usados: `invalid`, `parse_error`, `not_authenticated`, `authentication_failed`, `inactive_user`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
 
 ---
 
@@ -103,8 +104,17 @@ Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed
 | Método | Ruta | Descripción | Éxito |
 |---|---|---|---|
 | `POST` | `/auth/login/` | Inicia sesión | `200` |
+| `POST` | `/auth/registro/` | Registra una cuenta con rol `ADMIN` | `201` |
 | `POST` | `/auth/logout/` | Invalida el token actual | `204` |
 | `GET` | `/auth/me/` | Devuelve el usuario autenticado | `200` + Usuario |
+
+**`POST /auth/registro/`** es público. Requiere `nombre`, `apellido`, `email` y `contrasena`; el servidor asigna `ADMIN` y estado activo. La contraseña debe cumplir los validadores configurados en Django y se guarda hasheada. No inicia sesión automáticamente: la persona debe usar el formulario de login.
+
+```json
+{ "nombre": "Ana", "apellido": "Pérez", "email": "ana@correo.com", "contrasena": "UnaClaveSegura2026" }
+```
+
+La respuesta `201` contiene los datos públicos del usuario, sin contraseña ni token. Un correo ya registrado o datos inválidos producen `400`.
 
 **`POST /auth/login/`**
 
@@ -119,13 +129,30 @@ Valores de `code` usados: `invalid`, `not_authenticated`, `authentication_failed
 }
 ```
 
-Errores: `400` si faltan campos; `401` (`authentication_failed`) si las credenciales son incorrectas; `403` si el usuario está inactivo (`estado: false`).
+Errores: `400` si faltan campos; `401` (`authentication_failed`) si las credenciales son incorrectas; `403` (`inactive_user`) si el usuario está inactivo (`estado: false`).
+
+La contraseña se valida contra el hash almacenado por Django. Al iniciar sesión, se crea o reutiliza un token de DRF asociado al usuario. Las rutas protegidas reciben el token en `Authorization: Token <token>`. La gestión de usuarios requiere el rol `ADMIN`.
+
+`POST /auth/logout/` requiere el token actual, lo invalida y responde `204 No Content`. `GET /auth/me/` requiere el token actual y devuelve los datos públicos del usuario autenticado, sin incluir su contraseña.
 
 ---
 
 ## 5. Usuarios — `/usuarios/`
 
-CRUD estándar. Pensado para administradores.
+Por ahora se implementaron el listado y el alta de operarios. Ambos requieren un token de administrador. El `POST` siempre crea una cuenta activa con rol `OPERARIO`; se ignoran los campos `rol` y `estado` si el cliente los envía. Los demás métodos continúan sin implementar.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/usuarios/` | Lista las cuentas con datos públicos (`200` + array) |
+| `POST` | `/usuarios/` | Crea un operario (`201` + usuario creado) |
+
+Ejemplo de alta:
+
+```json
+{ "nombre": "Luis", "apellido": "Gómez", "email": "luis@correo.com", "contrasena": "UnaClaveSegura2026" }
+```
+
+Un correo duplicado o datos inválidos producen `400`; sin token responde `401` y con token de operario responde `403`.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
@@ -133,17 +160,11 @@ CRUD estándar. Pensado para administradores.
 | `nombre` | string (≤100) | Sí | |
 | `apellido` | string (≤100) | Sí | |
 | `email` | string (email) | Sí | Único (`400` si ya existe) |
-| `contrasena` | string | Sí en `POST` | **Solo escritura**. Se guarda hasheada. En `PUT`/`PATCH` es opcional: si se envía, se cambia |
-| `rol` | `"ADMIN"` \| `"OPERARIO"` | No | Por defecto `"OPERARIO"` |
-| `estado` | boolean | No | Por defecto `true`. `false` = no puede iniciar sesión |
+| `contrasena` | string | Sí en `POST` | **Solo escritura**. Se guarda hasheada y debe pasar los validadores de Django |
+| `rol` | `"ADMIN"` \| `"OPERARIO"` | — | Asignado por el servidor: el registro público crea `ADMIN` y este `POST` crea `OPERARIO` |
+| `estado` | boolean | — | Las altas se crean activas (`true`) |
 
-Filtros: `?rol=OPERARIO`, `?estado=true`.
-`DELETE`: `409` (`en_uso`) si el usuario tiene movimientos registrados; en ese caso se lo desactiva con `PATCH {"estado": false}`.
-
-```json
-// GET /usuarios/3/ → 200
-{ "id_usuario": 3, "nombre": "Genaro", "apellido": "Cura", "email": "genaro.cura@correo.com", "rol": "OPERARIO", "estado": true }
-```
+La edición y baja de cuentas todavía no están implementadas. `/usuarios/{id}/` sigue respondiendo `501`.
 
 ---
 
@@ -162,7 +183,7 @@ CRUD estándar.
 | `stock_actual` | decimal | — | **Solo lectura**. Cambia únicamente al registrar movimientos (§6.2) |
 | `stock_minimo` | decimal ≥ 0 | No | Por defecto `0` |
 
-Filtros: `?bajo_stock=true` (solo las que tienen `stock_actual < stock_minimo`), `?nombre=<texto>` (contiene, sin distinguir mayúsculas).
+Filtros: `?bajo_stock=true` (solo las que tienen `stock_actual < stock_minimo`), `?nombre=<texto>` (contiene, sin distinguir mayúsculas). Orden: alfabético por `nombre`.
 `DELETE`: `409` (`en_uso`) si está en alguna fórmula o tiene movimientos.
 
 ```json
@@ -209,39 +230,155 @@ CRUD estándar.
 | `id_categoria` | int | — | Solo lectura |
 | `nombre` | string (≤100) | Sí | Único (`400` si ya existe) |
 
+Orden: alfabético por `nombre`.
 `DELETE`: `409` (`en_uso`) si tiene productos.
+
+```json
+// GET /categorias/ → 200
+[
+  { "id_categoria": 6, "nombre": "Banquetas" },
+  { "id_categoria": 2, "nombre": "Bibliotecas" }
+]
+```
 
 ### 7.2 `/productos/`
 
-CRUD estándar.
+CRUD estándar. La fórmula del producto viaja **anidada** en el campo `formula`: se envía al crear el producto y viene incluida en cada respuesta.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
 | `id_producto` | int | — | Solo lectura |
+| `codigo` | string (≤20) | Sí | Único (`400` si ya existe). Ej.: `"PT-001"` |
 | `nombre` | string (≤100) | Sí | |
 | `descripcion` | string | No | Por defecto `""` |
-| `precio` | decimal ≥ 0 | Sí | 2 decimales |
+| `precio` | decimal ≥ 0 | Sí | Hasta 2 decimales |
 | `estado` | `"activo"` \| `"inactivo"` \| `"en_produccion"` \| `"pendiente"` | No | Por defecto `"activo"` |
-| `stock_actual` | decimal | — | **Solo lectura**. Cambia únicamente con movimientos (§7.4) o al finalizar producción |
+| `stock_actual` | decimal | — | **Solo lectura**. Vale `0` al crear el producto. Cambia únicamente con movimientos (§7.4) o al finalizar producción |
+| `stock_minimo` | decimal ≥ 0 | No | Por defecto `0` |
+| `stock_maximo` | decimal \| null | No | Por defecto `null` (sin tope). Si se envía, debe ser mayor o igual a `stock_minimo` |
+| `imagen` | string (≤255) | No | **Referencia** a la imagen, no el archivo: ruta de una imagen del frontend (`"assets/productos-terminados/rack_tv.jpg"`) o URL absoluta `http(s)://` (para un futuro proveedor de imágenes). Por defecto `""` (sin imagen). El backend no recibe ni guarda archivos |
 | `id_categoria` | int | Sí | `400` si no existe |
+| `formula` | array | Sí en `POST` | Líneas de la receta (tabla siguiente). Al menos una |
+
+Cada línea de `formula` indica cuánta materia prima hace falta para **una unidad** del producto. En las respuestas, las líneas vienen en el orden en que se enviaron:
+
+| Campo | Tipo | Req. | Notas |
+|---|---|---|---|
+| `id_detalle_formula` | int | — | Solo lectura |
+| `id_materia_prima` | int | Sí | Debe existir en el inventario (`400` si no existe). No se puede repetir dentro de la misma fórmula |
+| `cantidad_necesaria` | decimal > 0 | Sí | En la `unidad_medida` de la materia prima. Hasta 3 decimales |
 
 Filtros: `?id_categoria=1`, `?estado=activo`, `?nombre=<texto>`.
 `DELETE`: borra también su fórmula. `409` (`en_uso`) si tiene movimientos u órdenes de producción; en ese caso se lo pasa a `"inactivo"`.
+`PUT` / `PATCH`: cómo se modifica `formula` se define en la historia de edición de productos.
 
 ```json
 // GET /productos/1/ → 200
-{ "id_producto": 1, "nombre": "Mesa Nórdica", "descripcion": "Mesa de comedor de roble macizo.", "precio": "150000.00", "estado": "activo", "stock_actual": "28.000", "id_categoria": 1 }
+{
+  "id_producto": 1,
+  "codigo": "PT-001",
+  "nombre": "Mesa Nórdica",
+  "descripcion": "Mesa de comedor de roble macizo.",
+  "precio": "150000.00",
+  "estado": "activo",
+  "stock_actual": "28.000",
+  "stock_minimo": "5.000",
+  "stock_maximo": "40.000",
+  "imagen": "assets/productos-terminados/mesa_nordica.jpg",
+  "id_categoria": 1,
+  "formula": [
+    { "id_detalle_formula": 1, "id_materia_prima": 1, "cantidad_necesaria": "1.000" },
+    { "id_detalle_formula": 2, "id_materia_prima": 3, "cantidad_necesaria": "15.000" }
+  ]
+}
+```
+
+#### Crear un producto con su fórmula — `POST /productos/`
+
+El producto y su fórmula se guardan en una sola operación: si algún dato es inválido no se guarda nada, ni el producto ni ninguna línea de la fórmula.
+
+Reglas que valida el backend (todas responden `400`):
+
+1. `codigo`, `nombre`, `precio`, `id_categoria` y `formula` son obligatorios.
+2. `codigo` no puede repetirse entre productos.
+3. `precio` y `stock_minimo` son ≥ 0; `stock_maximo`, si se envía, es ≥ `stock_minimo`.
+4. `id_categoria` existe.
+5. `formula` tiene al menos una línea y no repite `id_materia_prima`.
+6. Cada `id_materia_prima` existe en el inventario.
+7. Cada `cantidad_necesaria` es mayor a 0 y tiene hasta 3 decimales.
+8. `imagen`, si se envía, es una ruta que empieza con `assets/` o una URL `http://` / `https://`, de hasta 255 caracteres. No se aceptan imágenes en base64.
+
+`stock_actual` se ignora si se envía: el producto nace con stock `0`.
+
+```json
+// POST /productos/
+{
+  "codigo": "PT-002",
+  "nombre": "Mesa Ratona Roble",
+  "descripcion": "Mesa baja de roble con estante inferior.",
+  "precio": "85000.00",
+  "estado": "activo",
+  "stock_minimo": "2",
+  "stock_maximo": "10",
+  "imagen": "assets/productos-terminados/mesa_ratona.webp",
+  "id_categoria": 1,
+  "formula": [
+    { "id_materia_prima": 1, "cantidad_necesaria": "0.750" },
+    { "id_materia_prima": 3, "cantidad_necesaria": "12" },
+    { "id_materia_prima": 4, "cantidad_necesaria": "0.150" }
+  ]
+}
+
+// 201
+{
+  "id_producto": 2,
+  "codigo": "PT-002",
+  "nombre": "Mesa Ratona Roble",
+  "descripcion": "Mesa baja de roble con estante inferior.",
+  "precio": "85000.00",
+  "estado": "activo",
+  "stock_actual": "0.000",
+  "stock_minimo": "2.000",
+  "stock_maximo": "10.000",
+  "imagen": "assets/productos-terminados/mesa_ratona.webp",
+  "id_categoria": 1,
+  "formula": [
+    { "id_detalle_formula": 3, "id_materia_prima": 1, "cantidad_necesaria": "0.750" },
+    { "id_detalle_formula": 4, "id_materia_prima": 3, "cantidad_necesaria": "12.000" },
+    { "id_detalle_formula": 5, "id_materia_prima": 4, "cantidad_necesaria": "0.150" }
+  ]
+}
+```
+
+Forma de los errores de `formula` dentro de `errors`:
+
+- Si el problema es de la lista completa (falta, está vacía o repite una materia prima), viene un array de mensajes: `"formula": ["La fórmula debe tener al menos una materia prima."]`.
+- Si el problema está en líneas puntuales, viene un objeto cuyas claves son la posición de cada línea con errores dentro del array enviado (como string, empezando en `"0"`). Las líneas correctas no aparecen.
+
+```json
+// 400 (la línea 0 era correcta; fallaron la 1 y la 2)
+{
+  "detail": "Datos inválidos.",
+  "code": "invalid",
+  "errors": {
+    "codigo": ["Ya existe un producto con este código."],
+    "formula": {
+      "1": { "id_materia_prima": ["No existe la materia prima con id 99."] },
+      "2": { "cantidad_necesaria": ["La cantidad necesaria debe ser mayor a 0."] }
+    }
+  }
+}
 ```
 
 ### 7.3 `/detalles-formula/`
 
-CRUD estándar. Cada registro es **una línea de la receta**: cuánta materia prima hace falta para **una unidad** del producto.
+CRUD estándar. Cada registro es **una línea de la receta**: cuánta materia prima hace falta para **una unidad** del producto. Las mismas líneas vienen incluidas en cada producto (§7.2); este recurso sirve para consultar o modificar líneas sueltas.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
 | `id_detalle_formula` | int | — | Solo lectura |
 | `id_producto` | int | Sí | `400` si no existe |
-| `id_materia_prima` | int | Sí | `400` si no existe |
+| `id_materia_prima` | int | Sí | `400` si no existe o si ya está en la fórmula de ese producto |
 | `cantidad_necesaria` | decimal > 0 | Sí | En la `unidad_medida` de la materia prima |
 
 Filtros: `?id_producto=1` (la fórmula completa de un producto), `?id_materia_prima=3`.
@@ -340,20 +477,20 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 
 ## 9. Resumen de rutas
 
-| Ruta | Métodos |
-|---|---|
-| `/auth/login/` | `POST` |
-| `/auth/logout/` | `POST` |
-| `/auth/me/` | `GET` |
-| `/usuarios/`, `/usuarios/{id}/` | CRUD |
-| `/materias-primas/`, `/materias-primas/{id}/` | CRUD |
-| `/movimientos-materia-prima/`, `/movimientos-materia-prima/{id}/` | `GET`, `POST` |
-| `/categorias/`, `/categorias/{id}/` | CRUD |
-| `/productos/`, `/productos/{id}/` | CRUD |
-| `/detalles-formula/`, `/detalles-formula/{id}/` | CRUD |
-| `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` |
-| `/estados/`, `/estados/{id}/` | CRUD |
-| `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD |
-| `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD |
+| Ruta | Métodos | Implementado |
+|---|---|---|
+| `/auth/login/`, `/auth/registro/` | `POST` | `POST` |
+| `/auth/logout/` | `POST` | `POST` |
+| `/auth/me/` | `GET` | `GET` |
+| `/usuarios/`, `/usuarios/{id}/` | CRUD | `GET /usuarios/`, `POST /usuarios/` (solo admin) |
+| `/materias-primas/`, `/materias-primas/{id}/` | CRUD | `GET /materias-primas/` (todavía sin filtros) |
+| `/movimientos-materia-prima/`, `/movimientos-materia-prima/{id}/` | `GET`, `POST` | — |
+| `/categorias/`, `/categorias/{id}/` | CRUD | `GET /categorias/` |
+| `/productos/`, `/productos/{id}/` | CRUD | `POST /productos/`, `DELETE /productos/{id}/` |
+| `/detalles-formula/`, `/detalles-formula/{id}/` | CRUD | — |
+| `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` | — |
+| `/estados/`, `/estados/{id}/` | CRUD | — |
+| `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD | — |
+| `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD | — |
 
-Todas con el prefijo `/api/v1/`. Hoy todas responden `501 Not Implemented` (o `405` si el método no está permitido).
+Todas con el prefijo `/api/v1/`. Los métodos que todavía no figuran en la columna **Implementado** responden `501 Not Implemented` (o `405` si el método no está permitido en esa ruta).

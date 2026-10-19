@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 import { environment } from '../../environments/environment';
-import { CategoriaApiDTO, EstadoApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
+import { CategoriaApiDTO, CategoriaBackendDTO, EstadoApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoBackendDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,8 @@ export class ProductoTerminadoService {
   private readonly movimientosInventarioUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
   private readonly categoriasUrl = `${environment.apiUrl}/categorias`;
   private readonly estadosUrl = `${environment.apiUrl}/estados`;
+  private readonly backendProductosUrl = `${environment.djangoApiUrl}/productos/`;
+  private readonly backendCategoriasUrl = `${environment.djangoApiUrl}/categorias/`;
   private categorias = new Map<number, string>();
   private estados = new Map<number, EstadoProductoTerminado>();
   private productosTerminados: ProductoTerminado[] = [];
@@ -41,91 +43,21 @@ export class ProductoTerminadoService {
     );
   }
 
-  crearProducto(
-    formValue: NuevoProductoFormValue,
-    materialesAgregados: MaterialAgregadoProducto[]
-  ): Observable<ProductoApiDTO> {
-    const stockActual = formValue.stockInicial ?? 0;
-    const stockMinimo = formValue.stockMinimo ?? 1;
-    const stockMaximo = formValue.stockMaximo ?? Math.max(stockActual * 2, stockActual);
-    const fechaActual = new Date().toLocaleDateString();
+  /** Categorías del backend Django, para el alta de productos. */
+  obtenerCategoriasDelBackend(): Observable<CategoriaBackendDTO[]> {
+    return this.http.get<CategoriaBackendDTO[]>(this.backendCategoriasUrl);
+  }
 
-    const producto: ProductoTerminado = {
-      id: formValue.codigo ?? this.generarNuevoId(),
-      nombre: formValue.nombre ?? '',
-      categoria: formValue.categoria ?? '',
-      descripcion: formValue.descripcion ?? '',
-      imagen: formValue.imagen ?? '',
-      unidadMedida: 'unidad',
-      stockActual,
-      stockMinimo,
-      stockMaximo,
-      estado: formValue.estado!,
-      ultimaActualizacion: fechaActual,
-      formula: materialesAgregados.map(material => ({
-        materiaPrimaId: material.materiaPrimaId,
-        nombreMateriaPrima: material.nombre,
-        cantidad: material.cantidadMaterial
-      })),
-      movimientos: stockActual > 0
-        ? [{
-          id: `MOV-${formValue.codigo ?? 'PT'}-1`,
-          fecha: fechaActual,
-          tipo: 'ingreso',
-          cantidad: stockActual,
-          origen: 'Alta inicial de producto',
-          stockResultante: stockActual
-        }]
-        : []
-    };
-
-    const payload: ProductoApiDTO = {
-      nombre: producto.nombre,
-      descripcion: producto.descripcion,
-      stock_actual: producto.stockActual,
-      stock_minimo: producto.stockMinimo,
-      stock_maximo: producto.stockMaximo,
-      id_categoria: this.obtenerIdCategoria(producto.categoria),
-      estado: producto.estado,
-      codigo: producto.id,
-      imagen: producto.imagen,
-      formula: producto.formula.map(material => ({
-        id_materia_prima: Number(material.materiaPrimaId.replace('M', '')),
-        nombre_materia_prima: material.nombreMateriaPrima,
-        cantidad: material.cantidad
-      }))
-    };
-
-    return this.http.post<ProductoApiDTO>(
-      this.productosUrl,
-      payload
-    ).pipe(
-      switchMap(respuesta => {
-        const productoPersistido = this.mapearProducto({ ...payload, ...respuesta }, [], producto);
-        this.productosTerminados = [productoPersistido, ...this.productosTerminados];
-
-        if (stockActual > 0 && respuesta.id) {
-          const movimientoAlta: MovimientoInventarioApiDTO = {
-            fecha: new Date().toISOString(),
-            tipo_movimiento: 'ingreso',
-            cantidad: stockActual,
-            id_producto: Number(respuesta.id),
-            id_usuario: this.obtenerIdUsuarioActual(),
-            observacion: 'Alta inicial de producto'
-          };
-
-          return this.http.post<MovimientoInventarioApiDTO>(this.movimientosInventarioUrl, movimientoAlta).pipe(
-            map(() => respuesta)
-          );
-        }
-
-        return of(respuesta);
-      })
-    );
+  /**
+   * Crea el producto con su fórmula en el backend Django (POST /productos/, backend/API.md §7.2).
+   * El producto nace con stock 0: el stock cambia con movimientos o al finalizar producción.
+   */
+  crearProducto(producto: ProductoBackendDTO): Observable<ProductoBackendDTO> {
+    return this.http.post<ProductoBackendDTO>(this.backendProductosUrl, producto);
   }
 
   eliminarProducto(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.productosUrl}/${id}`);
+    return this.http.delete<void>(`${this.backendProductosUrl}${id}/`);
   }
 
   actualizarProducto(
@@ -399,15 +331,6 @@ export class ProductoTerminadoService {
 
   private normalizar(texto: string): string {
     return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
-  }
-
-  private generarNuevoId(): string {
-    const ultimoNumero = this.productosTerminados
-      .map(pt => Number(pt.id.replace('PT-', '')))
-      .filter(numero => !Number.isNaN(numero))
-      .reduce((maximo, numero) => Math.max(maximo, numero), 0);
-
-    return `PT-${String(ultimoNumero + 1).padStart(3, '0')}`;
   }
 
   agregarProduccion(

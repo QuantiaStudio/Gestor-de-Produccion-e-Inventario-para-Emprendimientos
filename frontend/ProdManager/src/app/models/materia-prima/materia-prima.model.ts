@@ -1,12 +1,12 @@
 export type EstadoMateriaPrima = 'optimo' | 'bajo_minimo' | 'sin_stock';
 
 /**
- * Forma real del endpoint /api/v1/materias-primas/ del backend Django (TK-02-06/07).
+ * Materia prima tal como la devuelve el backend Django en /api/v1/materias-primas/ (backend/API.md §6.1).
  * No incluye categoría ni proveedor: no forman parte del modelo de datos del equipo.
  * ultimaActualizacion se completa en el service cuando exista un endpoint de movimientos.
  */
-export interface MateriaPrimaApi {
-  id: number;
+export interface MateriaPrimaBackendDTO {
+  id_materia_prima: number;
   nombre: string;
   descripcion: string;
   unidad_medida: string;

@@ -217,25 +217,19 @@ export class ProduccionService {
         );
     }
 
+    // Conexión con Endpoint de Inicio y Reserva Atómica en Django
     iniciarProduccion(id: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
             return throwError(() => new Error('La orden no existe.'));
         }
-        if (orden.estado !== 'pendiente') {
-            return throwError(() => new Error('Solo se pueden iniciar órdenes pendientes.'));
-        }
-        if (!this.verificarDisponibilidad(id)) {
-            return throwError(() => new Error('No hay materiales suficientes para iniciar la producción.'));
-        }
 
-        const fechaActual = new Date().toISOString();
+        const pk = orden.apiId;
+        const url = `${environment.apiUrl}/produccion/ordenes/${pk}/iniciar/`;
 
-        return this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
-            id_estado: this.idEstado('en_produccion'),
-            fecha_inicio: fechaActual
-        }).pipe(
+        return this.http.post<any>(url, {}).pipe(
             tap(() => {
+                const fechaActual = new Date().toISOString();
                 orden.estado = 'en_produccion';
                 orden.fechaInicio = fechaActual;
                 orden.historialEstados.push({ estado: 'en_produccion', fecha: fechaActual });
@@ -244,101 +238,44 @@ export class ProduccionService {
         );
     }
 
+    // Conexión con Endpoint de Finalización Transaccional en Django
     finalizarProduccion(id: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
             return throwError(() => new Error('La orden no existe.'));
         }
-        if (orden.estado !== 'en_produccion') {
-            return throwError(() => new Error('Solo se pueden finalizar órdenes en producción.'));
-        }
-        if (!this.verificarDisponibilidad(id)) {
-            return throwError(() => new Error('No hay materiales suficientes para finalizar la producción.'));
-        }
 
-        const producto = this.buscarProducto(orden.producto.id);
-        if (!producto || producto.apiId === undefined) {
-            return throwError(() => new Error('El producto no existe.'));
-        }
+        const pk = orden.apiId;
+        const url = `${environment.apiUrl}/produccion/ordenes/${pk}/finalizar/`;
 
-        const observacion = `Orden de producción ${orden.id}`;
-        const fechaActual = new Date().toISOString();
-        const nuevoStockProducto = producto.stockActual + orden.cantidad;
-
-        // Al finalizar se descuenta la materia prima (con su movimiento) y se suma el producto terminado.
-        orden.materialesRequeridos.forEach(material => {
-            const stockResultante = this.materiaPrimaService.registrarMovimiento(
-                material.materiaPrima.id,
-                'consumo',
-                material.cantidadRequerida
-            );
-            if (stockResultante !== undefined) {
-                this.movimientoStockService.registrarMovimiento(
-                    material.materiaPrima.id,
-                    'consumo',
-                    material.cantidadRequerida,
-                    stockResultante,
-                    observacion
-                );
-            }
-        });
-
-        const peticiones: Observable<unknown>[] = [
-            this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
-                id_estado: this.idEstado('finalizada')
-            }),
-            this.http.patch(`${this.productosUrl}/${producto.apiId}`, {
-                stock_actual: nuevoStockProducto
-            }),
-            this.http.post(this.movimientosProductoUrl, {
-                fecha: fechaActual,
-                tipo_movimiento: 'ingreso',
-                cantidad: orden.cantidad,
-                id_producto: producto.apiId,
-                id_usuario: this.obtenerIdUsuario(),
-                observacion
-            })
-        ];
-        if (orden.detalleApiId !== undefined) {
-            peticiones.push(this.http.patch(`${this.detallesUrl}/${orden.detalleApiId}`, {
-                cantidad_producida: orden.cantidad
-            }));
-        }
-
-        return forkJoin(peticiones).pipe(
+        return this.http.post<any>(url, {}).pipe(
             tap(() => {
+                const fechaActual = new Date().toISOString();
                 orden.cantidadProducida = orden.cantidad;
                 orden.estado = 'finalizada';
                 orden.fechaFinalizacion = fechaActual;
                 orden.historialEstados.push({ estado: 'finalizada', fecha: fechaActual });
-                this.productoTerminadoService.agregarProduccion(
-                    orden.producto.id,
-                    orden.cantidadProducida,
-                    observacion
-                );
             }),
             map(() => undefined)
         );
     }
 
+    // Conexión con Endpoint de Cancelación y Liberación de Reservas en Django
     cancelarProduccion(id: string, motivo: string): Observable<void> {
         const orden = this.ordenesProduccion.find(o => o.id === id);
         if (!orden) {
             return throwError(() => new Error('La orden no existe.'));
         }
-        if (orden.estado === 'finalizada' || orden.estado === 'cancelada') {
-            return throwError(() => new Error('No se puede cancelar una orden finalizada o ya cancelada.'));
-        }
         if (!motivo.trim()) {
             return throwError(() => new Error('Debes indicar un motivo de cancelación.'));
         }
 
-        const fechaActual = new Date().toISOString();
+        const pk = orden.apiId;
+        const url = `${environment.apiUrl}/produccion/ordenes/${pk}/cancelar/`;
 
-        return this.http.patch(`${this.ordenesUrl}/${orden.apiId}`, {
-            id_estado: this.idEstado('cancelada')
-        }).pipe(
+        return this.http.post<any>(url, { motivo: motivo.trim() }).pipe(
             tap(() => {
+                const fechaActual = new Date().toISOString();
                 orden.estado = 'cancelada';
                 orden.fechaCancelacion = fechaActual;
                 orden.historialEstados.push({
@@ -421,7 +358,6 @@ export class ProduccionService {
         });
     }
 
-    // Usa la fórmula del producto y, si no tiene, la tabla detalleFormula de la API.
     private obtenerFormula(producto: ProductoTerminado | undefined): ItemFormula[] {
         if (!producto) {
             return [];
@@ -502,8 +438,6 @@ export class ProduccionService {
         }
     }
 
-    // Las fechas llegan en ISO desde la API, pero pueden venir vacias
-    // (historial sin fecha registrada), asi que se tolera el caso invalido.
     private parsearFecha(fecha: string): number {
         const tiempo = new Date(fecha).getTime();
         return Number.isNaN(tiempo) ? 0 : tiempo;

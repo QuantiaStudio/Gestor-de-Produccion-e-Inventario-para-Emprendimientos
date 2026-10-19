@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../../../services/user.service';
+import { AuthService } from '../../../../auth/services/auth.service';
 import { User, UserRole, CreateUserDTO, UpdateUserDTO } from '../../../../models/user/user.model';
 
 @Component({
@@ -32,9 +33,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   toastMessage: string | null = null;
   toastType: 'success' | 'danger' = 'success';
+  isSaving = false;
 
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     private fb: FormBuilder
   ) {
     this.userForm = this.fb.group({
@@ -48,10 +51,21 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.currentUser = this.userService.getCurrentUser();
+    const usuarioActual = this.authService.getUsuarioActual();
+    this.currentUser = usuarioActual ? {
+      id: usuarioActual.id,
+      firstName: usuarioActual.nombre,
+      lastName: usuarioActual.apellido,
+      email: usuarioActual.email,
+      role: usuarioActual.rol === 'ADMIN' ? 'Administrator' : 'Operator',
+      isActive: true,
+    } : null;
     this.usersSubscription = this.userService.users$.subscribe(users => {
       this.users = users;
       this.applyFilters();
+    });
+    this.userService.getUsers().subscribe({
+      error: () => this.showToast('No se pudo cargar la lista de usuarios.', 'danger'),
     });
   }
 
@@ -121,7 +135,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       role: 'Operator',
       isActive: true
     });
-    this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
+    this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
     this.userForm.get('password')?.updateValueAndValidity();
     this.isModalOpen = true;
   }
@@ -185,8 +199,28 @@ export class UsersComponent implements OnInit, OnDestroy {
         isActive: formVal.isActive
       };
 
-      this.userService.createUser(createDto);
-      this.showToast('Usuario registrado exitosamente', 'success');
+      if (createDto.role !== 'Operator') {
+        this.showToast('Las cuentas de administrador se crean desde el registro público.', 'danger');
+        return;
+      }
+
+      this.isSaving = true;
+      this.userService.createOperator(createDto).subscribe({
+        next: usuario => {
+          this.userService.addCreatedUser(usuario);
+          this.showToast('Operario registrado exitosamente', 'success');
+          this.isSaving = false;
+          this.closeModal();
+        },
+        error: error => {
+          const errores = error.error?.errors;
+          const primerError = errores ? Object.values(errores).flat()[0] : null;
+          const mensaje = primerError || error.error?.detail || 'No se pudo registrar el operario.';
+          this.showToast(String(mensaje), 'danger');
+          this.isSaving = false;
+        },
+      });
+      return;
     }
 
     this.closeModal();
