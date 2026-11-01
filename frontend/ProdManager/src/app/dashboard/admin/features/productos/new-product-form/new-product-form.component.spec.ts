@@ -61,7 +61,7 @@ describe('NewProductFormComponent', () => {
         precio: 85000,
         categoria: '1',
         stockMinimo: 2,
-        stockMaximo: 10,
+        stockInicial: 8.5,
         imagen: 'assets/productos-terminados/mesa_ratona.webp'
       });
     }
@@ -87,10 +87,10 @@ describe('NewProductFormComponent', () => {
       ]);
     });
 
-    it('arranca con el estado "activo" y sin el campo de stock inicial', () => {
+    it('arranca con estado activo y permite ingresar el stock inicial', () => {
       expect(component.estado.value).toBe('activo');
-      expect(component.stockInicial.disabled).toBeTrue();
-      expect(textoEnPantalla()).not.toContain('Stock Inicial');
+      expect(component.stockInicial.enabled).toBeTrue();
+      expect(textoEnPantalla()).toContain('Stock inicial');
     });
 
     it('acepta cantidades con decimales y rechaza el 0', () => {
@@ -145,8 +145,8 @@ describe('NewProductFormComponent', () => {
         descripcion: 'Mesa baja de roble.',
         precio: 85000,
         estado: 'activo',
+        stock_actual: 8.5,
         stock_minimo: 2,
-        stock_maximo: 10,
         imagen: 'assets/productos-terminados/mesa_ratona.webp',
         id_categoria: 1,
         formula: [
@@ -156,7 +156,7 @@ describe('NewProductFormComponent', () => {
       });
       expect(component.guardando).toBeTrue();
 
-      pedido.flush({ ...pedido.request.body, id_producto: 1, stock_actual: '0.000' }, { status: 201, statusText: 'Created' });
+      pedido.flush({ ...pedido.request.body, id_producto: 1, stock_actual: '8.500' }, { status: 201, statusText: 'Created' });
 
       expect(creado).toHaveBeenCalled();
       expect(component.guardando).toBeFalse();
@@ -221,7 +221,6 @@ describe('NewProductFormComponent', () => {
       unidadMedida: 'unidad',
       stockActual: 28,
       stockMinimo: 5,
-      stockMaximo: 40,
       estado: 'pendiente',
       ultimaActualizacion: '',
       formula: [],

@@ -4,7 +4,9 @@ export type EstadoProductoTerminado =
   | 'pendiente'
   | 'en_produccion'
   | 'finalizado'
-  | 'cancelado';
+  | 'cancelado'
+  | 'activo'
+  | 'inactivo';
 
 export type EstadoInventarioProducto = 'optimo' | 'bajo_minimo' | 'sin_stock';
 
@@ -29,7 +31,6 @@ export interface ProductoTerminado {
   unidadMedida: string;
   stockActual: number;
   stockMinimo: number;
-  stockMaximo: number;
   estado: EstadoProductoTerminado;
   ultimaActualizacion: string;
   lote?: string;
@@ -72,7 +73,6 @@ export interface NuevoProductoFormValue {
   estado: EstadoProductoTerminado | null;
   stockInicial: number | null;
   stockMinimo: number | null;
-  stockMaximo: number | null;
   descripcion: string | null;
   imagen?: string | null;
 }
@@ -99,9 +99,8 @@ export interface ProductoApiDTO {
   descripcion: string;
   stock_actual: number;
   stock_minimo?: number;
-  stock_maximo?: number;
   id_categoria: number;
-  estado: boolean | EstadoProductoTerminado;
+  estado: boolean | EstadoProductoTerminado | EstadoProductoBackend;
   formula?: DetalleFormulaApiDTO[];
   imagen?: string;
 }
@@ -120,7 +119,7 @@ export interface MovimientoInventarioApiDTO {
   id_movimiento_producto?: number;
   fecha: string;
   tipo_movimiento: string;
-  cantidad: number;
+  cantidad: number | string;
   id_producto: number;
   id_usuario?: number;
   observacion?: string;
@@ -139,6 +138,7 @@ export interface CategoriaBackendDTO {
 export interface LineaFormulaBackendDTO {
   id_detalle_formula?: number;
   id_materia_prima: number;
+  nombre_materia_prima?: string;
   cantidad_necesaria: number | string;
 }
 
@@ -154,9 +154,8 @@ export interface ProductoBackendDTO {
   descripcion: string;
   precio: number | string;
   estado: EstadoProductoBackend;
-  stock_actual?: string;
+  stock_actual?: number | string;
   stock_minimo: number | string;
-  stock_maximo: number | string | null;
   imagen: string;
   id_categoria: number;
   formula: LineaFormulaBackendDTO[];

@@ -31,8 +31,6 @@ class Producto(models.Model):
     estado = models.CharField(max_length=20, choices=EstadoProducto.choices, default=EstadoProducto.ACTIVO)
     stock_actual = models.DecimalField(max_digits=12, decimal_places=3, default=0)
     stock_minimo = models.DecimalField(max_digits=12, decimal_places=3, default=0)
-    # null = sin tope de stock.
-    stock_maximo = models.DecimalField(max_digits=12, decimal_places=3, null=True, blank=True)
     # Referencia a la imagen (ruta de assets del frontend o URL), no el archivo.
     imagen = models.CharField(max_length=255, blank=True)
     categoria = models.ForeignKey(

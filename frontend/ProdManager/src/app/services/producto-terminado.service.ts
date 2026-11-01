@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 import { environment } from '../../environments/environment';
-import { CategoriaApiDTO, CategoriaBackendDTO, EstadoApiDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoBackendDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
+import { CategoriaBackendDTO, EstadoProductoTerminado, FiltroProductoTerminado, MaterialAgregadoProducto, MovimientoInventario, MovimientoInventarioApiDTO, NuevoProductoFormValue, ProductoApiDTO, ProductoBackendDTO, ProductoTerminado, ResumenInventario } from '../models/producto/producto-terminado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +15,10 @@ export class ProductoTerminadoService {
   ) { }
   private readonly productosUrl = `${environment.apiUrl}/productos`;
   private readonly movimientosInventarioUrl = `${environment.apiUrl}/movimientosInventarioProducto`;
-  private readonly categoriasUrl = `${environment.apiUrl}/categorias`;
-  private readonly estadosUrl = `${environment.apiUrl}/estados`;
   private readonly backendProductosUrl = `${environment.djangoApiUrl}/productos/`;
   private readonly backendCategoriasUrl = `${environment.djangoApiUrl}/categorias/`;
+  private readonly backendMovimientosUrl = `${environment.djangoApiUrl}/movimientos-producto/`;
   private categorias = new Map<number, string>();
-  private estados = new Map<number, EstadoProductoTerminado>();
   private productosTerminados: ProductoTerminado[] = [];
 
   obtenerProductosTerminados(): ProductoTerminado[] {
@@ -29,15 +27,13 @@ export class ProductoTerminadoService {
 
   cargarProductosTerminados(): Observable<ProductoTerminado[]> {
     return forkJoin({
-      productos: this.http.get<ProductoApiDTO[]>(this.productosUrl),
-      movimientos: this.http.get<MovimientoInventarioApiDTO[]>(this.movimientosInventarioUrl),
-      categorias: this.http.get<CategoriaApiDTO[]>(this.categoriasUrl),
-      estados: this.http.get<EstadoApiDTO[]>(this.estadosUrl)
+      productos: this.http.get<ProductoBackendDTO[]>(this.backendProductosUrl),
+      movimientos: this.http.get<MovimientoInventarioApiDTO[]>(this.backendMovimientosUrl),
+      categorias: this.http.get<CategoriaBackendDTO[]>(this.backendCategoriasUrl)
     }).pipe(
-      map(({ productos, movimientos, categorias, estados }) => {
-        this.categorias = new Map(categorias.map(categoria => [categoria.id, categoria.nombre]));
-        this.estados = new Map(estados.map(estado => [estado.id, this.normalizarEstadoNombre(estado.nombre)]));
-        return productos.map(producto => this.mapearProducto(producto, movimientos));
+      map(({ productos, movimientos, categorias }) => {
+        this.categorias = new Map(categorias.map(categoria => [categoria.id_categoria, categoria.nombre]));
+        return productos.map(producto => this.mapearProductoBackend(producto, movimientos));
       }),
       tap(productos => this.productosTerminados = productos)
     );
@@ -71,7 +67,6 @@ export class ProductoTerminadoService {
       descripcion: formValue.descripcion ?? '',
       stock_actual: formValue.stockInicial ?? producto.stockActual,
       stock_minimo: formValue.stockMinimo ?? producto.stockMinimo,
-      stock_maximo: formValue.stockMaximo ?? producto.stockMaximo,
       id_categoria: this.obtenerIdCategoria(formValue.categoria ?? producto.categoria),
       estado: producto.estado,
       codigo: formValue.codigo ?? producto.id,
@@ -104,35 +99,41 @@ export class ProductoTerminadoService {
     );
   }
 
-  private mapearProducto(
-    apiProducto: ProductoApiDTO,
-    movimientosInventario: MovimientoInventarioApiDTO[] = [],
-    productoLocal?: ProductoTerminado
+  private mapearProductoBackend(
+    producto: ProductoBackendDTO,
+    movimientosInventario: MovimientoInventarioApiDTO[]
   ): ProductoTerminado {
-    const stockActual = Number(apiProducto.stock_actual ?? 0);
-    const stockMinimo = Number(apiProducto.stock_minimo ?? productoLocal?.stockMinimo ?? 1);
-    const productoId = Number(apiProducto.id ?? 0);
+    const idProducto = Number(producto.id_producto);
+    const stockActual = Number(producto.stock_actual ?? 0);
 
     return {
-      id: apiProducto.codigo ?? productoLocal?.id ?? `PT-${String(apiProducto.id ?? 0).padStart(3, '0')}`,
-      apiId: apiProducto.id ?? productoLocal?.apiId,
-      nombre: apiProducto.nombre ?? '',
-      categoria: this.categorias.get(apiProducto.id_categoria) ?? productoLocal?.categoria ?? '',
-      descripcion: apiProducto.descripcion ?? '',
-      imagen: apiProducto.imagen ?? productoLocal?.imagen ?? '',
-      unidadMedida: productoLocal?.unidadMedida ?? '',
+      id: producto.codigo,
+      apiId: idProducto,
+      nombre: producto.nombre,
+      categoria: this.categorias.get(producto.id_categoria) ?? '',
+      descripcion: producto.descripcion,
+      imagen: this.resolverImagen(producto.imagen),
+      unidadMedida: 'unidad',
       stockActual,
-      stockMinimo,
-      stockMaximo: Number(apiProducto.stock_maximo ?? productoLocal?.stockMaximo ?? Math.max(stockActual * 2, stockActual)),
-      estado: this.normalizarEstado(apiProducto.estado, productoLocal?.estado ?? 'pendiente'),
-      ultimaActualizacion: productoLocal?.ultimaActualizacion ?? this.fechaDeHoy(),
-      formula: apiProducto.formula?.map(material => ({
+      stockMinimo: Number(producto.stock_minimo),
+      estado: producto.estado,
+      ultimaActualizacion: this.fechaDeHoy(),
+      formula: producto.formula.map(material => ({
         materiaPrimaId: `M${String(material.id_materia_prima).padStart(3, '0')}`,
-        nombreMateriaPrima: material.nombre_materia_prima,
-        cantidad: material.cantidad
-      })) ?? productoLocal?.formula ?? [],
-      movimientos: this.mapearMovimientosProducto(productoId, movimientosInventario)
+        nombreMateriaPrima: material.nombre_materia_prima ?? `Materia prima ${material.id_materia_prima}`,
+        cantidad: Number(material.cantidad_necesaria)
+      })),
+      movimientos: this.mapearMovimientosProducto(idProducto, movimientosInventario)
     };
+  }
+
+  private resolverImagen(imagen?: string | null): string {
+    const referencia = imagen?.trim();
+    if (!referencia) return '/assets/box.svg';
+    if (/^https?:\/\//i.test(referencia)) return referencia;
+
+    const rutaAssets = referencia.replace(/^\/?assets\//, '');
+    return `/assets/${rutaAssets}`;
   }
 
   private mapearMovimientosProducto(
@@ -209,16 +210,6 @@ export class ProductoTerminadoService {
     return categoria?.[0] ?? 0;
   }
 
-  private normalizarEstadoNombre(nombre: string): EstadoProductoTerminado {
-    const estado = nombre
-      .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .toLowerCase()
-      .replace(/\s+/g, '_');
-
-    return estado === 'finalizada' ? 'finalizado' : estado as EstadoProductoTerminado;
-  }
-
   private obtenerIdUsuarioActual(): number {
     const idUsuario = Number(this.authService.getUsuarioActual()?.id);
 
@@ -263,7 +254,7 @@ export class ProductoTerminadoService {
   }
 
   obtenerEstados(): EstadoProductoTerminado[] {
-    return [...this.estados.values()];
+    return [...new Set(this.productosTerminados.map(producto => producto.estado))];
   }
 
   obtenerResumenInventario(productos: ProductoTerminado[] = this.productosTerminados): ResumenInventario {
@@ -300,26 +291,6 @@ export class ProductoTerminadoService {
     producto.stockActual = stockActual;
     producto.stockMinimo = stockMinimo;
     producto.ultimaActualizacion = fecha;
-  }
-
-  private normalizarEstado(
-    estado: boolean | EstadoProductoTerminado | undefined,
-    fallback: EstadoProductoTerminado = 'pendiente'
-  ): EstadoProductoTerminado {
-    if (typeof estado === 'string') {
-      const valoresValidos: EstadoProductoTerminado[] = [
-        'pendiente', 'en_produccion', 'finalizado', 'cancelado'
-      ];
-
-      return valoresValidos.includes(estado as EstadoProductoTerminado)
-        ? (estado as EstadoProductoTerminado)
-        : fallback;
-    }
-
-    if (estado === false) return 'cancelado';
-    if (estado === true) return 'finalizado';
-
-    return fallback;
   }
 
   private fechaDeHoy(): string {

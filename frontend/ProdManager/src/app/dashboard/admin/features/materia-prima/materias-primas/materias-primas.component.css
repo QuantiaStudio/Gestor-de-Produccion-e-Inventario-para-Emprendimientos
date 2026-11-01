@@ -291,11 +291,6 @@
     margin-right: 8px;
 }
 
-.btn-eliminar-fila:hover {
-    color: var(--color-error, #dc2626);
-    transform: none;
-}
-
 .btn-ver-detalle:hover {
     transform: translateX(3px);
     color: var(--primary-color);

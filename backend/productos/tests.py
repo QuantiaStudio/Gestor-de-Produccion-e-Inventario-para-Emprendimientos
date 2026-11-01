@@ -5,7 +5,7 @@ from rest_framework import status
 
 from config.testing import APITestCaseAutenticado
 
-from .models import DetalleFormula, Producto
+from .models import DetalleFormula, MovimientoInventarioProducto, Producto
 
 URL_PRODUCTOS = reverse('producto-list')
 URL_CATEGORIAS = reverse('categoria-list')
@@ -28,7 +28,6 @@ def producto_valido(**cambios):
         'precio': '85000.00',
         'estado': 'activo',
         'stock_minimo': '2',
-        'stock_maximo': '10',
         'imagen': 'assets/productos-terminados/mesa_ratona.webp',
         'id_categoria': 1,
         # Las materias primas van desordenadas a propósito: la respuesta tiene que respetar este orden.
@@ -72,7 +71,7 @@ class CrearProductoTests(APITestCaseAutenticado):
         self.assertEqual(cuerpo['precio'], '85000.00')
         self.assertEqual(cuerpo['estado'], 'activo')
         self.assertEqual(cuerpo['stock_minimo'], '2.000')
-        self.assertEqual(cuerpo['stock_maximo'], '10.000')
+        self.assertEqual(cuerpo['stock_actual'], '0.000')
         self.assertEqual(cuerpo['imagen'], 'assets/productos-terminados/mesa_ratona.webp')
         self.assertEqual(cuerpo['id_categoria'], 1)
         self.assertEqual(DetalleFormula.objects.filter(producto=producto).count(), 3)
@@ -84,12 +83,17 @@ class CrearProductoTests(APITestCaseAutenticado):
         self.assertEqual([l['cantidad_necesaria'] for l in formula], ['0.150', '0.750', '12.000'])
         self.assertTrue(all(isinstance(l['id_detalle_formula'], int) for l in formula))
 
-    def test_el_producto_nace_con_stock_cero_aunque_se_envie_otro(self):
+    def test_registra_el_stock_inicial_y_su_movimiento_de_ingreso(self):
         respuesta = self.crear(producto_valido(stock_actual='50'))
 
         self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(respuesta.json()['stock_actual'], '0.000')
-        self.assertEqual(Producto.objects.get().stock_actual, 0)
+        producto = Producto.objects.get()
+        self.assertEqual(respuesta.json()['stock_actual'], '50.000')
+        self.assertEqual(producto.stock_actual, 50)
+        movimiento = MovimientoInventarioProducto.objects.get(producto=producto)
+        self.assertEqual(movimiento.tipo_movimiento, 'ingreso')
+        self.assertEqual(movimiento.cantidad, 50)
+        self.assertEqual(movimiento.usuario, self.usuario)
 
     def test_completa_los_valores_por_defecto(self):
         obligatorios = {campo: producto_valido()[campo] for campo in ('codigo', 'nombre', 'precio', 'id_categoria', 'formula')}
@@ -99,7 +103,7 @@ class CrearProductoTests(APITestCaseAutenticado):
         self.assertEqual(cuerpo['estado'], 'activo')
         self.assertEqual(cuerpo['descripcion'], '')
         self.assertEqual(cuerpo['stock_minimo'], '0.000')
-        self.assertIsNone(cuerpo['stock_maximo'])
+        self.assertEqual(cuerpo['stock_actual'], '0.000')
         self.assertEqual(cuerpo['imagen'], '')
 
     def test_exige_los_campos_obligatorios(self):
@@ -133,12 +137,6 @@ class CrearProductoTests(APITestCaseAutenticado):
         for precio, mensaje in casos.items():
             with self.subTest(precio=precio):
                 self.assertErrores(self.crear(producto_valido(precio=precio)), {'precio': [mensaje]})
-
-    def test_rechaza_un_stock_maximo_menor_que_el_minimo(self):
-        self.assertErrores(
-            self.crear(producto_valido(stock_minimo='10', stock_maximo='5')),
-            {'stock_maximo': ['El stock máximo no puede ser menor que el stock mínimo.']},
-        )
 
     def test_rechaza_un_estado_invalido(self):
         self.assertErrores(

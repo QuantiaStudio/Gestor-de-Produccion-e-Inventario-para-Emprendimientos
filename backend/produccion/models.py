@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -18,6 +19,15 @@ class OrdenProduccion(models.Model):
     id_orden = models.AutoField(primary_key=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_inicio = models.DateTimeField(null=True, blank=True)
+    observaciones = models.TextField(blank=True, default='')
+    operador = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        db_column='id_usuario',
+        related_name='ordenes_produccion',
+        null=True,
+        blank=True,
+    )
     estado = models.ForeignKey(
         Estado,
         on_delete=models.PROTECT,

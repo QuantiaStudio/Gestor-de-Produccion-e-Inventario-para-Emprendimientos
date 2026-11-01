@@ -45,7 +45,7 @@
             >
               <td>
                 <div class="producto-celda">
-                  <img [src]="pt.imagen" [alt]="pt.nombre" class="producto-thumb" />
+                  <img [src]="pt.imagen" [alt]="pt.nombre" class="producto-thumb" (error)="usarImagenAlternativa($event)" />
                   <div class="producto-info">
                     <span class="producto-nombre">{{ pt.nombre }}</span>
                     <small class="mono">{{ pt.id }}</small>

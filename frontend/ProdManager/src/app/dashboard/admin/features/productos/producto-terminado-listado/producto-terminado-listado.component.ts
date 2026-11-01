@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActualizacionStock, EstadoProductoTerminado, FiltroProductoTerminado, ProductoTerminado, ResumenInventario } from '../../../../../models/producto/producto-terminado.model';
 import { ProductoTerminadoService } from '../../../../../services/producto-terminado.service';
 import { NewProductFormComponent } from '../new-product-form/new-product-form.component';
@@ -21,6 +21,7 @@ import { ProductoTerminadoFiltrosComponent } from '../producto-terminado-filtros
   styleUrl: './producto-terminado-listado.component.css'
 })
 export class ProductoTerminadoListadoComponent {
+  @ViewChild(ProductoTerminadoFiltrosComponent) private filtros?: ProductoTerminadoFiltrosComponent;
   productoSeleccionado: ProductoTerminado | null = null;
   productosTerminados: ProductoTerminado[] = [];
   catalogo: ProductoTerminado[] = [];
@@ -77,6 +78,8 @@ export class ProductoTerminadoListadoComponent {
   }
 
   productoCreado() {
+    this.filtrosActuales = {};
+    this.filtros?.limpiar();
     this.cargarProductosDesdeApi(() => {
       this.mostrarFormularioNuevoProducto = false;
       this.mensajeExito = 'El producto se creó correctamente.';
@@ -88,6 +91,14 @@ export class ProductoTerminadoListadoComponent {
 
   seleccionar(producto: ProductoTerminado) {
     this.productoSeleccionado = producto;
+  }
+
+  usarImagenAlternativa(event: Event) {
+    const imagen = event.currentTarget as HTMLImageElement;
+    if (imagen.dataset['fallback'] === 'true') return;
+
+    imagen.dataset['fallback'] = 'true';
+    imagen.src = '/assets/box.svg';
   }
 
   estaEnProduccion(producto: ProductoTerminado): boolean {

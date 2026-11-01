@@ -1,6 +1,6 @@
 # Contrato de la API — Gestor de Producción e Inventario
 
-Versión del contrato: **v1** · Estado: **en implementación**. La columna *Implementado* del resumen de rutas (§9) indica qué endpoints ya funcionan; el resto responde `501`.
+Versión del contrato: **v1** · La autenticación, la consulta/alta de usuarios y el resumen del dashboard están implementados; algunos endpoints de negocio todavía responden `501`.
 
 Este documento es la referencia común entre frontend y backend. Si un endpoint se implementa distinto a lo que dice acá, se actualiza este documento en el mismo PR.
 
@@ -92,7 +92,7 @@ Ejemplos:
 { "detail": "Stock insuficiente de 'Roble macizo': disponible 2.000, requerido 5.000.", "code": "stock_insuficiente" }
 
 // 501
-{ "detail": "El endpoint GET /api/v1/productos/ todavía no está implementado.", "code": "not_implemented" }
+{ "detail": "El endpoint todavía no está implementado.", "code": "not_implemented" }
 ```
 
 Valores de `code` usados: `invalid`, `parse_error`, `not_authenticated`, `authentication_failed`, `inactive_user`, `permission_denied`, `not_found`, `method_not_allowed`, `conflict`, `stock_insuficiente`, `en_uso`, `server_error`, `not_implemented`.
@@ -137,14 +137,29 @@ La contraseña se valida contra el hash almacenado por Django. Al iniciar sesió
 
 ---
 
+## Resumen del dashboard — `/dashboard/resumen/`
+
+`GET /dashboard/resumen/` requiere un token de administrador y devuelve los valores agregados para las tarjetas del panel:
+
+```json
+{
+  "usuarios_activos": 4,
+  "productos_en_produccion": 12,
+  "disenos_catalogo": 28
+}
+```
+
+`usuarios_activos` cuenta usuarios habilitados, `productos_en_produccion` suma las unidades planificadas en órdenes con estado `En Produccion`, y `disenos_catalogo` cuenta todos los registros de productos.
+
 ## 5. Usuarios — `/usuarios/`
 
-Por ahora se implementaron el listado y el alta de operarios. Ambos requieren un token de administrador. El `POST` siempre crea una cuenta activa con rol `OPERARIO`; se ignoran los campos `rol` y `estado` si el cliente los envía. Los demás métodos continúan sin implementar.
+Por ahora se implementaron el listado, el alta de operarios y la actualización parcial. Requieren un token de administrador. El `POST` siempre crea una cuenta activa con rol `OPERARIO`; se ignoran los campos `rol` y `estado` si el cliente los envía. La edición permite actualizar los campos editables; `GET`, `PUT` y `DELETE` sobre un usuario continúan sin implementar.
 
 | Método | Ruta | Descripción |
 |---|---|---|
 | `GET` | `/usuarios/` | Lista las cuentas con datos públicos (`200` + array) |
 | `POST` | `/usuarios/` | Crea un operario (`201` + usuario creado) |
+| `PATCH` | `/usuarios/{id}/` | Actualiza parcialmente una cuenta (`200` + usuario actualizado) |
 
 Ejemplo de alta:
 
@@ -164,7 +179,7 @@ Un correo duplicado o datos inválidos producen `400`; sin token responde `401` 
 | `rol` | `"ADMIN"` \| `"OPERARIO"` | — | Asignado por el servidor: el registro público crea `ADMIN` y este `POST` crea `OPERARIO` |
 | `estado` | boolean | — | Las altas se crean activas (`true`) |
 
-La edición y baja de cuentas todavía no están implementadas. `/usuarios/{id}/` sigue respondiendo `501`.
+`PATCH /usuarios/{id}/` acepta uno o más de estos campos: `nombre`, `apellido`, `email`, `contrasena`, `rol` (`ADMIN` o `OPERARIO`) y `estado` (booleano). La contraseña se valida y se guarda hasheada; no se devuelve en la respuesta. Un correo duplicado, un campo inválido o una contraseña débil producen `400`; un id inexistente produce `404`. `/usuarios/{id}/` continúa respondiendo `501` para `GET`, `PUT` y `DELETE`.
 
 ---
 
@@ -253,9 +268,8 @@ CRUD estándar. La fórmula del producto viaja **anidada** en el campo `formula`
 | `descripcion` | string | No | Por defecto `""` |
 | `precio` | decimal ≥ 0 | Sí | Hasta 2 decimales |
 | `estado` | `"activo"` \| `"inactivo"` \| `"en_produccion"` \| `"pendiente"` | No | Por defecto `"activo"` |
-| `stock_actual` | decimal | — | **Solo lectura**. Vale `0` al crear el producto. Cambia únicamente con movimientos (§7.4) o al finalizar producción |
+| `stock_actual` | decimal ≥ 0 | No | Stock inicial opcional al crear; si es mayor que `0`, se registra un movimiento de ingreso con el usuario autenticado. Luego cambia con movimientos (§7.4) o al finalizar producción |
 | `stock_minimo` | decimal ≥ 0 | No | Por defecto `0` |
-| `stock_maximo` | decimal \| null | No | Por defecto `null` (sin tope). Si se envía, debe ser mayor o igual a `stock_minimo` |
 | `imagen` | string (≤255) | No | **Referencia** a la imagen, no el archivo: ruta de una imagen del frontend (`"assets/productos-terminados/rack_tv.jpg"`) o URL absoluta `http(s)://` (para un futuro proveedor de imágenes). Por defecto `""` (sin imagen). El backend no recibe ni guarda archivos |
 | `id_categoria` | int | Sí | `400` si no existe |
 | `formula` | array | Sí en `POST` | Líneas de la receta (tabla siguiente). Al menos una |
@@ -266,9 +280,10 @@ Cada línea de `formula` indica cuánta materia prima hace falta para **una unid
 |---|---|---|---|
 | `id_detalle_formula` | int | — | Solo lectura |
 | `id_materia_prima` | int | Sí | Debe existir en el inventario (`400` si no existe). No se puede repetir dentro de la misma fórmula |
+| `nombre_materia_prima` | string | — | Solo lectura; nombre del material incluido en la respuesta |
 | `cantidad_necesaria` | decimal > 0 | Sí | En la `unidad_medida` de la materia prima. Hasta 3 decimales |
 
-Filtros: `?id_categoria=1`, `?estado=activo`, `?nombre=<texto>`.
+`GET /productos/` devuelve todos los productos en orden de id, con su fórmula incluida. Filtros: `?id_categoria=1`, `?estado=activo`, `?nombre=<texto>`.
 `DELETE`: borra también su fórmula. `409` (`en_uso`) si tiene movimientos u órdenes de producción; en ese caso se lo pasa a `"inactivo"`.
 `PUT` / `PATCH`: cómo se modifica `formula` se define en la historia de edición de productos.
 
@@ -283,7 +298,6 @@ Filtros: `?id_categoria=1`, `?estado=activo`, `?nombre=<texto>`.
   "estado": "activo",
   "stock_actual": "28.000",
   "stock_minimo": "5.000",
-  "stock_maximo": "40.000",
   "imagen": "assets/productos-terminados/mesa_nordica.jpg",
   "id_categoria": 1,
   "formula": [
@@ -301,14 +315,14 @@ Reglas que valida el backend (todas responden `400`):
 
 1. `codigo`, `nombre`, `precio`, `id_categoria` y `formula` son obligatorios.
 2. `codigo` no puede repetirse entre productos.
-3. `precio` y `stock_minimo` son ≥ 0; `stock_maximo`, si se envía, es ≥ `stock_minimo`.
+3. `precio` y `stock_minimo` son ≥ 0.
 4. `id_categoria` existe.
 5. `formula` tiene al menos una línea y no repite `id_materia_prima`.
 6. Cada `id_materia_prima` existe en el inventario.
 7. Cada `cantidad_necesaria` es mayor a 0 y tiene hasta 3 decimales.
 8. `imagen`, si se envía, es una ruta que empieza con `assets/` o una URL `http://` / `https://`, de hasta 255 caracteres. No se aceptan imágenes en base64.
 
-`stock_actual` se ignora si se envía: el producto nace con stock `0`.
+Si se envía `stock_actual` mayor que `0`, el backend crea el producto con ese stock y registra el movimiento inicial de ingreso con el usuario autenticado. Si se omite o vale `0`, el producto nace sin stock.
 
 ```json
 // POST /productos/
@@ -318,8 +332,8 @@ Reglas que valida el backend (todas responden `400`):
   "descripcion": "Mesa baja de roble con estante inferior.",
   "precio": "85000.00",
   "estado": "activo",
+  "stock_actual": "10",
   "stock_minimo": "2",
-  "stock_maximo": "10",
   "imagen": "assets/productos-terminados/mesa_ratona.webp",
   "id_categoria": 1,
   "formula": [
@@ -337,9 +351,8 @@ Reglas que valida el backend (todas responden `400`):
   "descripcion": "Mesa baja de roble con estante inferior.",
   "precio": "85000.00",
   "estado": "activo",
-  "stock_actual": "0.000",
+  "stock_actual": "10.000",
   "stock_minimo": "2.000",
-  "stock_maximo": "10.000",
   "imagen": "assets/productos-terminados/mesa_ratona.webp",
   "id_categoria": 1,
   "formula": [
@@ -393,7 +406,7 @@ Filtros: `?id_producto=1` (la fórmula completa de un producto), `?id_materia_pr
 
 ### 7.4 `/movimientos-producto/`
 
-Registro histórico: **solo** `GET` y `POST` (igual que §6.2).
+Registro histórico: **solo** `GET` y `POST` (igual que §6.2). El `GET` devuelve los movimientos del más reciente al más antiguo.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
@@ -432,7 +445,7 @@ CRUD estándar. Catálogo precargado por migración:
 
 ### 8.2 `/ordenes-produccion/`
 
-CRUD estándar.
+Consulta de órdenes y alta transaccional de una orden con su primer detalle.
 
 | Campo | Tipo | Req. | Notas |
 |---|---|---|---|
@@ -440,16 +453,19 @@ CRUD estándar.
 | `fecha_creacion` | datetime | — | Solo lectura. La asigna el servidor |
 | `fecha_inicio` | datetime \| null | No | Por defecto `null` |
 | `id_estado` | int | No | Por defecto `1` (Pendiente). `400` si no existe |
+| `detalle` | objeto | Sí en `POST` | Producto y cantidad planificada; se guarda atómicamente con la orden. `409` si no hay materia prima suficiente |
+| `observaciones` | string | No | Nota de la orden; por defecto `""` |
+| `id_usuario` | int \| null | — | Solo lectura. Se asigna desde el usuario autenticado |
 
 Filtros: `?id_estado=2`, `?desde=`, `?hasta=` (sobre `fecha_creacion`). Orden: más reciente primero.
 `DELETE`: borra también sus detalles. `409` si la orden no está en estado Pendiente.
 
 ```json
 // POST /ordenes-produccion/
-{ "fecha_inicio": null }
+{ "detalle": { "id_producto": 2, "cantidad_planificada": "5" }, "observaciones": "Priorizar este lote" }
 
 // 201
-{ "id_orden": 7, "fecha_creacion": "2026-10-14T13:45:00Z", "fecha_inicio": null, "id_estado": 1 }
+{ "id_orden": 7, "fecha_creacion": "2026-10-14T13:45:00Z", "fecha_inicio": null, "id_estado": 1, "id_usuario": 3, "observaciones": "Priorizar este lote" }
 ```
 
 ### 8.3 `/detalles-orden-produccion/`
@@ -486,11 +502,11 @@ Filtros: `?id_orden=7`, `?id_producto=1`.
 | `/materias-primas/`, `/materias-primas/{id}/` | CRUD | `GET /materias-primas/` (todavía sin filtros) |
 | `/movimientos-materia-prima/`, `/movimientos-materia-prima/{id}/` | `GET`, `POST` | — |
 | `/categorias/`, `/categorias/{id}/` | CRUD | `GET /categorias/` |
-| `/productos/`, `/productos/{id}/` | CRUD | `POST /productos/`, `DELETE /productos/{id}/` |
+| `/productos/`, `/productos/{id}/` | CRUD | `GET /productos/`, `POST /productos/`, `DELETE /productos/{id}/` |
 | `/detalles-formula/`, `/detalles-formula/{id}/` | CRUD | — |
-| `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` | — |
-| `/estados/`, `/estados/{id}/` | CRUD | — |
-| `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD | — |
-| `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD | — |
+| `/movimientos-producto/`, `/movimientos-producto/{id}/` | `GET`, `POST` | `GET /movimientos-producto/` |
+| `/estados/`, `/estados/{id}/` | CRUD | `GET /estados/` |
+| `/ordenes-produccion/`, `/ordenes-produccion/{id}/` | CRUD | `GET /ordenes-produccion/`, `POST /ordenes-produccion/` |
+| `/detalles-orden-produccion/`, `/detalles-orden-produccion/{id}/` | CRUD | `GET /detalles-orden-produccion/`, `POST /detalles-orden-produccion/` |
 
 Todas con el prefijo `/api/v1/`. Los métodos que todavía no figuran en la columna **Implementado** responden `501 Not Implemented` (o `405` si el método no está permitido en esa ruta).

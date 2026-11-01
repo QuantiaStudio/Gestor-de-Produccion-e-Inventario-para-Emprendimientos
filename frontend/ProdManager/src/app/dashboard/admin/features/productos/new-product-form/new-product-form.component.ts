@@ -43,7 +43,6 @@ const CONTROL_POR_CAMPO_BACKEND: Partial<Record<string, string>> = {
   precio: 'precio',
   estado: 'estado',
   stock_minimo: 'stockMinimo',
-  stock_maximo: 'stockMaximo',
   imagen: 'imagen',
   id_categoria: 'categoria',
 };
@@ -98,7 +97,6 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       this.imagen.disable();
       this.cargarDatosDeJsonServer();
     } else {
-      this.stockInicial.disable();
       this.estado.setValue('activo');
       this.cargarDatosDelBackend();
     }
@@ -114,9 +112,8 @@ export class NewProductFormComponent implements OnChanges, OnInit {
     nombre: ['', [Validators.required, Validators.maxLength(100)]],
     descripcion: [''],
     precio: [null as number | null, [Validators.required, Validators.min(0), maximoDecimales(2)]],
-    stockInicial: [0, [Validators.required, Validators.min(1)]],
+    stockInicial: [0, [Validators.required, Validators.min(0), maximoDecimales(3)]],
     stockMinimo: [1, [Validators.required, Validators.min(0)]],
-    stockMaximo: [1, [Validators.required, Validators.min(0)]],
     codigo: ['', [Validators.required, Validators.maxLength(20)]],
     categoria: ['', Validators.required],
     estado: ['', Validators.required],
@@ -151,9 +148,6 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   }
   get stockMinimo() {
     return this.productForm.get('stockMinimo')!;
-  }
-  get stockMaximo() {
-    return this.productForm.get('stockMaximo')!;
   }
   get codigo() {
     return this.productForm.get('codigo')!;
@@ -209,11 +203,6 @@ export class NewProductFormComponent implements OnChanges, OnInit {
     return this.materiales?.hasError('required') && this.materiales?.touched;
   }
 
-  get stockRangoInvalido() {
-    const minimo = Number(this.stockMinimo?.value);
-    const maximo = Number(this.stockMaximo?.value);
-    return this.stockMinimo?.touched && this.stockMaximo?.touched && minimo > maximo;
-  }
 
   agregarMaterial() {
     this.errorMaterial = null;
@@ -270,11 +259,7 @@ export class NewProductFormComponent implements OnChanges, OnInit {
   guardarProducto() {
     this.errorGeneral = null;
 
-    const minimo = Number(this.stockMinimo?.value);
-    const maximo = Number(this.stockMaximo?.value);
-    const rangoStockInvalido = minimo > maximo;
-
-    if (this.productForm.invalid || rangoStockInvalido) {
+    if (this.productForm.invalid) {
 
       this.productForm.markAllAsTouched();
 
@@ -327,8 +312,8 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       descripcion: valores.descripcion ?? '',
       precio: valores.precio ?? 0,
       estado: valores.estado as EstadoProductoBackend,
+      stock_actual: valores.stockInicial ?? 0,
       stock_minimo: valores.stockMinimo ?? 0,
-      stock_maximo: valores.stockMaximo ?? null,
       imagen: valores.imagen ?? '',
       id_categoria: Number(valores.categoria),
       formula: this.materialesAgregados.map(material => ({
@@ -433,7 +418,6 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       precio: null,
       stockInicial: 0,
       stockMinimo: 1,
-      stockMaximo: 1,
       codigo: '',
       categoria: '',
       estado: this.modoEdicion ? '' : 'activo',
@@ -451,7 +435,6 @@ export class NewProductFormComponent implements OnChanges, OnInit {
       descripcion: producto.descripcion,
       stockInicial: producto.stockActual,
       stockMinimo: producto.stockMinimo,
-      stockMaximo: producto.stockMaximo,
       codigo: producto.id,
       categoria: producto.categoria,
       estado: producto.estado,

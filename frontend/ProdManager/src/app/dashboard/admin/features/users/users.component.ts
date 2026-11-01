@@ -185,10 +185,22 @@ export class UsersComponent implements OnInit, OnDestroy {
         updateDto.password = formVal.password;
       }
 
-      const updated = this.userService.updateUser(this.editingUserId, updateDto);
-      if (updated) {
-        this.showToast('Usuario actualizado exitosamente', 'success');
-      }
+      this.isSaving = true;
+      this.userService.updateUser(this.editingUserId, updateDto).subscribe({
+        next: () => {
+          this.showToast('Usuario actualizado exitosamente', 'success');
+          this.isSaving = false;
+          this.closeModal();
+        },
+        error: error => {
+          const errores = error.error?.errors;
+          const primerError = errores ? Object.values(errores).flat()[0] : null;
+          const mensaje = primerError || error.error?.detail || 'No se pudo actualizar el usuario.';
+          this.showToast(String(mensaje), 'danger');
+          this.isSaving = false;
+        },
+      });
+      return;
     } else {
       const createDto: CreateUserDTO = {
         firstName: formVal.firstName,

@@ -8,7 +8,7 @@ from rest_framework.validators import UniqueValidator
 
 from materia_prima.models import MateriaPrima
 
-from .models import Categoria, DetalleFormula, Producto
+from .models import Categoria, DetalleFormula, MovimientoInventarioProducto, Producto, TipoMovimientoProducto
 
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -27,10 +27,11 @@ class DetalleFormulaEnProductoSerializer(serializers.ModelSerializer):
         queryset=MateriaPrima.objects.all(),
         error_messages={'does_not_exist': 'No existe la materia prima con id {pk_value}.'},
     )
+    nombre_materia_prima = serializers.CharField(source='materia_prima.nombre', read_only=True)
 
     class Meta:
         model = DetalleFormula
-        fields = ['id_detalle_formula', 'id_materia_prima', 'cantidad_necesaria']
+        fields = ['id_detalle_formula', 'id_materia_prima', 'nombre_materia_prima', 'cantidad_necesaria']
 
     def validate_cantidad_necesaria(self, cantidad):
         if cantidad <= 0:
@@ -52,10 +53,8 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = Producto
         fields = [
             'id_producto', 'codigo', 'nombre', 'descripcion', 'precio', 'estado', 'stock_actual',
-            'stock_minimo', 'stock_maximo', 'imagen', 'id_categoria', 'formula',
+            'stock_minimo', 'imagen', 'id_categoria', 'formula',
         ]
-        # El stock solo cambia con movimientos o al finalizar producción.
-        read_only_fields = ['stock_actual']
         extra_kwargs = {
             'codigo': {
                 'validators': [
@@ -63,8 +62,8 @@ class ProductoSerializer(serializers.ModelSerializer):
                 ],
             },
             'precio': {'min_value': Decimal('0')},
+            'stock_actual': {'min_value': Decimal('0')},
             'stock_minimo': {'min_value': Decimal('0')},
-            'stock_maximo': {'min_value': Decimal('0')},
         }
 
     def validate_imagen(self, imagen):
@@ -91,18 +90,37 @@ class ProductoSerializer(serializers.ModelSerializer):
         return lineas
 
     def validate(self, datos):
-        minimo = datos.get('stock_minimo', getattr(self.instance, 'stock_minimo', 0))
-        maximo = datos.get('stock_maximo', getattr(self.instance, 'stock_maximo', None))
-        if maximo is not None and maximo < minimo:
-            raise serializers.ValidationError(
-                {'stock_maximo': 'El stock máximo no puede ser menor que el stock mínimo.'}
-            )
         return datos
 
     @transaction.atomic
     def create(self, datos):
-        # El producto y su fórmula se guardan juntos: si falla alguna línea no queda nada guardado.
+        # El producto, la fórmula y el stock inicial se guardan juntos.
         lineas = datos.pop('formula')
-        producto = Producto.objects.create(**datos)
+        stock_inicial = datos.pop('stock_actual', Decimal('0'))
+        producto = Producto.objects.create(**datos, stock_actual=Decimal('0'))
         DetalleFormula.objects.bulk_create(DetalleFormula(producto=producto, **linea) for linea in lineas)
+
+        if stock_inicial > 0:
+            usuario = self.context['request'].user
+            MovimientoInventarioProducto.objects.create(
+                producto=producto,
+                usuario=usuario,
+                tipo_movimiento=TipoMovimientoProducto.INGRESO,
+                cantidad=stock_inicial,
+            )
+            producto.stock_actual = stock_inicial
+            producto.save(update_fields=['stock_actual'])
+
         return producto
+
+
+class MovimientoInventarioProductoSerializer(serializers.ModelSerializer):
+    """Movimiento de inventario de producto (API.md §7.4)."""
+
+    id_producto = serializers.IntegerField(source='producto_id', read_only=True)
+    id_usuario = serializers.IntegerField(source='usuario_id', read_only=True)
+
+    class Meta:
+        model = MovimientoInventarioProducto
+        fields = ['id_movimiento_producto', 'fecha', 'tipo_movimiento', 'cantidad', 'id_producto', 'id_usuario']
+        read_only_fields = fields

@@ -58,20 +58,23 @@ export class UserService {
     };
   }
 
-  updateUser(id: number, dto: UpdateUserDTO): User | null {
-    const index = this.users.findIndex(user => user.id === id);
-    if (index === -1) {
-      return null;
-    }
-
-    this.users[index] = {
-      ...this.users[index],
-      ...dto,
-      id
-    };
-
-    this.usersSubject.next([...this.users]);
-    return this.users[index];
+  updateUser(id: number, dto: UpdateUserDTO): Observable<User> {
+    return this.http.patch<DatosUsuarioApi>(`${this.usersUrl}${id}/`, {
+      nombre: dto.firstName?.trim(),
+      apellido: dto.lastName?.trim(),
+      email: dto.email?.trim(),
+      contrasena: dto.password || undefined,
+      rol: dto.role === undefined ? undefined : dto.role === 'Administrator' ? 'ADMIN' : 'OPERARIO',
+      estado: dto.isActive,
+    }).pipe(
+      map(usuario => this.mapUsuario(usuario)),
+      tap(usuarioActualizado => {
+        this.users = this.users.map(usuario =>
+          usuario.id === id ? usuarioActualizado : usuario
+        );
+        this.usersSubject.next([...this.users]);
+      })
+    );
   }
 
   deleteUser(id: number): boolean {

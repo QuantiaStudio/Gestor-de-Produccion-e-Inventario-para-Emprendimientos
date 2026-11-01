@@ -62,31 +62,28 @@ export interface NuevaOrdenProduccion {
     observaciones?: string;
 }
 
-/** Forma real de la tabla "ordenesProduccion" en db.json (json-server). */
+/** Orden de producción del API Django. */
 export interface OrdenProduccionApiDTO {
-    id?: number;
     id_orden: number;
     fecha_creacion: string;
-    fecha_inicio?: string;
+    fecha_inicio: string | null;
     id_estado: number;
+    id_usuario: number | null;
+    observaciones: string;
 }
 
-/** Forma real de la tabla "detalleOrdenProduccion" en db.json (json-server). */
+/** Detalle de orden de producción del API Django. */
 export interface DetalleOrdenProduccionApiDTO {
-    id?: number;
     id_detalle_produccion: number;
     id_orden: number;
     id_producto: number;
-    cantidad_planificada: number;
-    cantidad_producida: number;
+    cantidad_planificada: number | string;
+    cantidad_producida: number | string;
 }
 
-/** Forma real de la tabla "detalleFormula" en db.json (json-server). */
-export interface DetalleFormulaTablaApiDTO {
-    id_detalle_formula: number;
-    id_producto: number;
-    id_materia_prima: number;
-    cantidad_necesaria: number;
+export interface EstadoOrdenApiDTO {
+    id_estado: number;
+    nombre: string;
 }
 
 export interface FiltroOrdenProduccion {

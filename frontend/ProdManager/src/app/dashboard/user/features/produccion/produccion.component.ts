@@ -341,7 +341,7 @@ export class ProduccionComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.mensajeError = error instanceof Error && !('status' in error)
           ? error.message
-          : 'No se pudo crear la orden de producción.';
+          : error?.error?.detail ?? 'No se pudo crear la orden de producción.';
       }
     });
   }

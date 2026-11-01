@@ -1,13 +1,14 @@
 from django.db import transaction
 from django.db.models import ProtectedError
+from django.utils.dateparse import parse_date
 from rest_framework import status
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 
 from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
 
-from .models import Categoria, EstadoProducto, Producto
-from .serializers import CategoriaSerializer, ProductoSerializer
+from .models import Categoria, EstadoProducto, MovimientoInventarioProducto, Producto
+from .serializers import CategoriaSerializer, MovimientoInventarioProductoSerializer, ProductoSerializer
 
 ESTADOS_ORDEN_ACTIVA = ['Pendiente', 'En Produccion']
 
@@ -23,8 +24,33 @@ class CategoriaDetailView(ElementoNoImplementado):
 
 
 class ProductoListView(ColeccionNoImplementada):
+    def get(self, request):
+        productos = Producto.objects.select_related('categoria').prefetch_related(
+            'formula__materia_prima'
+        ).order_by('id_producto')
+
+        id_categoria = request.query_params.get('id_categoria')
+        if id_categoria:
+            try:
+                id_categoria = int(id_categoria)
+            except ValueError as error:
+                raise ValidationError({'id_categoria': 'Debe ser un número entero.'}) from error
+            productos = productos.filter(categoria_id=id_categoria)
+
+        estado = request.query_params.get('estado')
+        if estado:
+            if estado not in EstadoProducto.values:
+                raise ValidationError({'estado': 'El estado indicado no es válido.'})
+            productos = productos.filter(estado=estado)
+
+        nombre = request.query_params.get('nombre')
+        if nombre:
+            productos = productos.filter(nombre__icontains=nombre.strip())
+
+        return Response(ProductoSerializer(productos, many=True).data)
+
     def post(self, request):
-        serializer = ProductoSerializer(data=request.data)
+        serializer = ProductoSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -78,7 +104,33 @@ class DetalleFormulaDetailView(ElementoNoImplementado):
 
 
 class MovimientoInventarioProductoListView(ColeccionNoImplementada):
-    pass
+    def get(self, request):
+        movimientos = MovimientoInventarioProducto.objects.select_related('producto', 'usuario').order_by('-fecha')
+
+        id_producto = request.query_params.get('id_producto')
+        if id_producto:
+            try:
+                id_producto = int(id_producto)
+            except ValueError as error:
+                raise ValidationError({'id_producto': 'Debe ser un número entero.'}) from error
+            movimientos = movimientos.filter(producto_id=id_producto)
+
+        tipo_movimiento = request.query_params.get('tipo_movimiento')
+        if tipo_movimiento:
+            tipos_validos = [valor for valor, _ in MovimientoInventarioProducto._meta.get_field('tipo_movimiento').choices]
+            if tipo_movimiento not in tipos_validos:
+                raise ValidationError({'tipo_movimiento': 'El tipo de movimiento indicado no es válido.'})
+            movimientos = movimientos.filter(tipo_movimiento=tipo_movimiento)
+
+        for parametro, filtro in [('desde', 'fecha__date__gte'), ('hasta', 'fecha__date__lte')]:
+            valor = request.query_params.get(parametro)
+            if valor:
+                fecha = parse_date(valor)
+                if fecha is None:
+                    raise ValidationError({parametro: 'La fecha debe tener formato AAAA-MM-DD.'})
+                movimientos = movimientos.filter(**{filtro: fecha})
+
+        return Response(MovimientoInventarioProductoSerializer(movimientos, many=True).data)
 
 
 class MovimientoInventarioProductoDetailView(ElementoNoImplementado):
