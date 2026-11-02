@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from config.stubs import ColeccionNoImplementada, ElementoNoImplementado
+from materia_prima.models import TipoMovimientoMateriaPrima
+from materia_prima.servicios import registrar_movimiento as registrar_movimiento_materia_prima
 
 from .models import DetalleOrdenProduccion, Estado, OrdenProduccion, ReservaMateriaPrima
 from .serializers import DetalleOrdenProduccionSerializer, EstadoSerializer, OrdenProduccionSerializer
@@ -223,9 +225,13 @@ class FinalizarOrdenAPIView(APIView):
         try:
             with transaction.atomic():
                 for reserva in reservas:
-                    materia_prima = reserva.materia_prima
-                    materia_prima.stock_actual -= reserva.cantidad_reservada
-                    materia_prima.save()
+                    registrar_movimiento_materia_prima(
+                        materia_prima=reserva.materia_prima,
+                        tipo_movimiento=TipoMovimientoMateriaPrima.CONSUMO,
+                        cantidad=reserva.cantidad_reservada,
+                        usuario=request.user,
+                        observacion=f'Consumo automático al finalizar la orden #{orden.pk}.',
+                    )
 
                     reserva.activa = False
                     reserva.save()
