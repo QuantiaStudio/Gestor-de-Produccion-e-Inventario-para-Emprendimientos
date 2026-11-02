@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EstadoMateriaPrima, MateriaPrima, MateriaPrimaBackendDTO, TipoMovimientoStock } from '../models/materia-prima/materia-prima.model';
 import { environment } from '../../environments/environment';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 // La consulta (listado y detalle) ya se conecta al backend real de Django (TK-02-08).
 const DJANGO_LIST_URL = `${environment.djangoApiUrl}/materias-primas/`;
@@ -18,15 +18,16 @@ const MOVIMIENTOS_URL = `${environment.apiUrl}/movimientosStockMateriaPrima`;
 })
 export class MateriaPrimaService {
   private materiasPrimas: MateriaPrima[] = [];
-  readonly materiasPrimas$: Observable<MateriaPrima[]>;
 
-  constructor(private http: HttpClient) {
-    this.materiasPrimas$ = this.http.get<MateriaPrimaBackendDTO[]>(DJANGO_LIST_URL).pipe(
+  constructor(private http: HttpClient) {}
+
+  /** Pide el listado al backend. Sin cachear: cada llamada trae el stock actualizado. */
+  private cargarMateriasPrimas$(): Observable<MateriaPrima[]> {
+    return this.http.get<MateriaPrimaBackendDTO[]>(DJANGO_LIST_URL).pipe(
       map(materias => materias.map(mp => this.mapearDesdeApi(mp))),
       tap(materias => {
         this.materiasPrimas = materias;
-      }),
-      shareReplay(1)
+      })
     );
   }
 
@@ -55,14 +56,12 @@ export class MateriaPrimaService {
   }
 
   obtenerMateriasPrimas$(): Observable<MateriaPrima[]> {
-    return this.materiasPrimas$;
+    return this.cargarMateriasPrimas$();
   }
 
   /** Materias primas del inventario del backend Django, para armar la fórmula de un producto nuevo. */
   obtenerMateriasPrimasDelBackend$(): Observable<MateriaPrima[]> {
-    return this.http.get<MateriaPrimaBackendDTO[]>(DJANGO_LIST_URL).pipe(
-      map(materias => materias.map(mp => this.mapearDesdeApi(mp)))
-    );
+    return this.cargarMateriasPrimas$();
   }
 
 
