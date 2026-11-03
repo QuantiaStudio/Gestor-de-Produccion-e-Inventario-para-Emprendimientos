@@ -13,6 +13,8 @@ export interface MateriaPrimaBackendDTO {
   // DRF serializa los DecimalField como string para no perder precisión.
   stock_actual: string;
   stock_minimo: string;
+  stock_reservado?: string;
+  stock_disponible?: string;
 }
 
 export interface MateriaPrima {

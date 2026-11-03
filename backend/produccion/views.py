@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -13,7 +11,12 @@ from materia_prima.servicios import registrar_movimiento as registrar_movimiento
 
 from .models import DetalleOrdenProduccion, Estado, OrdenProduccion, ReservaMateriaPrima
 from .serializers import DetalleOrdenProduccionSerializer, EstadoSerializer, OrdenProduccionSerializer
-from .servicios import calcular_disponibilidad, validar_disponibilidad_formula
+from .servicios import (
+    StockInsuficienteError,
+    calcular_requerimientos,
+    reservar_materias_primas,
+    validar_disponibilidad_formula,
+)
 
 
 class EstadoOrden:
@@ -63,17 +66,19 @@ class OrdenProduccionListView(ColeccionNoImplementada):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        detalle = serializer.validated_data['detalle']
-        error_disponibilidad = validar_disponibilidad_formula(
-            detalle['producto'], detalle['cantidad_planificada']
-        )
-        if error_disponibilidad is not None:
+        try:
+            with transaction.atomic():
+                orden = serializer.save()
+                requerimientos = calcular_requerimientos(
+                    list(orden.detalles.select_related('producto'))
+                )
+                reservar_materias_primas(orden, requerimientos)
+        except StockInsuficienteError as error:
             return Response(
-                {'detail': error_disponibilidad, 'code': 'stock_insuficiente'},
+                {'detail': str(error), 'code': 'stock_insuficiente'},
                 status=status.HTTP_409_CONFLICT,
             )
 
-        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -143,53 +148,29 @@ class IniciarOrdenAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        requerimientos = {}
         for detalle in detalles:
-            formulas = list(detalle.producto.formula.select_related('materia_prima'))
-            if not formulas:
+            if not detalle.producto.formula.exists():
                 return Response(
                     {"error": f"El producto '{detalle.producto.nombre}' no tiene una fórmula configurada."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            for formula in formulas:
-                materia_prima = formula.materia_prima
-                cantidad = formula.cantidad_necesaria * detalle.cantidad_planificada
-                requerimientos[materia_prima.pk] = (
-                    materia_prima,
-                    requerimientos.get(materia_prima.pk, (materia_prima, Decimal('0')))[1] + cantidad,
-                )
-
-        for materia_prima, cantidad_requerida in requerimientos.values():
-            disponible = calcular_disponibilidad(materia_prima)
-            if disponible < cantidad_requerida:
-                return Response(
-                    {
-                        "error": f"Insumo insuficiente: {materia_prima.nombre}. "
-                                 f"Requerido: {cantidad_requerida}, Disponible: {disponible}."
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+        requerimientos = calcular_requerimientos(detalles)
 
         try:
             with transaction.atomic():
+                reservar_materias_primas(orden, requerimientos)
                 orden.estado = obtener_estado(EstadoOrden.EN_PRODUCCION)
                 orden.fecha_inicio = timezone.now()
                 orden.save(update_fields=['estado', 'fecha_inicio'])
-
-                for materia_prima, cantidad in requerimientos.values():
-                    ReservaMateriaPrima.objects.create(
-                        orden=orden,
-                        materia_prima=materia_prima,
-                        cantidad_reservada=cantidad,
-                        activa=True
-                    )
 
             return Response(
                 {"mensaje": f"Orden #{orden.pk} iniciada correctamente con estado 'En Produccion' y reservas activadas."},
                 status=status.HTTP_200_OK
             )
 
+        except StockInsuficienteError as error:
+            return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response(
                 {"error": f"Error al procesar las reservas de la orden: {str(e)}"},

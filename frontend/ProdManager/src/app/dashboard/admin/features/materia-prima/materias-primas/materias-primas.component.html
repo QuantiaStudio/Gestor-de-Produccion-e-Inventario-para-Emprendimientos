@@ -91,6 +91,7 @@
               <th>Materia Prima ↕</th>
               <th>unidad</th>
               <th>Stock Total</th>
+              <th>Stock Reservado</th>
               <th>Stock Disponible</th>
               <th>Nivel Mínimo</th>
               <th>Estado</th>
@@ -108,6 +109,7 @@
                 </td>
                 <td>{{ item.unidadMedida }}</td>
                 <td>{{ item.stockTotal }}</td>
+                <td>{{ item.stockTotal - item.stockDisponible }}</td>
                 <td>{{ item.stockDisponible }}</td>
                 <td>{{ item.stockMinimo }}</td>
                 <td>
@@ -133,7 +135,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="8" class="text-center py-4 text-muted">No se encontraron materias primas.</td>
+                <td colspan="9" class="text-center py-4 text-muted">No se encontraron materias primas.</td>
               </tr>
             }
           </tbody>

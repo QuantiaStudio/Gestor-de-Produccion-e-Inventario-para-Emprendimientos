@@ -36,6 +36,8 @@ export class MateriaPrimaService {
     // perder precisión; hay que convertirlos a number antes de compararlos.
     const stockActual = Number(mp.stock_actual);
     const stockMinimo = Number(mp.stock_minimo);
+    const stockReservado = Number(mp.stock_reservado ?? 0);
+    const stockDisponible = Number(mp.stock_disponible ?? stockActual - stockReservado);
 
     return {
       id: String(mp.id_materia_prima),
@@ -43,9 +45,9 @@ export class MateriaPrimaService {
       descripcion: mp.descripcion,
       unidadMedida: mp.unidad_medida,
       stockTotal: stockActual,
-      stockDisponible: stockActual,
+      stockDisponible,
       stockMinimo: stockMinimo,
-      estado: this.calcularEstado(stockActual, stockMinimo),
+      estado: this.calcularEstado(stockDisponible, stockMinimo),
       // El backend todavía no expone un endpoint de movimientos de materia prima.
       ultimaActualizacion: '',
     };
@@ -73,10 +75,11 @@ export class MateriaPrimaService {
     const materiaPrima = this.obtenerPorId(id);
     if (!materiaPrima) return;
 
+    const stockReservado = materiaPrima.stockTotal - materiaPrima.stockDisponible;
     materiaPrima.stockTotal = stockTotal;
-    materiaPrima.stockDisponible = stockTotal;
+    materiaPrima.stockDisponible = stockTotal - stockReservado;
     materiaPrima.stockMinimo = stockMinimo;
-    materiaPrima.estado = this.calcularEstado(stockTotal, stockMinimo);
+    materiaPrima.estado = this.calcularEstado(materiaPrima.stockDisponible, stockMinimo);
     materiaPrima.ultimaActualizacion = new Date().toLocaleDateString('es-AR');
 
     this.http.patch(`${API_URL}/${id}`, {
@@ -92,7 +95,7 @@ export class MateriaPrimaService {
     const delta = tipo === 'ingreso' ? cantidad : -cantidad;
     materiaPrima.stockTotal += delta;
     materiaPrima.stockDisponible += delta;
-    materiaPrima.estado = this.calcularEstado(materiaPrima.stockTotal, materiaPrima.stockMinimo);
+    materiaPrima.estado = this.calcularEstado(materiaPrima.stockDisponible, materiaPrima.stockMinimo);
     materiaPrima.ultimaActualizacion = new Date().toLocaleDateString('es-AR');
 
     this.http.patch(`${API_URL}/${id}`, { stock_actual: materiaPrima.stockTotal }).subscribe();
