@@ -105,6 +105,19 @@ La API de materias primas queda disponible en:
 http://localhost:8000/api/v1/materias-primas/
 ```
 
+## Cargar productos de ejemplo
+
+Después de aplicar las migraciones, se pueden cargar productos terminados de
+ejemplo junto con sus fórmulas:
+
+```powershell
+.\.venv\Scripts\python.exe manage.py cargar_productos_ejemplo
+```
+
+El comando es idempotente: identifica los productos por su código, no duplica
+registros y actualiza sus fórmulas al volver a ejecutarse. Requiere que estén
+cargadas las materias primas y categorías iniciales.
+
 Por ahora, el módulo de materias primas del frontend se está conectando
 progresivamente a esta API. Los demás módulos pueden continuar usando
 `json-server` mientras se realiza la migración.

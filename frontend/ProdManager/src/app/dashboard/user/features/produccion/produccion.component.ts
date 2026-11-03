@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subscription, merge } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProduccionService } from '../../../../services/produccion.service';
@@ -338,10 +339,17 @@ export class ProduccionComponent implements OnInit, OnDestroy {
         });
         this.cerrarFormulario();
       },
-      error: (error) => {
-        this.mensajeError = error instanceof Error && !('status' in error)
+      error: (error: HttpErrorResponse | Error) => {
+        if (error instanceof HttpErrorResponse && error.error?.code === 'stock_insuficiente') {
+          this.mensajeError = error.error.detail;
+          return;
+        }
+
+        this.mensajeError = error instanceof Error && !(error instanceof HttpErrorResponse)
           ? error.message
-          : error?.error?.detail ?? 'No se pudo crear la orden de producción.';
+          : error instanceof HttpErrorResponse
+            ? error.error?.detail ?? 'No se pudo crear la orden de producción.'
+            : 'No se pudo crear la orden de producción.';
       }
     });
   }

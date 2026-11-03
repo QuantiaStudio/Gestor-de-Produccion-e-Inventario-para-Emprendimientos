@@ -389,6 +389,10 @@
         <h2>Nueva producción</h2>
       </header>
       <form [formGroup]="ordenForm" (ngSubmit)="crearOrden()">
+        @if (mensajeError) {
+          <p class="form-error" role="alert">{{ mensajeError }}</p>
+        }
+
         <div class="form-row">
           <div class="form-group">
             <label for="productoSelect">PRODUCTO</label>
