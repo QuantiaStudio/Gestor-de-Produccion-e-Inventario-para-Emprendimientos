@@ -19,7 +19,7 @@
 
 .table-wrapper {
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .table-wrapper table {
@@ -27,6 +27,9 @@
 }
 
 .table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   background-color: #FAFAFA;
   font-size: 10px;
   font-weight: 800;

@@ -224,7 +224,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
-    overflow-x: auto;
+    overflow: visible;
 }
 
 .inventory-table .table {
@@ -232,6 +232,10 @@
 }
 
 .inventory-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--color-surface);
     border-bottom: 1px solid rgba(148, 163, 184, 0.18);
     color: var(--gray-500);
     font-size: 0.78rem;
